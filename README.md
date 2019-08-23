@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./templates/images/icon-512x512.png" height="20" width="20">
+  <img src="./templates/images/icon-512x512.png" height="100" width="100">
 </p>
 
 # Smart_Home
