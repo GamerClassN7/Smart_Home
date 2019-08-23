@@ -6,9 +6,9 @@ if (isset($_POST) && !empty($_POST)){
 		$onDays = $_POST['atDays'];
 
 		AutomationManager::create('name', $onDays, $doCode, $ifCode);
-	}
 
-	header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')), TRUE);
-	die();
+		header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')), TRUE);
+		die();
+	}
 }
 ?>

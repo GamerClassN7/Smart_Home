@@ -23,29 +23,7 @@
                     =
                     <input class="input" type="num" name="atDeviceValueInt" id="atDeviceValueInt" required disabled/>
                 </div>
-                
-                <div class="label"><?php echo $LANG['l_resetAt']?></div>
-                <div class="field">
-                    <select class="input" name="restartAtSelector" id="valueSelector" required>
-                        <option	value="sunSet"><?php echo $LANG['l_sunSet']?></option>
-                        <option	value="sunRise"><?php echo $LANG['l_sunRice']?></option>
-                        <option	value="inHome"><?php echo $LANG['l_inHome']?></option>
-                        <option	value="outHome"><?php echo $LANG['l_outHome']?></option>
-                        <option	value="time"><?php echo $LANG['l_time']?></option>
-                        <option	value="atDeviceValue"><?php echo $LANG['l_deviceValue']?></option>
-                    </select>
-                    <input class="input" type="time" name="restartAtTime" id="atTime" disabled/>
-                    <select class="input" name="restartAtDeviceValue" id="atDeviceValue" disabled>
-                        <?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ ?>
-                            <option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name']; ?>[<?php echo $subDeviceValue['type'];  ?>]</option>
-                        <?php } ?>
-                    </select>
-                    =
-                    <input class="input" type="num" name="restartAtDeviceValueInt" id="atDeviceValueInt" required disabled/>
-                </div>
-                
-                
-                
+
                 <div class="label"><?php echo $LANG['l_affectedDevices']?></div>
                 <div class="field">
                     <select class="input" name="devices[]" multiple>

@@ -30,154 +30,40 @@
 			</div>
 		</div>
 		<div class="col-md-9 main-body">
-			<a href="#modal" class="button is-primary m-1">Create Automation</a>
-			<a id="remove" class="button m-1"><i class="fa fa-trash" aria-hidden="true"></i></a>
+			<a class="button is-primary m-1" onClick="$('#modal').removeClass('modal-container-hiden').show();"><?php echo $LANG['t_createAutomation'];?></a>
 			<div class="row no-gutters">
-			<?php foreach ($AUTOMATIONS as $automationId => $automationData) { ?>
-					<div class="col-12 col-md-6 col-xl-4 square-wrap">
-						<div class="rectangle-2">
-							<div class="square-content double <?php echo ($automationData['active'] == 0 ? 'paused' : ''); ?>" onClick="ajaxPost('./ajax.php',{automation_id:'<?php echo $automationId; ?>'}, this, true);">
-								<div class="delete">delete</div>
-								<div class="row">
-									<div class="col-1">
-										<h5 class="fa">
-											<?php
-											switch ($automationData['ifSomething']) {
-												case 'sunSet':
-												echo'&#xf186';
-												break;
-												
-												case 'sunRise':
-												echo'&#xf185 ';
-												break;
-												
-												default:
-												echo'&#xf017';
-												break;
-											}
-											?>
-										</h5>
-									</div>
-									<div class="col">
-										<h5 class="text-right break-all">
-											<?php 
-											if (!in_array($automationData['ifSomething'], ["sunRise", "sunSet"])) {
-												echo $automationData['ifSomething'];
-											}
-											?>
-										</h5>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<?php echo $automationData['onDays'];?>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<?php } ?>
-				</div>
+				<?php foreach ($AUTOMATIONS as $automationId => $automationData) {
+					//BUTTON
+					$partial = new Partial('automationButton');
+					$partial->prepare('lang',$LANG);
+					$partial->prepare('automationId',$automationId);
+					$partial->prepare('automationData',$automationData);
+					$partial->render();
+					
+					//EDIT
+					$partial = new Partial('automationEdit');
+					$partial->prepare('lang',$LANG);
+					$partial->prepare('automationId',$automationId);
+					$partial->prepare('automation',$automationData);
+					$partial->prepare('subDevices',$SUBDEVICES);
+					$partial->render();
+				} ?>
+			</div>
 		</div>
 	</div>
-	
-	<div class="modal-container modal-container-hiden" id="modal">
-		<div class="modal">
-			<a href=""><i class="fa fa-times close"></i></a>
-			<h4 class="mb-4">Modal bitch</h4>
-			<?php if (!isset($_POST['modalNext'])) { ?>
-				<form method="post">
-					<div class="field">
-						<div class="label">Run at:</div>
-						<div class="field">
-							<select class="input" name="atSelector" id="valueSelector" required>
-								<option	value="sunSet">Západu Slunce</option>
-								<option	value="sunRise">Východu Slunce</option>
-								<option	value="time">Čase</option>
-								<option	value="atDeviceValue">Hodnbotě Zařízení</option>
-							</select>
-							<input class="input" type="time" name="atTime" id="atTime" disabled/>
-							<select class="input" name="atDeviceValue" id="atDeviceValue" disabled>
-								<?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ ?>
-									<option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name']; ?>[<?php echo $subDeviceValue['type'];  ?>]</option>
-								<?php } ?>
-							</select>
-							=
-							<input class="input" type="num" name="atDeviceValueInt" id="atDeviceValueInt" required disabled/>
-						</div>
-						<div class="label">Select Affected Devices:</div>
-						<div class="field">
-							<select class="input" name="devices[]" multiple>
-								<?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ 
-									if ($subDeviceValue['type'] != 'on/off') continue;?>
-									<option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name']; ?></option>
-								<?php } ?>
-							</select>
-							
-						</div>
-						<div class="label">ve dny:</div>
-						<div class="field">
-							<input type="checkbox" name="day[]" value="mon"/> Pondělí
-						</div>
-						<div class="field">
-							<input type="checkbox" name="day[]" value="tue"/> Úterý
-						</div>
-						<div class="field">
-							<input type="checkbox" name="day[]" value="wed"/> Středa
-						</div>
-						<div class="field">
-							<input type="checkbox" name="day[]" value="thu"/> Čtvrtek
-						</div>
-						<div class="field">
-							<input type="checkbox" name="day[]" value="fri"/> Pátek
-						</div>
-						<div class="field">
-							<input type="checkbox" name="day[]" value="sat"/> Sobota
-						</div>
-						<div class="field">
-							<input type="checkbox" name="day[]" value="sun"/> Neděle
-						</div>
-					</div>
-					<input type="submit" class="button" name="modalNext" value="Next"/>
-				</form>
-			<?php } else if (isset($_POST['modalNext'])) { ?>
-				<form method="post" action="controls/automation.php">
-					<div class="field">
-						<input type="hidden" name="atSelector" value="<?php if (isset($_POST['atTime'])) {
-							echo $_POST['atTime'];
-						} else if (isset($_POST['atDeviceValue'])) {
-							$subDeviceId = $_POST['atDeviceValue'];
-							$subDeviceValue = $_POST['atDeviceValueInt'];
-							$subDevice = SubDeviceManager::getSubDevice($subDeviceId);
-							$subDeviceMaster = SubDeviceManager::getSubDeviceMaster($subDeviceId,$subDevice['type']);
-							
-							$json = json_encode([
-								'deviceID' => $subDeviceMaster['device_id'],
-								'type'=> htmlspecialchars($subDevice['type']),
-								'value'=> $subDeviceValue,
-							]);
-							echo  htmlspecialchars($json);
-						}
-						else {
-							echo $_POST['atSelector'];
-						} ?>" required/>
-						<input type="hidden" name="atDays" value="<?php echo htmlspecialchars(($_POST['day'] != '' ? json_encode($_POST['day']) : '')); ?>" required/>
-						<?php foreach ($_POST['devices'] as $value) { ?>
-							<?php $deviceData = DeviceManager::getDeviceById($value); ?>
-							<div class="label"><?php echo $deviceData['name'];?></div>
-							<select class="input" name="device[<?php echo $deviceData['device_id'];?>]">
-								<option	value="1">ON</option>
-								<option	value="0">OFF</option>
-							</select>
-						<?php } ?>
-					</div>
-					<input type="submit" class="button" name="modalFinal" value="Next"/>
-				</form>
-			<?php } ?>
-		</div>
-	</div>
-	
-	<?php
+	<?php 
+	ECHO $_POST['modalNext'];
+	if (isset($_POST['modalNext'])) {
+		$partial = new Partial('automationCreateFinal');
+		$partial->prepare('lang',$LANG);
+		$partial->prepare('subDevices',$SUBDEVICES);
+		$partial->render();
+	} else {
+		$partial = new Partial('automationCreate');
+		$partial->prepare('lang',$LANG);
+		$partial->prepare('subDevices',$SUBDEVICES);
+		$partial->render();
+	}
 	$partial = new Partial('footer');
 	$partial->render();
 	?>
