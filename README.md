@@ -1,6 +1,8 @@
-<img src="./templates/images/icon-512x512.png" height="20" width="20">
-# Smart_Home
+<p align="center">
+  <img src="./templates/images/icon-512x512.png" height="20" width="20">
+</p>
 
+# Smart_Home
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Discord](https://img.shields.io/discord/601817042475286540.svg?color=Blue&label=Discord&logo=Discord)](https://discord.gg/nMe5evu)
 
