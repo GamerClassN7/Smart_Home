@@ -36,12 +36,10 @@
 			<div class="label m-1">
 				doma jsou: 
 				<?php 
+				$keyWords = ['entered', 'connected', 'connected to'];
 				foreach ($USERS as $user) {
-					if (trim($user['at_home']) === "entered") {
-						echo $user['username'];
-					}
-					if (trim($user['at_home']) === "connected to") {
-						echo $user['username'];
+					if (in_array(trim($user['at_home']), $keyWords)) {
+						echo $user['username'] . ' ';
 					}
 				} ?>
 			</div>
