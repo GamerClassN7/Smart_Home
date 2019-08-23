@@ -15,16 +15,16 @@ foreach (["class", "views"] as $dir) {
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 
 //Filtrování IP adress
-if (DEBUGMOD != 1) {
-	if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {
-		echo json_encode(array(
-			'state' => 'unsuccess',
-			'errorMSG' => "Using API from your IP insn´t alowed!",
-		));
-		header("HTTP/1.1 401 Unauthorized");
-		exit();
-	}
+/*if (DEBUGMOD != 1) {
+if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {
+echo json_encode(array(
+'state' => 'unsuccess',
+'errorMSG' => "Using API from your IP insn´t alowed!",
+));
+header("HTTP/1.1 401 Unauthorized");
+exit();
 }
+}*/
 
 
 
@@ -41,7 +41,7 @@ if (isset($obj['user']) && $obj['user'] != ''){
 }
 
 //automationExecution
-AutomationManager::executeAll();
+//AutomationManager::executeAll();
 
 //Record Cleaning
 RecordManager::clean(RECORDTIMOUT);

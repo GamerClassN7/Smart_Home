@@ -20,7 +20,7 @@ int reconectAtemptsMax = 10; //time to wait before restart
 void setup() {
     Serial.begin(9600);
     delay(10);
-  Serial.println('\n');
+    Serial.println('\n');
     Serial.println("HW: " + String(hwId));
     
     pinMode(SONOFF, OUTPUT);
@@ -32,31 +32,31 @@ void setup() {
     
     WiFi.begin(ssid, pasw);
     Serial.print("Connecting to ");
-  Serial.print(ssid); Serial.println(" ...");
-
-  int i = 0;
-  while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
-    delay(1000);
-    Serial.print(++i); Serial.print(' ');
-  }
-
-  Serial.println('\n');
-  Serial.println("Connection established!");  
-  Serial.print("IP address:\t");
-  Serial.println(WiFi.localIP());   
+    Serial.print(ssid); Serial.println(" ...");
+    
+    int i = 0;
+    while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
+        delay(1000);
+        Serial.print(++i); Serial.print(' ');
+    }
+    
+    Serial.println('\n');
+    Serial.println("Connection established!");  
+    Serial.print("IP address:\t");
+    Serial.println(WiFi.localIP());   
 }
 
 void loop() {
-    
-    Serial.println("CONECED");
-    bool buttonState = !digitalRead(SONOFF_BUT);
-    Serial.println("CONECED" + String(buttonState));
-
     StaticJsonDocument<200> jsonContent;
     jsonContent["token"] = hwId;
     
     if (!digitalRead(SONOFF_BUT)){
         jsonContent["values"]["on/off"]["value"] = (int) !lastState;
+        if (!lastState == 1) {
+            digitalWrite(SONOFF, HIGH)
+        } else if (!lastState == 0){
+            digitalWrite(SONOFF, LOW)
+        }
         while(!digitalRead(SONOFF_BUT)) {
             delay(100);
         }
@@ -65,7 +65,7 @@ void loop() {
     String requestJson = "";
     serializeJson(jsonContent, requestJson);
     Serial.println("JSON: " + requestJson);
-
+    
     HTTPClient http;
     http.begin(server);
     http.addHeader("Content-Type", "text/plain");  //Specify content-type header
@@ -77,24 +77,18 @@ void loop() {
     Serial.println("HTTP BODY: " + String(payload) + "");  //Print request response payload
     
     deserializeJson(jsonContent, payload);
-    
     String hostname = jsonContent["device"]["hostname"];
-    
+    int state = jsonContent["value"];
     WiFi.hostname(hostname);
     
-    int state = jsonContent["value"];
     if (state !=  lastState){
-      if (state == 1 && lastState == 0) {
-          Serial.println("ON");
-          digitalWrite(SONOFF, HIGH);   // Turn the LED on by making the voltage LOW
-          digitalWrite(SONOFF_LED, LOW);   // Turn the LED on by making the voltage LOW
-      } else {
-          Serial.println("OFF");
-          digitalWrite(SONOFF, LOW);   // Turn the LED on by making the voltage LOW
-          digitalWrite(SONOFF_LED, HIGH);   // Turn the LED on by making the voltage LOW
-      }
+        if (state == 1 && lastState == 0) {
+            Serial.println("ON");
+            digitalWrite(SONOFF, HIGH);   // Turn the LED on by making the voltage LOW
+        } else {
+            Serial.println("OFF");
+            digitalWrite(SONOFF, LOW);   // Turn the LED on by making the voltage LOW
+        }
     }
-    
     lastState = state;
-    delay(1000);
 }
