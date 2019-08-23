@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<?php
+	$partial = new Partial('head');
+	$partial->render();
+	?>
+	<title><?php echo $TITLE ?></title>
+</head>
+<body class="no-transitions">
+	<div class="row no-gutters main">
+		<div class="col-md-3 d-sm-none"></div>
+		<div class="col-md-3 nav-container">
+			<div class="nav">
+				<div class="nav-item">
+					<a href="./"><i class="fa fa-home"></i><span><?php echo $LANG['m_home']?></span></a>
+				</div>
+				<div class="nav-item is-active">
+					<a href="dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i><span><?php echo $LANG['m_dashboard']?></span></a>
+				</div>
+				<div class="nav-item">
+					<a href="setting"><i class="fa fa-wrench" aria-hidden="true"></i></i><span><?php echo $LANG['m_settings']?></span></a>
+				</div>
+				<div class="nav-item">
+					<a href="automation"><i class="fa fa-calendar-o" aria-hidden="true"></i><span><?php echo $LANG['m_automatization']?></span></a>
+				</div>
+				<div class="nav-item">
+					<a href="scene"><i class="fa fa-terminal" aria-hidden="true"></i><span><?php echo $LANG['m_scenes']?></span></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9 main-body">
+			<a href="#modal" class="button is-primary m-1">Add Device</a>
+			<a id="remove" class="button m-1"><i class="fa fa-trash" aria-hidden="true"></i></a>
+			<div class="row no-gutters">
+				<?php foreach ($DASHBOARD as $dashboardItemId => $dashboardItemData) {
+					$partialDeviceButton = new Partial('dashboardButton');
+					$partialDeviceButton->prepare('dashboardItemData', $dashboardItemData);
+					
+					$partialDeviceButton->render();
+				} ?>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal-container modal-container-hiden" id="modal">
+		<div class="modal">
+			<a href=""><i class="fa fa-times close"></i></a>
+			<h4 class="mb-4">Modal bitch</h4>
+			<form method="post" action="controls/dashboard.php">
+				<div class="field px-2">
+					<div class="label">Zvolte zařízení:</div>
+					<select class="input" name="devices[]" multiple>
+						<?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ ?>
+							<option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name'] . '[' . $subDeviceValue['type']  . ']'; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<input type="submit" class="button" name="modalFinal" value="Next"/>
+			</form>
+		</div>
+	</div>
+	
+	<?php
+	if (isset($_POST['deviceId'])) {
+		$partial = new Partial('deviceEdit');
+		$partial->prepare('DEVICEDATA', $DEVICEDATA);
+		
+		$partial->render();
+	}
+	$partial = new Partial('footer');
+	$partial->render();
+	?>
+</body>
+</html>

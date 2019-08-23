@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<?php
+	$partial = new Partial('head');
+	$partial->render();
+	?>
+	<title><?php echo $TITLE ?></title>
+</head>
+<body class="no-transitions">
+	<div class="row no-gutters main">
+		<div class="col-md-3 d-sm-none"></div>
+		<div class="col-md-3 nav-container">
+			<div class="nav">
+				<div class="nav-item">
+					<a href="./"><i class="fa fa-home"></i><span><?php echo $LANG['m_home']?></span></a>
+				</div>
+				<div class="nav-item">
+					<a href="dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i><span><?php echo $LANG['m_dashboard']?></span></a>
+				</div>
+				<div class="nav-item  is-active">
+					<a href="setting"><i class="fa fa-wrench" aria-hidden="true"></i></i><span><?php echo $LANG['m_settings']?></span></a>
+				</div>
+				<div class="nav-item">
+					<a href="automation"><i class="fa fa-calendar-o" aria-hidden="true"></i><span><?php echo $LANG['m_automatization']?></span></a>
+				</div>
+				<div class="nav-item">
+					<a href="scene"><i class="fa fa-terminal" aria-hidden="true"></i><span><?php echo $LANG['m_scenes']?></span></a>
+				</div>
+				<div class="nav-item">
+					<a href="rooms"><i class="fa fa-terminal" aria-hidden="true"></i><span>ROOMS</span></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9 main-body">
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<form method="post" enctype="multipart/form-data">
+					<div class="">
+						<div class="field">
+							<div class="label">Stránka po načtení</div>
+							<select class="input" name="loadPage">
+								<option value="0" <?php echo (UserManager::getUserData("startPage") == 0 ? "selected" : ""); ?>>Default</option>
+								<option value="1" <?php echo (UserManager::getUserData("startPage") == 1 ? "selected" : ""); ?>>Dashboard</option>
+							</select>
+						</div>
+						<input type="submit" name="submit" class="button" value="Uložit"/>
+					</div>
+				</div>
+			</form>
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<div class="field">
+					<a href="logout" class="button is-primary">Odhlásit se</a>
+				</div>
+			</div>
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<div class="field">
+					<button id="enable-features" class="button">Enable Alpha Feature</button>
+				</div>
+			</div>
+		</div>
+		
+		
+	</div>
+	
+	<?php
+	$partial = new Partial('footer');
+	$partial->render();
+	//TODO js do main.js
+	?>
+	<script>
+	$( "#enable-features" ).click(function(e) {
+		var selectRoomId = localStorage.getItem("enableFeature");
+		if (selectRoomId){
+			localStorage.setItem("enableFeature", true);
+		}else {
+			localStorage.setItem("enableFeature", false);
+		}
+	});
+	</script>
+</body>
+</html>

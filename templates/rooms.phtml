@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php
+    $partial = new Partial('head');
+    $partial->render();
+    ?>
+    <title><?php echo $TITLE ?></title>
+</head>
+<body class="no-transitions">
+    <div class="row no-gutters main">
+        <div class="col-md-3 d-sm-none"></div>
+        <div class="col-md-3 nav-container">
+            <div class="nav">
+                <div class="nav-item is-active">
+                    <a href="./"><i class="fa fa-home"></i><span><?php echo $LANG['m_home']?></span></a>
+                </div>
+                <div class="nav-item">
+                    <a href="dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i><span><?php echo $LANG['m_dashboard']?></span></a>
+                </div>
+                <div class="nav-item">
+                    <a href="setting"><i class="fa fa-wrench" aria-hidden="true"></i></i><span><?php echo $LANG['m_settings']?></span></a>
+                </div>
+                <div class="nav-item">
+                    <a href="automation"><i class="fa fa-calendar-o" aria-hidden="true"></i><span><?php echo $LANG['m_automatization']?></span></a>
+                </div>
+                <div class="nav-item">
+                    <a href="scene"><i class="fa fa-terminal" aria-hidden="true"></i><span><?php echo $LANG['m_scenes']?></span></a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="col-md-9 main-body">
+            <div class="frame">
+                <?php foreach ($ROOMS as $roomId => $room) {  ?>
+                    <div class="single-frame" id="room-<?php echo $roomId; ?>">
+                        <div class="">
+                            <h1><?php echo $room['name']; ?></h1>
+                            <?php foreach ($room['reading'] as $key => $value) { ?>
+                                <?php echo $LANG[$key] .": ".  $value; ?></br>
+                            <?php } ?>
+                            <?php if (DEBUGMOD == 1) { ?>
+                                <pre>
+                                    <?php var_dump($room);?>
+                                </pre>
+                            <?php } ?>
+                        </div>
+                        <?php foreach ($room['controls'] as $key => $value) { ?>
+                            <div class="row no-gutters">
+                                <div class="device-button col-4 col-sm-3 col-xl-2 square-wrap"  data-room-id="">
+                                    <div class="square">
+                                        <div class="square-content" id="device-" data-sub-device-id="">
+                                            <div class="content">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h5 unselectable="on" class="fa">&#x<?php echo $value['icon'];?></h5>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h5 unselectable="on" class="device-button-value text-right" title=""><?php echo $value['value'];?></h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col" unselectable="on" >
+                                                        <?php echo $value['name'];?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+            </div>
+            <style>
+            .single-frame {
+                background-color: red;
+                width: 100%;
+                flex: 0 0 100%;
+                height: 100%;
+            }
+            
+            .frame {
+                overflow-x: auto;
+                width: 100%;
+                display: flex;
+                height: 100%;
+            }
+            
+            body,html{
+                height: 100%;
+            }
+            
+            .frame .single-frame:nth-child(even) {
+                background: red;
+            }
+            
+            .frame .single-frame:nth-child(odd) {
+                background: green;
+            }
+            
+            </style>
+        </div>
+    </div>
+    <?php
+    $partial = new Partial('footer');
+    $partial->render();
+    ?>
+    <script>
+    var prev_id;
+    var id;
+    var current_element
+    var elementWidth = $('.frame').width();
+    
+    $('.frame').scroll(function(){
+        //console.log('SCROLLING!');
+        //console.log('scrool'+$('.single-frame').scrollLeft());
+        var element_width = $('.single-frame').width();
+        
+        var offset = $('.single-frame').offset();
+        var positive =  Math.abs(offset.left)
+        var divided = positive / element_width;
+        var round = Math.round(divided);
+        
+        current_element = $('.frame').children().eq(round);
+        id = current_element.attr('id');
+        
+        if (prev_id != id){
+            prev_id = id;
+            console.log(prev_id);
+        }
+        var scrollTo = $('#'+id).offset().left;
+        console.log('s-f: '+ scrollTo)
+        
+    });
+    $('.frame').on('touchend', function(){ // listen to mouse up
+        console.log('STOPPED SCROLLING!');
+        var scrollLeft = $('.frame').scrollLeft();
+        console.log('frameLeft' + scrollLeft);
+        var a = $('.frame').children();
+        for (index = 0; index < a.length; ++index) {
+            if(a[index].id == id){
+                $('.frame').animate({
+                    scrollLeft: (index * elementWidth)
+                });    
+                $('.frame').animate({
+                    scrollLeft: (index * elementWidth)
+                }); 
+            }
+            console.log(a[index]);
+        }
+        
+        if (scrollTo > 160) {
+            console.log($('#'+id).left)
+            
+        }
+    });
+    </script>
+</body>
+</html>
