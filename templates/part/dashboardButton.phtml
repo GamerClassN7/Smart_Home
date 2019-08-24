@@ -1,8 +1,7 @@
 <div class="col-4 col-sm-3 col-xl-2 square-wrap">
     <div class="square">
-        <div class="square-content" id="device-<?php echo $DASHBOARDITEMDATA['masterId'] ?>" onClick="ajaxPost('./ajax.php',{subDevice_id:'<?php echo $DASHBOARDITEMDATA['id']; ?>'}, this);">
+        <div class="square-content" id="device-<?php echo $DASHBOARDITEMDATA['masterId'] ?>" onClick="ajaxPost('ajax',{subDevice_id:'<?php echo $DASHBOARDITEMDATA['id']; ?>'}, this);">
             <div class="content">
-                <div class="delete">delete</div>
                 <div class="row">
                     <div class="col">
                         <h5 class="fa">&#x<?php echo $DASHBOARDITEMDATA['icon'] ?></h5>

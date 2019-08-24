@@ -1,0 +1,22 @@
+<div class="col-12 col-md-6 col-xl-4 square-wrap noselect">
+    <div class="rectangle-2">
+        <div class="square-content double" id="scene-<?php echo $SCENEID ?>" onClick="ajaxPost('ajax',{scene_id:'<?php echo $SCENEID; ?>'}, this);" >
+            <div class="row">
+                <div class="col-1">
+                    <h5 class="fa noselect">
+                        &#x<?php echo $SCENEDATA['icon']; ?>
+                    </h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-right break-all noselect">
+                        <?php echo $SCENEDATA['name']; ?>
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

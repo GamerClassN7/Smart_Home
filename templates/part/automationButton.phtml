@@ -1,0 +1,54 @@
+<div class="col-12 col-md-6 col-xl-4 square-wrap">
+    <div class="rectangle-2">
+        <div class="square-content double <?php echo ($AUTOMATIONDATA['active'] == 0 ? 'paused' : ''); ?>" id="automation-<?php echo $AUTOMATIONID; ?>">
+            <div class="row">
+                <div class="col-1">
+                    <h5 class="fa">
+                        <?php
+                        //echo $AUTOMATIONDATA['ifSomething'];
+                        switch ($AUTOMATIONDATA['ifSomething']) {
+                            case 'sunSet':
+                            echo'&#xf186';
+                            break;
+                            
+                            case 'sunRise':
+                            echo'&#xf185 ';
+                            break;
+                            
+                            case 'inHome':
+                            echo'&#xf090';
+                            break;
+                            
+                            case 'outHome':
+                            echo'&#xf08b';
+                            break;
+                            
+                            case 'outDevice':
+                            echo'&#xf2db';
+                            break;
+                            
+                            default:
+                            echo'&#xf017';
+                            break;
+                        }
+                        ?>
+                    </h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-right break-all">
+                        <?php 
+                        if (!in_array($AUTOMATIONDATA['ifSomething'], ["sunRise", "sunSet"])) {
+                            echo $AUTOMATIONDATA['ifSomething'];
+                        }
+                        ?>
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <?php echo implode(', ',$AUTOMATIONDATA['onDays']);?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

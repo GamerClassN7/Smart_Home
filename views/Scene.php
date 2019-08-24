@@ -27,7 +27,7 @@ class Scene extends Template
 			$scenes[$sceneData['scene_id']] = [
 				"name" => $sceneData['name'],
 				"icon" => $sceneData['icon'],
-				"do_something" => $doSomething,
+				"doSomething" => $doSomething,
 
 			];
 		}

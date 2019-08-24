@@ -70,5 +70,11 @@ class RecordManager{
 			Db::command ('DELETE FROM records WHERE time < ADDDATE(NOW(), INTERVAL -? DAY);', array($day));
 		}
 	}
+
+
+	//TODO: zkontrolovat jestli neco nezbilo po smazaní
+	public static function cleanSubdeviceRecords ($subDeviceId) {
+		Db::command ('DELETE FROM records WHERE subdevice_id = ?);', array($subDeviceId));
+	}
 }
 ?>

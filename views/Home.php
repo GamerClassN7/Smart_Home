@@ -93,10 +93,7 @@ class Home extends Template
 					}
 
 					$subDevices[$subDeviceData['subdevice_id']] = [
-						'data' => $data,
 						'events'=> $events,
-						'labels' => $labels,
-						'range' => RANGES[$subDevice['type']],
 						'type' => $subDeviceData['type'],
 						'unit' => $subDeviceData['unit'],
 						'comError' => $connectionError,
@@ -125,6 +122,7 @@ class Home extends Template
 					'room' => $deviceData['room_id'],
 					'token' => $deviceData['token'],
 					'sleepTime' => $deviceData['sleep_time'],
+					'approved' => $deviceData['approved'],
 					'permission' => $permissionArray,
 					'owner' => $deviceData['owner'],
 					'userIsAdmin' => $userIsDeviceAdmin,

@@ -30,39 +30,22 @@
             </div>
         </div>
         <div class="col-md-9 main-body">
-            <a class="button is-primary m-2" onClick="$('#modal').removeClass('modal-container-hiden').show();"><?php echo $LANG['t_createScene'];?></a>
+            <a class="button is-primary m-1" onClick="$('#modal').removeClass('modal-container-hiden').show();"><?php echo $LANG['t_createScene'];?></a>
             <div class="row no-gutters">
-                <?php foreach ($SCENES as $sceneId => $sceneData) { ?>
-                    <div class="col-12 col-md-6 col-xl-4 square-wrap">
-                        <div class="rectangle-2">
-                            <div class="square-content double" id="scene-<?php echo $sceneId ?>" onClick="ajaxPost('ajax',{scene_id:'<?php echo $sceneId; ?>'}, this);" >
-                                <div class="row">
-                                    <div class="col-1">
-                                        <h5 class="fa">
-                                            &#x<?php echo $sceneData['icon']; ?>
-                                        </h5>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="text-right break-all">
-                                            <?php echo $sceneData['name']; ?>
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <?php foreach ($SCENES as $sceneId => $sceneData) { 
+                    //BUTTON
+                    $partialScenButton = new Partial('sceneButton');
+                    $partialScenButton->prepare('lang', $LANG);
+                    $partialScenButton->prepare('sceneId', $sceneId);
+                    $partialScenButton->prepare('sceneData', $sceneData);
                     
-                    <?php
+                    $partialScenButton->render();
+                    
                     // Edit
                     $partialSceneEdit = new Partial('sceneEdit');
                     $partialSceneEdit->prepare('lang',$LANG);
                     $partialSceneEdit->prepare('sceneId',$sceneId);
                     $partialSceneEdit->prepare('scene',$sceneData);
-
                     
                     $partialSceneEdit->render();
                     ?>
@@ -77,11 +60,13 @@
         $partial->prepare('setStateFormDevices',$SETSTATEFORMDEVICES );
         $partial->prepare('sceneIcon',$SCENEICON );
         $partial->prepare('SceneName',$SCENENAME );
+        
         $partial->render();
     } else {
         $partial = new Partial('sceneCreate');
         $partial->prepare('lang',$LANG);
         $partial->prepare('subDevices',$SUBDEVICES);
+        
         $partial->render();
     } 
     $partial = new Partial('footer');

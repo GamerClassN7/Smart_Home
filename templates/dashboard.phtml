@@ -30,8 +30,7 @@
 			</div>
 		</div>
 		<div class="col-md-9 main-body">
-			<a href="#modal" class="button is-primary m-1">Add Device</a>
-			<a id="remove" class="button m-1"><i class="fa fa-trash" aria-hidden="true"></i></a>
+			<a onClick="$('#modal').removeClass('modal-container-hiden').show();" class="button is-primary m-1">Add Device</a>
 			<div class="row no-gutters">
 				<?php foreach ($DASHBOARD as $dashboardItemId => $dashboardItemData) {
 					$partialDeviceButton = new Partial('dashboardButton');
@@ -45,7 +44,9 @@
 	
 	<div class="modal-container modal-container-hiden" id="modal">
 		<div class="modal">
-			<a href=""><i class="fa fa-times close"></i></a>
+			<div class="close">
+				<i class="fa fa-times"></i>
+			</div>
 			<h4 class="mb-4">Modal bitch</h4>
 			<form method="post" action="controls/dashboard.php">
 				<div class="field px-2">

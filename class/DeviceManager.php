@@ -3,11 +3,11 @@ class DeviceManager{
 	public static $devices;
 
 	function getAllDevices () {
-		return Db::loadAll ("SELECT * FROM devices");
+		return Db::loadAll ("SELECT * FROM devices WHERE approved != ?", Array(2));
 	}
 
 	function getAllDevicesInRoom ($roomId = "") {
-		return Db::loadAll ("SELECT * FROM devices WHERE room_id = ?", Array($roomId));
+		return Db::loadAll ("SELECT * FROM devices WHERE room_id = ? AND approved != ?", Array($roomId, 2));
 	}
 
 	function getOtherDevices(){
