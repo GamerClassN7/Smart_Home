@@ -10,15 +10,21 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-$('#valueSelector').change(function() {
+
+$('select').change(function(e) {
     console.log($(this).val());
     if( $(this).val() == 'time') {
+        
         $('#atTime').prop( "disabled", false );
+        
+        $('#atDeviceValue').prop( "disabled", true );
+        $('#atDeviceValueInt').prop( "disabled", true );
     } else if( $(this).val() == 'atDeviceValue') {
+        
         $('#atDeviceValue').prop( "disabled", false );
         $('#atDeviceValueInt').prop( "disabled", false );
-    } else {
-        $('#atDeviceValue').prop( "disabled", true );
+        
+        $('#atTime').prop( "disabled", true );
     }
 });
 
@@ -30,14 +36,32 @@ $("div.square-content").on('touchend', function (e){
 });
 
 $("div.square-content").on('touchstart', function (eTarget) {
-    var id = $(this).attr('id').replace('device-', '');
+    navigator.vibrate([500]);
+    var id = '';
+    
+    var windowLoc = $(location).attr('pathname');
+    windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
+    console.log(windowLoc);
+    if (windowLoc == "/") {    
+        id = $(this).attr('id').replace('device-', '');
+    } else if (windowLoc == "/scene") {
+        id = $(this).attr('id').replace('scene-', '');
+    } else if (windowLoc == "/automation") {
+        id = $(this).attr('id').replace('automation-', '');
+    }
+    
     var subId = $(this).attr('data-sub-device-id');
     
     touch++;
     if(touch == 2 && touchSubId == subId){
         console.log("Detail");
-        $("#modal-detail-"+subId).removeClass('modal-container-hiden').show();
-        ajaxChart(subId);
+        if (windowLoc == "/") {    
+            $("#modal-detail-"+subId).removeClass('modal-container-hiden').show();
+            ajaxChart(subId);
+        } else if (windowLoc == "/scene") {
+            
+        } else if (windowLoc == "/automation") {
+        }
         touch = 0;
         touchSubId = "";
         return;
@@ -47,6 +71,7 @@ $("div.square-content").on('touchstart', function (eTarget) {
     pressTimer = window.setTimeout(function (e) {
         console.log("Setting");
         $("#modal-setting-"+id).removeClass('modal-container-hiden').show();
+        touch = 0;
     }, 500);
 });
 
@@ -60,6 +85,8 @@ $("div.square-content").mousedown(function(e) {
             id = $(this).attr('id').replace('device-', '');
         } else if (windowLoc == "/scene") {
             id = $(this).attr('id').replace('scene-', '');
+        } else if (windowLoc == "/automation") {
+            id = $(this).attr('id').replace('automation-', '');
         }
         $("#modal-setting-"+id).removeClass('modal-container-hiden').show();
         console.log("Setting");
@@ -155,31 +182,36 @@ $( '[name="room"]' ).change(function (e) {
 });  
 
 
-var autoUpdate = setInterval(function(){
-    $.ajax({
-        url: 'ajax',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            "action": 'getState'
-        },
-        success: function(data){
-            // console.log('DATA: ', data);
-            for (const key in data) {
-                if (data.hasOwnProperty(key)) {
-                    const device = data[key];
-                    $('[data-sub-device-id="'+key+'"]')
-                    .find('.device-button-value')
-                    .text(device['value'])
-                    .attr('title',device['time'])
+var windowLoc = $(location).attr('pathname');
+windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
+console.log();
+if (windowLoc == "/") {
+    var autoUpdate = setInterval(function(){
+        $.ajax({
+            url: 'ajax',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                "action": 'getState'
+            },
+            success: function(data){
+                // console.log('DATA: ', data);
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        const device = data[key];
+                        $('[data-sub-device-id="'+key+'"]')
+                        .find('.device-button-value')
+                        .text(device['value'])
+                        .attr('title',device['time'])
+                    }
                 }
+            },
+            error: function (request, status, error) {
+                console.log("ERROR ajaxChart():", request, error);
             }
-        },
-        error: function (request, status, error) {
-            console.log("ERROR ajaxChart():", request, error);
-        }
-    });
-},2000);
+        });
+    },2000);
+}
 
 
 
@@ -191,7 +223,21 @@ $('.graph-period').on('click', function (e) {
     ajaxChart(subId, period, groupBy);
 });
 
-
+$( "button[name=remove]" ).click(function(e) {
+    if (confirm('Are you shure ?')) {
+        var windowLoc = $(location).attr('pathname');
+        windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
+        console.log(windowLoc);
+        var id = null;
+        if (windowLoc == "/scene") {
+            id = $(this).data('scene-id');
+            $("#scene-"+id+"-content").remove();
+        } else if (windowLoc == "/automation") {
+            id = $(this).data('automation-id');
+            $("#automation-"+id+"-content").remove();
+        }
+    }
+});
 
 
 

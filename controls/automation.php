@@ -1,8 +1,11 @@
 <?php
 if (isset($_POST) && !empty($_POST)){
 	if (isset($_POST['modalFinal']) && $_POST['modalFinal'] == "Next") {
-		$ifCode = json_encode($_POST['device'], JSON_PRETTY_PRINT);
-		$doCode = $_POST['atSelector'];
+		$doCode = json_encode($_POST['device'], JSON_PRETTY_PRINT);
+		$ifCode = json_encode([
+			"type" => $_POST['atSelector'],
+			"value" => $_POST['atSelectorValue'],
+		], JSON_PRETTY_PRINT);
 		$onDays = $_POST['atDays'];
 
 		AutomationManager::create('name', $onDays, $doCode, $ifCode);

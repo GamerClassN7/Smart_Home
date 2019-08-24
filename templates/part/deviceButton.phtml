@@ -8,7 +8,7 @@ if ($SUBDEVICE['type'] == 'on/off') {
 
 <div class="device-button col-4 col-sm-3 col-xl-2 square-wrap" <?php echo $action; ?> data-room-id="<?php echo $ROOMID; ?>">
 	<div class="square">
-		<div class="square-content <?php echo ($SUBDEVICE['comError'] ? "is-inactive" : "") ;?>" id="device-<?php echo $DEVICEID ?>" data-sub-device-id="<?php echo $SUBDEVICEID;?>">
+		<div class="square-content <?php echo (($SUBDEVICE['comError'] == 1 || $DEVICE['approved'] == 0) ? "is-inactive" : "") ;?>" id="device-<?php echo $DEVICEID ?>" data-sub-device-id="<?php echo $SUBDEVICEID;?>">
 			<div class="content">
 				<div class="row">
 					<div class="col">

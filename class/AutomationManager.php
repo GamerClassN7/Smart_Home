@@ -16,8 +16,8 @@ class AutomationManager{
 		$scene = array (
 			'name' => $name,
 			'on_days' => $onDays,
-			'if_something' => $doCode,
-			'do_something' => $ifCode,
+			'if_something' => $ifCode,
+			'do_something' => $doCode,
 		);
 		try {
 			Db::add ('automation', $scene);
@@ -33,11 +33,12 @@ class AutomationManager{
 	}
 
 	public function executeAll(){
-		global $dateTimeOffset;
+		$dateTimeOffset;
 		$automations = Db::loadAll ("SELECT * FROM automation");
 		$dayNameNow = strtolower (date('D', time()));
+
 		foreach ($automations as $automation) {
-			$onValue = $automation['if_something'];
+			$onValue = json_decode($automation['if_something'], true);
 			$sceneDoJson = $automation['do_something'];
 			$actionDays = json_decode($automation['on_days'], true);
 			$value = time();
@@ -46,17 +47,24 @@ class AutomationManager{
 
 			if ($automation['active'] != 0){
 				if (in_array($dayNameNow, $actionDays)){
-					if (in_array($onValue, ['sunSet','time','now'])) {
-						if ($onValue == 'sunSet') {
+					if (in_array($onValue['type'], ['sunSet','time','now'])) {
+
+						if ($onValue['type'] == 'sunSet') {
 							$value = date_sunset($value, SUNFUNCS_RET_TIMESTAMP, 50.0755381 , 14.4378005, 90, $dateTimeOffset);
-						} else if ($onValue == 'sunRise') {
+						} else if ($onValue['type'] == 'sunRise') {
 							$value = date_sunrise($value, SUNFUNCS_RET_TIMESTAMP, 50.0755381 , 14.4378005, 90, $dateTimeOffset);
-						} else if ($onValue == 'time') {
-							$onValue = explode(':',$onValue);
+						} else if ($onValue['type'] == 'time') {
+							$onValue = explode(':',$onValue['value']);
 							$today = date_create('now');
 							$onValue = $today->setTime($onValue[0], $onValue[1]);
 							$value = $today->getTimestamp();
 						}
+
+						/*
+						Echo "Spouštění Automatizace";
+						echo "Aktual" . date( "HH:mm", strtotime(time()));
+						echo "Run At" . date( "HH:mm", strtotime($value));
+						*/
 
 						if (time() > $value){
 							if ($automation['executed'] == 0){
@@ -89,3 +97,4 @@ class AutomationManager{
 			}
 		}
 	}
+}

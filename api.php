@@ -41,7 +41,7 @@ if (isset($obj['user']) && $obj['user'] != ''){
 }
 
 //automationExecution
-//AutomationManager::executeAll();
+AutomationManager::executeAll();
 
 //Record Cleaning
 RecordManager::clean(RECORDTIMOUT);

@@ -41,7 +41,11 @@ class Ajax extends Template
 
 		}  else if (isset($_POST['automation_id'])){
 			$automationId = $_POST['automation_id'];
-			AutomationManager::deactive($automationId);
+			if (isset($_POST['action']) && $_POST['action'] == 'delete') {
+				AutomationManager::remove($automationId);
+			}else {
+				AutomationManager::deactive($automationId);
+			}
 		} else if (isset($_POST['subDevice']) && isset($_POST['action']) && $_POST['action'] == "chart") {
 			//TODO lepe rozstrukturovat
 			$subDeviceId = $_POST['subDevice'];
@@ -154,7 +158,11 @@ class Ajax extends Template
 			die();
 		} else if (isset($_POST['scene_id'])) {
 			$sceneId = $_POST['scene_id'];
-			echo SceneManager::execScene($sceneId);
+			if (isset($_POST['action']) && $_POST['action'] == 'delete') {
+				SceneManager::delete($sceneId);
+			}else {
+				echo SceneManager::execScene($sceneId);
+			}
 		}
 
 		die();

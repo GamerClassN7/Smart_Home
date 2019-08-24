@@ -4,7 +4,8 @@
         <h4 class="mb-4"><?php echo $LANG['t_createAutomation']?></h4>
         <form method="post">
             <div class="field">
-                <input type="hidden" name="atSelector" value="<?php if (isset($_POST['atTime'])) {
+                <input type="hidden" name="atSelector" value="<?php echo $_POST['atSelector']; ?>" required/>
+                <input type="hidden" name="atSelectorValue" value="<?php if (isset($_POST['atTime'])) {
                     echo $_POST['atTime'];
                 } else if (isset($_POST['atDeviceValue'])) {
                     $subDeviceId = $_POST['atDeviceValue'];

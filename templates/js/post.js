@@ -1,3 +1,22 @@
+function ajaxPostSimple(path, params, reload = false) {
+    navigator.vibrate([200]);
+    $.ajax({
+        url: path,
+        type: 'POST',
+        data: params,
+        success: function(msg){
+            console.log(msg);
+            if (reload){
+                location.reload();
+            }
+        },
+        error: function (request, status, error) {
+            console.log('0');
+        }
+    });
+    return false;
+}
+
 function ajaxPost(path, params, self, reload = false) {
     navigator.vibrate([200]);
     $.ajax({
@@ -14,7 +33,7 @@ function ajaxPost(path, params, self, reload = false) {
             }
             console.log(msg);
             if (reload){
-                location.reload();
+                //location.reload();
             }
         },
         error: function (request, status, error) {

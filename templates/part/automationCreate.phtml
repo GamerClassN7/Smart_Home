@@ -29,7 +29,7 @@
                     <select class="input" name="devices[]" multiple>
                         <?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ 
                             if ($subDeviceValue['type'] != 'on/off') continue;?>
-                            <option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name']; ?></option>
+                            <option value="<?php echo $subDeviceValue['masterDevice']; ?>"><?php echo $subDeviceValue['name']; ?></option>
                         <?php } ?>
                     </select>
                     

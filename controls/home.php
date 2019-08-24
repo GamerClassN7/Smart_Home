@@ -13,13 +13,16 @@ if (isset($_POST) && !empty($_POST)){
 
 
 		$deviceOwnerUserId = $_POST['deviceOwnerUserId'];
+		$deviceOwnerRoomId = $_POST['deviceOwnerId'];
+
 		try {
 			$args = array(
 				'owner' => $deviceOwnerUserId,
 				'name' => $deviceName,
 				'icon' => $deviceIcon,
 				'permission' => $permissionsInJson,
-				'sleep_time' => $sleepTime
+				'sleep_time' => $sleepTime,
+				'room_id' => $deviceOwnerRoomId,
 			);
 			DeviceManager::edit($deviceId, $args);
 		} catch (\Exception $e) {
