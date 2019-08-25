@@ -30,6 +30,7 @@ class Ajax extends Template
 			$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
 			$deviceId = SubDeviceManager::getSubDeviceMaster($subDeviceId)['device_id'];
 			if ($subDeviceData['type'] == 'on/off'){
+				//TODO: Pridelat kontrolu změnit stav pouze pokud se poslední [executed] stav != novému
 				if (RecordManager::getLastRecord($subDeviceData['subdevice_id'])['value'] == 0){
 					RecordManager::create($deviceId, 'on/off', 1);
 					echo 'ON';

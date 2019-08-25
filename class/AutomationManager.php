@@ -73,13 +73,40 @@ class AutomationManager{
 								$restart = true;
 							}
 						}
-					}
+					} else if ($onValue['type'] == 'outHome') {
 
-					if ($onValue == 'outHome') {
+					} else if ($onValue['type'] == 'inHome') {
 
-					}
-
-					if ($onValue == 'inHome') {
+					} else if ($onValue['type'] == 'noOneHome') {
+						$users = UserManager::getUsers();
+						$membersHome = 0;
+						foreach ($users as $key => $user) {
+							if ($user['at_home'] == 'true'){
+								$membersHome++;
+							}
+						}
+						if ($membersHome == 0 && $automation['executed'] == 0) {
+							$run = true;
+						} else if ($membersHome > 0 && $automation['executed'] == 1){
+							$restart = true;
+						}
+					} else if ($onValue['type'] == 'someOneHome') {
+						$users = UserManager::getUsers();
+						$membersHome = 0;
+						foreach ($users as $key => $user) {
+							if ($user['at_home'] == 'true'){
+								$membersHome++;
+							}
+						}
+						if ($membersHome == 0 && $automation['executed'] == 0) {
+							$restart = true;
+						} else if ($membersHome > 0 && $automation['executed'] == 1){
+							$run = true;
+						}
+						/*echo "Someone Home". '<br>';
+						echo "at home" . $membersHome. '<br>';
+						echo "run" . $run. '<br>';
+						echo "restart" . $restart. '<br>';*/
 
 					}
 

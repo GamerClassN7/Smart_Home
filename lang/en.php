@@ -63,8 +63,12 @@ $lang = [
 	'w_icon' => 'Icon',
 	'w_no' => 'no',
 	'w_noOne' => 'noone',
+	'w_someOne' => 'Some',
 	'w_room' => 'Room',
 	'w_moduls' => 'Moduls',
+	'w_home' => 'Home',
+	'w_neni' => 'At',
+	'w_is' => 'is',
 
 	//example
 	'' => '',

@@ -33,7 +33,7 @@ function ajaxPost(path, params, self, reload = false) {
             }
             console.log(msg);
             if (reload){
-                //location.reload();
+                location.reload();
             }
         },
         error: function (request, status, error) {

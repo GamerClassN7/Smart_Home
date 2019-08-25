@@ -20,10 +20,10 @@ class Automation extends Template
 		$automationsData = AutomationManager::getAll();
 		foreach ($automationsData as $automationKey => $automationData) {
 			$doSomething = [];
-			foreach (json_decode($automationData['do_something']) as $subdeviceId => $subDeviceState) {
-				$subDeviceMasterDeviceData = SubDeviceManager::getSubDeviceMaster($subdeviceId);
-				$doSomething[$subdeviceId] = [
-					'name' => $subDeviceMasterDeviceData['name'],
+			foreach (json_decode($automationData['do_something']) as $deviceId => $subDeviceState) {
+				$subDeviceMasterDeviceData = DeviceManager::getDeviceById($deviceId);
+				$doSomething[$deviceId] = [
+					'name' => $subDeviceMasterDeviceData['name'] . $subDeviceMasterDeviceData['device_id'] ,
 					'state' => $subDeviceState,
 				];
 			}
@@ -43,7 +43,7 @@ class Automation extends Template
 			$allSubDevicesData = SubDeviceManager::getAllSubDevices($deviceValue['device_id']);
 			foreach ($allSubDevicesData as $subDeviceKey => $subDeviceValue) {
 				$approvedSubDevices[$subDeviceValue['subdevice_id']] = [
-					'name' => $allDevicesData[$deviceKey]['name'],
+					'name' => $allDevicesData[$deviceKey]['name'] . $allDevicesData[$deviceKey]['device_id'],
 					'type' => $subDeviceValue['type'],
 					'masterDevice' => $subDeviceValue['device_id'],
 				];
