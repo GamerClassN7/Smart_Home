@@ -18,18 +18,20 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 
+
+//zabespecit proti Ddosu
 if (isset($obj['user']) && $obj['user'] != ''){
 	//user at home
 	$user = UserManager::getUser($obj['user']);
 	$userId = $user['user_id'];
 	$keyWords = ['entered', 'connected', 'connected to'];
 	UserManager::atHome($userId, $obj['atHome']);
-	echo 'ssaved';
+	echo 'saved';
 	die();
 }
 
 //Filtrování IP adress
-/*if (DEBUGMOD != 1) {
+if (DEBUGMOD != 1) {
 	if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {
 		echo json_encode(array(
 			'state' => 'unsuccess',
@@ -38,7 +40,7 @@ if (isset($obj['user']) && $obj['user'] != ''){
 		header("HTTP/1.1 401 Unauthorized");
 		exit();
 	}
-}*/
+}
 
 //automationExecution
 AutomationManager::executeAll();
