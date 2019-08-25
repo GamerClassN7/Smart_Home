@@ -23,7 +23,7 @@ class Automation extends Template
 			foreach (json_decode($automationData['do_something']) as $deviceId => $subDeviceState) {
 				$subDeviceMasterDeviceData = DeviceManager::getDeviceById($deviceId);
 				$doSomething[$deviceId] = [
-					'name' => $subDeviceMasterDeviceData['name'] . $subDeviceMasterDeviceData['device_id'] ,
+					'name' => $subDeviceMasterDeviceData['name'],
 					'state' => $subDeviceState,
 				];
 			}
