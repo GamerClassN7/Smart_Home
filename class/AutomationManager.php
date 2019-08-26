@@ -98,9 +98,9 @@ class AutomationManager{
 								$membersHome++;
 							}
 						}
-						if ($membersHome == 0 && $automation['executed'] == 0) {
+						if ($membersHome == 0 && $automation['executed'] == 1) {
 							$restart = true;
-						} else if ($membersHome > 0 && $automation['executed'] == 1){
+						} else if ($membersHome > 0 && $automation['executed'] == 0){
 							$run = true;
 						}
 						/*echo "Someone Home". '<br>';
