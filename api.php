@@ -11,6 +11,9 @@ foreach (["class", "views"] as $dir) {
 	}
 }
 
+//Log
+$logManager = new LogManager();
+
 //DB Conector
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 
@@ -38,6 +41,7 @@ if (DEBUGMOD != 1) {
 			'errorMSG' => "Using API from your IP insn´t alowed!",
 		));
 		header("HTTP/1.1 401 Unauthorized");
+		$logManager->write("acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordType::WARNING);
 		exit();
 	}
 }
@@ -74,6 +78,7 @@ if (!DeviceManager::registeret($token)) {
 		'state' => 'unsuccess',
 		'errorMSG' => "Device not registeret",
 	));
+	$logManager->write("Registering Device", LogRecordType::INFO);
 	exit();
 }
 
@@ -85,16 +90,6 @@ if (!DeviceManager::approved($token)) {
 	));
 	exit();
 }
-
-if (!DeviceManager::approved($token)) {
-	header("HTTP/1.1 401 Unauthorized");
-	echo json_encode(array(
-		'state' => 'unsuccess',
-		'errorMSG' => "Unaproved Device",
-	));
-	exit();
-}
-
 
 // Subdevices first data!
 if ($values != null || $values != "") {
@@ -107,6 +102,7 @@ if ($values != null || $values != "") {
 			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
 		}
 		RecordManager::create($deviceId, $key, round($value['value'],2));
+		$logManager->write("Device_ID " . $deviceId . " writed value " . $key . $value['value'], LogRecordType::INFO);
 	}
 
 	$hostname = strtolower($device['name']);
@@ -127,15 +123,17 @@ if ($values != null || $values != "") {
 
 		if (count(SubDeviceManager::getAllSubDevices($deviceId)) == 0) {
 			SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
-			RecordManager::create($deviceId, 'on/off', 0);
+			//RecordManager::create($deviceId, 'on/off', 0);
 		}
 
 		$subDeviceId = SubDeviceManager::getAllSubDevices($deviceId)[0]['subdevice_id'];
-
 		$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
 		$subDeviceLastReordValue = $subDeviceLastReord['value'];
 
-		RecordManager::setExecuted($subDeviceLastReord['record_id']);
+		if ($subDeviceLastReord['execuded'] == 0){
+			$logManager->write("subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
+			RecordManager::setExecuted($subDeviceLastReord['record_id']);
+		}
 
 		echo json_encode(array(
 			'device' => [
@@ -148,5 +146,6 @@ if ($values != null || $values != "") {
 			header("HTTP/1.1 200 OK");
 		}
 
+		unset($logManager);
 		Db::disconect();
 		die();
