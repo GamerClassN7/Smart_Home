@@ -116,8 +116,10 @@ class AutomationManager{
 						foreach ($sceneDoArray as $deviceId => $deviceState) {
 							RecordManager::create($deviceId, 'on/off', $deviceState);
 						}
+						$logManager->write("[AUTOMATIONS] automation id ". $automation['automation_id'] . " was executed");
 						Db::edit('automation', array('executed' => 1), 'WHERE automation_id = ?', array($automation['automation_id']));
 					} else if ($restart) {
+						$logManager->write("[AUTOMATIONS] automation id ". $automation['automation_id'] . " was restarted");
 						Db::edit('automation', array('executed' => 0), 'WHERE automation_id = ?', array($automation['automation_id']));
 					}
 				}

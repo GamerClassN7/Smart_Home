@@ -41,7 +41,7 @@ if (DEBUGMOD != 1) {
 			'errorMSG' => "Using API from your IP insn´t alowed!",
 		));
 		header("HTTP/1.1 401 Unauthorized");
-		$logManager->write("acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordType::WARNING);
+		$logManager->write("[API] acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordType::WARNING);
 		exit();
 	}
 }
@@ -78,7 +78,7 @@ if (!DeviceManager::registeret($token)) {
 		'state' => 'unsuccess',
 		'errorMSG' => "Device not registeret",
 	));
-	$logManager->write("Registering Device", LogRecordType::INFO);
+	$logManager->write("[API] Registering Device", LogRecordType::INFO);
 	exit();
 }
 
@@ -102,7 +102,7 @@ if ($values != null || $values != "") {
 			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
 		}
 		RecordManager::create($deviceId, $key, round($value['value'],2));
-		$logManager->write("Device_ID " . $deviceId . " writed value " . $key . $value['value'], LogRecordType::INFO);
+		$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . $value['value'], LogRecordType::INFO);
 	}
 
 	$hostname = strtolower($device['name']);
@@ -131,7 +131,7 @@ if ($values != null || $values != "") {
 		$subDeviceLastReordValue = $subDeviceLastReord['value'];
 
 		if ($subDeviceLastReord['execuded'] == 0){
-			$logManager->write("subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
+			$logManager->write("[API] subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
 			RecordManager::setExecuted($subDeviceLastReord['record_id']);
 		}
 
