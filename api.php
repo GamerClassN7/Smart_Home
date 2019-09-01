@@ -29,7 +29,8 @@ if (isset($obj['user']) && $obj['user'] != ''){
 	$userId = $user['user_id'];
 	$keyWords = ['entered', 'connected', 'connected to', 'true'];
 	UserManager::atHome($userId, $obj['atHome']);
-	echo 'saved';
+	echo 'Saved';
+	header("HTTP/1.1 200 OK");
 	die();
 }
 
