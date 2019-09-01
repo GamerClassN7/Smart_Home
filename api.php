@@ -27,7 +27,7 @@ if (isset($obj['user']) && $obj['user'] != ''){
 	//user at home
 	$user = UserManager::getUser($obj['user']);
 	$userId = $user['user_id'];
-	$keyWords = ['entered', 'connected', 'connected to'];
+	$keyWords = ['entered', 'connected', 'connected to', 'true'];
 	UserManager::atHome($userId, $obj['atHome']);
 	echo 'saved';
 	die();
