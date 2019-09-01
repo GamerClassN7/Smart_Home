@@ -38,7 +38,7 @@ if (DEBUGMOD != 1) {
 	if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {
 		echo json_encode(array(
 			'state' => 'unsuccess',
-			'errorMSG' => "Using API from your IP insn´t alowed!",
+			'errorMSG' => "Using API from your IP insnt alowed!",
 		));
 		header("HTTP/1.1 401 Unauthorized");
 		$logManager->write("[API] acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordType::WARNING);
@@ -47,11 +47,19 @@ if (DEBUGMOD != 1) {
 }
 
 //automationExecution
-AutomationManager::executeAll();
+try {
+	AutomationManager::executeAll();
+} catch (\Exception $e) {
+	$logManager->write("[Automation] Something happen during automation execution", LogRecordType::ERROR);
+}
 
 //Record Cleaning
-RecordManager::clean(RECORDTIMOUT);
+try {
+	RecordManager::clean(RECORDTIMOUT);
+} catch (\Exception $e) {
+	$logManager->write("[Record] cleaning record older that" . RECORDTIMOUT , LogRecordType::ERROR);
 
+}
 //Variables
 $token = $obj['token'];
 $values = null;
