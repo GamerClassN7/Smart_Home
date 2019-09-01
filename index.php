@@ -43,6 +43,8 @@ $userManager = new UserManager();
 if (isset($_POST['username']) && isset($_POST['password']) ) {
 	$userManager->login($_POST['username'], $_POST['password'], $_POST['remember']);
 }
+
+$logManager = new LogManager();
 /*
 $form = new Form('name','1','POST','');
 $form->addInput(InputTypes::TEXT,'nadpis','','Label','');
@@ -70,6 +72,7 @@ $route->add('/dashboard', 'Dashboard');
 $route->add('/setting', 'Setting');
 $route->add('/scene', 'Scene');
 $route->add('/ajax', 'Ajax');
+$route->add('/log', 'Log');
 $route->add('/rooms', 'Rooms');
 
 $route->submit();

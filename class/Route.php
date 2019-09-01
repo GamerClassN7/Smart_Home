@@ -20,7 +20,11 @@ class Route{
 			if ($urlValue === $urlGetParam) {
 				$useView = $this->views[$urlKey];
 				new $useView();
+				die();
 			}
 		}
+		echo 'Not Fount 404';
+		die();
+		//TODO: 404 přidělat
 	}
 }
