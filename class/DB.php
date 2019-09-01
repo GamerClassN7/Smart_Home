@@ -19,6 +19,10 @@ class Db{
 		}
 	}
 
+	public static function disconect(){
+		self::$join = null;
+	}
+
 	public static function loadOne ($sql, $values = array (), $numberKey = false) {
 		$answer = self::$join->prepare ($sql);
 		$answer->execute ($values);

@@ -35,10 +35,8 @@
 		<div class="col-md-9 main-body">
 			<div class="label m-1">
 				doma jsou: 
-				<?php 
-				$keyWords = ['entered', 'connected', 'connected to'];
-				foreach ($USERS as $user) {
-					if (in_array(trim($user['at_home']), $keyWords)) {
+				<?php foreach ($USERS as $user) {
+					if ($user['at_home'] == 'true') {
 						echo $user['username'] . ' ';
 					}
 				} ?>
