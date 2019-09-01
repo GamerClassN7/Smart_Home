@@ -25,13 +25,17 @@ $obj = json_decode($json, true);
 //zabespecit proti Ddosu
 if (isset($obj['user']) && $obj['user'] != ''){
 	//user at home
+
 	$user = UserManager::getUser($obj['user']);
-	$userId = $user['user_id'];
-	$keyWords = ['entered', 'connected', 'connected to', 'true'];
-	UserManager::atHome($userId, $obj['atHome']);
-	echo 'Saved';
-	header("HTTP/1.1 200 OK");
-	die();
+	if (!empty($user)) {
+		$userId = $user['user_id'];
+		if (is_bool($obj['atHome'])){
+			UserManager::atHome($userId, $obj['atHome'] ? 'true' : 'false');
+			echo 'Saved';
+			header("HTTP/1.1 200 OK");
+			die();
+		}
+	}
 }
 
 //Filtrování IP adress
