@@ -29,12 +29,11 @@ if (isset($obj['user']) && $obj['user'] != ''){
 	$user = UserManager::getUser($obj['user']);
 	if (!empty($user)) {
 		$userId = $user['user_id'];
-		if (is_bool($obj['atHome'])){
-			UserManager::atHome($userId, $obj['atHome'] ? 'true' : 'false');
-			echo 'Saved';
-			header("HTTP/1.1 200 OK");
-			die();
-		}
+		$atHome = boolval ($obj['atHome']);
+		UserManager::atHome($userId, $atHome ? 'true' : 'false');
+		echo 'Saved';
+		header("HTTP/1.1 200 OK");
+		die();
 	}
 }
 
