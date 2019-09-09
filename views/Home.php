@@ -25,15 +25,15 @@ class Home extends Template
 				foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
 
 					$events = RecordManager::getLastRecord($subDeviceData['subdevice_id'], 5);
-
-
-					$lastRecord = RecordManager::getLastRecord($subDeviceData['subdevice_id']);
+					//TODO: skontrolovat zdali se jedná o poslední (opravdu nejaktuálnější) záznam
+					$lastRecord = $events[0];
 					$parsedValue = round($lastRecord['value']);
 
 					/*Value Parsing*/
 					if ($subDeviceData['type'] == "on/off") {
 						$parsedValue = ($parsedValue == 1 ? 'ON' : 'OFF');
 					}
+
 					if ($subDeviceData['type'] == "door") {
 						$replacementTrue = 'Closed';
 						$replacementFalse = 'Opened';
@@ -63,18 +63,6 @@ class Home extends Template
 							$parsedValue = ($parsedValue == 0 ? $replacementTrue : $replacementFalse);
 						}
 					}
-
-					$subDevice = SubDeviceManager::getSubDevice($subDeviceData['subdevice_id']);
-					$records = RecordManager::getAllRecordForGraph($subDeviceData['subdevice_id']);
-
-					$array = array_column($records, 'value');
-					foreach ($array as $key => $value) {
-						$array[$key] = $value . $subDevice['unit'];
-					}
-
-					$data = json_encode($array);
-					$labels = json_encode($array);
-
 
 					$date2 = new DateTime($lastRecord['time']);
 
@@ -134,29 +122,6 @@ class Home extends Template
 				'deviceCount' => $roomsData['device_count'],
 				'devices' => $devices,
 			];
-		}
-
-		if (isset($_POST['deviceId'])){
-			$deviceData = DeviceManager::getDeviceById($_POST['deviceId']);
-
-			$subDevices = [];
-			$subDevicesData = SubDeviceManager::getAllSubDevices($_POST['deviceId']);
-
-			foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
-				$subDevices[$subDeviceData['subdevice_id']] = [
-					'type' => $subDeviceData['type'],
-					'unit' => $subDeviceData['unit'],
-				];
-			}
-
-			$device = [
-				'id' => $deviceData['device_id'],
-				'name' => $deviceData['name'],
-				'token' => $deviceData['token'],
-				'icon' => $deviceData['icon'],
-				'subDevices' => $subDevices,
-			];
-			$template->prepare('deviceData', $device);
 		}
 
 		$users = UserManager::getUsers();
