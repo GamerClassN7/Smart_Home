@@ -4,7 +4,10 @@ if (isset($_POST) && !empty($_POST)){
 		$deviceId = $_POST['deviceId'];
 		$deviceName = $_POST['deviceName'];
 		$deviceIcon = $_POST['deviceIcon'];
-		$sleepTime = $_POST['sleepTime'];
+		$sleepTime = 0;
+		if (isset($_POST['sleepTime'])) {
+			$sleepTime = $_POST['sleepTime'];
+		}
 		//TODO: if device isnt on off
 		$permissionsInJson = json_encode([
 			(int) $_POST['permissionOwner'],
