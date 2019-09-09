@@ -77,7 +77,7 @@
                                 $roomId =  $room['room_id'];
                                 $roomName =  $room['name'];											
                                 ?>
-                                <option value="<?php echo $roomName; ?>" <?php ECHO ((int) $roomId === (int)  $DEVICE['room'] ? 'selected="selected"' : ''); ?>><?php echo $roomName; ?></option>
+                                <option value="<?php echo $roomId; ?>" <?php ECHO ((int) $roomId === (int)  $DEVICE['room'] ? 'selected="selected"' : ''); ?>><?php echo $roomName; ?></option>
                             <?php } ?>
                         </select>
                     </div>
