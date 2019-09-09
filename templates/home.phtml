@@ -34,12 +34,17 @@
 		
 		<div class="col-md-9 main-body">
 			<div class="label m-1">
-				doma jsou: 
-				<?php foreach ($USERS as $user) {
+				<?php 
+				$usersAtHome = '';
+				foreach ($USERS as $user) {
 					if ($user['at_home'] == 'true') {
-						echo $user['username'] . ' ';
+						$usersAtHome .= $user['username'] . ' ';
 					}
-				} ?>
+				}
+				if ($usersAtHome != "") {
+					echo 'doma jsou:' . $usersAtHome; 	
+				}
+				?>
 			</div>
 			<select class="select m-1" name="room">
 				<option value="all">All</option>
