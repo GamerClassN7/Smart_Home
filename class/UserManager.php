@@ -26,7 +26,7 @@ class UserManager
 			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
 					if (isset($rememberMe) && $rememberMe == 'true') {
-						setcookie ("rememberMe", $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), "/", $_SERVER['HTTP_HOST'], 1);
+						setcookie ("rememberMe" . str_replace(".", "_", $_SERVER['HTTP_HOST']), $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), "/", $_SERVER['HTTP_HOST'], 1);
 					}
 					$_SESSION['user']['id'] = $user['user_id'];
 					$page = "./index.php";
@@ -51,8 +51,8 @@ class UserManager
 		if (isset ($_SESSION['user']) && isset($_SESSION['user']['id'])) {
 			return true;
 		} else {
-			if (isset ($_COOKIE['rememberMe'])){
-				if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($this->getDecryptedCookie($_COOKIE['rememberMe'])))) {
+			if (isset ($_COOKIE['rememberMe' . str_replace(".", "_", $_SERVER['HTTP_HOST'])])){
+				if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($this->getDecryptedCookie($_COOKIE['rememberMe' . str_replace(".", "_", $_SERVER['HTTP_HOST'])])))) {
 					$_SESSION['user']['id'] = $user['user_id'];
 					return true;
 				}
@@ -62,7 +62,7 @@ class UserManager
 	}
 
 	public function logout () {
-		setcookie ("rememberMe","", time() - (30 * 24 * 60 * 60 * 1000), "/", $_SERVER['HTTP_HOST'], 1);
+		setcookie ("rememberMe" . str_replace(".", "_", $_SERVER['HTTP_HOST']),"", time() - (30 * 24 * 60 * 60 * 1000), "/", $_SERVER['HTTP_HOST'], 1);
 		unset($_SESSION['user']);
 		session_destroy();
 	}
