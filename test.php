@@ -33,11 +33,65 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript">
 function foo(element){
+	var id = element.attr("name").match(/\d+/)[0]
+	$("[name='variable["+id+"][value]']").remove();
+	$("[name='variable["+id+"][equaler]']").remove();
+
 	if (element.val() == "atDeviceValue") {
-		var input = $("<input name=''/>");
+		var arrVarOperator = [
+			{val : '>', text: '>'},
+			{val : '<', text: '<'},
+		];
+
+		var varOperator = $('<select name="variable['+id+'][equaler]">');
+		$(arrVarOperator).each(function() {
+			varOperator.append($('<option>').attr('value',this.val).text(this.text));
+		});
+		element.parent().append(varOperator);
+
+
+		var input = $("<input/>");
 		input.attr("type","text");
-		input.attr("name",element.attr("name"));
+		input.attr("name","variable["+id+"][value]");
 		element.parent().append(input);
+	} else if (element.val() == "time") {
+		var arrVarOperator = [
+			{val : '>', text: '>'},
+			{val : '<', text: '<'},
+		];
+
+		var varOperator = $('<select name="variable['+id+'][equaler]">');
+		$(arrVarOperator).each(function() {
+			varOperator.append($('<option>').attr('value',this.val).text(this.text));
+		});
+		element.parent().append(varOperator);
+
+		var input = $("<input/>");
+		input.attr("type","time");
+		input.attr("name","variable["+id+"][value]");
+		element.parent().append(input);
+	}else {
+		var arrVarOperator = [
+			{val : '=', text: '=='},
+			{val : '!=', text: '!='},
+		];
+
+		var varOperator = $('<select name="variable['+id+'][equaler]">');
+		$(arrVarOperator).each(function() {
+			varOperator.append($('<option>').attr('value',this.val).text(this.text));
+		});
+		element.parent().append(varOperator);
+
+		var arrVarValue = [
+			{val : 'true', text: 'True'},
+			{val : 'false', text: 'False'},
+		];
+
+		var varValue = $('<select name="variable['+id+'][value]">');
+		$(arrVarValue).each(function() {
+			varValue.append($('<option>').attr('value',this.val).text(this.text));
+		});
+		element.parent().append(varValue);
 	}
 }
 $("#addButton,#restartAddButton").click( function (event) {
@@ -55,45 +109,45 @@ $("#addButton,#restartAddButton").click( function (event) {
 		{val : 'someOneHome', text: 'Nekdo Doma'},
 	];
 
-	var varSelect = $('<select name="variable['+numItems+'][]">');
+	var varSelect = $('<select name="variable['+numItems+'][what]">');
 	$(arrVarSelect).each(function() {
 		varSelect.append($('<option>').attr('value',this.val).text(this.text));
 	});
 	varSelect.attr("onchange", "foo($(this))");
 
 	/*onchange = function(e) {
-		console.log(this.value);
-		if (this.value == 'atDeviceValue') {
-			alert("ok");
-		}
-	};*/
+	console.log(this.value);
+	if (this.value == 'atDeviceValue') {
+	alert("ok");
+}
+};*/
 
-	var arrVarOperator = [
-		{val : '>', text: '>'},
-		{val : '<', text: '<'},
-		{val : '=', text: '=='},
-		{val : '!=', text: '!='},
-	];
+var arrVarOperator = [
+	{val : '>', text: '>'},
+	{val : '<', text: '<'},
+	{val : '=', text: '=='},
+	{val : '!=', text: '!='},
+];
 
-	var varOperator = $('<select name="variable['+numItems+'][]">');
-	$(arrVarOperator).each(function() {
-		varOperator.append($('<option>').attr('value',this.val).text(this.text));
-	});
+var varOperator = $('<select name="variable['+numItems+'][equaler]">');
+$(arrVarOperator).each(function() {
+	varOperator.append($('<option>').attr('value',this.val).text(this.text));
+});
 
-	var arrVarValue = [
-		{val : 'true', text: 'True'},
-		{val : 'false', text: 'False'},
-	];
+var arrVarValue = [
+	{val : 'true', text: 'True'},
+	{val : 'false', text: 'False'},
+];
 
-	var varValue = $('<select name="variable['+numItems+'][]">');
-	$(arrVarValue).each(function() {
-		varValue.append($('<option>').attr('value',this.val).text(this.text));
-	});
+var varValue = $('<select name="variable['+numItems+'][value]">');
+$(arrVarValue).each(function() {
+	varValue.append($('<option>').attr('value',this.val).text(this.text));
+});
 
-	var newDiv = $("<div class=var>").append(varSelect);
-	newDiv = newDiv.append(varOperator);
-	newDiv = newDiv.append(varValue);
-	$(this).parent().append(newDiv);
+var newDiv = $("<div class=var>").append(varSelect);
+newDiv = newDiv.append(varOperator);
+newDiv = newDiv.append(varValue);
+$(this).parent().append(newDiv);
 
 });
 
