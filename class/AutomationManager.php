@@ -1,4 +1,5 @@
 <?php
+
 class AutomationManager{
 	public static $automation;
 
@@ -33,7 +34,8 @@ class AutomationManager{
 	}
 
 	public function executeAll(){
-		$dateTimeOffset;
+		global $logManager;
+
 		$automations = Db::loadAll ("SELECT * FROM automation");
 		$dayNameNow = strtolower (date('D', time()));
 
@@ -47,12 +49,12 @@ class AutomationManager{
 
 			if ($automation['active'] != 0){
 				if (in_array($dayNameNow, $actionDays)){
-					if (in_array($onValue['type'], ['sunSet','time','now'])) {
+					if (in_array($onValue['type'], ['sunSet', 'sunRise', 'time','now'])) {
 
 						if ($onValue['type'] == 'sunSet') {
-							$value = date_sunset($value, SUNFUNCS_RET_TIMESTAMP, 50.0755381 , 14.4378005, 90, $dateTimeOffset);
+							$value = date_sunset($value, SUNFUNCS_RET_TIMESTAMP, 50.0755381 , 14.4378005, 90);
 						} else if ($onValue['type'] == 'sunRise') {
-							$value = date_sunrise($value, SUNFUNCS_RET_TIMESTAMP, 50.0755381 , 14.4378005, 90, $dateTimeOffset);
+							$value = date_sunrise($value, SUNFUNCS_RET_TIMESTAMP, 50.0755381 , 14.4378005, 90);
 						} else if ($onValue['type'] == 'time') {
 							$onValue = explode(':',$onValue['value']);
 							$today = date_create('now');
