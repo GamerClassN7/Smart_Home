@@ -7,9 +7,9 @@
 const char* ssid = "";
 const char* pasw = "";
 const char* server = "http://dev.steelants.cz/vasek/home/api.php";
-const char* hwId = "tatsad5";
+const char* hwId = "";
 int lastState = 0;
-int reconectAtemptsMax = 0; //time to wait before restart
+int reconectAtemptsMax = 10; //time to wait before restart
 
 //Constant
 #define SONOFF 12
@@ -35,45 +35,27 @@ void setup() {
     Serial.print(ssid); Serial.println(" ...");
     
     int i = 0;
-    while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect    
+    while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
+        delay(1000);
         Serial.print(++i); Serial.print(' ');
-        digitalWrite(SONOFF_LED, HIGH);
-        delay(1000);
-        digitalWrite(SONOFF_LED, LOW);
-        delay(1000);
     }
-    digitalWrite(SONOFF_LED, HIGH);
-        
+    
     Serial.println('\n');
     Serial.println("Connection established!");  
     Serial.print("IP address:\t");
     Serial.println(WiFi.localIP());   
-    
 }
 
 void loop() {
-    if (WiFi.status() != WL_CONNECTED){
-      digitalWrite(SONOFF_LED, HIGH);
-      delay(1000);
-      digitalWrite(SONOFF_LED, LOW);
-      delay(1000);
-      reconectAtemptsMax++;
-      Serial.println("Reconect Attempt " + String(reconectAtemptsMax) + " from 10");
-      if (reconectAtemptsMax == 10) {
-        ESP.restart();
-      }
-      return;
-    }
-    
     StaticJsonDocument<200> jsonContent;
     jsonContent["token"] = hwId;
     
     if (!digitalRead(SONOFF_BUT)){
         jsonContent["values"]["on/off"]["value"] = (int) !lastState;
         if (!lastState == 1) {
-            digitalWrite(SONOFF, HIGH);
+            digitalWrite(SONOFF, HIGH)
         } else if (!lastState == 0){
-            digitalWrite(SONOFF, LOW);
+            digitalWrite(SONOFF, LOW)
         }
         while(!digitalRead(SONOFF_BUT)) {
             delay(100);
@@ -98,17 +80,15 @@ void loop() {
     String hostname = jsonContent["device"]["hostname"];
     int state = jsonContent["value"];
     WiFi.hostname(hostname);
-
-    if (httpCode == 200){
-      if (state !=  lastState){
-          if (state == 1 && lastState == 0) {
-              Serial.println("ON");
-              digitalWrite(SONOFF, HIGH);   // Turn the LED on by making the voltage LOW
-          } else {
-              Serial.println("OFF");
-              digitalWrite(SONOFF, LOW);   // Turn the LED on by making the voltage LOW
-          }
-      }
-  }
-  lastState = digitalRead(SONOFF);
+    
+    if (state !=  lastState){
+        if (state == 1 && lastState == 0) {
+            Serial.println("ON");
+            digitalWrite(SONOFF, HIGH);   // Turn the LED on by making the voltage LOW
+        } else {
+            Serial.println("OFF");
+            digitalWrite(SONOFF, LOW);   // Turn the LED on by making the voltage LOW
+        }
+    }
+    lastState = state;
 }
