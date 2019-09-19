@@ -4,7 +4,7 @@
 #include <ArduinoJson.h>
 
 //Variables
-const char* ssid = "";
+const char* ssid = " ";
 const char* pasw = "";
 const char* server = "http://dev.steelants.cz/vasek/home/api.php";
 const char* hwId = "";
