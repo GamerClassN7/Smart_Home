@@ -4,4 +4,4 @@ _nemazat/index.html
 _nemazat/css/main.css.map
 _nemazat/css/main.css
 _nemazat/css/font-awesome.min.css
-logs/*.log
+app/logs/*.log
