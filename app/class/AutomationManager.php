@@ -13,7 +13,7 @@ class AutomationManager{
 		return Db::command ('UPDATE automation SET active = ? WHERE automation_id=?', array ($flipedValue,$automationId));
 	}
 
-	public function create ($name, $onDays, $doCode, $ifCode) {
+	public function create ($name, $onDays, $doCode, $ifCode, $automationId = "") {
 		$scene = array (
 			'name' => $name,
 			'on_days' => $onDays,
@@ -21,7 +21,11 @@ class AutomationManager{
 			'do_something' => $doCode,
 		);
 		try {
-			Db::add ('automation', $scene);
+			if ($automationId == "") {
+				Db::add ('automation', $scene);
+			} else {
+				Db::edit ('automation', $scene, 'WHERE automation_id = ?', array ($automationId));
+			}
 		} catch(PDOException $error) {
 			echo $error->getMessage();
 			die();
