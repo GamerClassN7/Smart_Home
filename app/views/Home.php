@@ -14,6 +14,24 @@ class Home extends Template
 
 		$template = new Template('home');
 
+		//users instantialize
+		$users = UserManager::getUsers();
+		$template->prepare('users', $users);
+
+		//Users at home Info
+		$usersAtHome = '';
+		$i = 0;
+		foreach ($users as $user) {
+			$i++;
+			if ($user['at_home'] == 'true') {
+				$usersAtHome .= $user['username'];
+				if ($usersAtHome != "" && isset($users[$i + 1])){
+					$usersAtHome .= ', ';
+				}
+			}
+		}
+		$template->prepare('usersAtHome', $usersAtHome);
+
 		$roomsItems = [];
 		$roomsData = RoomManager::getAllRooms();
 		foreach ($roomsData as $roomKey => $roomsData) {
@@ -123,9 +141,6 @@ class Home extends Template
 				'devices' => $devices,
 			];
 		}
-
-		$users = UserManager::getUsers();
-		$template->prepare('users', $users);
 
 		$rooms = RoomManager::getAllRooms();
 		$template->prepare('rooms', $rooms);

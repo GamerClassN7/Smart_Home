@@ -16,7 +16,7 @@ class Log extends Template
 		$template->prepare('title', 'Log');
 
 		$result = array();
-		$cdir = scandir('./logs/');
+		$cdir = scandir('./app/logs/');
 		foreach ($cdir as $key => $value)
 		{
 			if (!in_array($value,array(".","..")))

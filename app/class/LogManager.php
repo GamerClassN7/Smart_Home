@@ -16,17 +16,18 @@ class LogManager
 	function __construct($fileName = "")
 	{
 		if ($fileName == ""){
-			$fileName = './logs/'. date("Y-m-d").'.log';
+			$fileName = './app/logs/'. date("Y-m-d").'.log';
 		}
-		if(!is_dir("./logs/"))
+		if(!is_dir("./app/logs/"))
 		{
-			mkdir("./logs/");
+			mkdir("./app/logs/");
 		}
 		$this->logFile = fopen($fileName, "a") or die("Unable to open file!");
 	}
 
 	function write($value, $type = LogRecordType::ERROR){
-		$record = "[".date("H:m:s")."][".$type."]" .$value . "\n";
+		$record = "[".date("H:m:s")."][".$type."]" . $value . "\n";
+		$record = Utilities::stringInsert($record,"\n",65);
 		fwrite($this->logFile, $record);
 	}
 

@@ -3,12 +3,33 @@
 include_once('./config.php');
 
 //Autoloader
-foreach (["class", "views"] as $dir) {
-	$files = scandir('./'.$dir.'/');
-	$files = array_diff($files, array('.', '..'));
-	foreach ($files as $file) {
-		include_once './'.$dir.'/'.  $file;
-	}
+
+$files = scandir('./app/class/');
+
+$files = array_diff($files, array(
+	'.',
+	'..',
+	'app',
+	'ChartJS.php',
+	'ChartJS_Line.php',
+	'ChartManager.php',
+	'DashboardManager.php',
+	'Partial.php',
+	'Form.php',
+	'Route.php',
+	'Template.php',
+	'Ajax.php',
+));
+
+foreach($files as $file) {
+	include './app/class/'.  $file;
+}
+
+
+//Allow acces only wia Curl, Ajax ETC
+$restAcess = 'XMLHttpRequest' == ( $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '' );
+if (!$restAcess){
+	header('Location: ./');
 }
 
 //Log
@@ -21,17 +42,16 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 
-
 //zabespecit proti Ddosu
 if (isset($obj['user']) && $obj['user'] != ''){
 	//user at home
-
 	$user = UserManager::getUser($obj['user']);
 	if (!empty($user)) {
 		$userId = $user['user_id'];
-		$atHome = boolval ($obj['atHome']);
-		UserManager::atHome($userId, $atHome ? 'true' : 'false');
-		echo 'Saved';
+		$atHome = $obj['atHome'];
+		UserManager::atHome($userId, $atHome);
+		$logManager->write("[Record] user " . $userId . "changet his home state to " . $atHome . RECORDTIMOUT , LogRecordType::WARNING);
+		echo 'Saved: ' . $atHome;
 		header("HTTP/1.1 200 OK");
 		die();
 	}
@@ -61,7 +81,7 @@ try {
 try {
 	RecordManager::clean(RECORDTIMOUT);
 } catch (\Exception $e) {
-	$logManager->write("[Record] cleaning record older that" . RECORDTIMOUT , LogRecordType::ERROR);
+	$logManager->write("[Record] cleaning record older that " . RECORDTIMOUT , LogRecordType::ERROR);
 
 }
 //Variables
@@ -114,7 +134,7 @@ if ($values != null || $values != "") {
 			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
 		}
 		RecordManager::create($deviceId, $key, round($value['value'],2));
-		$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . $value['value'], LogRecordType::INFO);
+		$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
 	}
 
 	$hostname = strtolower($device['name']);

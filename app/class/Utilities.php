@@ -35,4 +35,10 @@ class Utilities
 		);
 		return preg_replace(array_keys($utf8), array_values($utf8), $text);
 	}
+
+	function stringInsert($str,$insertstr,$pos)
+	{
+		$str = substr($str, 0, $pos) . $insertstr . substr($str, $pos);
+		return $str;
+	}
 }

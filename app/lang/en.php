@@ -6,6 +6,7 @@ $lang = [
 	'm_settings' => 'Setting',
 	'm_automatization' => 'Automatization',
 	'm_scenes' => 'Scenes',
+	'm_log' => 'Log',
 
 	//Buttons
 	'b_year' => 'Year',
@@ -42,6 +43,7 @@ $lang = [
 	'l_permission' => 'Permission',
 	'l_inMinutes' => 'in minutes',
 	'l_sleepTime' => 'Device sleep Time',
+	'l_atHome' => 'At home',
 
 	//Title
 	't_createScene' => 'Create Scene',

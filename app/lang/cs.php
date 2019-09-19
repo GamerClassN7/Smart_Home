@@ -6,6 +6,7 @@ $lang = [
 	'm_settings' => 'Nastavení',
 	'm_automatization' => 'Automatizace',
 	'm_scenes' => 'Scény',
+	'm_log' => 'Log',
 
 	//Buttons
 	'b_year' => 'Rok',
@@ -42,6 +43,7 @@ $lang = [
 	'l_permission' => 'Oprávmnění',
 	'l_inMinutes' => 'v minutách',
 	'l_sleepTime' => 'Doba spánku zařízení',
+	'l_atHome' => 'Doma Jsou',
 
 	//Title
 	't_createScene' => 'Vytvořit scénu',

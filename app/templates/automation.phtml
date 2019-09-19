@@ -11,23 +11,12 @@
 	<div class="row no-gutters main">
 		<div class="col-md-3 d-sm-none"></div>
 		<div class="col-md-3 nav-container">
-			<div class="nav">
-				<div class="nav-item">
-					<a href="./"><i class="fa fa-home"></i><span><?php echo $LANG['m_home']?></span></a>
-				</div>
-				<div class="nav-item">
-					<a href="dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i><span><?php echo $LANG['m_dashboard']?></span></a>
-				</div>
-				<div class="nav-item">
-					<a href="setting"><i class="fa fa-wrench" aria-hidden="true"></i></i><span><?php echo $LANG['m_settings']?></span></a>
-				</div>
-				<div class="nav-item is-active">
-					<a href="automation"><i class="fa fa-calendar-o" aria-hidden="true"></i><span><?php echo $LANG['m_automatization']?></span></a>
-				</div>
-				<div class="nav-item">
-					<a href="scene"><i class="fa fa-terminal" aria-hidden="true"></i><span><?php echo $LANG['m_scenes']?></span></a>
-				</div>
-			</div>
+			<?php
+			$partial = new Partial('menu');
+			$partial->prepare('item','automation');
+			$partial->prepare('lang',$LANG);
+			$partial->render();
+			?>
 		</div>
 		<div class="col-md-9 main-body">
 			<a class="button is-primary m-1" onClick="$('#modal').removeClass('modal-container-hiden').show();"><?php echo $LANG['t_createAutomation'];?></a>

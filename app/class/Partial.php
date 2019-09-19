@@ -1,5 +1,5 @@
 <?php
-class Template extends Partial{
+class Partial{
 	var $assignedValues = [];
 	var $partBuffer;
 	var $path;
@@ -7,11 +7,11 @@ class Template extends Partial{
 
 	function __construct($path = "", $debug = false) {
 		$this->debug = $debug;
-		if (!empty('templates/' . $path . '.phtml') && file_exists('templates/' . $path . '.phtml')) {
+		if (!empty('app/templates/part/' . $path . '.phtml') && file_exists('app/templates/part/' . $path . '.phtml')) {
 			$this->path = $path;
 		} else {
 			echo '<pre>';
-			echo 'PHTML: Template File ' . $path . ' not found';
+			echo 'PHTML: Parial File ' . $path . ' not found';
 			echo '</pre>';
 			die();
 		}
@@ -25,10 +25,10 @@ class Template extends Partial{
 	}
 
 	function render() {
-		extract($this->assignedValues);
-		if (!empty('controls/' . $this->path . '.php') && file_exists('controls/' . $this->path . '.php')) {
-			require_once('controls/' . $this->path . '.php');
+		if (!empty($this->assignedValues)){
+			extract($this->assignedValues);
 		}
-		require_once('templates/' . $this->path . '.phtml');
+
+		require('app/templates/part/' . $this->path . '.phtml');
 	}
 }

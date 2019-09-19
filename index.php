@@ -11,10 +11,11 @@ mb_internal_encoding ("UTF-8");
 
 //Autoloader
 foreach (["class", "views"] as $dir) {
-	$files = scandir('./'.$dir.'/');
-	$files = array_diff($files, array('.', '..'));
+	$files = scandir('./app/'.$dir.'/');
+	$files = array_diff($files, array('.', '..', 'app'));
+
 	foreach($files as $file) {
-		include_once './'.$dir.'/'.  $file;
+		include './app/'.$dir.'/'.  $file;
 	}
 }
 
@@ -33,7 +34,7 @@ if (DEBUGMOD == 1) {
 	echo '</pre>';
 	echo '</dev>';*/
 }
-require_once './lang/' . $langTag . '.php';
+require_once './app/lang/' . $langTag . '.php';
 
 //DB Conector
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
@@ -55,8 +56,8 @@ $form->addInput(InputTypes::TEXT,'nadpis','','Label','');
 $form->addInput(InputTypes::CHECK,'nadpis','','Label','');
 $form->addInput(InputTypes::TEXT,'nadpis','','Label','');
 $arg = array(
-	'test_v' => 'test',
-	'test_v2' => 'test',
+'test_v' => 'test',
+'test_v2' => 'test',
 );
 $form->addSelect('1', '1', '1', $arg, false);
 $form->render();
