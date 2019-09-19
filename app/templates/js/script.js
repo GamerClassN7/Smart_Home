@@ -14,52 +14,52 @@ if ('serviceWorker' in navigator) {
 $('select').change(function(e) {
     console.log($(this).val());
     if( $(this).val() == 'time') {
-        
+
         $('#atTime').prop( "disabled", false );
-        
+
         $('#atDeviceValue').prop( "disabled", true );
         $('#atDeviceValueInt').prop( "disabled", true );
     } else if( $(this).val() == 'atDeviceValue') {
-        
+
         $('#atDeviceValue').prop( "disabled", false );
         $('#atDeviceValueInt').prop( "disabled", false );
-        
+
         $('#atTime').prop( "disabled", true );
     }
 });
 
-var pressTimer; 
+var pressTimer;
 var touch = 0;
 var touchSubId = "";
-$("div.square-content").on('touchend', function (e){ 
+$("div.square-content").on('touchend', function (e){
     clearTimeout(pressTimer);
 });
 
 $("div.square-content").on('touchstart', function (eTarget) {
     navigator.vibrate([500]);
     var id = '';
-    
+
     var windowLoc = $(location).attr('pathname');
     windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
     console.log(windowLoc);
-    if (windowLoc == "/") {    
+    if (windowLoc == "/") {
         id = $(this).attr('id').replace('device-', '');
     } else if (windowLoc == "/scene") {
         id = $(this).attr('id').replace('scene-', '');
     } else if (windowLoc == "/automation") {
         id = $(this).attr('id').replace('automation-', '');
     }
-    
+
     var subId = $(this).attr('data-sub-device-id');
-    
+
     touch++;
     if(touch == 2 && touchSubId == subId){
         console.log("Detail");
-        if (windowLoc == "/") {    
+        if (windowLoc == "/") {
             $("#modal-detail-"+subId).removeClass('modal-container-hiden').show();
             ajaxChart(subId);
         } else if (windowLoc == "/scene") {
-            
+
         } else if (windowLoc == "/automation") {
         }
         touch = 0;
@@ -67,7 +67,7 @@ $("div.square-content").on('touchstart', function (eTarget) {
         return;
     }
     touchSubId = subId;
-    
+
     pressTimer = window.setTimeout(function (e) {
         console.log("Setting");
         $("#modal-setting-"+id).removeClass('modal-container-hiden').show();
@@ -81,7 +81,7 @@ $("div.square-content").mousedown(function(e) {
         windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
         console.log(windowLoc);
         var id = null;
-        if (windowLoc == "/") {    
+        if (windowLoc == "/") {
             id = $(this).attr('id').replace('device-', '');
         } else if (windowLoc == "/scene") {
             id = $(this).attr('id').replace('scene-', '');
@@ -91,7 +91,7 @@ $("div.square-content").mousedown(function(e) {
         $("#modal-setting-"+id).removeClass('modal-container-hiden').show();
         console.log("Setting");
         console.log("modal" + id);
-    }    
+    }
 });
 
 $(".close").on('click', function (e) {
@@ -154,9 +154,9 @@ console.log();
 if (windowLoc == "/") {
     var selectRoomId = localStorage.getItem("selectedRoomId");
     console.log('Saved Selected Room ID '+ selectRoomId);
-    $('[name="room"]').val(selectRoomId);     
+    $('[name="room"]').val(selectRoomId);
     $('.device-button').each(function(){
-        if (selectRoomId != 'all'){  
+        if (selectRoomId != 'all'){
             if($(this).data('room-id') != selectRoomId){
                 $(this).hide();
             } else {
@@ -167,19 +167,19 @@ if (windowLoc == "/") {
 }
 
 //Room selector
-$( '[name="room"]' ).change(function (e) {    
+$( '[name="room"]' ).change(function (e) {
     console.log('Selected Room ID ' + this.value)
     var roomId = this.value;
     localStorage.setItem("selectedRoomId", roomId);
     $('.device-button').show();
-    if (roomId != 'all'){        
+    if (roomId != 'all'){
         $('.device-button').each(function(){
             if($(this).data('room-id') != roomId){
                 $(this).hide();
             }
         });
     }
-});  
+});
 
 
 // var windowLoc = $(location).attr('pathname');
@@ -233,40 +233,7 @@ $( "button[name=remove]" ).click(function(e) {
             id = $(this).data('scene-id');
             $("#scene-"+id+"-content").remove();
         } else if (windowLoc == "/automation") {
-            id = $(this).data('automation-id');
-            $("#automation-"+id+"-content").remove();
+            $(this).parent().remove();
         }
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

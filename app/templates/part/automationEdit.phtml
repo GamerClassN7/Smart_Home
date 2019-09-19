@@ -8,7 +8,7 @@
             <div class="field">
                 <div class="label"><?php echo $LANG['l_runAt']?></div>
                 <div class="field">
-                    <?php //TODO Dodělat identifikaci pro Selctor události a selector času zařízení hodnoty ?> 
+                    <?php //TODO Dodělat identifikaci pro Selctor události a selector času zařízení hodnoty ?>
                     <select class="input" name="atSelector" id="valueSelector" required>
                         <option	value="sunSet" <?php ECHO ($AUTOMATION['ifSomething'] == "sunSet" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_sunSet']?></option>
                         <option	value="sunRise" <?php ECHO ($AUTOMATION['ifSomething'] == "sunRise" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_sunRice']?></option>
@@ -26,35 +26,14 @@
                     =
                     <input class="input" type="num" name="atDeviceValueInt" id="atDeviceValueInt" required <?php ECHO ($AUTOMATION['ifSomething'] == "atDeviceValue" ? '' : 'disabled'); ?>/>
                 </div>
-                
-                <div class="label"><?php echo $LANG['l_resetAt']?></div>
-                <div class="field">
-                    <?php //TODO Dodělat identifikaci pro Selctor události a selector času zařízení hodnoty ?> 
-                    <select class="input" name="restartAtSelector" id="valueSelector" required>
-                        <option	value="sunSet" <?php ECHO ($AUTOMATION['ifSomething'] == "sunSet" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_sunSet']?></option>
-                        <option	value="sunRise" <?php ECHO ($AUTOMATION['ifSomething'] == "sunRise" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_sunRice']?></option>
-                        <option	value="inHome" <?php ECHO ($AUTOMATION['ifSomething'] == "inHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_inHome']?></option>
-                        <option	value="outHome" <?php ECHO ($AUTOMATION['ifSomething'] == "outHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_outHome']?></option>
-                        <option	value="time" <?php ECHO ($AUTOMATION['ifSomething'] == "time" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_time']?></option>
-                        <option	value="atDeviceValue" <?php ECHO ($AUTOMATION['ifSomething'] == "atDeviceValue" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_deviceValue']?></option>
-                    </select>
-                    <input class="input" type="time" name="restartAtTime" id="atTime" <?php ECHO ($AUTOMATION['ifSomething'] == "time" ? '' : 'disabled'); ?>/>
-                    <select class="input" name="restartAtDeviceValue" id="atDeviceValue" <?php ECHO ($AUTOMATION['ifSomething'] == "atDeviceValue" ? '' : 'disabled'); ?>>
-                        <?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ ?>
-                            <option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name']; ?>[<?php echo $subDeviceValue['type'];  ?>]</option>
-                        <?php } ?>
-                    </select>
-                    =
-                    <input class="input" type="num" name="restartAtDeviceValueInt" id="atDeviceValueInt" required <?php ECHO ($AUTOMATION['ifSomething'] == "atDeviceValue" ? '' : 'disabled'); ?>/>
-                </div>
-                
+
                 <div class="label"><?php echo $LANG['l_affectedDevices'];?></div>
                 <div class="field">
                     <div class="field px-2">
-                        <?php 
+                        <?php
                         $i = 0;
-                        foreach($AUTOMATION['doSomething'] as $subDeviceId => $subDeviceData){ ?>  
-                            <div id="automation-<?php echo $AUTOMATIONID; ?>-content">              
+                        foreach($AUTOMATION['doSomething'] as $subDeviceId => $subDeviceData){ ?>
+                            <div id="automation-<?php echo $AUTOMATIONID; ?>-content">
                                 <div class="label"><?php echo $subDeviceData['name']; ?></div>
                                 <select class="input" name="devices[<?php echo $subDeviceId; ?>]">
                                     <option value="0" <?php echo ($subDeviceData['state'] == "0" ? 'selected="selected"' : ''); ?>>off</option>
@@ -62,12 +41,12 @@
                                 </select>
                                 <button name="remove" type="button" class="button is-danger fa" data-automation-id="<?php echo $AUTOMATIONID; ?>">&#xf1f8;</button>
                             </div>
-                            <?php 
+                            <?php
                             $i++;
                         } ?>
                     </div>
                 </div>
-                <div class="label"><?php echo $LANG['l_atDays'];?></div> 
+                <div class="label"><?php echo $LANG['l_atDays'];?></div>
                 <div class="field">
                     <input type="checkbox" name="day[]" value="mon" <?php ECHO (in_array("mon", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Pondělí
                 </div>
@@ -90,7 +69,7 @@
                     <input type="checkbox" name="day[]" value="sun" <?php ECHO (in_array("sun", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Neděle
                 </div>
             </div>
-            <input type="submit" class="button" name="modalFinal" value="<?php echo $LANG['b_edit'];?>"/>	
+            <input type="submit" class="button" name="modalFinal" value="<?php echo $LANG['b_edit'];?>"/>
             <input type="submit" class="button is-danger"  onClick="ajaxPostSimple('ajax',{automation_id:  '<?php echo $AUTOMATIONID ?>', action:'delete'}, true);"  name="remove" value="<?php echo $LANG['b_remove'];?>"/>
         </form>
 
