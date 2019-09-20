@@ -11,20 +11,20 @@ if ('serviceWorker' in navigator) {
 }
 
 
-$('select').change(function(e) {
+$('select[name="atSelector"]').change(function(e) {
     console.log($(this).val());
     if( $(this).val() == 'time') {
 
-        $('#atTime').prop( "disabled", false );
+        $('input[name="atTime"]').prop( "disabled", false );
 
-        $('#atDeviceValue').prop( "disabled", true );
-        $('#atDeviceValueInt').prop( "disabled", true );
+        $('select[name="atDeviceValueInt"]').prop( "disabled", true );
+        $('input[name="atDeviceValue"]').prop( "disabled", true );
     } else if( $(this).val() == 'atDeviceValue') {
 
-        $('#atDeviceValue').prop( "disabled", false );
-        $('#atDeviceValueInt').prop( "disabled", false );
+        $('select[name="atDeviceValue"]').prop( "disabled", false );
+        $('input[name="atDeviceValueInt"]').prop( "disabled", false );
 
-        $('#atTime').prop( "disabled", true );
+        $('input[name="atTime"]').prop( "disabled", true );
     }
 });
 
