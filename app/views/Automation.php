@@ -43,7 +43,7 @@ class Automation extends Template
 			$allSubDevicesData = SubDeviceManager::getAllSubDevices($deviceValue['device_id']);
 			foreach ($allSubDevicesData as $subDeviceKey => $subDeviceValue) {
 				$approvedSubDevices[$subDeviceValue['subdevice_id']] = [
-					'name' => $allDevicesData[$deviceKey]['name'] . $allDevicesData[$deviceKey]['device_id'],
+					'name' => $allDevicesData[$deviceKey]['name'],
 					'type' => $subDeviceValue['type'],
 					'masterDevice' => $subDeviceValue['device_id'],
 				];
