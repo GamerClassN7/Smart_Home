@@ -16,7 +16,6 @@
                         <option	value="inHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "inHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_inHome']?></option>
                         <option	value="outHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "outHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_outHome']?></option>
                         <option	value="time" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "time" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_time']?></option>
-                        <option	value="noOneHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "noOneHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_time']?></option>
                         <option	value="atDeviceValue" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "atDeviceValue" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_deviceValue'];?></option>
                         <option	value="noOneHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "noOneHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['w_noOne'] . ' ' . $LANG['w_neni'] . ' ' . $LANG['w_home'];?></option>
                         <option	value="someOneHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "someOneHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['w_someOne'] . ' ' . $LANG['w_is'] . ' ' . $LANG['w_home'];?></option>
