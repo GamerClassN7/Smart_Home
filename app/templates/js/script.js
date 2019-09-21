@@ -182,36 +182,36 @@ $( '[name="room"]' ).change(function (e) {
 });
 
 
-// var windowLoc = $(location).attr('pathname');
-// windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
-// console.log();
-// if (windowLoc == "/") {
-//     var autoUpdate = setInterval(function(){
-//         $.ajax({
-//             url: 'ajax',
-//             type: 'POST',
-//             dataType: 'json',
-//             data: {
-//                 "action": 'getState'
-//             },
-//             success: function(data){
-//                 // console.log('DATA: ', data);
-//                 for (const key in data) {
-//                     if (data.hasOwnProperty(key)) {
-//                         const device = data[key];
-//                         $('[data-sub-device-id="'+key+'"]')
-//                         .find('.device-button-value')
-//                         .text(device['value'])
-//                         .attr('title',device['time'])
-//                     }
-//                 }
-//             },
-//             error: function (request, status, error) {
-//                 console.log("ERROR ajaxChart():", request, error);
-//             }
-//         });
-//     },2000);
-// }
+var windowLoc = $(location).attr('pathname');
+windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
+console.log();
+if (windowLoc == "/") {
+    var autoUpdate = setInterval(function(){
+        $.ajax({
+            url: 'ajax',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                "action": 'getState'
+            },
+            success: function(data){
+                console.log(data);
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        const device = data[key];
+                        $('[data-sub-device-id="'+key+'"]')
+                        .find('.device-button-value')
+                        .text(device['value'])
+                        .attr('title',device['time'])
+                    }
+                }
+            },
+            error: function (request, status, error) {
+                console.log("ERROR ajaxChart():", request, error);
+            }
+        });
+    },2000);
+}
 
 
 
