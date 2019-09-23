@@ -19,7 +19,7 @@ class Log extends Template
 		$cdir = scandir('./app/logs/');
 		foreach ($cdir as $key => $value)
 		{
-			if (!in_array($value,array(".","..")))
+			if (!in_array($value,array(".","..", ".gitkeep")))
 			{
 				$result[$value] = $value;
 			}

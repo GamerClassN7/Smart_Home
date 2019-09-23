@@ -10,7 +10,7 @@ if ($SUBDEVICE['type'] == 'on/off') {
 	<div class="square">
 		<div class="square-content <?php echo (($SUBDEVICE['comError'] == 1 || $DEVICE['approved'] == 0) ? "is-inactive" : "") ;?>" id="device-<?php echo $DEVICEID ?>" data-sub-device-id="<?php echo $SUBDEVICEID;?>">
 			<div class="content">
-				<div class="row">
+				<div class="row no-gutters">
 					<div class="col">
 						<h5 unselectable="on" class="fa">&#x<?php echo $DEVICE['icon'] ?></h5>
 					</div>
@@ -19,7 +19,7 @@ if ($SUBDEVICE['type'] == 'on/off') {
 					</div>
 				</div>
 				<div class="row">
-					<div class="col" unselectable="on" >
+					<div class="col  button-text" unselectable="on" >
 						<?php echo $DEVICE['name']; ?>
 					</div>
 				</div>

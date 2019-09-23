@@ -48,6 +48,7 @@ class Ajax extends Template
 				AutomationManager::deactive($automationId);
 			}
 		} else if (isset($_POST['subDevice']) && isset($_POST['action']) && $_POST['action'] == "chart") {
+			die();
 			//TODO lepe rozstrukturovat
 			$subDeviceId = $_POST['subDevice'];
 			$period = $_POST['period'];

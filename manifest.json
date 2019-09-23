@@ -10,11 +10,11 @@
   "theme_color": "#182239",
   "icons": [
     {
-      "src": "/vasek/home/templates/images/icon-192x192.png",
+      "src": "/vasek/home/app/templates/images/icon-192x192.png",
       "sizes": "192x192"
     },
     {
-      "src": "/vasek/home/templates/images/icon-512x512.png",
+      "src": "/vasek/home/app/templates/images/icon-512x512.png",
       "sizes": "512x512"
     }
   ],

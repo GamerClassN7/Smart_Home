@@ -43,58 +43,69 @@ class Home extends Template
 				foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
 
 					$events = RecordManager::getLastRecord($subDeviceData['subdevice_id'], 5);
-					//TODO: skontrolovat zdali se jedná o poslední (opravdu nejaktuálnější) záznam
-					$lastRecord = $events[0];
-					$parsedValue = round($lastRecord['value']);
-
-					/*Value Parsing*/
-					if ($subDeviceData['type'] == "on/off") {
-						$parsedValue = ($parsedValue == 1 ? 'ON' : 'OFF');
-					}
-
-					if ($subDeviceData['type'] == "door") {
-						$replacementTrue = 'Closed';
-						$replacementFalse = 'Opened';
-						foreach ($events as $key => $value) {
-							$events[$key]['value'] = ($value['value'] == 1 ? $replacementTrue : $replacementFalse);
-						}
-						$parsedValue = ($parsedValue == 1 ? $replacementTrue : $replacementFalse);
-					}
-
-					if ($subDeviceData['type'] == "light") {
-						$replacementTrue = 'Light';
-						$replacementFalse = 'Dark';
-						foreach ($events as $key => $value) {
-							if ($parsedValue != 1){
-								//Analog Reading
-								$events[$key]['value'] = ($value['value'] <= 810 ? $replacementTrue : $replacementFalse);
-							} else {
-								//Digital Reading
-								$events[$key]['value'] = ($value['value'] == 0 ? $replacementTrue : $replacementFalse);
-							}
-						}
-						if ($parsedValue != 1){
-							//Analog Reading
-							$parsedValue = ($parsedValue <= 810 ? $replacementTrue : $replacementFalse);
-						} else {
-							//Digital Reading
-							$parsedValue = ($parsedValue == 0 ? $replacementTrue : $replacementFalse);
-						}
-					}
-
-					$date2 = new DateTime($lastRecord['time']);
-
-					$niceTime = $this->ago($date2);
 
 					$connectionError = false;
+					$parsedValue = "";
+					$niceTime = "";
 
-					$startDate = date_create($lastRecord['time']);
-					$interval = $startDate->diff(new DateTime());
-					$hours   = $interval->format('%h');
-					$minutes = $interval->format('%i');
-					$lastSeen = ($hours * 60 + $minutes);
 
-					if ($lastSeen > $deviceData['sleep_time'] && $subDeviceData['type'] != "on/off") {
+					if (sizeof($events) > 1) {
+
+						//TODO: skontrolovat zdali se jedná o poslední (opravdu nejaktuálnější) záznam
+						$lastRecord = $events[0];
+
+						$parsedValue = round($lastRecord['value']);
+
+						/*Value Parsing*/
+						if ($subDeviceData['type'] == "on/off") {
+							$parsedValue = ($parsedValue == 1 ? 'ON' : 'OFF');
+						}
+
+						if ($subDeviceData['type'] == "door") {
+							$replacementTrue = 'Closed';
+							$replacementFalse = 'Opened';
+							foreach ($events as $key => $value) {
+								$events[$key]['value'] = ($value['value'] == 1 ? $replacementTrue : $replacementFalse);
+							}
+							$parsedValue = ($parsedValue == 1 ? $replacementTrue : $replacementFalse);
+						}
+
+						if ($subDeviceData['type'] == "light") {
+							$replacementTrue = 'Light';
+							$replacementFalse = 'Dark';
+							foreach ($events as $key => $value) {
+								if ($parsedValue != 1){
+									//Analog Reading
+									$events[$key]['value'] = ($value['value'] <= 810 ? $replacementTrue : $replacementFalse);
+								} else {
+									//Digital Reading
+									$events[$key]['value'] = ($value['value'] == 0 ? $replacementTrue : $replacementFalse);
+								}
+							}
+							if ($parsedValue != 1){
+								//Analog Reading
+								$parsedValue = ($parsedValue <= 810 ? $replacementTrue : $replacementFalse);
+							} else {
+								//Digital Reading
+								$parsedValue = ($parsedValue == 0 ? $replacementTrue : $replacementFalse);
+							}
+						}
+
+						$date2 = new DateTime($lastRecord['time']);
+
+						$niceTime = $this->ago($date2);
+
+
+						$startDate = date_create($lastRecord['time']);
+						$interval = $startDate->diff(new DateTime());
+						$hours   = $interval->format('%h');
+						$minutes = $interval->format('%i');
+						$lastSeen = ($hours * 60 + $minutes);
+
+						if ($lastSeen > $deviceData['sleep_time'] && $subDeviceData['type'] != "on/off") {
+							$connectionError = true;
+						}
+					} else {
 						$connectionError = true;
 					}
 
@@ -104,9 +115,9 @@ class Home extends Template
 						'unit' => $subDeviceData['unit'],
 						'comError' => $connectionError,
 						'lastRecort' =>  [
-							'value' => $parsedValue,
-							'time' => $lastRecord['time'],
-							'niceTime' => $niceTime,
+							'value' => (empty($parsedValue) ? 0 : $parsedValue),
+							'time' => (empty($lastRecord['time']) ? "00:00" : $lastRecord['time']),
+							'niceTime' => (empty($niceTime) ? "00:00" : $niceTime),
 						],
 					];
 				}

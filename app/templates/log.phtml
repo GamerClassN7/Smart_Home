@@ -34,14 +34,13 @@
                     <?php 
                     if (isset($_POST['LogFile'])) {
                         $file_lines = file('./app/logs/' . $_POST['LogFile']);
-                        echo '<pre>';
+                        echo '<pre style="overflow: auto;">';
                         foreach ($file_lines as $line) {
                             echo $line;
                         }
                         echo '</pre>';
                     }
                     ?>
-                </pre>
             </div>
         </div>
         
