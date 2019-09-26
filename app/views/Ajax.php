@@ -103,10 +103,10 @@ $JSON = '{
 			"display": false
 		},
 		"scales": {
-			xAxes: [{
-				type: "time",
-				time: {
-					unit: "hour"
+			"xAxes": [{
+				"type": "time",
+				"time": {
+					"unit": "hour"
 				}
 			}],
 			"yAxes": [{
@@ -115,10 +115,6 @@ $JSON = '{
 					"max": ' . $range['max'] . ',
 					"steps": ' . $range['scale'] . '
 				}
-			}],
-			xAxes: [{
-				type: "time",
-				distribution: "linear"
 			}]
 		},
 		"tooltips": {
