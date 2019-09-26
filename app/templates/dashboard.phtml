@@ -5,7 +5,7 @@
 	$partial = new Partial('head');
 	$partial->render();
 	?>
-	<title><?php echo $TITLE ?></title>
+	<title><?php echo $TITLE; ?></title>
 </head>
 <body class="no-transitions">
 	<div class="row no-gutters main">
@@ -24,13 +24,13 @@
 				<?php foreach ($DASHBOARD as $dashboardItemId => $dashboardItemData) {
 					$partialDeviceButton = new Partial('dashboardButton');
 					$partialDeviceButton->prepare('dashboardItemData', $dashboardItemData);
-					
+
 					$partialDeviceButton->render();
 				} ?>
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="modal-container modal-container-hiden" id="modal">
 		<div class="modal">
 			<div class="close">
@@ -50,12 +50,12 @@
 			</form>
 		</div>
 	</div>
-	
+
 	<?php
 	if (isset($_POST['deviceId'])) {
 		$partial = new Partial('deviceEdit');
 		$partial->prepare('DEVICEDATA', $DEVICEDATA);
-		
+
 		$partial->render();
 	}
 	$partial = new Partial('footer');
