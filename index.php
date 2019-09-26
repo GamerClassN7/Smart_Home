@@ -6,7 +6,7 @@ include_once './config.php';
 //setup
 ini_set ('session.cookie_httponly', '1');
 ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
-ini_set('session.cookie_path', str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['HTTP_REFERER'])));
+ini_set('session.cookie_path', str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])));
 ini_set('session.cookie_secure', '1');
 session_start ();
 mb_internal_encoding ("UTF-8");

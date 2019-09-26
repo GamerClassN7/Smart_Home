@@ -26,7 +26,7 @@ class UserManager
 			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
 					if (isset($rememberMe) && $rememberMe == 'true') {
-						setcookie ("rememberMe", $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['HTTP_REFERER'])), $_SERVER['HTTP_HOST'], 1);
+						setcookie ("rememberMe", $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])), $_SERVER['HTTP_HOST'], 1);
 					}
 					$_SESSION['user']['id'] = $user['user_id'];
 					$page = "./index.php";
@@ -62,7 +62,7 @@ class UserManager
 	}
 
 	public function logout () {
-		setcookie ("rememberMe","", time() - (30 * 24 * 60 * 60 * 1000), str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['HTTP_REFERER'])), $_SERVER['HTTP_HOST'], 1);
+		setcookie ("rememberMe","", time() - (30 * 24 * 60 * 60 * 1000), str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])), $_SERVER['HTTP_HOST'], 1);
 		unset($_SESSION['user']);
 		session_destroy();
 	}
