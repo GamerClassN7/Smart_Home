@@ -192,7 +192,6 @@ $( '[name="room"]' ).change(function (e) {
     }
 });
 
-
 var windowLoc = $(location).attr('pathname');
 windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
 console.log();
@@ -227,9 +226,8 @@ if (windowLoc == "/") {
                 }
             });
         }
-    },2000);
+    },4000);
 }
-
 
 
 //Graphs

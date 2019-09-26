@@ -48,126 +48,141 @@ class Ajax extends Template
 				AutomationManager::deactive($automationId);
 			}
 		} else if (isset($_POST['subDevice']) && isset($_POST['action']) && $_POST['action'] == "chart") {
-			die();
 			//TODO lepe rozstrukturovat
 			$subDeviceId = $_POST['subDevice'];
-			$period = $_POST['period'];
-			$groupBy = $_POST['group'];
+
 
 			$subDevice = SubDeviceManager::getSubDevice($subDeviceId);
-			$records = RecordManager::getAllRecordForGraph($subDeviceId, $period, $groupBy);
+			$records = RecordManager::getAllRecordForGraph($subDeviceId);
+
 
 			$array = array_column($records, 'value');
+			$arrayTime = array_column($records, 'time');
+			$output = [];
 
-			if ($subDevice['type'] == 'light'){
-				foreach ($array as $key => $value) {
-					if ($value == 1 || $value == 0)
-					{
-						return;
-					}
-					if ($value > 810){
-						$array[$key] = 1;
+
+			foreach ($array as $key => $value) {
+				/*if ($value == 1 || $value == 0)
+				{
+				$output[$key]['y'] = $value;
+			}
+			if ($value > 810){
+			$output[$key]['y'] = 1;
+		} else {
+		$output[$key]['y'] = 0;
+	}*/
+	$output[$key]['y'] = $value;
+	$output[$key]['t'] = (new DateTime($arrayTime[$key]))->format("hA");
+}
+
+
+
+$data = json_encode($output);
+
+$arrayTimeStamps = array_column($records, 'time');
+foreach ($arrayTimeStamps as $key => $value) {
+	$arrayTimeStamps[$key] = (new DateTime($value))->format(TIMEFORMAT);
+}
+
+$labels = json_encode($arrayTimeStamps);
+$range = RANGES[$subDevice['type']];
+header('Content-Type: application/json');
+$JSON = '{
+	"type": "line",
+	"data": {
+		"labels": ' . $labels . ',
+		"datasets": [{
+			"data": ' . $data . ',
+			"backgroundColor": "#7522bf",
+			"lineTension": 0,
+			"radius": 5
+		}]
+	},
+	"options": {
+		"legend": {
+			"display": false
+		},
+		"scales": {
+			xAxes: [{
+				type: "time",
+				time: {
+					unit: "hour"
+				}
+			}],
+			"yAxes": [{
+				"ticks": {
+					"min": ' . $range['min'] . ',
+					"max": ' . $range['max'] . ',
+					"steps": ' . $range['scale'] . '
+				}
+			}],
+			xAxes: [{
+				type: "time",
+				distribution: "linear"
+			}]
+		},
+		"tooltips": {
+			"enabled": false
+		},
+		"hover": {
+			"mode": null
+		}
+	}
+}';
+
+echo $JSON;
+die();
+} else if (isset($_POST['action']) && $_POST['action'] == "getState") {
+	//State Update
+	$roomsData = RoomManager::getAllRooms();
+	$subDevices = [];
+	foreach ($roomsData as $roomKey => $roomsData) {
+		$devicesData = DeviceManager::getAllDevicesInRoom($roomsData['room_id']);
+		foreach ($devicesData as $deviceKey => $deviceData) {
+			$subDevicesData = SubDeviceManager::getAllSubDevices($deviceData['device_id']);
+			foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
+				$lastRecord = RecordManager::getLastRecord($subDeviceData['subdevice_id']);
+				$parsedValue = round($lastRecord['value']);
+				//TODO: Předelat na switch snažší přidávání
+				/*Value Parsing*/
+				if ($subDeviceData['type'] == "on/off") {
+					$parsedValue = ($parsedValue == 1 ? 'ON' : 'OFF');
+				}
+				if ($subDeviceData['type'] == "light") {
+					$replacementTrue = 'Light';
+					$replacementFalse = 'Dark';
+					if ($parsedValue != 1){
+						//Analog Reading
+						$parsedValue = ($parsedValue <= 810 ? $replacementTrue : $replacementFalse);
 					} else {
-						$array[$key] = 0;
+						//Digital Reading
+						$parsedValue = ($parsedValue == 0 ? $replacementTrue : $replacementFalse);
 					}
 				}
-			}
-
-			$data = json_encode($array);
-
-			$arrayTimeStamps = array_column($records, 'time');
-			foreach ($arrayTimeStamps as $key => $value) {
-				$arrayTimeStamps[$key] = (new DateTime($value))->format(TIMEFORMAT);
-			}
-
-			$labels = json_encode($arrayTimeStamps);
-			$range = RANGES[$subDevice['type']];
-			header('Content-Type: application/json');
-			$JSON = '{
-				"type": "line",
-				"data": {
-					"labels": ' . $labels . ',
-					"datasets": [{
-						"data": ' . $data . ',
-						"backgroundColor": "#7522bf",
-						"lineTension": 0,
-						"radius": 5
-					}]
-				},
-				"options": {
-					"legend": {
-						"display": false
-					},
-					"scales": {
-						"yAxes": [{
-							"ticks": {
-								"min": ' . $range['min'] . ',
-								"max": ' . $range['max'] . ',
-								"steps": ' . $range['scale'] . '
-							}
-						}]
-					},
-					"tooltips": {
-						"enabled": false
-					},
-					"hover": {
-						"mode": null
-					}
+				if ($subDeviceData['type'] == "door") {
+					$replacementTrue = 'Closed';
+					$replacementFalse = 'Opened';
+					$parsedValue = ($parsedValue == 1 ? $replacementTrue : $replacementFalse);
 				}
-			}';
-
-			echo $JSON;
-		} else if (isset($_POST['action']) && $_POST['action'] == "getState") {
-			//State Update
-			$roomsData = RoomManager::getAllRooms();
-			$subDevices = [];
-			foreach ($roomsData as $roomKey => $roomsData) {
-				$devicesData = DeviceManager::getAllDevicesInRoom($roomsData['room_id']);
-				foreach ($devicesData as $deviceKey => $deviceData) {
-					$subDevicesData = SubDeviceManager::getAllSubDevices($deviceData['device_id']);
-					foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
-						$lastRecord = RecordManager::getLastRecord($subDeviceData['subdevice_id']);
-						$parsedValue = round($lastRecord['value']);
-						//TODO: Předelat na switch snažší přidávání
-						/*Value Parsing*/
-						if ($subDeviceData['type'] == "on/off") {
-							$parsedValue = ($parsedValue == 1 ? 'ON' : 'OFF');
-						}
-						if ($subDeviceData['type'] == "light") {
-							$replacementTrue = 'Light';
-							$replacementFalse = 'Dark';
-							if ($parsedValue != 1){
-								//Analog Reading
-								$parsedValue = ($parsedValue <= 810 ? $replacementTrue : $replacementFalse);
-							} else {
-								//Digital Reading
-								$parsedValue = ($parsedValue == 0 ? $replacementTrue : $replacementFalse);
-							}
-						}
-						if ($subDeviceData['type'] == "door") {
-							$replacementTrue = 'Closed';
-							$replacementFalse = 'Opened';
-							$parsedValue = ($parsedValue == 1 ? $replacementTrue : $replacementFalse);
-						}
-						$subDevices[$subDeviceData['subdevice_id']] = [
-							'value' => $parsedValue .$subDeviceData['unit'],
-							'time' => $lastRecord['time'],
-						];
-					}
-				}
-			}
-			echo json_encode($subDevices);
-			die();
-		} else if (isset($_POST['scene_id'])) {
-			$sceneId = $_POST['scene_id'];
-			if (isset($_POST['action']) && $_POST['action'] == 'delete') {
-				SceneManager::delete($sceneId);
-			}else {
-				echo SceneManager::execScene($sceneId);
+				$subDevices[$subDeviceData['subdevice_id']] = [
+					'value' => $parsedValue .$subDeviceData['unit'],
+					'time' => $lastRecord['time'],
+				];
 			}
 		}
-
-		die();
-
 	}
+	echo json_encode($subDevices);
+	die();
+} else if (isset($_POST['scene_id'])) {
+	$sceneId = $_POST['scene_id'];
+	if (isset($_POST['action']) && $_POST['action'] == 'delete') {
+		SceneManager::delete($sceneId);
+	}else {
+		echo SceneManager::execScene($sceneId);
+	}
+}
+
+die();
+
+}
 }
