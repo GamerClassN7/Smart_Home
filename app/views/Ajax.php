@@ -72,7 +72,8 @@ class Ajax extends Template
 		$output[$key]['y'] = 0;
 	}*/
 	$output[$key]['y'] = $value;
-	$output[$key]['t'] = (new DateTime($arrayTime[$key]))->format("hA");
+	$timeStamp = new DateTime($arrayTime[$key]);
+	$output[$key]['t'] = $timeStamp->format("Y-m-d") . 'T' . $timeStamp->format("H:i:s") . 'Z';
 }
 
 
@@ -87,27 +88,58 @@ foreach ($arrayTimeStamps as $key => $value) {
 $labels = json_encode($arrayTimeStamps);
 $range = RANGES[$subDevice['type']];
 header('Content-Type: application/json');
-$JSON = '{
-	"type": "line",
+/*$JSON = '{
+"type": "line",
+"data": {
+"labels": ' . $data . ',
+"datasets": [{
+"data": ' . $data . ',
+"backgroundColor": "#7522bf",
+"lineTension": 0,
+"radius": 5
+}]
+},
+"options": {
+"legend": {
+"display": false
+},
+"scales": {
+"xAxes": [{
+"type": "time",
+"time": {
+"unit": "hour"
+}
+}],
+"yAxes": [{
+"ticks": {
+"min": ' . $range['min'] . ',
+"max": ' . $range['max'] . ',
+"steps": ' . $range['scale'] . '
+}
+}]
+},
+"tooltips": {
+"enabled": false
+},
+"hover": {
+"mode": null
+}
+}
+}';*/
+
+$JSON = '
+{
+	"type": "bar",
 	"data": {
-		"labels": ' . $labels . ',
 		"datasets": [{
-			"data": ' . $data . ',
-			"backgroundColor": "#7522bf",
-			"lineTension": 0,
-			"radius": 5
+			"data": ' . $data . '
 		}]
 	},
 	"options": {
-		"legend": {
-			"display": false
-		},
 		"scales": {
 			"xAxes": [{
 				"type": "time",
-				"time": {
-					"unit": "hour"
-				}
+				"distribution": "linear"
 			}],
 			"yAxes": [{
 				"ticks": {
@@ -117,14 +149,26 @@ $JSON = '{
 				}
 			}]
 		},
+		"legend": {
+			"display": false
+		},
 		"tooltips": {
-			"enabled": false
+			"enabled": true
 		},
 		"hover": {
-			"mode": null
+			"mode": true
 		}
 	}
-}';
+}
+';
+
+
+/*
+
+
+
+
+*/
 
 echo $JSON;
 die();
