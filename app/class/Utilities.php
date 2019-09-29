@@ -41,4 +41,54 @@ class Utilities
 		$str = substr($str, 0, $pos) . $insertstr . substr($str, $pos);
 		return $str;
 	}
+
+	/**
+	 * [generateGraphJson description]
+	 * @param  string $type    [line/bar]
+	 * @param  array  $data    [description]
+	 * @param  array  $options [description]
+	 * @return [type]          [description]
+	 */
+
+	function generateGraphJson(string $type = 'line', array $data = [], array $options = []){
+		$array = [
+			'type' => $type,
+			'data' => [
+				'datasets' => [
+					[
+						'data' => $data
+					]
+				]
+			],
+			'options' => [
+				'scales' => [
+					'xAxes' => [
+						[
+							'type' => 'time',
+							'distribution' => 'linear',
+						]
+					],
+					'yAxes' => [
+						[
+							'ticks' => [
+								'min' => $options['min'],
+								'max' => $options['max'],
+								'steps' => $options['scale']
+							]
+						]
+					]
+				],
+				'legend' => [
+					'display' => false
+				],
+				'tooltips' => [
+					'enabled' => true
+				],
+				'hover' => [
+					'mode' => true
+				]
+			]
+		];
+		return json_encode($array, JSON_PRETTY_PRINT);
+	}
 }

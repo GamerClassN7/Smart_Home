@@ -74,7 +74,7 @@ class Ajax extends Template
 			}
 
 			$data = json_encode($output);
-
+			$data = $output;
 			$arrayTimeStamps = array_column($records, 'time');
 			foreach ($arrayTimeStamps as $key => $value) {
 				$arrayTimeStamps[$key] = (new DateTime($value))->format(TIMEFORMAT);
@@ -86,40 +86,7 @@ class Ajax extends Template
 
 			header('Content-Type: application/json');
 
-			$JSON = '
-			{
-				"type": "' . $graphType . '",
-				"data": {
-					"datasets": [{
-						"data": ' . $data . '
-					}]
-				},
-				"options": {
-					"scales": {
-						"xAxes": [{
-							"type": "time",
-							"distribution": "linear"
-						}],
-						"yAxes": [{
-							"ticks": {
-								"min": ' . $range['min'] . ',
-								"max": ' . $range['max'] . ',
-								"steps": ' . $range['scale'] . '
-							}
-						}]
-					},
-					"legend": {
-						"display": false
-					},
-					"tooltips": {
-						"enabled": true
-					},
-					"hover": {
-						"mode": true
-					}
-				}
-			}';
-			echo $JSON;
+			echo Utilities::generateGraphJson($range['graph'], $data, $range);
 			die();
 		} else if (isset($_POST['action']) && $_POST['action'] == "getState") {
 			//State Update
