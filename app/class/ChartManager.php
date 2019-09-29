@@ -1,4 +1,10 @@
 <?php
+class ChartScale{
+	const HOUR = 'info';
+	const DAY = 'warning';
+	const MONTH = 'warning';
+	const YEAR = 'error';
+}
 class ChartManager{
 	function generateChart($data, $min = 0, $max = 100)
 	{
