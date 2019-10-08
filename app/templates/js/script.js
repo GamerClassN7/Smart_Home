@@ -1,10 +1,37 @@
 var pending = false;
 
+var firebaseConfig = {
+    apiKey: "AIzaSyBFZjXvnCMpGurSWEuVgHkE9jD9jxGJhx8",
+    authDomain: "test-push-notf.firebaseapp.com",
+    databaseURL: "https://test-push-notf.firebaseio.com",
+    projectId: "test-push-notf",
+    storageBucket: "",
+    messagingSenderId: "93473765978",
+    appId: "1:93473765978:web:5d959a487fe5382480f663"
+};
+firebase.initializeApp(firebaseConfig);
+
+const messaging = firebase.messaging();
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('serviceWorker.js')
         .then(registration => {
             console.log('Service Worker is registered', registration);
+            messaging.useServiceWorker(registration);
+            messaging.usePublicVapidKey('BDYQ7X7J7PX0aOFNqB-CivQeqLq4-SqCxQJlDfJ6yNnQeYRoK8H2KOqxHRh47fLrbUhC8O3tve67MqJAIqox7Ng');
+            messaging.requestPermission().then(function () {
+                console.log("Notification permission granted.");
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                console.log("token is : " + token);
+            })
+            .catch(function (err) {
+                console.log("Unable to get permission to notify.", err);
+            });
+            messaging.onMessage(function(payload) {
+                console.log("Message received. ", payload);
+            });
         })
         .catch(err => {
             console.error('Registration failed:', err);
@@ -191,43 +218,43 @@ $( '[name="room"]' ).change(function (e) {
         });
     }
 });
-
+/*
 var windowLoc = $(location).attr('pathname');
 windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
 console.log();
 if (windowLoc == "/") {
-    var autoUpdate = setInterval(function(){
-        if (pending == false) {
-            pending = true;
-            $.ajax({
-                url: 'ajax',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    "action": 'getState'
-                },
-                success: function(data){
-                    console.log(data);
-                    for (const key in data) {
-                        if (data.hasOwnProperty(key)) {
-                            const device = data[key];
-                            $('[data-sub-device-id="'+key+'"]')
-                            .find('.device-button-value')
-                            .text(device['value'])
-                            .attr('title',device['time'])
-                        }
-                    }
-                },
-                error: function (request, status, error) {
-                    console.log("ERROR ajaxChart():", request, error);
-                },
-                complete: function (){
-                    pending = false;
-                }
-            });
-        }
-    },4000);
+var autoUpdate = setInterval(function(){
+if (pending == false) {
+pending = true;
+$.ajax({
+url: 'ajax',
+type: 'POST',
+dataType: 'json',
+data: {
+"action": 'getState'
+},
+success: function(data){
+console.log(data);
+for (const key in data) {
+if (data.hasOwnProperty(key)) {
+const device = data[key];
+$('[data-sub-device-id="'+key+'"]')
+.find('.device-button-value')
+.text(device['value'])
+.attr('title',device['time'])
 }
+}
+},
+error: function (request, status, error) {
+console.log("ERROR ajaxChart():", request, error);
+},
+complete: function (){
+pending = false;
+}
+});
+}
+},4000);
+}*/
 
 
 //Graphs
@@ -235,6 +262,7 @@ $('.graph-period').on('click', function (e) {
     var subId = $(this).attr('data-sub-device-id');
     var period = $(this).attr('data-period');
     var groupBy = $(this).attr('data-group');
+    
     ajaxChart(subId, period, groupBy);
 });
 
