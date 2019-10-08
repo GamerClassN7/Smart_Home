@@ -28,7 +28,7 @@ class Automation extends Template
 				];
 			}
 			$automations[$automationData['automation_id']] = [
-				'name' => '',
+				'name' => $automationData['name'],
 				'onDays' => json_decode($automationData['on_days']),
 				'ifSomething' => $automationData['if_something'],
 				'doSomething' => $doSomething,

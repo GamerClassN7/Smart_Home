@@ -5,6 +5,7 @@
         <form method="post">
             <div class="field">
                 <input type="hidden" name="atSelector" value="<?php echo $_POST['atSelector']; ?>" required/>
+                <input type="hidden" name="name" value="<?php echo $_POST['name']; ?>" required/>
                 <input type="hidden" name="atSelectorValue" value="<?php if (isset($_POST['atTime'])) {
                     echo $_POST['atTime'];
                 } else if (isset($_POST['atDeviceValue'])) {
@@ -12,7 +13,7 @@
                     $subDeviceValue = $_POST['atDeviceValueInt'];
                     $subDevice = SubDeviceManager::getSubDevice($subDeviceId);
                     $subDeviceMaster = SubDeviceManager::getSubDeviceMaster($subDeviceId,$subDevice['type']);
-                    
+
                     $json = json_encode([
                         'deviceID' => $subDeviceMaster['device_id'],
                         'type'=> htmlspecialchars($subDevice['type']),

@@ -10,23 +10,23 @@
                             case 'sunSet':
                             echo'&#xf186';
                             break;
-                            
+
                             case 'sunRise':
                             echo'&#xf185 ';
                             break;
-                            
+
                             case 'inHome':
                             echo'&#xf090';
                             break;
-                            
+
                             case 'outHome':
                             echo'&#xf08b';
                             break;
-                            
+
                             case 'outDevice':
                             echo'&#xf2db';
                             break;
-                            
+
                             default:
                             echo'&#xf017';
                             break;
@@ -36,10 +36,11 @@
                 </div>
                 <div class="col">
                     <h5 class="text-right break-all">
-                        <?php 
-                        if (!in_array($AUTOMATIONDATA['ifSomething'], ["sunRise", "sunSet"])) {
+                        <?php
+                        /*if (!in_array($AUTOMATIONDATA['ifSomething'], ["sunRise", "sunSet"])) {
                             echo $AUTOMATIONDATA['ifSomething'];
-                        }
+                        }*/
+                        echo $AUTOMATIONDATA['name'];
                         ?>
                     </h5>
                 </div>
@@ -47,6 +48,14 @@
             <div class="row">
                 <div class="col">
                     <?php echo implode(', ',$AUTOMATIONDATA['onDays']);?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a class="button is-primary m-1" onclick="$('#modal').removeClass('modal-container-hiden').show();">restart</a>
+                </div>
+                <div class="col">
+                    <a class="button is-primary m-1" onclick="$('#modal').removeClass('modal-container-hiden').show();">deaktivovat</a>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ if (isset($_POST) && !empty($_POST)){
 		], JSON_PRETTY_PRINT);
 		$onDays = $_POST['atDays'];
 
-		AutomationManager::create('name', $onDays, $doCode, $ifCode);
+		AutomationManager::create($_POST['name'], $onDays, $doCode, $ifCode);
 
 		header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')), TRUE);
 		die();
@@ -23,7 +23,7 @@ if (isset($_POST) && !empty($_POST)){
 
 			$json = json_encode([
 					'deviceID' => $subDeviceMaster['device_id'],
-					'type'=> htmlspecialchars($subDevice['type']),
+					'type'=> $subDevice['type'],
 					'value'=> $subDeviceValue,
 			]);
 		}
@@ -36,7 +36,7 @@ if (isset($_POST) && !empty($_POST)){
 		], JSON_PRETTY_PRINT);
 		$onDays = ($_POST['day'] != '' ? json_encode($_POST['day']) : '');
 
-		AutomationManager::create('name', $onDays, $doCode, $ifCode, (isset ($_POST['automation_id']) ? $_POST['automation_id'] : ""));
+		AutomationManager::create($_POST['name'], $onDays, $doCode, $ifCode, (isset ($_POST['automation_id']) ? $_POST['automation_id'] : ""));
 
 		header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')), TRUE);
 		die();

@@ -7,6 +7,10 @@
         <form method="post">
             <input name="automation_id" type="hidden" value="<?php echo $AUTOMATIONID; ?>">
             <div class="field">
+                <div class="label"><?php echo $LANG['l_nameAt']?></div>
+                <div class="field">
+                    <input class="input" type="text" name="name" value="<?php echo (isset ($AUTOMATION['name']) ? $AUTOMATION['name'] : ""); ?>" required/>
+                </div>
                 <div class="label"><?php echo $LANG['l_runAt']?></div>
                 <div class="field">
                     <?php //TODO Dodělat identifikaci pro Selctor události a selector času zařízení hodnoty ?>

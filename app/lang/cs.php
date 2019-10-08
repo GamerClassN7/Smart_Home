@@ -44,6 +44,7 @@ $lang = [
 	'l_inMinutes' => 'v minutách',
 	'l_sleepTime' => 'Doba spánku zařízení',
 	'l_atHome' => 'Doma Jsou',
+	'l_nameAt' => 'Název',
 
 	//Title
 	't_createScene' => 'Vytvořit scénu',

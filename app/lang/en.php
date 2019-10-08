@@ -44,6 +44,7 @@ $lang = [
 	'l_inMinutes' => 'in minutes',
 	'l_sleepTime' => 'Device sleep Time',
 	'l_atHome' => 'At home',
+	'l_nameAt' => 'Name',
 
 	//Title
 	't_createScene' => 'Create Scene',
