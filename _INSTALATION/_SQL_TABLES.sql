@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Počítač: localhost:3306
--- Vytvořeno: Pát 28. čen 2019, 10:05
--- Verze serveru: 10.1.38-MariaDB-0+deb9u1
--- Verze PHP: 7.0.33-0+deb9u3
+-- Vytvořeno: Úte 08. říj 2019, 18:05
+-- Verze serveru: 10.1.41-MariaDB-0+deb9u1
+-- Verze PHP: 7.0.33-0+deb9u5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -28,12 +28,13 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `automation` (
   `automation_id` int(11) NOT NULL,
-  `name` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `on_days` varchar(255) NOT NULL,
   `if_something` varchar(255) NOT NULL,
   `do_something` varchar(255) NOT NULL,
   `executed` tinyint(4) NOT NULL,
-  `active` tinyint(4) NOT NULL DEFAULT '1'
+  `active` tinyint(4) NOT NULL DEFAULT '1',
+  `locked` tinyint(4) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -59,8 +60,23 @@ CREATE TABLE `devices` (
   `room_id` int(11) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
+  `sleep_time` int(13) NOT NULL,
+  `owner` int(13) NOT NULL,
+  `permission` varchar(255) NOT NULL,
   `approved` int(11) NOT NULL,
   `icon` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(13) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -72,8 +88,9 @@ CREATE TABLE `devices` (
 CREATE TABLE `records` (
   `record_id` int(11) NOT NULL,
   `subdevice_id` int(11) NOT NULL,
-  `value` varchar(255) NOT NULL,
-  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `value` smallint(6) NOT NULL,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `execuded` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -123,8 +140,10 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `startPage` int(11) NOT NULL
+  `startPage` int(11) NOT NULL,
+  `at_home` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
 -- Vypisuji data pro tabulku `users`
@@ -157,6 +176,12 @@ ALTER TABLE `dashboard`
 ALTER TABLE `devices`
   ADD PRIMARY KEY (`device_id`),
   ADD KEY `room_id` (`room_id`);
+
+--
+-- Klíče pro tabulku `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Klíče pro tabulku `records`
@@ -198,42 +223,47 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pro tabulku `automation`
 --
 ALTER TABLE `automation`
-  MODIFY `automation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `automation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 --
 -- AUTO_INCREMENT pro tabulku `dashboard`
 --
 ALTER TABLE `dashboard`
-  MODIFY `dashboard_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `dashboard_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT pro tabulku `devices`
 --
 ALTER TABLE `devices`
-  MODIFY `device_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `device_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+--
+-- AUTO_INCREMENT pro tabulku `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(13) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT pro tabulku `records`
 --
 ALTER TABLE `records`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26310;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=352338;
 --
 -- AUTO_INCREMENT pro tabulku `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT pro tabulku `scenes`
 --
 ALTER TABLE `scenes`
-  MODIFY `scene_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `scene_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT pro tabulku `subdevices`
 --
 ALTER TABLE `subdevices`
-  MODIFY `subdevice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `subdevice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT pro tabulku `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Omezení pro exportované tabulky
 --
@@ -249,7 +279,7 @@ ALTER TABLE `dashboard`
 -- Omezení pro tabulku `devices`
 --
 ALTER TABLE `devices`
-  ADD CONSTRAINT `devices_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `devices_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Omezení pro tabulku `records`
