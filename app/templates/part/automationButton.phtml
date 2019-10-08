@@ -37,10 +37,11 @@
                 </div>
                 <div class="col">
                     <h5 class="text-right break-all">
-                        <?php 
-                        if (!in_array($AUTOMATIONDATA['ifSomething'], ["sunRise", "sunSet"])) {
+                        <?php
+                        /*if (!in_array($AUTOMATIONDATA['ifSomething'], ["sunRise", "sunSet"])) {
                             echo $AUTOMATIONDATA['ifSomething'];
-                        }
+                        }*/
+                        echo $AUTOMATIONDATA['name'];
                         ?>
                     </h5>
                 </div>
@@ -48,6 +49,14 @@
             <div class="row">
                 <div class="col">
                     <?php echo implode(', ',$AUTOMATIONDATA['onDays']);?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a class="button is-primary m-1" onclick="$('#modal').removeClass('modal-container-hiden').show();">restart</a>
+                </div>
+                <div class="col">
+                    <a class="button is-primary m-1" onclick="$('#modal').removeClass('modal-container-hiden').show();">deaktivovat</a>
                 </div>
             </div>
         </div>
