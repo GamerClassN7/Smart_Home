@@ -6,7 +6,8 @@
                     <h5 class="fa">
                         <?php
                         //echo $AUTOMATIONDATA['ifSomething'];
-                        switch ($AUTOMATIONDATA['ifSomething']) {
+                        $ifCode = json_decode($AUTOMATIONDATA['ifSomething']);
+                        switch ($ifCode->type) {
                             case 'sunSet':
                             echo'&#xf186';
                             break;
