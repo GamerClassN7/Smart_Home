@@ -6,27 +6,28 @@
                     <h5 class="fa">
                         <?php
                         //echo $AUTOMATIONDATA['ifSomething'];
-                        switch ($AUTOMATIONDATA['ifSomething']) {
+                        $ifCode = json_decode($AUTOMATIONDATA['ifSomething']);
+                        switch ($ifCode->type) {
                             case 'sunSet':
                             echo'&#xf186';
                             break;
-                            
+
                             case 'sunRise':
                             echo'&#xf185 ';
                             break;
-                            
+
                             case 'inHome':
                             echo'&#xf090';
                             break;
-                            
+
                             case 'outHome':
                             echo'&#xf08b';
                             break;
-                            
+
                             case 'outDevice':
                             echo'&#xf2db';
                             break;
-                            
+
                             default:
                             echo'&#xf017';
                             break;
