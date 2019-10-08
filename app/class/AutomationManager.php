@@ -51,10 +51,12 @@ class AutomationManager{
 			$run = false;
 			$restart = false;
 
-			if ($automation['active'] != 0){
+			if ($automation['active'] == 1){
+
+
+
 				if (in_array($dayNameNow, $actionDays)){
 					if (in_array($onValue['type'], ['sunSet', 'sunRise', 'time','now'])) {
-
 						if ($onValue['type'] == 'sunSet') {
 							$value = date_sunset($value, SUNFUNCS_RET_TIMESTAMP, 50.0755381 , 14.4378005, 90);
 						} else if ($onValue['type'] == 'sunRise') {
@@ -65,13 +67,6 @@ class AutomationManager{
 							$onValue = $today->setTime($onValue[0], $onValue[1]);
 							$value = $today->getTimestamp();
 						}
-
-						/*
-						Echo "Spouštění Automatizace";
-						echo "Aktual" . date( "HH:mm", strtotime(time()));
-						echo "Run At" . date( "HH:mm", strtotime($value));
-						*/
-
 						if (time() > $value){
 							if ($automation['executed'] == 0){
 								$run = true;
@@ -109,19 +104,33 @@ class AutomationManager{
 						} else if ($membersHome > 0 && $automation['executed'] == 0){
 							$run = true;
 						}
-						/*echo "Someone Home". '<br>';
-						echo "at home" . $membersHome. '<br>';
-						echo "run" . $run. '<br>';
-						echo "restart" . $restart. '<br>';*/
-
 					}
 
 					//finalization
 					if ($run) {
+						$serverKey = 'AAAAFcN4elo:APA91bG4GViYbiwDHhNgkcOc3DpCYHW_4dpj9F-nQ-v5yiRcps9iENT6CmVAi8Qxxyjid5mrsMAqib9YSyObBOEJLg-Q9gsD5MnVaJjjTYggwyeyJEgFLM5wQNPeqQDPvIecXS9sbib4';
+						$body = '';
+
 						$sceneDoArray = json_decode($sceneDoJson);
 						foreach ($sceneDoArray as $deviceId => $deviceState) {
 							RecordManager::create($deviceId, 'on/off', $deviceState);
 						}
+
+						$subscribers = NotificationManager::getSubscription();
+						$i = 0;
+						foreach ($subscribers as $key => $subscriber) {
+							// code...
+							$logManager->write("[NOTIFICATION] SENDING NOTIFICATION TO" . $subscriber['id'] . " was executed" . $i);
+							$title = 'Automatizace-'.$automation['automation_id']." was executed" . $i;
+							$bodyFinal = var_export($subscriber);;
+							$notification = new Notification($serverKey);
+							$notification->to($subscriber['token']);
+							$notification->notification($title, $bodyFinal  , '', '');
+							$notification->send();
+							$notification = null;
+						}
+
+
 						$logManager->write("[AUTOMATIONS] automation id ". $automation['automation_id'] . " was executed");
 						Db::edit('automation', array('executed' => 1), 'WHERE automation_id = ?', array($automation['automation_id']));
 					} else if ($restart) {
@@ -129,7 +138,15 @@ class AutomationManager{
 						Db::edit('automation', array('executed' => 0), 'WHERE automation_id = ?', array($automation['automation_id']));
 					}
 				}
+
+
+
+
 			}
 		}
 	}
+
+
+
+
 }

@@ -25,55 +25,40 @@ var CACHE_FILES  = [
     'assets/logo.svg'
 ];
 
-this.addEventListener('install', function(event) {
-});
 
+self.addEventListener('install', function(event) {
+    console.info('Installed');
+});
 
 self.addEventListener('push', function(event) {  
     console.log('Received a push message', event);
-    if (!firebase.apps.length) {
-        firebase.initializeApp({
-        'messagingSenderId': '93473765978'
-    });
-}
+    if (event && event.data) {
+        var data = event.data.json();
+        data = JSON.parse(data.data.notification);
+        console.log(data);
+        event.waitUntil(self.registration.showNotification(data.title, {
+            body: data.body,
+            icon: data.icon || null
+        }));
+    }
+});
+
+self.addEventListener('sync', function(event) {
+    console.info('Event: Sync');
+});
+
+self.addEventListener('fetch', function (event) {
     
-    const messaging = firebase.messaging();
-    messaging.setBackgroundMessageHandler(function(payload) {
-        console.log('[firebase-messaging-sw.js] Received background message ', payload);
-        // Customize notification here
-        const notificationTitle = 'Background Message Title';
-        const notificationOptions = {
-            body: 'Background Message body.',
-            icon: '/itwonders-web-logo.png'
-        };
-        
-        return self.registration.showNotification(notificationTitle,
-            notificationOptions);
-        });
-    });
+});
+
+self.addEventListener("online", function (event) {
     
-    self.addEventListener('sync', function(event) {
-        console.info('Event: Sync');
-        
-    });
+});
+
+self.addEventListener("offline", function (event) {
+});
+
+self.addEventListener('notificationclick', function(e) {
     
-    self.addEventListener('fetch', function (event) {
-        
-    });
-    
-    self.addEventListener("online", function (event) {
-        
-    });
-    
-    self.addEventListener("offline", function (event) {
-    });
-    
-    self.addEventListener('notificationclick', function(e) {
-        
-    });
-    
-    // Initialize the Firebase app in the service worker by passing in the
-    // messagingSenderId.
-    
-    
-    
+});
+

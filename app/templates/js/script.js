@@ -25,12 +25,31 @@ if ('serviceWorker' in navigator) {
             })
             .then(function(token) {
                 console.log("token is : " + token);
+                $.ajax({
+                    url: 'ajax',
+                    type: 'POST',
+                    data: {
+                        "token": token
+                    },
+                    success: function(data){
+                        console.log('saved', data);
+                    },
+                    error: function (request, status, error) {
+                        console.log("ERROR ", request, error);
+                    }
+                });
             })
             .catch(function (err) {
                 console.log("Unable to get permission to notify.", err);
             });
             messaging.onMessage(function(payload) {
                 console.log("Message received. ", payload);
+                var notification = new Notification('hello', {
+                    body: "Hey there!",
+                });
+                notification.onclick = function () {
+                    window.open("http://google.com");
+                };
             });
         })
         .catch(err => {

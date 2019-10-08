@@ -29,14 +29,16 @@
 				}
 				?>
 			</div>
-			<select class="select m-1" name="room">
-				<option value="all">All</option>
-				<?php foreach ($ROOMS as $key => $room) {
-					if ($room['device_count'] > 0) { ?>
-						<option value="<?php echo $room['room_id']?>"><?php echo $room['name'] ?></option>
+			<div class="m-1">
+				<select class="select" name="room">
+					<option value="all">All</option>
+					<?php foreach ($ROOMS as $key => $room) {
+						if ($room['device_count'] > 0) { ?>
+							<option value="<?php echo $room['room_id']?>"><?php echo $room['name'] ?></option>
+						<?php } ?>
 					<?php } ?>
-				<?php } ?>
-			</select>
+				</select>
+			</div>
 			<div class="row no-gutters">
 				<?php foreach ($DATA as $roomId => $room) { ?>					
 					<?php foreach ($room['devices'] as $deviceId => $device) { ?>				

@@ -136,6 +136,8 @@ class Ajax extends Template
 			}else {
 				echo SceneManager::execScene($sceneId);
 			}
+		} else if (isset($_POST['token'])) {
+			NotificationManager::addSubscriber($_SESSION['user']['id'], $_POST['token']);
 		}
 
 		die();
