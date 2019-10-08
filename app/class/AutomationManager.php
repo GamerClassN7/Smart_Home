@@ -51,10 +51,8 @@ class AutomationManager{
 			$run = false;
 			$restart = false;
 
-			if ($automation['active'] == 1){
-
-
-
+			if ($automation['active'] == 1 && $automation['locked'] != 1){
+				Db::edit('automation', array('locked' => 1), 'WHERE automation_id = ?', array($automation['automation_id']));
 				if (in_array($dayNameNow, $actionDays)){
 					if (in_array($onValue['type'], ['sunSet', 'sunRise', 'time','now'])) {
 						if ($onValue['type'] == 'sunSet') {
@@ -119,17 +117,14 @@ class AutomationManager{
 						$subscribers = NotificationManager::getSubscription();
 						$i = 0;
 						foreach ($subscribers as $key => $subscriber) {
-							// code...
 							$logManager->write("[NOTIFICATION] SENDING NOTIFICATION TO" . $subscriber['id'] . " was executed" . $i);
 							$title = 'Automatizace-'.$automation['automation_id']." was executed" . $i;
-							$bodyFinal = var_export($subscriber);;
 							$notification = new Notification($serverKey);
 							$notification->to($subscriber['token']);
-							$notification->notification($title, $bodyFinal  , '', '');
+							$notification->notification($subscriber['id'], ''  , '', '');
 							$notification->send();
 							$notification = null;
 						}
-
 
 						$logManager->write("[AUTOMATIONS] automation id ". $automation['automation_id'] . " was executed");
 						Db::edit('automation', array('executed' => 1), 'WHERE automation_id = ?', array($automation['automation_id']));
@@ -137,6 +132,7 @@ class AutomationManager{
 						$logManager->write("[AUTOMATIONS] automation id ". $automation['automation_id'] . " was restarted");
 						Db::edit('automation', array('executed' => 0), 'WHERE automation_id = ?', array($automation['automation_id']));
 					}
+					Db::edit('automation', array('locked' => 0), 'WHERE automation_id = ?', array($automation['automation_id']));
 				}
 
 
