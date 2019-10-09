@@ -134,15 +134,7 @@ class AutomationManager{
 					}
 					Db::edit('automation', array('locked' => 0), 'WHERE automation_id = ?', array($automation['automation_id']));
 				}
-
-
-
-
 			}
 		}
 	}
-
-
-
-
 }
