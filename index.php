@@ -25,7 +25,7 @@ foreach (["class", "views"] as $dir) {
 /** Language **/
 $langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 if (DEBUGMOD == 1) {
-	/*echo '<div class="col-md-9 main-body">';
+	echo '<div class="col-md-9 main-body">';
 	echo '<pre>';
 	echo 'Language SLUG: ' . $langTag;
 	echo '</pre>';
@@ -35,7 +35,7 @@ if (DEBUGMOD == 1) {
 	echo '<pre>';
 	print_r(get_defined_vars());
 	echo '</pre>';
-	echo '</dev>';*/
+	echo '</dev>';
 }
 require_once './app/lang/' . $langTag . '.php';
 
