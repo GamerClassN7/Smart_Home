@@ -18,7 +18,26 @@ class NotificationManager
 	function getSubscription(){
 		return Db::loadAll('SELECT * FROM notifications;', array());
 	}
+
+	function sendSimpleNotification(string $serverKey, string $to, array $data){
+		$dataTemplate = [
+			'title' => '',
+			'body' => '',
+			'icon' => '',
+		];
+
+		if (array_diff_key ($dataTemplate , $data)){
+			return;
+		}
+
+		$notification = new Notification($serverKey);
+		$notification->to($to);
+		$notification->notification($data['title'], $data['body'], $data['icon'], '');
+		$notification->send();
+		$notification = null;
+	}
 }
+
 class Notification
 {
 	public $server_key = '';
