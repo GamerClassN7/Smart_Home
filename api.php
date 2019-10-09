@@ -104,7 +104,12 @@ if ($token == null || $token == "") {
 
 //Vstupní Checky
 if (!DeviceManager::registeret($token)) {
-	DeviceManager::create($token, $token);
+	$deviceId = DeviceManager::create($token, $token);
+	foreach ($values as $key => $value) {
+		if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
+			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
+		}
+	}
 	header("HTTP/1.1 401 Unauthorized");
 	echo json_encode(array(
 		'state' => 'unsuccess',
