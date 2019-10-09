@@ -29,6 +29,7 @@ class DeviceManager{
 		);
 		try {
 			Db::add ('devices', $device);
+			return Db::loadOne("SELECT device_id FROM devices WHERE token = ?", array($token))['device_id'];
 		} catch(PDOException $error) {
 			echo $error->getMessage();
 			die();
