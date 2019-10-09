@@ -140,49 +140,89 @@ if ($values != null || $values != "") {
 		}
 		RecordManager::create($deviceId, $key, round($value['value'],2));
 		$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
+
+
+		//notification
+		if ($key == 'door' || $key == 'water') {
+
+			$notificationMng = new NotificationManager;
+
+			$notificationData = [];
+
+			switch ($key) {
+				case 'door':
+				$notificationData = [
+					'title' => 'Info',
+					'body' => 'Someone just open up '.$device['name'],
+					'icon' => '',
+				];
+				break;
+				case 'water':
+				$notificationData = [
+					'title' => 'Alert',
+					'body' => 'Wather leak detected by '.$device['name'],
+					'icon' => '',
+				];
+				break;
+			}
+
+			if ($notificationData != []) {
+				$subscribers = $notificationMng::getSubscription();
+				foreach ($subscribers as $key => $subscriber) {
+					$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ");
+					$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
+				}
+			}
+		}
 	}
 
 	$hostname = strtolower($device['name']);
 	$hostname = str_replace(' ', '_', $hostname);
-	echo json_encode(array(
+	$jsonAnswer = [
 		'device' => [
 			'hostname' => $hostname,
+		],
+		'state' => 'succes',
+	];
+
+	$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
+	if (!in_array($subDevicesTypeList, ['on/off', 'door', 'water'])) {
+		$jsonAnswer['sleepTime'] = $device['sleep_time'];
+	}
+	echo json_encode($jsonAnswer);
+
+	header("HTTP/1.1 200 OK");
+} else {
+	//Vypis
+	//TODO: doděla uložení výpisu jinými slovy zda li byl comman vykonán
+	$device = DeviceManager::getDeviceByToken($token);
+	$deviceId = $device['device_id'];
+
+	if (count(SubDeviceManager::getAllSubDevices($deviceId)) == 0) {
+		SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
+		//RecordManager::create($deviceId, 'on/off', 0);
+	}
+
+	$subDeviceId = SubDeviceManager::getAllSubDevices($deviceId)[0]['subdevice_id'];
+	$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
+	$subDeviceLastReordValue = $subDeviceLastReord['value'];
+
+	if ($subDeviceLastReord['execuded'] == 0){
+		$logManager->write("[API] subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
+		RecordManager::setExecuted($subDeviceLastReord['record_id']);
+	}
+
+	echo json_encode(array(
+		'device' => [
+			'hostname' => $device['name'],
 			'sleepTime' => $device['sleep_time'],
 			],
 			'state' => 'succes',
+			'value' => $subDeviceLastReordValue
 		));
 		header("HTTP/1.1 200 OK");
-	} else {
-		//Vypis
-		//TODO: doděla uložení výpisu jinými slovy zda li byl comman vykonán
-		$device = DeviceManager::getDeviceByToken($token);
-		$deviceId = $device['device_id'];
+	}
 
-		if (count(SubDeviceManager::getAllSubDevices($deviceId)) == 0) {
-			SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
-			//RecordManager::create($deviceId, 'on/off', 0);
-		}
-
-		$subDeviceId = SubDeviceManager::getAllSubDevices($deviceId)[0]['subdevice_id'];
-		$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
-		$subDeviceLastReordValue = $subDeviceLastReord['value'];
-
-		if ($subDeviceLastReord['execuded'] == 0){
-			$logManager->write("[API] subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
-			RecordManager::setExecuted($subDeviceLastReord['record_id']);
-		}
-
-		echo json_encode(array(
-			'device' => [
-				'hostname' => $device['name'],
-				'sleepTime' => $device['sleep_time'],
-				],
-				'state' => 'succes',
-				'value' => $subDeviceLastReordValue
-			));
-			header("HTTP/1.1 200 OK");
-		}
-
-		unset($logManager);
-		Db::disconect();
-		die();
+	unset($logManager);
+	Db::disconect();
+	die();
