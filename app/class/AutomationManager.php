@@ -65,13 +65,13 @@ class AutomationManager{
 							$onValue = $today->setTime($onValue[0], $onValue[1]);
 							$value = $today->getTimestamp();
 						}
-						if (time() > $value){
-							if ($automation['executed'] == 0){
-								$run = true;
-							} else if (time() < $value && $automation['executed'] = 1) { //recovery realowing of automation
-								$restart = true;
-							}
+
+						if (time() > $value && $automation['executed'] == 0){
+							$run = true;
+						} else if (time() < $value && $automation['executed'] = 1) { //recovery realowing of automation
+							$restart = true;
 						}
+
 					} else if ($onValue['type'] == 'outHome') {
 
 					} else if ($onValue['type'] == 'inHome') {
