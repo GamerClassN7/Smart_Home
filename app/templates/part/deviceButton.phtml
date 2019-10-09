@@ -1,7 +1,7 @@
 <?php 
 $action = "";
 if ($SUBDEVICE['type'] == 'on/off') {
-	$action = 'onClick="ajaxPost(\'ajax\',{subDevice_id:\'' . $SUBDEVICEID . '\'}, this);"';
+	$action = 'onClick="ajaxPost(\'ajax\',{subDevice_id:\'' . $SUBDEVICEID . '\', action:\'change\'}, this);"';
 } 
 //neaktivní zařízení is-inactive
 ?>
