@@ -51,7 +51,7 @@ function waitForExecution(params, elements, msg_state){
                 url: 'ajax',
                 type: 'POST',
                 data: { 
-                    lastRecord:'',
+                    action:'executed',
                     subDevice_id : params['subDevice_id']
                 },
                 success: function(msg){

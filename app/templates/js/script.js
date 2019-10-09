@@ -29,6 +29,7 @@ if ('serviceWorker' in navigator) {
                     url: 'ajax',
                     type: 'POST',
                     data: {
+                        "notification" : '',
                         "token": token
                     },
                     success: function(data){
@@ -179,7 +180,7 @@ function ajaxChart(id, period = 'day', group = 'hour'){
         type: 'POST',
         dataType: 'json',
         data: {
-            "subDevice": id,
+            "subDevice_id": id,
             "action": 'chart',
             "period": period,
             "group": group

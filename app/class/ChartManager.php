@@ -6,8 +6,7 @@ class ChartScale{
 	const YEAR = 'error';
 }
 class ChartManager{
-	function generateChart($data, $min = 0, $max = 100)
-	{
+	function generateChart($data, $min = 0, $max = 100) {
 
 		echo '<br>Aktuální Hodnota: '.$data[0]['value'];
 		echo "<style>
@@ -87,6 +86,44 @@ class ChartManager{
 			}
 		}
 		</script>';
+	}
+
+	function generateChartData(int $subDeviceId, string $periode, string $groupBy) {
+		$chartData = [];
+
+		$subDevice = SubDeviceManager::getSubDevice($subDeviceId);
+		$records = RecordManager::getAllRecordForGraph($subDeviceId, $periode, $groupBy);
+
+		$array = array_column($records, 'value');
+		$arrayTime = array_column($records, 'time');
+		$output = [];
+
+		foreach ($array as $key => $value) {
+			$output[$key]['y'] = $value;
+			if ($subDevice['type'] == 'light'){
+				if ($value > 810){
+					$output[$key]['y'] = 1;
+				} else {
+					$output[$key]['y'] = 0;
+				}
+			}
+
+			$timeStamp = new DateTime($arrayTime[$key]);
+			$output[$key]['t'] = $timeStamp->format("Y-m-d") . 'T' . $timeStamp->format("H:i:s") . 'Z';
+		}
+
+		$data = json_encode($output);
+		$data = $output;
+		$arrayTimeStamps = array_column($records, 'time');
+		foreach ($arrayTimeStamps as $key => $value) {
+			$arrayTimeStamps[$key] = (new DateTime($value))->format(TIMEFORMAT);
+		}
+
+		$chartData['graphRange'] = RANGES[$subDevice['type']];
+		$chartData['graphType'] = RANGES[$subDevice['type']]['graph'];
+		$chartData['graphData'] = $data;
+
+		return $chartData;
 	}
 }
 ?>
