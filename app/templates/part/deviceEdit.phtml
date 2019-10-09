@@ -63,7 +63,7 @@
                     <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['token']; ?>" disabled>	
                 </div>	
                 <?php if ($DEVICE['userIsAdmin']) { ?>
-                    <?php if (!in_array($SUBDEVICE['type'], ['on/off', 'door'])) { ?>
+                    <?php if (!in_array($SUBDEVICE['type'], ['on/off', 'door', 'water'])) { ?>
                         <div class="field">
                             <div class="label"><?php echo $LANG['l_sleepTime']; ?></div>
                             <input class="input" type="int" name="sleepTime" value="<?php echo $DEVICE['sleepTime']; ?>"  <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>>	
