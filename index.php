@@ -18,6 +18,7 @@ foreach (["class", "views"] as $dir) {
 	$files = array_diff($files, array('.', '..', 'app'));
 
 	foreach($files as $file) {
+		//echo './app/'.$dir.'/'.  $file;
 		include './app/'.$dir.'/'.  $file;
 	}
 }
