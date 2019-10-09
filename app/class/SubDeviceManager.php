@@ -36,6 +36,16 @@ class SubDeviceManager
 		return Db::loadOne("SELECT * FROM subdevices WHERE subdevice_id = ?;", array($subDeviceId));
 	}
 
+	public function getSubDevicesTypeForMater($deviceId)
+	{
+		$parsedTypes = [];
+		$types = Db::loadAll("SELECT type FROM subdevices WHERE device_id = ?;", array($deviceId));
+		foreach ($types as $orderNum => $type) {
+			$parsedTypes[$orderNum] = $type['type'];
+		}
+		return $parsedTypes;
+	}
+
 	//check if dubdevice exist
 
 	public function create($deviceId, $type, $unit)
