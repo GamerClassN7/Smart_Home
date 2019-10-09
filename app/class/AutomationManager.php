@@ -106,7 +106,6 @@ class AutomationManager{
 
 					//finalization
 					if ($run) {
-						$serverKey = 'AAAAFcN4elo:APA91bG4GViYbiwDHhNgkcOc3DpCYHW_4dpj9F-nQ-v5yiRcps9iENT6CmVAi8Qxxyjid5mrsMAqib9YSyObBOEJLg-Q9gsD5MnVaJjjTYggwyeyJEgFLM5wQNPeqQDPvIecXS9sbib4';
 						$body = '';
 
 						$sceneDoArray = json_decode($sceneDoJson);
@@ -118,10 +117,10 @@ class AutomationManager{
 						$i = 0;
 						foreach ($subscribers as $key => $subscriber) {
 							$logManager->write("[NOTIFICATION] SENDING NOTIFICATION TO" . $subscriber['id'] . " was executed" . $i);
-							$title = 'Automatizace-'.$automation['automation_id']." was executed" . $i;
-							$notification = new Notification($serverKey);
+							$title = 'Automatization '.$automation['name']." was just executed";
+							$notification = new Notification(SERVERKEY);
 							$notification->to($subscriber['token']);
-							$notification->notification($subscriber['id'], ''  , '', '');
+							$notification->notification($title, ''  , '', '');
 							$notification->send();
 							$notification = null;
 						}
