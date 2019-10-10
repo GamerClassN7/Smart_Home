@@ -60,21 +60,33 @@ class Home extends Template
 							case 'on/off':
 							$replacementTrue = 'On';
 							$replacementFalse = 'Off';
+							$operator = '==';
+							$breakValue = 1;
 							break;
 
 							case 'door':
 							$replacementTrue = 'Closed';
 							$replacementFalse = 'Open';
+							$operator = '==';
+							$breakValue = 1;
 							break;
 
 							case 'light':
 							$replacementTrue = 'Light';
 							$replacementFalse = 'Dark';
+							$operator = '==';
+							$breakValue = 1;
+							if ($lastValue != 1 || $lastValue != 0) { //Digital Light Senzor
+								$operator = '<=';
+								$breakValue = 810;
+							}
 							break;
 
 							case 'water':
 							$replacementTrue = 'Wet';
 							$replacementFalse = 'Dry';
+							$operator = '==';
+							$breakValue = 1;
 							break;
 
 							default:
@@ -86,14 +98,15 @@ class Home extends Template
 						if ($replacementTrue != '' && $replacementFalse != '') {
 							//parsing last values
 							$parsedValue = $replacementFalse;
-							if ($lastValue == 1) {
+
+							if (Utilities::checkOperator($lastValue, $operator, $breakValue)) {
 								$parsedValue = $replacementTrue;
 							}
 
 							//parsing last events values
 							foreach ($events as $key => $value) {
 								$events[$key]['value'] = $replacementFalse;
-								if ($value == 1) {
+								if (Utilities::checkOperator($lastValue, $operator, $breakValue)) {
 									$events[$key]['value'] = $replacementTrue;
 								}
 							}

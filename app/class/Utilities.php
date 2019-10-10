@@ -107,4 +107,36 @@ class Utilities
 	{
 		return $count . ( ( $count == 1 ) ? ( " $text" ) : ( " ${text}s" ) );
 	}
+
+	function checkOperator($value1, $operator, $value2) {
+		switch ($operator) {
+			case '<': // Less than
+			return $value1 < $value2;
+			case '<=': // Less than or equal to
+			return $value1 <= $value2;
+			case '>': // Greater than
+			return $value1 > $value2;
+			case '>=': // Greater than or equal to
+			return $value1 >= $value2;
+			case '==': // Equal
+			return $value1 == $value2;
+			case '===': // Identical
+			return $value1 === $value2;
+			case '!==': // Not Identical
+			return $value1 !== $value2;
+			case '!=': // Not equal
+			case '<>': // Not equal
+			return $value1 != $value2;
+			case '||': // Or
+			case 'or': // Or
+			return $value1 || $value2;
+			case '&&': // And
+			case 'and': // And
+			return $value1 && $value2;
+			case 'xor': // Or
+			return $value1 xor $value2;
+			default:
+			return FALSE;
+		} // end switch
+	}
 }
