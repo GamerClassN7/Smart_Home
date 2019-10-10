@@ -32,6 +32,7 @@ class Home extends Template
 		}
 		$template->prepare('usersAtHome', $usersAtHome);
 
+
 		$roomsItems = [];
 		$roomsData = RoomManager::getAllRooms();
 		foreach ($roomsData as $roomKey => $roomsData) {
@@ -44,69 +45,71 @@ class Home extends Template
 
 					$events = RecordManager::getLastRecord($subDeviceData['subdevice_id'], 5);
 
-					$connectionError = false;
+					$connectionError = true;
 					$parsedValue = "";
 					$niceTime = "";
 
-
 					if (sizeof($events) > 1) {
-
-						//TODO: skontrolovat zdali se jedná o poslední (opravdu nejaktuálnější) záznam
 						$lastRecord = $events[0];
-
-						$parsedValue = round($lastRecord['value']);
+						$lastValue = round($lastRecord['value']);
+						$parsedValue = $lastValue;
 
 						/*Value Parsing*/
-						if ($subDeviceData['type'] == "on/off") {
-							$parsedValue = ($parsedValue == 1 ? 'ON' : 'OFF');
-						}
+						//Last Value Parsing
+						switch ($subDeviceData['type']) {
+							case 'on/off':
+							$replacementTrue = 'On';
+							$replacementFalse = 'Off';
+							break;
 
-						if ($subDeviceData['type'] == "door") {
+							case 'door':
 							$replacementTrue = 'Closed';
-							$replacementFalse = 'Opened';
-							foreach ($events as $key => $value) {
-								$events[$key]['value'] = ($value['value'] == 1 ? $replacementTrue : $replacementFalse);
-							}
-							$parsedValue = ($parsedValue == 1 ? $replacementTrue : $replacementFalse);
-						}
+							$replacementFalse = 'Open';
+							break;
 
-						if ($subDeviceData['type'] == "light") {
+							case 'light':
 							$replacementTrue = 'Light';
 							$replacementFalse = 'Dark';
-							foreach ($events as $key => $value) {
-								if ($parsedValue != 1){
-									//Analog Reading
-									$events[$key]['value'] = ($value['value'] <= 810 ? $replacementTrue : $replacementFalse);
-								} else {
-									//Digital Reading
-									$events[$key]['value'] = ($value['value'] == 0 ? $replacementTrue : $replacementFalse);
-								}
+							break;
+
+							case 'water':
+							$replacementTrue = 'Wet';
+							$replacementFalse = 'Dry';
+							break;
+
+							default:
+							$replacementTrue = '';
+							$replacementFalse = '';
+							break;
+						}
+
+						if ($replacementTrue != '' && $replacementFalse != '') {
+							//parsing last values
+							$parsedValue = $replacementFalse;
+							if ($lastValue == 1) {
+								$parsedValue = $replacementTrue;
 							}
-							if ($parsedValue != 1){
-								//Analog Reading
-								$parsedValue = ($parsedValue <= 810 ? $replacementTrue : $replacementFalse);
-							} else {
-								//Digital Reading
-								$parsedValue = ($parsedValue == 0 ? $replacementTrue : $replacementFalse);
+
+							//parsing last events values
+							foreach ($events as $key => $value) {
+								$events[$key]['value'] = $replacementFalse;
+								if ($value == 1) {
+									$events[$key]['value'] = $replacementTrue;
+								}
 							}
 						}
 
-						$date2 = new DateTime($lastRecord['time']);
+						$LastRecordTime = new DateTime($lastRecord['time']);
+						$niceTime = Utilities::ago($LastRecordTime);
 
-						$niceTime = $this->ago($date2);
-
-
-						$startDate = date_create($lastRecord['time']);
-						$interval = $startDate->diff(new DateTime());
+						$interval = $LastRecordTime->diff(new DateTime());
 						$hours   = $interval->format('%h');
 						$minutes = $interval->format('%i');
 						$lastSeen = ($hours * 60 + $minutes);
 
-						if ($lastSeen > $deviceData['sleep_time'] && $subDeviceData['type'] != "on/off") {
-							$connectionError = true;
+						if ($lastSeen < $deviceData['sleep_time'] || $subDeviceData['type'] == "on/off") {
+							$connectionError = false;
 						}
-					} else {
-						$connectionError = true;
 					}
 
 					$subDevices[$subDeviceData['subdevice_id']] = [
@@ -123,12 +126,11 @@ class Home extends Template
 				}
 
 				$permissionArray = json_decode($deviceData['permission']);
-
 				$userIsDeviceAdmin = false;
 				if($permissionArray[1] == 3) {
 					$userIsDeviceAdmin = true;
 				} else if ($permissionArray[0] == 3) {
-					if ( $deviceData['owner'] == $userManager->getUserData('user_id')) {
+					if ( $deviceData['owner'] == $_SESSION['user']['id']) {
 						$userIsDeviceAdmin = true;
 					}
 				}
@@ -161,21 +163,5 @@ class Home extends Template
 
 		$template->render();
 
-	}
-
-	function ago( $datetime )
-	{
-		$interval = date_create('now')->diff( $datetime );
-		$suffix = ( $interval->invert ? ' ago' : '' );
-		if ( $v = $interval->y >= 1 ) return $this->pluralize( $interval->m, 'month' ) . $suffix;
-		if ( $v = $interval->d >= 1 ) return $this->pluralize( $interval->d, 'day' ) . $suffix;
-		if ( $v = $interval->h >= 1 ) return $this->pluralize( $interval->h, 'hour' ) . $suffix;
-		if ( $v = $interval->i >= 1 ) return $this->pluralize( $interval->i, 'minute' ) . $suffix;
-		return $this->pluralize( $interval->s, 'second' ) . $suffix;
-	}
-
-	function pluralize( $count, $text )
-	{
-		return $count . ( ( $count == 1 ) ? ( " $text" ) : ( " ${text}s" ) );
 	}
 }
