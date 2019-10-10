@@ -68,7 +68,7 @@ class AutomationManager{
 
 						if (time() > $value && $automation['executed'] == 0){
 							$run = true;
-						} else if (time() < $value && $automation['executed'] = 1) { //recovery realowing of automation
+						} else if (time() < $value && $automation['executed'] == 1) { //recovery realowing of automation
 							$restart = true;
 						}
 
@@ -115,6 +115,7 @@ class AutomationManager{
 
 						$subscribers = NotificationManager::getSubscription();
 						$i = 0;
+
 						foreach ($subscribers as $key => $subscriber) {
 							$logManager->write("[NOTIFICATION] SENDING NOTIFICATION TO" . $subscriber['id'] . " was executed" . $i);
 							$title = 'Automatization '.$automation['name']." was just executed";
