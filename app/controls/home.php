@@ -67,7 +67,7 @@ if (isset($_POST) && !empty($_POST)){
 		echo '<a href="/vasek/home/">CONTINUE</a>';
 		die();
 	}
-	header('Location: /vasek/home/', TRUE);
+	header('Location: /vasek/home/');
 	die();
 }
 ?>

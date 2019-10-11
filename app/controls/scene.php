@@ -13,6 +13,6 @@ if (isset($_POST) && !empty($_POST)){
 		die();
 	}
 
-	header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')), TRUE);
+	header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')));
 	die();
 }
