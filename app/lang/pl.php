@@ -1,5 +1,6 @@
 <?php
-return $lang = [
+return <?php
+$lang = [
 	//Menu
 	'm_home' => 'Strona główna',
 	'm_dashboard' => 'Panel',
@@ -21,13 +22,12 @@ return $lang = [
 	'b_approve' => 'Zaakceptuj',
 	'b_disable' => 'Wyłącz',
 	'b_save' => 'Zapisz',
-	//newOne
-	'b_logOut' => 'Logout',
-	'b_sendTestNotification' => 'Send Test Notification',
-	'b_rooms' => 'Rooms',
-	'b_restart' => 'Restart',
-	'b_disable' => 'disabele',
-	'b_select' => 'Select',
+	'b_logOut' => 'Wyloguj',
+	'b_sendTestNotification' => 'Wyślij próbne powiadomienie',
+	'b_rooms' => 'Pokoje',
+	'b_restart' => 'Zrestartuj',
+	'b_disable' => 'Wyłącz',
+	'b_select' => 'Wybierz',
 
 	//labels
 	'l_choseDevice' => 'Wybierz urządzenie:',
@@ -51,22 +51,20 @@ return $lang = [
 	'l_sleepTime' => 'Czas snu urządzenia',
 	'l_atHome' => 'W domu',
 	'l_nameAt' => 'Nazwa',
-	//newOne
-	'l_nameAt' => 'Name',
-	'l_lastSeen' => 'Last Seen',
-	'l_notificationStatus' => 'Notification status',
+	'l_nameAt' => 'Nazwa',
+	'l_lastSeen' => 'Ostatnio widziany',
+	'l_notificationStatus' => 'Stan powiadomienia',
 
 	//Title
 	't_createScene' => 'Utwórz scenariusz',
 	't_editScene' => 'Edytuj scenariusz',
 	't_createAutomation' => 'Utwórz automację',
-	//newOne
-	't_addDevice' => 'Add Device',
+	't_addDevice' => 'Dodaj Urządzenie',
 	't_editDevice' => 'Edutuj urządzenie',
-	't_pageAfterLogIn' => 'Page After Login',
-	't_profile' => 'Profile',
-	't_notification' => 'Notification',
-	't_experimental' => 'Experimental',
+	't_pageAfterLogIn' => 'Strona Po Zalogowaniu',
+	't_profile' => 'Profil',
+	't_notification' => 'Powiadomienie',
+	't_experimental' => 'Eksperymentalne',
 
 	//constants
 	'humi' => 'Wilgotność',
@@ -87,19 +85,18 @@ return $lang = [
 	'w_neni' => 'W',
 	'w_is' => 'jest',
 
-	//newOne
 	//tables
-	't_time' => 'Time',
-	't_state' => 'State',
+	't_time' => 'Czas',
+	't_state' => 'Stan',
 
 	//Days Long
-	'd_monday' => 'Monday',
-	'd_tuesday' => 'Tuesday',
-	'd_wednesday' => 'Wednesday',
-	'd_thursday' => 'Thursday',
-	'd_friday' => 'Friday',
-	'd_saturday' => 'Saturday',
-	'd_sunday' => 'Sunday',
+	'd_monday' => 'Poniedziałek',
+	'd_tuesday' => 'Wtorek',
+	'd_wednesday' => 'Środa',
+	'd_thursday' => 'Czwartek',
+	'd_friday' => 'Piątek',
+	'd_saturday' => 'Sobota',
+	'd_sunday' => 'Niedziela',
 
 	//example
 	'' => '',
