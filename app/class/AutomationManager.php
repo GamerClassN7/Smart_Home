@@ -13,6 +13,10 @@ class AutomationManager{
 		return Db::command ('UPDATE automation SET active = ? WHERE automation_id=?', array ($flipedValue,$automationId));
 	}
 
+	public function restart($automationId) {
+		return Db::command ('UPDATE automation SET executed = 0 WHERE automation_id=?', array ($automationId));
+	}
+
 	public function create ($name, $onDays, $doCode, $ifCode, $automationId = "") {
 		$scene = array (
 			'name' => $name,

@@ -40,6 +40,11 @@ class Ajax extends Template
 				die();
 				break;
 
+				case 'restart':
+				AutomationManager::restart($automationId);
+				die();
+				break;
+
 				default:
 				echo 'no action detected';
 				break;
