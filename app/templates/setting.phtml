@@ -14,13 +14,15 @@
 			<?php
 			$partial = new Partial('menu');
 			$partial->prepare('item', 'setting');
-			$partial->prepare('lang',$LANG);
+			$partial->prepare('langMng',$LANGMNG);
 			$partial->render();
 			?>
 		</div>
 		<div class="col-md-9 main-body">
 			<div class="col-12 col-sm-9 mx-auto mt-4">
-				<h4 class="mb-4">Stránka po načtení</h4>
+				<h4 class="mb-4">	
+					<?php $LANGMNG->echo('t_pageAfterLogIn') ?>
+				</h4>
 				<form method="post" enctype="multipart/form-data">
 					<div class="">
 						<div class="field">
@@ -29,28 +31,28 @@
 								<option value="1" <?php echo (UserManager::getUserData("startPage") == 1 ? "selected" : ""); ?>>Dashboard</option>
 							</select>
 						</div>
-						<input type="submit" name="submit" class="button" value="Uložit"/>
+						<input type="submit" name="submit" class="button" value="<?php $LANGMNG->echo('b_save') ?>"/>
 					</div>
 				</div>
 			</form>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
-				<h4 class="mb-4">Profil</h4>
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_profile') ?></h4>
 				<div class="field">
-					<a href="logout" class="button is-primary">Odhlásit se</a>
+					<a href="logout" class="button is-primary"><?php $LANGMNG->echo('b_logOut') ?></a>
 				</div>
 			</div>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
-				<h4 class="mb-4">Notifications</h4>
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_notification') ?></h4>
 				<input id="notifications" type="checkbox" onChange="toggleNotificationPermissions(this);" />
-				<div class="label">Status notifikací</div>
+				<div class="label"><?php $LANGMNG->echo('l_notificationStatus') ?></div>
 				<div class="field">
-					<a onClick="sendTestNotification();" class="button">Test Notification</a>
+					<a onClick="sendTestNotification();" class="button"><?php $LANGMNG->echo('b_sendTestNotification');?></a>
 				</div>
 			</div>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
-				<h4 class="mb-4">Logs</h4>
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_experimental') ?></h4>
 				<div class="field">
-					<a href="rooms" class="button">ROOMS</a>
+					<a href="rooms" class="button"><?php $LANGMNG->echo('b_rooms') ?></a>
 				</div>
 			</div>
 		</div>

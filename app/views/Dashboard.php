@@ -4,7 +4,7 @@ class Dashboard extends Template
 	function __construct()
 	{
 		global $userManager;
-		global $lang;
+		global $langMng;
 
 		if (!$userManager->isLogin()){
 			header('Location: ./login');
@@ -81,7 +81,7 @@ class Dashboard extends Template
 		}
 
 		$template->prepare('title', 'Nástěnka');
-		$template->prepare('lang', $lang);
+		$template->prepare('langMng', $langMng);
 		$template->prepare('dashboard', $dashboard);
 		$template->prepare('subDevices', $approvedSubDevices);
 

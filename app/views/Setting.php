@@ -4,7 +4,7 @@ class Setting extends Template
 	function __construct()
 	{
 		global $userManager;
-		global $lang;
+		global $langMng;
 
 		if (!$userManager->isLogin()){
 			header('Location: ./login');
@@ -23,7 +23,7 @@ class Setting extends Template
 
 		$template = new Template('setting');
 		$template->prepare('title', 'Automation');
-		$template->prepare('lang', $lang);
+		$template->prepare('langMng', $langMng);
 		$template->prepare('automations', $automations);
 
 		$template->render();

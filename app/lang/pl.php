@@ -1,5 +1,5 @@
 <?php
-$langMng = [
+return $langMng = [
 	//Menu
 	'm_home' => 'Home',
 	'm_dashboard' => 'Dashboard',

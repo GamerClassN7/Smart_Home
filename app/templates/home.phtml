@@ -14,7 +14,7 @@
 			<?php
 			$partial = new Partial('menu');
 			$partial->prepare('item', 'home');
-			$partial->prepare('lang',$LANG);
+			$partial->prepare('langMng',$LANGMNG);
 			$partial->render();
 			?>
 		</div>
@@ -25,7 +25,8 @@
 			<div class="label m-1">
 				<?php 
 				if ($USERSATHOME != "") {
-					echo $LANG['l_atHome'] . ': ' . $USERSATHOME; 	
+					$LANGMNG->echo('l_atHome');
+					echo ': ' . $USERSATHOME; 	
 				}
 				?>
 			</div>
@@ -58,7 +59,7 @@
 							$partialDetail->prepare('subdeviceid',$subDeviceKey);
 							$partialDetail->prepare('subdevice',$subDevice);
 							$partialDetail->prepare('device',$device);
-							$partialDetail->prepare('lang',$LANG);
+							$partialDetail->prepare('langMng',$LANGMNG);
 							
 							$partialDetail->render();
 							
@@ -69,7 +70,7 @@
 							$partialEdit->prepare('device',$device);
 							$partialEdit->prepare('users',$USERS);
 							$partialEdit->prepare('rooms',$ROOMS);
-							$partialEdit->prepare('lang',$LANG);
+							$partialEdit->prepare('langMng',$LANGMNG);
 							
 							$partialEdit->render();
 						} 

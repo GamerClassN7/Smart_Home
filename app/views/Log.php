@@ -6,7 +6,7 @@ class Log extends Template
 	function __construct()
 	{
 		global $userManager;
-		global $lang;
+		global $langMng;
 
 		if (!$userManager->isLogin()){
 			header('Location: ./login');
@@ -26,7 +26,7 @@ class Log extends Template
 		}
 
 		$template->prepare('logsFiles', $result);
-		$template->prepare('lang', $lang);
+		$template->prepare('langMng', $langMng);
 
 		$template->render();
 

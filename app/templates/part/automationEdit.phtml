@@ -3,26 +3,26 @@
         <div class="close">
             <i class="fa fa-times"></i>
         </div>
-        <h4 class="mb-4"><?php echo $LANG['t_createAutomation']?></h4>
+        <h4 class="mb-4"><?php $LANGMNG->echo('t_createAutomation');?></h4>
         <form method="post">
             <input name="automation_id" type="hidden" value="<?php echo $AUTOMATIONID; ?>">
             <div class="field">
-                <div class="label"><?php echo $LANG['l_nameAt']?></div>
+                <div class="label"><?php $LANGMNG->echo('l_nameAt');?></div>
                 <div class="field">
                     <input class="input" type="text" name="name" value="<?php echo (isset ($AUTOMATION['name']) ? $AUTOMATION['name'] : ""); ?>" required/>
                 </div>
-                <div class="label"><?php echo $LANG['l_runAt']?></div>
+                <div class="label"><?php $LANGMNG->echo('l_runAt');?></div>
                 <div class="field">
                     <?php //TODO Dodělat identifikaci pro Selctor události a selector času zařízení hodnoty ?>
                     <select class="input" name="atSelector" id="valueSelector" required>
-                        <option	value="sunSet" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "sunSet" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_sunSet']?></option>
-                        <option	value="sunRise" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "sunRise" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_sunRice']?></option>
-                        <option	value="inHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "inHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_inHome']?></option>
-                        <option	value="outHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "outHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_outHome']?></option>
-                        <option	value="time" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "time" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_time']?></option>
-                        <option	value="atDeviceValue" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "atDeviceValue" ? 'selected="selected"' : ''); ?>><?php echo $LANG['l_deviceValue'];?></option>
-                        <option	value="noOneHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "noOneHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['w_noOne'] . ' ' . $LANG['w_neni'] . ' ' . $LANG['w_home'];?></option>
-                        <option	value="someOneHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "someOneHome" ? 'selected="selected"' : ''); ?>><?php echo $LANG['w_someOne'] . ' ' . $LANG['w_is'] . ' ' . $LANG['w_home'];?></option>
+                        <option	value="sunSet" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "sunSet" ? 'selected="selected"' : ''); ?>><?php $LANGMNG->echo('l_sunSet');?></option>
+                        <option	value="sunRise" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "sunRise" ? 'selected="selected"' : ''); ?>><?php $LANGMNG->echo('l_sunRice');?></option>
+                        <option	value="inHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "inHome" ? 'selected="selected"' : ''); ?>><?php $LANGMNG->echo('l_inHome');?></option>
+                        <option	value="outHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "outHome" ? 'selected="selected"' : ''); ?>><?php $LANGMNG->echo('l_outHome');?></option>
+                        <option	value="time" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "time" ? 'selected="selected"' : ''); ?>><?php $LANGMNG->echo('l_time');?></option>
+                        <option	value="atDeviceValue" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "atDeviceValue" ? 'selected="selected"' : ''); ?>><?php $LANGMNG->echo('l_deviceValue');;?></option>
+                        <option	value="noOneHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "noOneHome" ? 'selected="selected"' : ''); ?>><?php $LANGMNG->echo('w_noOne'); echo ' ' . $LANGMNG->get('w_neni') . ' ' . $LANGMNG->get('w_home');?></option>
+                        <option	value="someOneHome" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "someOneHome" ? 'selected="selected"' : ''); ?>><?php $LANGMNG->echo('w_someOne'); echo ' ' . $LANGMNG->get('w_is') . ' ' . $LANGMNG->get('w_home');?></option>
                     </select>
                     <input class="input" type="time" name="atTime" id="atTime" value="<?php echo (json_decode($AUTOMATION['ifSomething'], true)['type'] == "time" ? json_decode($AUTOMATION['ifSomething'], true)['value'] : ""); ?>" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "time" ? '' : 'disabled'); ?>/>
                     <select class="input" name="atDeviceValue" id="atDeviceValue" <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "atDeviceValue" ? '' : 'disabled'); ?>>
@@ -34,7 +34,7 @@
                     <input class="input" type="text" name="atDeviceValueInt" id="atDeviceValueInt" required <?php ECHO (json_decode($AUTOMATION['ifSomething'], true)['type'] == "atDeviceValue" ? '' : 'disabled'); ?>/>
                 </div>
 
-                <div class="label"><?php echo $LANG['l_affectedDevices'];?></div>
+                <div class="label"><?php $LANGMNG->echo('l_affectedDevices'); ?></div>
                 <div class="field">
                     <div class="field px-2">
                         <?php
@@ -53,31 +53,31 @@
                         } ?>
                     </div>
                 </div>
-                <div class="label"><?php echo $LANG['l_atDays'];?></div>
+                <div class="label"><?php $LANGMNG->echo('l_atDays');?></div>
                 <div class="field">
-                    <input type="checkbox" name="day[]" value="mon" <?php ECHO (in_array("mon", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Pondělí
+                    <input type="checkbox" name="day[]" value="mon" <?php ECHO (in_array("mon", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> <?php $LANGMNG->echo('d_monday'); ?>
                 </div>
                 <div class="field">
-                    <input type="checkbox" name="day[]" value="tue" <?php ECHO (in_array("tue", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Úterý
+                    <input type="checkbox" name="day[]" value="tue" <?php ECHO (in_array("tue", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> <?php $LANGMNG->echo('d_tuesday'); ?>
                 </div>
                 <div class="field">
-                    <input type="checkbox" name="day[]" value="wed" <?php ECHO (in_array("wed", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Středa
+                    <input type="checkbox" name="day[]" value="wed" <?php ECHO (in_array("wed", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> <?php $LANGMNG->echo('d_wednesday'); ?>
                 </div>
                 <div class="field">
-                    <input type="checkbox" name="day[]" value="thu" <?php ECHO (in_array("thu", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Čtvrtek
+                    <input type="checkbox" name="day[]" value="thu" <?php ECHO (in_array("thu", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> <?php $LANGMNG->echo('d_thursday'); ?>
                 </div>
                 <div class="field">
-                    <input type="checkbox" name="day[]" value="fri" <?php ECHO (in_array("fri", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Pátek
+                    <input type="checkbox" name="day[]" value="fri" <?php ECHO (in_array("fri", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> <?php $LANGMNG->echo('d_friday'); ?>
                 </div>
                 <div class="field">
-                    <input type="checkbox" name="day[]" value="sat" <?php ECHO (in_array("sat", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Sobota
+                    <input type="checkbox" name="day[]" value="sat" <?php ECHO (in_array("sat", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> <?php $LANGMNG->echo('d_saturday'); ?>
                 </div>
                 <div class="field">
-                    <input type="checkbox" name="day[]" value="sun" <?php ECHO (in_array("sun", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> Neděle
+                    <input type="checkbox" name="day[]" value="sun" <?php ECHO (in_array("sun", $AUTOMATION['onDays']) ? 'checked' : ''); ?>/> <?php $LANGMNG->echo('d_sunday'); ?>
                 </div>
             </div>
-            <input type="submit" class="button" name="modalFinal" value="<?php echo $LANG['b_edit'];?>"/>
-            <input type="submit" class="button is-danger"  onClick="ajaxPostSimple('ajax',{automation_id:  '<?php echo $AUTOMATIONID ?>', action:'delete'}, true);"  name="remove" value="<?php echo $LANG['b_remove'];?>"/>
+            <input type="submit" class="button" name="modalFinal" value="<?php $LANGMNG->echo('b_edit'); ?>"/>
+            <input type="submit" class="button is-danger"  onClick="ajaxPostSimple('ajax',{automation_id:  '<?php echo $AUTOMATIONID ?>', action:'delete'}, true);"  name="remove" value="<?php $LANGMNG->echo('b_remove');?>"/>
         </form>
 
     </div>

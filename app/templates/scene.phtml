@@ -14,17 +14,17 @@
             <?php
             $partial = new Partial('menu');
             $partial->prepare('item', 'scene');
-            $partial->prepare('lang',$LANG);
+            $partial->prepare('langMng',$LANGMNG);
             $partial->render();
             ?>
         </div>
         <div class="col-md-9 main-body">
-            <a class="button is-primary m-1" onClick="$('#modal').removeClass('modal-container-hiden').show();"><?php echo $LANG['t_createScene'];?></a>
+            <a class="button is-primary m-1" onClick="$('#modal').removeClass('modal-container-hiden').show();"><?php $LANGMNG->echo('t_createScene');?></a>
             <div class="row no-gutters">
                 <?php foreach ($SCENES as $sceneId => $sceneData) { 
                     //BUTTON
                     $partialScenButton = new Partial('sceneButton');
-                    $partialScenButton->prepare('lang', $LANG);
+                    $partialScenButton->prepare('langMng', $LANGMNG);
                     $partialScenButton->prepare('sceneId', $sceneId);
                     $partialScenButton->prepare('sceneData', $sceneData);
                     
@@ -32,7 +32,7 @@
                     
                     // Edit
                     $partialSceneEdit = new Partial('sceneEdit');
-                    $partialSceneEdit->prepare('lang',$LANG);
+                    $partialSceneEdit->prepare('langMng',$LANGMNG);
                     $partialSceneEdit->prepare('sceneId',$sceneId);
                     $partialSceneEdit->prepare('scene',$sceneData);
                     
@@ -45,7 +45,7 @@
     
     <?php if (isset($_POST['devices'])) {
         $partial = new Partial('sceneCreateOptions');
-        $partial->prepare('lang',$LANG);
+        $partial->prepare('langMng',$LANGMNG);
         $partial->prepare('setStateFormDevices',$SETSTATEFORMDEVICES );
         $partial->prepare('sceneIcon',$SCENEICON );
         $partial->prepare('SceneName',$SCENENAME );
@@ -53,7 +53,7 @@
         $partial->render();
     } else {
         $partial = new Partial('sceneCreate');
-        $partial->prepare('lang',$LANG);
+        $partial->prepare('langMng',$LANGMNG);
         $partial->prepare('subDevices',$SUBDEVICES);
         
         $partial->render();

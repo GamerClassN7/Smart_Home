@@ -1,5 +1,5 @@
 <?php
-$lang = [
+return $lang = [
 	//Menu
 	'm_home' => 'Domů',
 	'm_dashboard' => 'Nástěnka',
@@ -45,6 +45,7 @@ $lang = [
 	'l_sleepTime' => 'Doba spánku zařízení',
 	'l_atHome' => 'Doma Jsou',
 	'l_nameAt' => 'Název',
+	'l_lastSeen' => 'Naposledy připojeno',
 
 	//Title
 	't_createScene' => 'Vytvořit scénu',

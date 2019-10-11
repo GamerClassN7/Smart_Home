@@ -1,5 +1,5 @@
 <?php
-$lang = [
+return $lang = [
 	//Menu
 	'm_home' => 'Home',
 	'm_dashboard' => 'Dashboard',
@@ -21,6 +21,12 @@ $lang = [
 	'b_approve' => 'Approve',
 	'b_disable' => 'Disable',
 	'b_save' => 'Save',
+	'b_logOut' => 'Logout',
+	'b_sendTestNotification' => 'Send Test Notification',
+	'b_rooms' => 'Rooms',
+	'b_restart' => 'Restart',
+	'b_disable' => 'disabele',
+	'b_select' => 'Select',
 
 
 	//labels
@@ -45,6 +51,8 @@ $lang = [
 	'l_sleepTime' => 'Device sleep Time',
 	'l_atHome' => 'At home',
 	'l_nameAt' => 'Name',
+	'l_lastSeen' => 'Last Seen',
+	'l_notificationStatus' => 'Notification status',
 
 	//Title
 	't_createScene' => 'Create Scene',
@@ -52,7 +60,15 @@ $lang = [
 
 	't_createAutomation' => 'Create Automation',
 
+
+	't_addDevice' => 'Add Device',
 	't_editDevice' => 'Edit Device',
+	't_pageAfterLogIn' => 'Page After Login',
+	't_profile' => 'Profile',
+	't_notification' => 'Notification',
+	't_experimental' => 'Experimental',
+	't_' => 'Edit Device',
+
 
 	//constants
 	'humi' => 'Humidity',
@@ -72,6 +88,19 @@ $lang = [
 	'w_home' => 'Home',
 	'w_neni' => 'At',
 	'w_is' => 'is',
+
+	//tables
+	't_time' => 'Time',
+	't_state' => 'State',
+
+	//Days Long
+	'd_monday' => 'Monday',
+	'd_tuesday' => 'Tuesday',
+	'd_wednesday' => 'Wednesday',
+	'd_thursday' => 'Thursday',
+	'd_friday' => 'Friday',
+	'd_saturday' => 'Saturday',
+	'd_sunday' => 'Sunday',
 
 	//example
 	'' => '',

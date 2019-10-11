@@ -14,12 +14,12 @@
 			<?php
 			$partial = new Partial('menu');
 			$partial->prepare('item', 'dashboard');
-			$partial->prepare('lang',$LANG);
+			$partial->prepare('langMng',$LANGMNG);
 			$partial->render();
 			?>
 		</div>
 		<div class="col-md-9 main-body">
-			<a onClick="$('#modal').removeClass('modal-container-hiden').show();" class="button is-primary m-1">Add Device</a>
+			<a onClick="$('#modal').removeClass('modal-container-hiden').show();" class="button is-primary m-1"><?php $LANGMNG->echo('t_addDevice'); ?></a>
 			<div class="row no-gutters">
 				<?php foreach ($DASHBOARD as $dashboardItemId => $dashboardItemData) {
 					$partialDeviceButton = new Partial('dashboardButton');
@@ -36,17 +36,17 @@
 			<div class="close">
 				<i class="fa fa-times"></i>
 			</div>
-			<h4 class="mb-4">Modal bitch</h4>
+			<h4 class="mb-4"><?php $LANGMNG->echo('t_addDevice'); ?></h4>
 			<form method="post">
 				<div class="field px-2">
-					<div class="label">Zvolte zařízení:</div>
-					<select class="input" name="devices[]" multiple>
+					<div class="label"><?php $LANGMNG->echo('l_choseDevice'); ?>:</div>
+					<select class="input" name="devices[]" multiple required>
 						<?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ ?>
 							<option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name'] . '[' . $subDeviceValue['type']  . ']'; ?></option>
 						<?php } ?>
 					</select>
 				</div>
-				<input type="submit" class="button" name="modalFinal" value="Next"/>
+				<input type="submit" class="button" name="modalFinal" value="<?php $LANGMNG->echo('b_create'); ?>"/>
 			</form>
 		</div>
 	</div>

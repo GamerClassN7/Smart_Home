@@ -3,15 +3,15 @@
         <div class="close">
             <i class="fa fa-times"></i>
         </div>
-        <h4 class="mb-4"><?php echo $LANG['t_editDevice']; ?></h4>
+        <h4 class="mb-4"><?php $LANGMNG->echo('t_editDevice'); ?></h4>
         <form method="post" action="">
             <input class="input" type="hidden" name="deviceId" value="<?php echo $DEVICEID; ?>">
             <?php if ($DEVICE['approved'] != 0) { ?>
                 <?php if ($DEVICE['userIsAdmin']) { ?>
                     <div class="field">
-                        <div class="label"><?php echo $LANG['l_owner']; ?></div>
+                        <div class="label"><?php $LANGMNG->echo('l_owner'); ?></div>
                         <select class="input" name="deviceOwnerUserId">
-                            <option value=""><?php echo $LANG['w_noOne']; ?></option>
+                            <option value=""><?php $LANGMNG->echo('w_noOne'); ?></option>
                             <?php foreach ($USERS as $user) { 
                                 $userId =  $user['user_id'];
                                 $userName =  $user['username'];
@@ -20,11 +20,11 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="label"> <?php echo $LANG['l_permission']; ?></div>
+                    <div class="label"><?php $LANGMNG->echo('l_permission'); ?></div>
                     <div class="row">
                         
                         <div class="col-6">
-                            <div class="label"> - <?php echo $LANG['l_owner']; ?></div>
+                            <div class="label"> - <?php $LANGMNG->echo('l_owner'); ?></div>
                         </div>
                         
                         <div class="col-6">
@@ -37,24 +37,24 @@
                                 echo '</pre>';
                             }
                             ?>
-                            <input type="radio" name="permissionOwner" value=1 <?php ECHO ($permissions[0] == 1 ? 'checked' : ''); ?>/> <?php echo $LANG['l_read']; ?>
-                            <input type="radio" name="permissionOwner" value=2 <?php ECHO ($permissions[0] == 2 ? 'checked' : ''); ?>/> <?php echo $LANG['l_use']; ?>
-                            <input type="radio" name="permissionOwner" value=3 <?php ECHO ($permissions[0] == 3 ? 'checked' : ''); ?>/> <?php echo $LANG['l_edit']; ?>
+                            <input type="radio" name="permissionOwner" value=1 <?php ECHO ($permissions[0] == 1 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_read'); ?>
+                            <input type="radio" name="permissionOwner" value=2 <?php ECHO ($permissions[0] == 2 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_use'); ?>
+                            <input type="radio" name="permissionOwner" value=3 <?php ECHO ($permissions[0] == 3 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_edit'); ?>
                             
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <div class="label"> - <?php echo $LANG['l_member']; ?></div>
+                            <div class="label"> - <?php $LANGMNG->echo('l_member'); ?></div>
                         </div>
                         <div class="col-6">
-                            <input type="radio" name="permissionOther" value=1 <?php ECHO ($permissions[1] == 1 ? 'checked' : ''); ?>/> <?php echo $LANG['l_read']; ?>
-                            <input type="radio" name="permissionOther" value=2 <?php ECHO ($permissions[1] == 2 ? 'checked' : ''); ?>/> <?php echo $LANG['l_use']; ?>
-                            <input type="radio" name="permissionOther" value=3 <?php ECHO ($permissions[1] == 3 ? 'checked' : ''); ?>/> <?php echo $LANG['l_edit']; ?>
+                            <input type="radio" name="permissionOther" value=1 <?php ECHO ($permissions[1] == 1 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_read'); ?>
+                            <input type="radio" name="permissionOther" value=2 <?php ECHO ($permissions[1] == 2 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_use'); ?>
+                            <input type="radio" name="permissionOther" value=3 <?php ECHO ($permissions[1] == 3 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_edit'); ?>
                         </div>
                     </div>
                     <div class="field">
-                        <div class="label"><?php echo $LANG['w_title']; ?></div>
+                        <div class="label"><?php $LANGMNG->echo('w_title'); ?></div>
                         <input class="input" type="text" name="deviceName" value="<?php echo $DEVICE['name']; ?>" <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>>
                     </div>
                 <?php } ?>
@@ -65,13 +65,13 @@
                 <?php if ($DEVICE['userIsAdmin']) { ?>
                     <?php if (!in_array($SUBDEVICE['type'], ['on/off', 'door', 'water'])) { ?>
                         <div class="field">
-                            <div class="label"><?php echo $LANG['l_sleepTime']; ?></div>
+                            <div class="label"><?php $LANGMNG->echo('l_sleepTime'); ?></div>
                             <input class="input" type="int" name="sleepTime" value="<?php echo $DEVICE['sleepTime']; ?>"  <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>>	
-                            <p>* - <?php echo $LANG['l_inMinutes']; ?></p>
+                            <p>* - <?php $LANGMNG->echo('l_inMinutes'); ?></p>
                         </div>
                     <?php }?>
                     <div class="field">
-                        <div class="label"><?php echo $LANG['w_room']; ?></div>
+                        <div class="label"><?php $LANGMNG->echo('w_room'); ?></div>
                         <select class="input" name="deviceOwnerId">
                             <?php foreach ($ROOMS as $room) { 
                                 $roomId =  $room['room_id'];
@@ -82,9 +82,9 @@
                         </select>
                     </div>
                     <div class="field">
-                        <div class="label"><?php echo $LANG['w_icon']; ?></div>
+                        <div class="label"><?php $LANGMNG->echo('w_icon'); ?></div>
                         <select class="input fa" name="deviceIcon" <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>>
-                            <option value=""><?php echo $LANG['w_no'] . ' ' . $LANG['w_icon']; ?></option>
+                            <option value=""><?php $LANGMNG->echo('w_no'); ?><?php echo ' '; ?><?php $LANGMNG->echo('w_icon'); ?></option>
                             <option value="f0eb" <?php ECHO ($DEVICE['icon'] == "f0eb" ? 'selected="selected"' : ''); ?>>&#xf0eb; - fa-lightbulb-o</option>
                             <option value="f2dc" <?php ECHO ($DEVICE['icon'] == "f2dc" ? 'selected="selected"' : ''); ?>>&#xf2dc; - fa-snowflake-o</option>
                             <option value="f0e7" <?php ECHO ($DEVICE['icon'] == "f0e7" ? 'selected="selected"' : ''); ?>>&#xf0e7; - fa-bolt</option>
@@ -98,7 +98,7 @@
                     </div>
                 <?php } ?>
                 <div class="field">
-                    <div class="label"><?php echo $LANG['w_moduls']; ?></div>
+                    <div class="label"><?php $LANGMNG->echo('w_moduls'); ?></div>
                     <div class="row no-gutters">
                         <?php foreach ($DEVICE['subDevices'] as $subDeviceKey => $subDevice) { ?>
                             <div class="col-4 col-sm-3 col-xl-2 square-wrap">
@@ -123,11 +123,11 @@
                         <?php } ?>	
                     </div>
                 </div>
-                <input type="submit" class="button" name="saveDevice" value="<?php echo $LANG['b_save']; ?>" <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>/>
-                <input type="submit" class="button is-danger" name="disableDevice" value="<?php echo $LANG['b_disable']; ?>"/>
+                <input type="submit" class="button" name="saveDevice" value="<?php $LANGMNG->echo('b_save'); ?>" <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>/>
+                <input type="submit" class="button is-danger" name="disableDevice" value="<?php $LANGMNG->echo('b_disable'); ?>"/>
             <?php } else { ?>
                 <div class="field">
-                    <div class="label"><?php echo $LANG['w_moduls']; ?></div>
+                    <div class="label"><?php $LANGMNG->echo('w_moduls'); ?></div>
                     <div class="row no-gutters">
                         <?php foreach ($DEVICE['subDevices'] as $subDeviceKey => $subDevice) { ?>
                             <div class="col-4 col-sm-3 col-xl-2 square-wrap">
@@ -152,8 +152,8 @@
                         <?php } ?>	
                     </div>
                 </div>
-                <input type="submit" class="button is-primary" name="approveDevice" value="<?php echo $LANG['b_approve']; ?>"/>
-                <input type="submit" class="button is-danger" name="disableDevice" value="<?php echo $LANG['b_disable']; ?>"/>
+                <input type="submit" class="button is-primary" name="approveDevice" value="<?php $LANGMNG->echo('b_approve'); ?>"/>
+                <input type="submit" class="button is-danger" name="disableDevice" value="<?php $LANGMNG->echo('b_disable'); ?>"/>
             <?php } ?>
         </form>
     </div>

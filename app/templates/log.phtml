@@ -14,7 +14,7 @@
             <?php
             $partial = new Partial('menu');
             $partial->prepare('item', 'log');
-            $partial->prepare('lang',$LANG);
+            $partial->prepare('langMng',$LANGMNG);
             $partial->render();
             ?>
         </div>
@@ -22,13 +22,12 @@
             <div class="col-12 col-sm-9 mx-auto mt-4">
                 <form method="post" action="">
                     <div class="field">
-                        <div class="label">LOG:CZ</div>
                         <select class="input" name="LogFile">
                             <?php foreach ($LOGSFILES as $key => $value) { ?>
                                 <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
                             <?php } ?>
                         </select>
-                        <input type="submit" class="button" name="selectFile" value="file"/>
+                        <input type="submit" class="button" name="selectFile" value="<?php $LANGMNG->echo('b_select');?>"/>
                     </div>
                 </form>
                     <?php 

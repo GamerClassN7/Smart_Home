@@ -4,7 +4,7 @@ class Scene extends Template
 	function __construct()
 	{
 		global $userManager;
-		global $lang;
+		global $langMng;
 
 		if (!$userManager->isLogin()){
 			header('Location: ./');
@@ -12,7 +12,7 @@ class Scene extends Template
 
 		$template = new Template('scene');
 		$template->prepare('title', 'Scény');
-		$template->prepare('lang', $lang);
+		$template->prepare('langMng', $langMng);
 
 		$scenes = [];
 		foreach (SceneManager::getAllScenes() as $sceneId => $sceneData) {

@@ -25,21 +25,21 @@ foreach (["class", "views"] as $dir) {
 
 /** Language **/
 $langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-$langMng = new LanguageManager($langTag);
+$langMng = new LanguageManager($langTag, DEBUGMOD);
 $langMng->load();
 
 if (DEBUGMOD == 1) {
-	echo '<div class="col-md-9 main-body">';
-	echo '<pre>';
-	echo 'Language SLUG: ' . $langTag;
-	echo '</pre>';
-	echo '<pre>';
-	print_r(get_defined_constants());
-	echo '</pre>';
-	echo '<pre>';
-	print_r(get_defined_vars());
-	echo '</pre>';
-	echo '</dev>';
+	// echo '<div class="col-md-9 main-body">';
+	// echo '<pre>';
+	// echo 'Language SLUG: ' . $langTag;
+	// echo '</pre>';
+	// echo '<pre>';
+	// print_r(get_defined_constants());
+	// echo '</pre>';
+	// echo '<pre>';
+	// print_r(get_defined_vars());
+	// echo '</pre>';
+	// echo '</dev>';
 }
 
 //DB Conector

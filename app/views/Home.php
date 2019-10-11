@@ -6,7 +6,7 @@ class Home extends Template
 	function __construct()
 	{
 		global $userManager;
-		global $lang;
+		global $langMng;
 
 		if (!$userManager->isLogin()){
 			header('Location: ./login');
@@ -171,7 +171,7 @@ class Home extends Template
 		$rooms = RoomManager::getAllRooms();
 		$template->prepare('rooms', $rooms);
 		$template->prepare('title', 'Home');
-		$template->prepare('lang', $lang);
+		$template->prepare('langMng', $langMng);
 		$template->prepare('data', $roomsItems);
 
 		$template->render();

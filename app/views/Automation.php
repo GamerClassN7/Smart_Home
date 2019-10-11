@@ -10,7 +10,7 @@ class Automation extends Template
 	function __construct()
 	{
 		global $userManager;
-		global $lang;
+		global $langMng;
 
 		if (!$userManager->isLogin()){
 			header('Location: ./login');
@@ -52,7 +52,7 @@ class Automation extends Template
 
 		$template = new Template('automation');
 		$template->prepare('title', 'Automation');
-		$template->prepare('lang', $lang);
+		$template->prepare('langMng', $langMng);
 		$template->prepare('automations', $automations);
 		$template->prepare('subDevices', $approvedSubDevices);
 
