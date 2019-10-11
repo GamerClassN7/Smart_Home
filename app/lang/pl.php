@@ -1,6 +1,5 @@
 <?php
-return <?php
-$lang = [
+return $lang = [
 	//Menu
 	'm_home' => 'Strona główna',
 	'm_dashboard' => 'Panel',
