@@ -33,8 +33,10 @@ class NotificationManager
 		$notification = new Notification($serverKey);
 		$notification->to($to);
 		$notification->notification($data['title'], $data['body'], $data['icon'], '');
-		$notification->send();
+		$answer = $notification->send();
 		$notification = null;
+
+		return $answer;
 	}
 }
 
