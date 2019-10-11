@@ -28,6 +28,8 @@
                                 <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
                             <?php } ?>
                         </select>
+                    </div>
+                    <div class="field">
                         <input type="submit" class="button" name="selectFile" value="<?php $LANGMNG->echo('b_select');?>"/>
                     </div>
                 </form>
@@ -49,15 +51,5 @@
         $partial->render();
         //TODO js do main.js
         ?>
-        <script>
-        $( "#enable-features" ).click(function(e) {
-            var selectRoomId = localStorage.getItem("enableFeature");
-            if (selectRoomId){
-                localStorage.setItem("enableFeature", true);
-            }else {
-                localStorage.setItem("enableFeature", false);
-            }
-        });
-        </script>
     </body>
     </html>
