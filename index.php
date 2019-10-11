@@ -25,6 +25,9 @@ foreach (["class", "views"] as $dir) {
 
 /** Language **/
 $langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+$langMng = new LanguageManager($langTag);
+$langMng->load();
+
 if (DEBUGMOD == 1) {
 	echo '<div class="col-md-9 main-body">';
 	echo '<pre>';
@@ -38,7 +41,6 @@ if (DEBUGMOD == 1) {
 	echo '</pre>';
 	echo '</dev>';
 }
-require_once './app/lang/' . $langTag . '.php';
 
 //DB Conector
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
@@ -49,24 +51,8 @@ if (isset($_POST['username']) && isset($_POST['password']) ) {
 	$userManager->login($_POST['username'], $_POST['password'], (isset ($_POST['remember']) ? $_POST['remember'] : 'false'));
 }
 
+//Logs
 $logManager = new LogManager();
-/*
-$form = new Form('name','1','POST','');
-$form->addInput(InputTypes::TEXT,'nadpis','','Label','');
-$form->addInput(InputTypes::BUTTON,'nadpis','','Label','test');
-$form->addInput(InputTypes::TEXT,'nadpis','','Label','');
-$form->addInput(InputTypes::TEXT,'nadpis','','Label','', false);
-$form->addInput(InputTypes::TEXT,'nadpis','','Label','');
-$form->addInput(InputTypes::CHECK,'nadpis','','Label','');
-$form->addInput(InputTypes::TEXT,'nadpis','','Label','');
-$arg = array(
-'test_v' => 'test',
-'test_v2' => 'test',
-);
-$form->addSelect('1', '1', '1', $arg, false);
-$form->render();
-die();
-*/
 
 $route = new Route();
 $route->add('/', 'Home');
