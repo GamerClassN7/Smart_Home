@@ -1,8 +1,9 @@
 <?php
 
 if (isset($_POST) && !empty($_POST)){
-
-	SceneManager::create($_POST['sceneIcon'], $_POST['sceneName'], json_encode($_POST['devices']));
+	if (sset($_POST['devices']) && $_POST['devices'] != '') {
+		SceneManager::create($_POST['sceneIcon'], $_POST['sceneName'], json_encode($_POST['devices']));
+	}
 
 	//Debug
 	if (DEBUGMOD == 1) {

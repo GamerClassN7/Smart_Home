@@ -26,7 +26,7 @@
             </div>
             <div class="field">
                 <div class="label"><?php $LANGMNG->echo('l_choseDevice');?></div>
-                <select  class="input" name="devices[]" multiple>
+                <select  class="input" name="devices[]" multiple required>
                     <?php
                     foreach ($SUBDEVICES as $subdeviceId => $subdeviceData) {
                         echo '<option value="'.$subdeviceId.'">'.$subdeviceData['name'].'</option>';
