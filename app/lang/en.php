@@ -57,18 +57,13 @@ return $lang = [
 	//Title
 	't_createScene' => 'Create Scene',
 	't_editScene' => 'Edit scénu',
-
 	't_createAutomation' => 'Create Automation',
-
-
 	't_addDevice' => 'Add Device',
 	't_editDevice' => 'Edit Device',
 	't_pageAfterLogIn' => 'Page After Login',
 	't_profile' => 'Profile',
 	't_notification' => 'Notification',
 	't_experimental' => 'Experimental',
-	't_' => 'Edit Device',
-
 
 	//constants
 	'humi' => 'Humidity',
