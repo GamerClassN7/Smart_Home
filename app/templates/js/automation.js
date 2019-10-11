@@ -1,5 +1,6 @@
 function restartAutomation(automationId){
     console.log("restartingAutomation" + automationId);
+    event.preventDefault();
     $.ajax({
         url: 'ajax',
         type: 'POST',
@@ -16,8 +17,9 @@ function restartAutomation(automationId){
     });
 }
 
-function toggleAutomation(automationId){
+function toggleAutomation(thisElement, automationId){
     console.log("togglingAutomation" + automationId);
+    event.preventDefault();
     $.ajax({
         url: 'ajax',
         type: 'POST',
@@ -26,7 +28,9 @@ function toggleAutomation(automationId){
             "action": 'deactive'
         },
         success: function(data){
-            console.log(data);
+            console.log($('automation-'+automationId));
+            $('#automation-'+automationId).toggleClass("is-inactive");
+            console.log('active');
         },
         error: function (request, status, error) {
             console.log("ERROR ", request, error);

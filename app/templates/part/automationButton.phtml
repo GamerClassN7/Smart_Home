@@ -1,6 +1,6 @@
 <div class="col-12 col-md-6 col-xl-4 square-wrap">
     <div class="rectangle-2">
-        <div class="square-content double <?php echo ($AUTOMATIONDATA['active'] == 0 ? 'paused' : ''); ?>" id="automation-<?php echo $AUTOMATIONID; ?>">
+        <div class="square-content double <?php echo ($AUTOMATIONDATA['active'] == 0 ? 'is-inactive' : ''); ?>" id="automation-<?php echo $AUTOMATIONID; ?>">
             <div class="row">
                 <div class="col-1">
                     <h5 class="fa">
@@ -53,10 +53,10 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <a class="button is-primary m-1" onclick="$('#modal').removeClass('modal-container-hiden').show();"><?php $LANGMNG->echo('b_restart')?></a>
+                    <a class="button is-primary m-1" onClick="restartAutomation(this, <?php echo $AUTOMATIONID; ?>);"><?php $LANGMNG->echo('b_restart')?></a>
                 </div>
                 <div class="col">
-                    <a class="button is-primary m-1" onclick="$('#modal').removeClass('modal-container-hiden').show();"><?php $LANGMNG->echo('b_disable')?></a>
+                    <a class="button is-primary m-1" onClick="toggleAutomation(this, <?php echo $AUTOMATIONID; ?>);"><?php $LANGMNG->echo('b_disable')?></a>
                 </div>
             </div>
         </div>
