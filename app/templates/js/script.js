@@ -29,7 +29,8 @@ if ('serviceWorker' in navigator) {
                     url: 'ajax',
                     type: 'POST',
                     data: {
-                        "notification" : '',
+                        "notification" : 'X',
+                        "action": 'subscribe',
                         "token": token
                     },
                     success: function(data){
