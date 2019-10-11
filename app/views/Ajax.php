@@ -68,7 +68,7 @@ class Ajax extends Template
 				if ($subDeviceData['type'] == 'on/off'){
 					$lastValue = RecordManager::getLastRecord($subDeviceData['subdevice_id'])['value'];
 					RecordManager::create($deviceId, 'on/off', !$lastValue);
-					echo ($lastValue ? 'ON' : 'OFF');
+					echo (!$lastValue ? 'ON' : 'OFF');
 				}
 				die();
 				break;
@@ -114,8 +114,25 @@ class Ajax extends Template
 			switch ($_POST['action']) {
 				//add suscription to database
 				case 'subscribe':
-				$subscriptionToken = $_POST['Token'];
+				$subscriptionToken = $_POST['token'];
 				NotificationManager::addSubscriber($_SESSION['user']['id'], $subscriptionToken);
+				die();
+				break;
+
+				case 'sendTest':
+				echo "test";
+				$notificationData = [
+					'title' => 'Alert',
+					'body' => 'test notification',
+					'icon' => '',
+				];
+				$notificationMng = new NotificationManager;
+				$subscribers = $notificationMng::getSubscription();
+				foreach ($subscribers as $key => $subscriber) {
+					echo $subscriber['user_id'];
+					if ($subscriber['user_id'] != $_SESSION['user']['id']) continue;
+					echo $notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
+				}
 				die();
 				break;
 

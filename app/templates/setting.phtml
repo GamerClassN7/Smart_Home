@@ -20,10 +20,10 @@
 		</div>
 		<div class="col-md-9 main-body">
 			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4">Stránka po načtení</h4>
 				<form method="post" enctype="multipart/form-data">
 					<div class="">
 						<div class="field">
-							<div class="label">Stránka po načtení</div>
 							<select class="input" name="loadPage">
 								<option value="0" <?php echo (UserManager::getUserData("startPage") == 0 ? "selected" : ""); ?>>Default</option>
 								<option value="1" <?php echo (UserManager::getUserData("startPage") == 1 ? "selected" : ""); ?>>Dashboard</option>
@@ -34,26 +34,30 @@
 				</div>
 			</form>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4">Profil</h4>
 				<div class="field">
 					<a href="logout" class="button is-primary">Odhlásit se</a>
 				</div>
 			</div>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
-				<div class="label">Testovavcí Nastavení</div>
+				<h4 class="mb-4">Notifications</h4>
+				<input id="notifications" type="checkbox" onChange="toggleNotificationPermissions(this);" />
+				<div class="label">Status notifikací</div>
 				<div class="field">
-					<a href="rooms" class="button">ROOMS</a>
+					<a onClick="sendTestNotification();" class="button">Test Notification</a>
 				</div>
 			</div>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4">Logs</h4>
 				<div class="field">
-					<a href="log" class="button">Logs</a>
+					<a href="rooms" class="button">ROOMS</a>
 				</div>
 			</div>
 		</div>
 		
 		
 	</div>
-	
+	<script src="./app/templates/js/setting.js"></script>
 	<?php
 	$partial = new Partial('footer');
 	$partial->render();
