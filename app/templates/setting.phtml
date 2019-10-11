@@ -64,17 +64,7 @@
 	<?php
 	$partial = new Partial('footer');
 	$partial->render();
-	//TODO js do main.js
 	?>
-	<script>
-	$( "#enable-features" ).click(function(e) {
-		var selectRoomId = localStorage.getItem("enableFeature");
-		if (selectRoomId){
-			localStorage.setItem("enableFeature", true);
-		}else {
-			localStorage.setItem("enableFeature", false);
-		}
-	});
 	</script>
 </body>
 </html>
