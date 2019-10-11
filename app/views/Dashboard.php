@@ -80,6 +80,7 @@ class Dashboard extends Template
 			$template->prepare('deviceData', $device);
 		}
 
+		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('title', 'Nástěnka');
 		$template->prepare('langMng', $langMng);
 		$template->prepare('dashboard', $dashboard);

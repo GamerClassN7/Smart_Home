@@ -51,6 +51,7 @@ class Automation extends Template
 		}
 
 		$template = new Template('automation');
+		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('title', 'Automation');
 		$template->prepare('langMng', $langMng);
 		$template->prepare('automations', $automations);

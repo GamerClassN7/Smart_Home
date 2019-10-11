@@ -3,6 +3,7 @@
 <head>
     <?php
     $partial = new Partial('head');
+    $partial->prepare('baseDir', $BASEDIR);
     $partial->render();
     ?>
     <title><?php echo $TITLE ?></title>
@@ -30,16 +31,16 @@
                         <input type="submit" class="button" name="selectFile" value="<?php $LANGMNG->echo('b_select');?>"/>
                     </div>
                 </form>
-                    <?php 
-                    if (isset($_POST['LogFile'])) {
-                        $file_lines = file('./app/logs/' . $_POST['LogFile']);
-                        echo '<pre style="overflow: auto;">';
-                        foreach ($file_lines as $line) {
-                            echo $line;
-                        }
-                        echo '</pre>';
+                <?php 
+                if (isset($_POST['LogFile'])) {
+                    $file_lines = file('./app/logs/' . $_POST['LogFile']);
+                    echo '<pre style="overflow: auto;">';
+                    foreach ($file_lines as $line) {
+                        echo $line;
                     }
-                    ?>
+                    echo '</pre>';
+                }
+                ?>
             </div>
         </div>
         

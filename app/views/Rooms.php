@@ -14,6 +14,7 @@ class Rooms extends Template
 
 		$template = new Template('rooms');
 
+		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('title', 'Rooms');
 		$template->prepare('lang', $lang);
 

@@ -11,6 +11,7 @@ class Scene extends Template
 		}
 
 		$template = new Template('scene');
+		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('title', 'Scény');
 		$template->prepare('langMng', $langMng);
 

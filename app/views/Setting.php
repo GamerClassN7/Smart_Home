@@ -22,6 +22,7 @@ class Setting extends Template
 		}
 
 		$template = new Template('setting');
+		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('title', 'Automation');
 		$template->prepare('langMng', $langMng);
 		$template->prepare('automations', $automations);

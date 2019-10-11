@@ -11,6 +11,7 @@ class Login extends Template
 		}
 
 		$template = new Template('login');
+		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('title', 'Home');
 		$template->prepare('lang', $lang);
 
