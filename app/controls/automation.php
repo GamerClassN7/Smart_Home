@@ -10,7 +10,7 @@ if (isset($_POST) && !empty($_POST)){
 
 		AutomationManager::create($_POST['name'], $onDays, $doCode, $ifCode);
 
-		header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')), TRUE);
+		header('Location: ' . BASEDIR . strtolower(basename(__FILE__, '.php')), TRUE);
 		die();
 	} else if (isset($_POST['modalFinal']) && $_POST['modalFinal'] == "Upravit") {
 		$doCode = json_encode($_POST['device'], JSON_PRETTY_PRINT);
@@ -38,7 +38,7 @@ if (isset($_POST) && !empty($_POST)){
 
 		AutomationManager::create($_POST['name'], $onDays, $doCode, $ifCode, (isset ($_POST['automation_id']) ? $_POST['automation_id'] : ""));
 
-		header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')));
+		header('Location: ' . BASEDIR . strtolower(basename(__FILE__, '.php')));
 		die();
 	}
 }

@@ -13,12 +13,12 @@ class Ajax extends Template
 		global $lang;
 
 		if (!$userManager->isLogin()){
-			header('Location: ./');
+			header('Location: ' . BASEDIR);
 		}
 
 		$is_ajax = 'XMLHttpRequest' == ( $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '' );
 		if (!$is_ajax){
-			header('Location: ./');
+			header('Location: '  . BASEDIR);
 		}
 
 		if (

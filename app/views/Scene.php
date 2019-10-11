@@ -7,7 +7,7 @@ class Scene extends Template
 		global $langMng;
 
 		if (!$userManager->isLogin()){
-			header('Location: ./');
+			header('Location: ' . BASEDIR . 'login');
 		}
 
 		$template = new Template('scene');

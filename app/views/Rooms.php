@@ -9,7 +9,7 @@ class Rooms extends Template
 		global $lang;
 
 		if (!$userManager->isLogin()){
-			header('Location: ./login');
+			header('Location: ' . BASEDIR . 'login');
 		}
 
 		$template = new Template('rooms');

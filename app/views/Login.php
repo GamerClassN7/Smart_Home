@@ -7,7 +7,7 @@ class Login extends Template
 		global $lang;
 
 		if ($userManager->isLogin()){
-			header('Location: ./');
+			header('Location: ' . BASEDIR);
 		}
 
 		$template = new Template('login');

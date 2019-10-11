@@ -9,7 +9,7 @@ class Log extends Template
 		global $langMng;
 
 		if (!$userManager->isLogin()){
-			header('Location: ./login');
+			header('Location: ' . BASEDIR . 'login');
 		}
 
 		$template = new Template('log');

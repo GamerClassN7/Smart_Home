@@ -42,7 +42,7 @@ if (isset($_POST) && !empty($_POST)){
 			echo $deviceId;
 			var_dump(json_decode ($permissionsInJson));
 			echo '</pre>';
-			echo '<a href="/vasek/home/">CONTINUE</a>';
+			echo '<a href="' . BASEDIR .'">CONTINUE</a>';
 			die();
 		}
 	} else if (isset($_POST['approveDevice'])) {
@@ -64,10 +64,10 @@ if (isset($_POST) && !empty($_POST)){
 		echo '<pre>';
 		var_dump($POST);
 		echo '</pre>';
-		echo '<a href="/vasek/home/">CONTINUE</a>';
+		echo '<a href="' . BASEDIR . '">CONTINUE</a>';
 		die();
 	}
-	header('Location: /vasek/home/');
+	header('Location: ' . BASEDIR );
 	die();
 }
 ?>

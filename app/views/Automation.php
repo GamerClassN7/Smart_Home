@@ -13,7 +13,7 @@ class Automation extends Template
 		global $langMng;
 
 		if (!$userManager->isLogin()){
-			header('Location: ./login');
+			header('Location: ' . BASEDIR . 'login');
 		}
 
 		$automations = [];

@@ -9,10 +9,10 @@ if (isset($_POST) && !empty($_POST)){
 		echo '<pre>';
 		var_dump($_POST);
 		echo '</pre>';
-		echo '<a href="/vasek/home/' . strtolower(basename(__FILE__, '.php')).'">CONTINUE</a>';
+		echo '<a href="/' . BASEDIR . strtolower(basename(__FILE__, '.php')).'">CONTINUE</a>';
 		die();
 	}
 
-	header('Location: /vasek/home/' . strtolower(basename(__FILE__, '.php')));
+	header('Location: ' . BASEDIR . strtolower(basename(__FILE__, '.php')));
 	die();
 }
