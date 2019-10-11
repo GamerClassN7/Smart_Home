@@ -3,9 +3,7 @@
 include_once('./config.php');
 
 //Autoloader
-
 $files = scandir('./app/class/');
-
 $files = array_diff($files, array(
 	'.',
 	'..',
@@ -24,7 +22,6 @@ $files = array_diff($files, array(
 foreach($files as $file) {
 	include './app/class/'.  $file;
 }
-
 
 //Allow acces only wia Curl, Ajax ETC
 $restAcess = 'XMLHttpRequest' == ( $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '' );
@@ -154,12 +151,9 @@ if ($values != null || $values != "") {
 		RecordManager::create($deviceId, $key, round($value['value'],2));
 		$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
 
-
 		//notification
 		if ($key == 'door' || $key == 'water') {
-
 			$notificationMng = new NotificationManager;
-
 			$notificationData = [];
 
 			switch ($key) {
@@ -203,7 +197,6 @@ if ($values != null || $values != "") {
 		$jsonAnswer['sleepTime'] = $device['sleep_time'];
 	}
 	echo json_encode($jsonAnswer);
-
 	header("HTTP/1.1 200 OK");
 } else {
 	//Vypis
