@@ -104,12 +104,25 @@ if ($token == null || $token == "") {
 
 //Vstupní Checky
 if (!DeviceManager::registeret($token)) {
+	$notificationData = [
+		'title' => 'Info',
+		'body' => 'New device Detected',
+		'icon' => '',
+	];
 	$deviceId = DeviceManager::create($token, $token);
 	foreach ($values as $key => $value) {
 		if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
 			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
 		}
 	}
+
+	//Notification for newly added Device
+	$subscribers = $notificationMng::getSubscription();
+	foreach ($subscribers as $key => $subscriber) {
+		$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ");
+		$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
+	}
+
 	header("HTTP/1.1 401 Unauthorized");
 	echo json_encode(array(
 		'state' => 'unsuccess',
