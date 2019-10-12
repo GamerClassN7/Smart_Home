@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="ICON HERE" height="100" width="100">
+  <img src="ICON HERE" height="100" width="100">
 </p>
 # Smart Home
 **PHP, JS, HTML - Supports PWA**
@@ -37,14 +37,14 @@
 <img src="./_README_IMG/10.png" height="250" width="125">
 
 # API
-### POST Message (Spínač)
+### POST Message (switch)
 ```
 {
 	"token":"2"
 }
 ```
 
-### Answer (Spínač)
+### Answer (switch)
 ```
 {
 	"device":{
@@ -57,7 +57,7 @@
 }
 ```
 
-### POST Message (Sensor)
+### POST Message (sensor)
 ```
 {
 	"token":"4",
@@ -68,7 +68,8 @@
 	}
 }
 ```
-Answer (Sensor)
+
+### Answer (sensor)
 ```
 {
 
