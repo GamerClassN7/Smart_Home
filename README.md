@@ -1,21 +1,22 @@
 <p align="center">
-<img src="./templates/images/icon-512x512.png" height="100" width="100">
-
-# Smart_Home
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Discord](https://img.shields.io/discord/601817042475286540.svg?color=Blue&label=Discord&logo=Discord)](https://discord.gg/nMe5evu)
+<img src="ICON HERE" height="100" width="100">
 </p>
+# Smart Home
+**PHP, JS, HTML - Supports PWA**
 
-PHP, JS, HTML - Supports PWA
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Discord](https://img.shields.io/discord/604697675430101003.svg?color=Blue&label=Discord&logo=Discord)](https://discord.gg/6BPErAS)
 
+
+* tu jebnę tabelkę
 
 # Installation
-default user is Admin and his password id ESP
+//zrób tu dużo panie revoxie
 
-# Discord
-https://discord.gg/nMe5evu
 
-## Browser (Desktop PWA)
+# Appearance
+
+### Browser (Desktop PWA)
 
 <img src="./_README_IMG/1.png" height="500" width="1000">
 <img src="./_README_IMG/2.png" height="500" width="1000">
@@ -23,7 +24,7 @@ https://discord.gg/nMe5evu
 <img src="./_README_IMG/4.png" height="500" width="1000">
 <img src="./_README_IMG/5.png" height="500" width="1000">
 
-## Mobile (PWA)
+### Mobile (PWA)
 
 <img src="./_README_IMG/6.png" height="500" width="250">
 <img src="./_README_IMG/7.png" height="500" width="250">
@@ -31,14 +32,15 @@ https://discord.gg/nMe5evu
 <img src="./_README_IMG/9.png" height="500" width="250">
 <img src="./_README_IMG/10.png" height="500" width="250">
 
-API
-POST Message (Spínač)
+# API
+### POST Message (Spínač)
 ```
 {
 	"token":"2"
 }
 ```
-Answer (Spínač)
+
+### Answer (Spínač)
 ```
 {
 	"device":{
@@ -50,7 +52,8 @@ Answer (Spínač)
 	}
 }
 ```
-POST Message (Sensor)
+
+### POST Message (Sensor)
 ```
 {
 	"token":"4",
@@ -67,3 +70,9 @@ Answer (Sensor)
 
 }
 ```
+
+# Contributions
+//tu jebnę coś o pull requestach
+
+# Authors
+//tu jebnę autorów
