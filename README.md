@@ -47,19 +47,12 @@
 ## Screenshots
 ### Browser (Desktop PWA)
 
-<img src="./_README_IMG/1.png" height="250" width="500">
-<img src="./_README_IMG/2.png" height="250" width="500">
-<img src="./_README_IMG/3.png" height="250" width="500">
-<img src="./_README_IMG/4.png" height="250" width="500">
-<img src="./_README_IMG/5.png" height="250" width="500">
+<img src="./_README_IMG/1.png" height="250" width="500"> <img src="./_README_IMG/2.png" height="250" width="500">
+<img src="./_README_IMG/3.png" height="250" width="500"> <img src="./_README_IMG/4.png" height="250" width="500">
 
 ### Mobile (PWA)
 
-<img src="./_README_IMG/6.png" height="250" width="125">
-<img src="./_README_IMG/7.png" height="250" width="125">
-<img src="./_README_IMG/8.png" height="250" width="125">
-<img src="./_README_IMG/9.png" height="250" width="125">
-<img src="./_README_IMG/10.png" height="250" width="125">
+<img src="./_README_IMG/6.png" height="250" width="125"> <img src="./_README_IMG/7.png" height="250" width="125"> <img src="./_README_IMG/8.png" height="250" width="125"> <img src="./_README_IMG/9.png" height="250" width="125"> <img src="./_README_IMG/10.png" height="250" width="125">
 
 ## API
 ### POST Message (switch)
