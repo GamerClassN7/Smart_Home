@@ -20,14 +20,14 @@
 **Smart_Home** is a home automation project suited for **ESP boards** family (including NodeMCU). It supports PWA; supports tons of sensors; has modern and elegant UI; is easily customizable; is multilangual.
 
 #### What works with Smart_Home?
-* temperature sensors (e.g. DHT11/22),
-* humidity sensors (e.g. DHT11/22),
-* light detectors,
-* water leak sensors,
-* voltage meters,
-* electricity consumption meters,
-* switches,
-* and many more...
+* temperature sensors (e.g. DHT11/22)
+* humidity sensors (e.g. DHT11/22)
+* light detectors
+* water leak sensors
+* voltage meters
+* electricity consumption meters
+* switches
+* and many more!
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
@@ -47,8 +47,8 @@
 ## Screenshots
 ### Browser (Desktop PWA)
 
-<img src="./_README_IMG/1.png" height="250" width="500"> <img src="./_README_IMG/2.png" height="250" width="500">
-<img src="./_README_IMG/3.png" height="250" width="500"> <img src="./_README_IMG/4.png" height="250" width="500">
+<img src="./_README_IMG/1.png" height="200" width="400"> <img src="./_README_IMG/2.png" height="200" width="400">
+<img src="./_README_IMG/3.png" height="200" width="400"> <img src="./_README_IMG/4.png" height="200" width="400">
 
 ### Mobile (PWA)
 
@@ -98,4 +98,10 @@
 //tu jebnę coś o pull requestach
 
 ## Authors
-//tu jebnę autorów
+* [GamerClassN7](https://github.com/GamerClassN7) - Lead developer
+* [Silentis](https://github.com/Silentis) - Developer
+* [Xinatorus](https://github.com/Xinatorus) - Developer
+* [revoxhere](https://github.com/revoxhere/) - ReadMe & Wikis
+
+Project Link: [https://github.com/GamerClassN7/Smart_Home/](https://github.com/GamerClassN7/Smart_Home/) <br> <br>
+<sup><sub>Tags (ignore): ESP32 ESP12 ESP08 ESP01 ESP Smart Home Automation System PWA PHP HTML JS DHT11 DHT22
