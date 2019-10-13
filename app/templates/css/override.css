@@ -1,0 +1,16 @@
+table.table td, table.table th {
+  border: 2px solid #121a2b;
+  padding: 8px;
+}
+
+/*tr:nth-child(even){background-color: #f2f2f2;}*/
+
+table.table tr:hover {background-color: #121a2b;}
+
+table.table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #121a2b;
+  color: white;
+}
