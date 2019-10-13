@@ -3,8 +3,8 @@ class UserManager
 {
 	public function getUsers () {
 		try {
-			$allRoom = Db::loadAll ("SELECT * FROM users");
-			return $allRoom;
+			$allUsers = Db::loadAll ("SELECT user_id, username FROM users");
+			return $allUsers;
 		} catch(PDOException $error) {
 			echo $error->getMessage();
 			die();
@@ -64,9 +64,6 @@ class UserManager
 	public function logout () {
 		unset($_SESSION['user']);
 		session_destroy();
-
-
-
 		if (isset($_COOKIE['rememberMe'])){
 			unset($_COOKIE['rememberMe']);
 			setcookie("rememberMe", 'false', time(), BASEDIR, $_SERVER['HTTP_HOST']);
@@ -190,10 +187,27 @@ class UserManager
 				if (self::getHashPassword($oldPassword) == $oldPasswordSaved) {
 					self::setUserData('password', self::getHashPassword($newPassword));
 				} else {
-					throw new ChybaUzivatele ("old password did not match");
+					throw new Exception ("old password did not match");
 				}
 			} else {
-				throw new ChybaUzivatele ("new password arent same");
+				throw new Exception ("new password arent same");
+			}
+		}
+
+		public function createUser($userName, $password){
+			$userId = Db::loadOne('SELECT * FROM users WHERE username = ?;', array($userName))['user_id'];
+			if ($userId != null) {
+				return false;
+			};
+			try {
+				$user = [
+					'username' => $userName,
+					'password' => self::getHashPassword($password),
+				];
+				return Db::add ('users', $user);
+			} catch(PDOException $error) {
+				echo $error->getMessage();
+				die();
 			}
 		}
 	}
