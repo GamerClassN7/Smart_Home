@@ -22,10 +22,10 @@ class Home extends Template
 		$usersAtHome = '';
 		$i = 0;
 		foreach ($users as $user) {
-			$i++;
 			if ($user['at_home'] == 'true') {
+				$i++;
 				$usersAtHome .= $user['username'];
-				if ($usersAtHome != "" && isset($users[$i + 1])){
+				if ($usersAtHome != "" && isset($users[$i + 1]) && $users[$i + 1]['at_home'] == 'true'){
 					$usersAtHome .= ', ';
 				}
 			}

@@ -3,7 +3,7 @@ class UserManager
 {
 	public function getUsers () {
 		try {
-			$allUsers = Db::loadAll ("SELECT user_id, username FROM users");
+			$allUsers = Db::loadAll ("SELECT user_id, username, at_home FROM users");
 			return $allUsers;
 		} catch(PDOException $error) {
 			echo $error->getMessage();
