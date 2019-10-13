@@ -141,7 +141,7 @@ CREATE TABLE `users` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `startPage` int(11) NOT NULL,
-  `at_home` varchar(255) NOT NULL
+  `at_home` varchar(255) NOT NULL DEFAULT 'false'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
