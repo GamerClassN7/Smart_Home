@@ -29,7 +29,6 @@ return $lang = [
 	'b_disable' => 'disabele',
 	'b_select' => 'Select',
 
-
 	//labels
 	'l_choseDevice' => 'Chose device:',
 	'l_inHome' => 'When entering',
@@ -54,6 +53,10 @@ return $lang = [
 	'l_nameAt' => 'Name',
 	'l_lastSeen' => 'Last Seen',
 	'l_notificationStatus' => 'Notification status',
+	'l_userName' => 'Username',
+	'l_password' => 'Password',
+	'l_oldPassword' => 'Old Password',
+	'l_newPassword' => 'New Password',
 
 	//Title
 	't_createScene' => 'Create Scene',
@@ -65,6 +68,8 @@ return $lang = [
 	't_profile' => 'Profile',
 	't_notification' => 'Notification',
 	't_experimental' => 'Experimental',
+	't_createuser' => 'Create User',
+	't_changePassword' => 'Change Password',
 
 	//constants
 	'humi' => 'Humidity',
@@ -88,6 +93,8 @@ return $lang = [
 	//tables
 	't_time' => 'Time',
 	't_state' => 'State',
+	't_userName' => 'State',
+	't_action' => 'Action',
 
 	//Days Long
 	'd_monday' => 'Monday',

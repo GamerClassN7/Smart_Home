@@ -18,10 +18,16 @@ return $lang = [
 	'b_create' => 'Vytvořit',
 	'b_edit' => 'Upravit',
 	'b_remove' => 'Smazat',
+	'b_finish' => 'Dokončit',
 	'b_approve' => 'Povolit',
 	'b_disable' => 'Zakázat',
 	'b_save' => 'Uložit',
-
+	'b_logOut' => 'Odhlásit',
+	'b_sendTestNotification' => 'Odeslat testovací notifikaci',
+	'b_rooms' => 'Místnosti',
+	'b_restart' => 'Restart',
+	'b_disable' => 'Deaktivovat',
+	'b_select' => 'Zvolit',
 
 	//labels
 	'l_choseDevice' => 'Zvolte zařízení:',
@@ -46,14 +52,24 @@ return $lang = [
 	'l_atHome' => 'Doma Jsou',
 	'l_nameAt' => 'Název',
 	'l_lastSeen' => 'Naposledy připojeno',
+	'l_notificationStatus' => 'Notification status',
+	'l_userName' => 'Username',
+	'l_password' => 'Password',
+	'l_oldPassword' => 'Old Password',
+	'l_newPassword' => 'New Password',
 
 	//Title
 	't_createScene' => 'Vytvořit scénu',
 	't_editScene' => 'Upravit scénu',
-
 	't_createAutomation' => 'Vytvořit Automatizaci',
-
+	't_addDevice' => 'Přidat Zařízení',
 	't_editDevice' => 'Upravit Zařízení',
+	't_pageAfterLogIn' => 'stránka po přihlášení',
+	't_profile' => 'Profil',
+	't_notification' => 'Notificatifikace',
+	't_experimental' => 'Experimental',
+	't_createuser' => 'Vytvořit Uživatele',
+	't_changePassword' => 'Změnit Heslo',
 
 	//constants
 	'temp' => 'Teplota',
@@ -73,6 +89,21 @@ return $lang = [
 	'w_home' => 'Doma',
 	'w_neni' => 'Není',
 	'w_is' => 'je',
+
+	//tables
+	't_time' => 'Čas',
+	't_state' => 'Stav',
+	't_userName' => 'Uživatelské Jméno',
+	't_action' => 'Akce',
+
+	//Days Long
+	'd_monday' => 'Pondělí',
+	'd_tuesday' => 'Ůterí',
+	'd_wednesday' => 'Středa',
+	'd_thursday' => 'Čtvrtek',
+	'd_friday' => 'Pátek',
+	'd_saturday' => 'Sobota',
+	'd_sunday' => 'Neděle',
 
 	//example
 	'' => '',

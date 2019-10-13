@@ -18,6 +18,7 @@ return $lang = [
 	'b_create' => 'Utwórz',
 	'b_edit' => 'Edytuj',
 	'b_remove' => 'Usuń',
+	'b_finish' => 'Dokončit', //newOne
 	'b_approve' => 'Zaakceptuj',
 	'b_disable' => 'Wyłącz',
 	'b_save' => 'Zapisz',
@@ -50,9 +51,12 @@ return $lang = [
 	'l_sleepTime' => 'Czas snu urządzenia',
 	'l_atHome' => 'W domu',
 	'l_nameAt' => 'Nazwa',
-	'l_nameAt' => 'Nazwa',
 	'l_lastSeen' => 'Ostatnio zaktualizowany',
 	'l_notificationStatus' => 'Stan powiadomienia',
+	'l_userName' => 'Username', //newOne
+	'l_password' => 'Password', //newOne
+	'l_oldPassword' => 'Old Password', //newOne
+	'l_newPassword' => 'New Password', //newOne
 
 	//Title
 	't_createScene' => 'Utwórz scenariusz',
@@ -64,6 +68,8 @@ return $lang = [
 	't_profile' => 'Profil',
 	't_notification' => 'Powiadomienie',
 	't_experimental' => 'Eksperymentalne',
+	't_createuser' => 'Vytvořit Uživatele', //newOne
+	't_changePassword' => 'Změnit Heslo', //newOne
 
 	//constants
 	'humi' => 'Wilgotność',
@@ -87,6 +93,8 @@ return $lang = [
 	//tables
 	't_time' => 'Czas',
 	't_state' => 'Stan',
+	't_userName' => 'State', //newOne
+	't_action' => 'Action', //newOne
 
 	//Days Long
 	'd_monday' => 'Poniedziałek',
