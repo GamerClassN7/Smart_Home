@@ -63,7 +63,7 @@
 
 ### Mobile (PWA)
 
-<img src="./_README_IMG/mobile1.png" height="250" width="125"> <img src="./_README_IMG/7.png" height="250" width="125"> <img src="./_README_IMG/mobile2.png" height="250" width="125"> <img src="./_README_IMG/9.png" height="250" width="125"> <img src="./_README_IMG/mobile3.png" height="250" width="125">
+<img src="./_README_IMG/mobile1.png" height="400" width="400"> <img src="./_README_IMG/mobile2.png" height="400" width="400"> <img src="./_README_IMG/mobile3.png" height="400" width="400">
 
 <!-- INSTALLATION -->
 ## Installation
