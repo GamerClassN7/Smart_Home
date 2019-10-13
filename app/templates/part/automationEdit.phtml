@@ -5,6 +5,7 @@
         </div>
         <h4 class="mb-4"><?php $LANGMNG->echo('t_createAutomation');?></h4>
         <form method="post">
+            <input type="hidden" name="action" value="edit" required/>
             <input name="automation_id" type="hidden" value="<?php echo $AUTOMATIONID; ?>">
             <div class="field">
                 <div class="label"><?php $LANGMNG->echo('l_nameAt');?></div>

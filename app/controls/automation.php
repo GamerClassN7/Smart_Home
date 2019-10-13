@@ -1,6 +1,6 @@
 <?php
 if (isset($_POST) && !empty($_POST)){
-	if (isset($_POST['modalFinal']) && $_POST['modalFinal'] == "Next") {
+	if (isset($_POST['modalFinal']) && $_POST['action'] == "add") {
 		$doCode = json_encode($_POST['device'], JSON_PRETTY_PRINT);
 		$ifCode = json_encode([
 			"type" => $_POST['atSelector'],
@@ -8,11 +8,22 @@ if (isset($_POST) && !empty($_POST)){
 		], JSON_PRETTY_PRINT);
 		$onDays = $_POST['atDays'];
 
+		//Debug
+		if (DEBUGMOD == 1) {
+			echo '<pre>';
+			echo $permissionsInJson;
+			echo $deviceId;
+			var_dump(json_decode ($permissionsInJson));
+			echo '</pre>';
+			echo '<a href="' . BASEDIR .'">CONTINUE</a>';
+			die();
+		}
+
 		AutomationManager::create($_POST['name'], $onDays, $doCode, $ifCode);
 
-		header('Location: ' . BASEDIR . strtolower(basename(__FILE__, '.php')), TRUE);
+		header('Location: ' . BASEDIR . strtolower(basename(__FILE__, '.php')));
 		die();
-	} else if (isset($_POST['modalFinal']) && $_POST['modalFinal'] == "Upravit") {
+	} else if (isset($_POST['modalFinal']) && $_POST['action'] == "edit") {
 		$doCode = json_encode($_POST['device'], JSON_PRETTY_PRINT);
 
 		if (isset ($_POST['atDeviceValue'])) {
@@ -22,9 +33,9 @@ if (isset($_POST) && !empty($_POST)){
 			$subDeviceMaster = SubDeviceManager::getSubDeviceMaster($subDeviceId,$subDevice['type']);
 
 			$json = json_encode([
-					'deviceID' => $subDeviceMaster['device_id'],
-					'type'=> $subDevice['type'],
-					'value'=> $subDeviceValue,
+				'deviceID' => $subDeviceMaster['device_id'],
+				'type'=> $subDevice['type'],
+				'value'=> $subDeviceValue,
 			]);
 		}
 

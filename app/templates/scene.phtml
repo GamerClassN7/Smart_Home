@@ -44,8 +44,8 @@
         </div>
     </div>
     
-    <?php if (isset($_POST['devices'])) {
-        $partial = new Partial('sceneCreateOptions');
+    <?php if (isset($_POST['submit'])) {
+        $partial = new Partial('sceneCreateFinal');
         $partial->prepare('langMng',$LANGMNG);
         $partial->prepare('setStateFormDevices',$SETSTATEFORMDEVICES );
         $partial->prepare('sceneIcon',$SCENEICON );
