@@ -53,10 +53,10 @@ return $lang = [
 	'l_nameAt' => 'Název',
 	'l_lastSeen' => 'Naposledy připojeno',
 	'l_notificationStatus' => 'Notification status',
-	'l_userName' => 'Username',
-	'l_password' => 'Password',
-	'l_oldPassword' => 'Old Password',
-	'l_newPassword' => 'New Password',
+	'l_userName' => 'Uživatelské jméno',
+	'l_password' => 'Heslo',
+	'l_oldPassword' => 'Staré Heslo',
+	'l_newPassword' => 'Nové Heslo',
 
 	//Title
 	't_createScene' => 'Vytvořit scénu',
