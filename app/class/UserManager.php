@@ -62,9 +62,14 @@ class UserManager
 	}
 
 	public function logout () {
-		setcookie ("rememberMe","", time() - (30 * 24 * 60 * 60 * 1000), str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])), $_SERVER['HTTP_HOST'], 1);
 		unset($_SESSION['user']);
 		session_destroy();
+		if (isset($_COOKIE['rememberMe'])){
+			//unset($_COOKIE['rememberMe']);
+			setcookie ("rememberMe2", $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), '/vasek/home/', $_SERVER['HTTP_HOST'], 1);
+			setcookie("token", "restt", time() - 36000, "/");
+			die();
+		}
 	}
 
 	public function setEncryptedCookie($value){
@@ -174,6 +179,20 @@ class UserManager
 			} catch(PDOException $error) {
 				echo $error->getMessage();
 				die();
+			}
+		}
+
+		public function changePassword($oldPassword, $newPassword, $newPassword2){
+			if ($newPassword == $newPassword2) {
+				//Password Criteria
+				$oldPasswordSaved = self::getUserData('password');
+				if (self::getHashPassword($oldPassword) == $oldPasswordSaved) {
+					self::setUserData('password', self::getHashPassword($newPassword));
+				} else {
+					throw new ChybaUzivatele ("old password did not match");
+				}
+			} else {
+				throw new ChybaUzivatele ("new password arent same");
 			}
 		}
 	}

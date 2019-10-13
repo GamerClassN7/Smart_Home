@@ -56,6 +56,26 @@
 					<a href="rooms" class="button"><?php $LANGMNG->echo('b_rooms') ?></a>
 				</div>
 			</div>
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_changePassword') ?></h4>
+				<form method="post">
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_oldPassword') ?>:</div>
+						<input type="password" class="input" name="oldPassword" value="" data-cip-id="cIPJQ342845639">  
+					</div>
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_newPassword') ?>:</div>
+						<input type="password" class="input" name="newPassword1" value="" data-cip-id="cIPJQ342845639">  
+					</div>
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_newPassword') ?>:</div>
+						<input type="password" class="input" name="newPassword2" value="" data-cip-id="cIPJQ342845639">  
+					</div>
+					<div class="field">
+						<input type="submit" name="submitPasswordChange" class="button" value="Uložit">
+					</div>
+				</form>	
+			</div>
 		</div>
 		
 		
@@ -65,6 +85,6 @@
 	$partial = new Partial('footer');
 	$partial->render();
 	?>
-	</script>
+</script>
 </body>
 </html>
