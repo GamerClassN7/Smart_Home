@@ -4,9 +4,22 @@
 -->
 
 <!-- LOGO -->
+<br />
 <p align="center">
-  <img src="./app/templates/images/icon-192x192.png" height="100" width="100">
+  <a href="https://github.com/GamerClassN7/Smart_Home">
+    <img src="./app/templates/images/icon-192x192.png" height="100" width="100">
+  </a>
+  <h3 align="center">Make your own Smart Home automation system</h3>
+  <p align="center"> 
+    <a href="there will be a demo one day"><strong>Watch demo »</strong></a>
+    <br>
+    <a href="https://github.com/GamerClassN7/Smart_Home">Explore wikis</a>
+    <sub><sup>•</sub></sup>
+    <a href="https://github.com/GamerClassN7/Smart_Home">Report bugs</a>
+    <br>
+  </p>
 </p>
+
 
 [![PHP](https://img.shields.io/badge/PHP-brightgreen.svg)](https://github.com/GamerClassN7/Smart_Home/search?l=php)
 [![JS](https://img.shields.io/badge/JS-red.svg)](https://github.com/GamerClassN7/Smart_Home/search?l=js)
@@ -35,15 +48,13 @@
 * [About Smart_Home](#about-smart_home)
 * [Screenshots](#screenshots)
 * [Installation](#instalation)
+* [API](#api)
 * [Contributing](#contributing)
 * [License](#license)
 * [Built With](#built-with)
 * [Authors](#authors)
 
-## Installation
-ok that's it for today. Will make more tommorow
-
-
+<!-- SCREENSHOTS -->
 ## Screenshots
 ### Browser (Desktop PWA)
 
@@ -54,15 +65,20 @@ ok that's it for today. Will make more tommorow
 
 <img src="./_README_IMG/6.png" height="250" width="125"> <img src="./_README_IMG/7.png" height="250" width="125"> <img src="./_README_IMG/8.png" height="250" width="125"> <img src="./_README_IMG/9.png" height="250" width="125"> <img src="./_README_IMG/10.png" height="250" width="125">
 
+<!-- INSTALLATION -->
+## Installation
+See [Wikis](https://github.com/GamerClassN7/Smart_Home/wiki) for help about installation, usage and troubleshooting.
+
+<!-- API -->
 ## API
-### POST Message (switch)
+#### POST Message (switch)
 ```
 {
 	"token":"2"
 }
 ```
 
-### Answer (switch)
+#### Answer (switch)
 ```
 {
 	"device":{
@@ -75,7 +91,7 @@ ok that's it for today. Will make more tommorow
 }
 ```
 
-### POST Message (sensor)
+#### POST Message (sensor)
 ```
 {
 	"token":"4",
@@ -87,15 +103,12 @@ ok that's it for today. Will make more tommorow
 }
 ```
 
-### Answer (sensor)
+#### Answer (sensor)
 ```
 {
 
 }
 ```
-
-## Contributions
-//tu jebnę coś o pull requestach
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -108,12 +121,19 @@ If you know how to fix, improve or optimze something, go ahead and contribute! H
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Make sure everything works as intended
-6. Open a Pull Request :wink:
+6. Open a Pull Request
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## Built with
+This section briefly lists major frameworks that you duino-coin uses:
+* [PHP](https://www.php.net)
+* [JS](https://www.javascript.com)
+* HTML
+* [Arduino IDE](https://www.arduino.cc)
 
 <!-- AUTHORS -->
 ## Authors
