@@ -5,7 +5,7 @@
 
 <!-- LOGO -->
 <p align="center">
-  <img src="ICON HERE" height="100" width="100">
+  <img src="./app/templates/images/icon-192x192.png" height="100" width="100">
 </p>
 
 [![PHP](https://img.shields.io/badge/PHP-brightgreen.svg)](https://github.com/GamerClassN7/Smart_Home/search?l=php)
@@ -100,7 +100,7 @@ ok that's it for today. Will make more tommorow
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. 
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create.
 If you know how to fix, improve or optimze something, go ahead and contribute! Help is greatly appreciated.
 
 1. Fork the Project
