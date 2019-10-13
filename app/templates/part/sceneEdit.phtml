@@ -3,16 +3,16 @@
         <div class="close">
             <i class="fa fa-times"></i>
         </div>
-        <h4 class="mb-4"><?php echo $LANG['t_editScene']?></h4>
+        <h4 class="mb-4"><?php $LANGMNG->echo('t_editScene')?></h4>
         <form method="post">
             <div class="field">
-                <div class="label"><?php echo $LANG['w_title'];?>:</div>
+                <div class="label"><?php $LANGMNG->echo('w_title');?>:</div>
                 <input type="text" class="input" name="sceneName" value="<?php echo $SCENE['name']; ?>"/>  
             </div>
             <div class="field">
-                <div class="label"><?php echo $LANG['w_icon'];?>:</div>
+                <div class="label"><?php $LANGMNG->echo('w_icon');?>:</div>
                 <select class="input fa" name="sceneIcon">
-                    <option value=""><?php echo $LANG['w_no'].$LANG['w_icon'];?></option>
+                    <option value=""><?php $LANGMNG->echo('w_no').$LANGMNG->get('w_icon');?></option>
                     <option value="f0eb" <?php ECHO ($SCENE['icon'] == "f0eb" ? 'selected="selected"' : ''); ?>>&#xf0eb; - fa-lightbulb-o</option>
                     <option value="f2dc" <?php ECHO ($SCENE['icon'] == "f2dc" ? 'selected="selected"' : ''); ?>>&#xf2dc; - fa-snowflake-o</option>
                     <option value="f0e7" <?php ECHO ($SCENE['icon'] == "f0e7" ? 'selected="selected"' : ''); ?>>&#xf0e7; - fa-bolt</option>
@@ -40,8 +40,8 @@
                     $i++;
                 } ?>
             </div>
-            <input type="submit" class="button" name="saveDevice" value="<?php echo $LANG['b_edit'];?>"/>	
-            <input type="button" class="button is-danger" onClick="ajaxPost('ajax',{scene_id:'<?php echo $SCENEID ?>', 'action':'delete'}, this, true);" name="saveDevice" value="<?php echo $LANG['b_remove'];?>"/>	
+            <input type="submit" class="button" name="saveDevice" value="<?php $LANGMNG->echo('b_edit');?>"/>	
+            <input type="button" class="button is-danger" onClick="ajaxPost('ajax',{scene_id:'<?php echo $SCENEID ?>', 'action':'delete'}, this, true);" name="saveDevice" value="<?php $LANGMNG->echo('b_remove');?>"/>	
         </form>
     </div>
 </div>

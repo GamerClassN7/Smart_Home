@@ -18,6 +18,7 @@ return $lang = [
 	'b_create' => 'Create',
 	'b_edit' => 'Edit',
 	'b_remove' => 'Remove',
+	'b_finish' => 'Finish',
 	'b_approve' => 'Approve',
 	'b_disable' => 'Disable',
 	'b_save' => 'Save',
