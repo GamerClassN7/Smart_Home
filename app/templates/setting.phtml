@@ -76,6 +76,38 @@
 					</div>
 				</form>	
 			</div>
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_createuser') ?></h4>
+				<table class="table is-fluid">
+					<thead>
+						<tr>
+							<th><?php $LANGMNG->echo('t_userName');?></th>
+							<th><?php $LANGMNG->echo('t_action');?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($USERS as $key => $user) { ?>
+							<tr>
+								<th><?php echo $user['username']; ?></th>
+								<th><button name="remove" type="button" class="button is-danger fa" data-automation-id="54">&#xf1f8;</button></th>
+							</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+				<form method="post">
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_userName') ?>:</div>
+						<input type="text" class="input" name="userName" value="" data-cip-id="cIPJQ342845639">  
+					</div>
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_password') ?>:</div>
+						<input type="password" class="input" name="userPassword" value="" data-cip-id="cIPJQ342845639">  
+					</div>
+					<div class="field">
+						<input type="submit" name="submitCreateUser" class="button" value="Uložit">
+					</div>
+				</form>	
+			</div>
 		</div>
 		
 		

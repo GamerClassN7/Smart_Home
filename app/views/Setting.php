@@ -27,6 +27,10 @@ class Setting extends Template
 		$template->prepare('langMng', $langMng);
 		$template->prepare('automations', $automations);
 
+		$users = $userManager->getUsers();
+		$template->prepare('users', $users);
+
+
 		$template->render();
 	}
 }
