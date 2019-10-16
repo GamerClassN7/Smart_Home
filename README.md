@@ -58,12 +58,11 @@
 ## Screenshots
 ### Browser (Desktop PWA)
 
-<img src="./_README_IMG/1.png" height="200" width="400"> <img src="./_README_IMG/2.png" height="200" width="400">
-<img src="./_README_IMG/3.png" height="200" width="400"> <img src="./_README_IMG/4.png" height="200" width="400">
+<img src="./_README_IMG/desktop1.png" height="250" width="250"> <img src="./_README_IMG/desktop2.png" height="250" width="250"> <img src="./_README_IMG/desktop3.png" height="250" width="250">
 
 ### Mobile (PWA)
 
-<img src="./_README_IMG/mobile1.png" height="400" width="400"> <img src="./_README_IMG/mobile2.png" height="400" width="400"> <img src="./_README_IMG/mobile3.png" height="400" width="400">
+<img src="./_README_IMG/mobile1.png" height="250" width="250"> <img src="./_README_IMG/mobile2.png" height="250" width="250"> <img src="./_README_IMG/mobile3.png" height="250" width="250">
 
 <!-- INSTALLATION -->
 ## Installation
