@@ -129,7 +129,7 @@ If you know how to fix, improve or optimze something, go ahead and contribute! H
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Built with
-This section briefly lists major frameworks that you duino-coin uses:
+This section briefly lists major frameworks that Smart_Home uses:
 * [PHP](https://www.php.net)
 * [JS](https://www.javascript.com)
 * HTML
