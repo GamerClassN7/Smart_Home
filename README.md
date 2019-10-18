@@ -1,44 +1,83 @@
-<p align="center">
-<img src="./templates/images/icon-512x512.png" height="100" width="100">
+<!--
+*** Smart_Home by JonatanRek
+*** README by revox, 2019
+-->
 
-# Smart_Home
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Discord](https://img.shields.io/discord/601817042475286540.svg?color=Blue&label=Discord&logo=Discord)](https://discord.gg/nMe5evu)
+<!-- LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/GamerClassN7/Smart_Home">
+    <img src="./app/templates/images/icon-192x192.png" height="100" width="100">
+  </a>
+  <h3 align="center">Make your own Smart Home automation system</h3>
+  <p align="center"> 
+    <a href="there will be a demo one day"><strong>Watch demo »</strong></a>
+    <br>
+    <a href="https://github.com/GamerClassN7/Smart_Home">Explore wikis</a>
+    <sub><sup>•</sub></sup>
+    <a href="https://github.com/GamerClassN7/Smart_Home">Report bugs</a>
+    <br>
+  </p>
 </p>
 
-PHP, JS, HTML - Supports PWA
 
+[![PHP](https://img.shields.io/badge/PHP-brightgreen.svg)](https://github.com/GamerClassN7/Smart_Home/search?l=php)
+[![JS](https://img.shields.io/badge/JS-red.svg)](https://github.com/GamerClassN7/Smart_Home/search?l=js)
+[![HTML](https://img.shields.io/badge/HTML-blue.svg)](https://github.com/GamerClassN7/Smart_Home/search?l=html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Discord](https://img.shields.io/discord/604697675430101003.svg?color=Blue&label=Discord&logo=Discord)](https://discord.gg/6BPErAS)
 
-# Installation
-default user is Admin and his password id ESP
+<!-- ABOUT THE PROJECT -->
+## About Smart_Home
 
-# Discord
-https://discord.gg/nMe5evu
+**Smart_Home** is a home automation project suited for **ESP boards** family (including NodeMCU). It supports PWA; supports tons of sensors; has modern and elegant UI; is easily customizable; is multilangual.
 
-## Browser (Desktop PWA)
+#### What works with Smart_Home?
+* temperature sensors (e.g. DHT11/22)
+* humidity sensors (e.g. DHT11/22)
+* light detectors
+* water leak sensors
+* voltage meters
+* electricity consumption meters
+* switches
+* and many more!
 
-<img src="./_README_IMG/1.png" height="500" width="1000">
-<img src="./_README_IMG/2.png" height="500" width="1000">
-<img src="./_README_IMG/3.png" height="500" width="1000">
-<img src="./_README_IMG/4.png" height="500" width="1000">
-<img src="./_README_IMG/5.png" height="500" width="1000">
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
 
-## Mobile (PWA)
+* [About Smart_Home](#about-smart_home)
+* [Screenshots](#screenshots)
+* [Installation](#instalation)
+* [API](#api)
+* [Contributing](#contributing)
+* [License](#license)
+* [Built With](#built-with)
+* [Authors](#authors)
 
-<img src="./_README_IMG/6.png" height="500" width="250">
-<img src="./_README_IMG/7.png" height="500" width="250">
-<img src="./_README_IMG/8.png" height="500" width="250">
-<img src="./_README_IMG/9.png" height="500" width="250">
-<img src="./_README_IMG/10.png" height="500" width="250">
+<!-- SCREENSHOTS -->
+## Screenshots
+### Browser (Desktop PWA)
 
-API
-POST Message (Spínač)
+<img src="./_README_IMG/desktop1.png" height="250" width="250"> <img src="./_README_IMG/desktop2.png" height="250" width="250"> <img src="./_README_IMG/desktop3.png" height="250" width="250">
+
+### Mobile (PWA)
+
+<img src="./_README_IMG/mobile1.png" height="250" width="250"> <img src="./_README_IMG/mobile2.png" height="250" width="250"> <img src="./_README_IMG/mobile3.png" height="250" width="250">
+
+<!-- INSTALLATION -->
+## Installation
+See [Wikis](https://github.com/GamerClassN7/Smart_Home/wiki) for help about installation, usage and troubleshooting.
+
+<!-- API -->
+## API
+#### POST Message (switch)
 ```
 {
 	"token":"2"
 }
 ```
-Answer (Spínač)
+
+#### Answer (switch)
 ```
 {
 	"device":{
@@ -50,7 +89,8 @@ Answer (Spínač)
 	}
 }
 ```
-POST Message (Sensor)
+
+#### POST Message (sensor)
 ```
 {
 	"token":"4",
@@ -61,9 +101,45 @@ POST Message (Sensor)
 	}
 }
 ```
-Answer (Sensor)
+
+#### Answer (sensor)
 ```
 {
 
 }
 ```
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create.
+If you know how to fix, improve or optimze something, go ahead and contribute! Help is greatly appreciated.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Make sure everything works as intended
+6. Open a Pull Request
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Built with
+This section briefly lists major frameworks that Smart_Home uses:
+* [PHP](https://www.php.net)
+* [JS](https://www.javascript.com)
+* HTML
+* [Arduino IDE](https://www.arduino.cc)
+
+<!-- AUTHORS -->
+## Authors
+* [GamerClassN7](https://github.com/GamerClassN7) - Lead developer
+* [Silentis](https://github.com/Silentis) - Developer
+* [Xinatorus](https://github.com/Xinatorus) - Developer
+* [revoxhere](https://github.com/revoxhere/) - ReadMe & Wikis
+
+Project Link: [https://github.com/GamerClassN7/Smart_Home/](https://github.com/GamerClassN7/Smart_Home/) <br> <br>
+<sup><sub>Tags (ignore): ESP32 ESP12 ESP08 ESP01 ESP Smart Home Automation System PWA PHP HTML JS DHT11 DHT22

@@ -1,7 +1,7 @@
 <?php
 if (isset($_POST) && !empty($_POST)){
 
-	if (isset($_POST['modalFinal']) && $_POST['modalFinal'] == "Next") {
+	if (isset($_POST['modalFinal']) && $_POST['modalFinal'] != "") {
 		$subDeviceIds = $_POST['devices'];
 		foreach ($subDeviceIds as $subDeviceId) {
 			DashboardManager::Add($subDeviceId);
