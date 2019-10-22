@@ -11,10 +11,17 @@ if (
 	$ota = false;
 	$userName = $_POST['username'];
 	$userPassword = $_POST['password'];
+	$rememberMe = (isset ($_POST['remember']) ? $_POST['remember'] : "");
 	$ota = $userManager->haveOtaEnabled($userName);
+	if ($ota == "") {
+		$landingPage = $userManager->login($userName, $userPassword, $rememberMe);
+		header('Location: ' . BASEDIR . $landingPage);
+		die();
+	}
 
 	$_SESSION['USERNAME'] = $userName;
 	$_SESSION['PASSWORD'] = $userPassword;
+	$_SESSION['REMEMBER'] = $rememberMe;
 	$_SESSION['OTA'] = $ota;
 } else if (
 	isset($_POST['otaCode']) &&
@@ -28,10 +35,11 @@ if (
 	$ota = $_SESSION['OTA'];
 	$userName = $_SESSION['USERNAME'];
 	$userPassword = $_SESSION['PASSWORD'];
+	$rememberMe = $_SESSION['REMEMBER'];
 	unset($_SESSION['OTA']);
 	$checkResult = $ga->verifyCode($otaSecret, $otaCode, 6);    // 2 = 2*30sec clock tolerance
 	if ($checkResult) {
-		$landingPage = $userManager->login($userName, $userPassword);
+		$landingPage = $userManager->login($userName, $userPassword, $rememberMe);
 		header('Location: ' . BASEDIR . $landingPage);
 		echo 'OK';
 	} else {

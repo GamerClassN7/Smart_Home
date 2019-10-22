@@ -29,7 +29,7 @@ class UserManager
 						setcookie ("rememberMe", $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), BASEDIR, $_SERVER['HTTP_HOST'], 1);
 					}
 					$_SESSION['user']['id'] = $user['user_id'];
-					$page = "home";
+					$page = "";
 					if ($user["startPage"] == 1) {
 						$page = "dashboard";
 					}
