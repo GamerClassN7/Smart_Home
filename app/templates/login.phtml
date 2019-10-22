@@ -8,26 +8,16 @@
 	<title><?php echo $TITLE ?></title>
 </head>
 <body class="no-transitions">
-	<div class="modal-container">
-		<div class="modal">
-			<h4 class="mb-4">Login</h4>
-			<form method="post">
-				<div class="field">
-					<div class="label">Name:</div>
-					<input class="input" type="text" name="username" placeholder="Jméno.."/>
-				</div>
-				<div class="field">
-					<div class="label">Password:</div>
-					<input class="input" type="password" name="password" placeholder="Heslo.."/>
-				</div>
-				<div class="field">
-					<div class="label">Remember me:</div>
-					<input class="" type="checkbox" name="remember" value="true"/>
-				</div>
-				<input type="submit" class="button" name="login" value="Login"/>
-			</form>
-		</div>
-	</div>
+	<?php
+	if (isset($ota) && $ota != '') {	
+		$partial = new Partial('loginOta');
+		$partial->prepare('ota',$ota);
+		$partial->render();
+	} else {
+		$partial = new Partial('loginForm');
+		$partial->render();
+	}
+	?>
 	
 	<?php
 	$partial = new Partial('footer');
