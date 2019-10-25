@@ -38,3 +38,21 @@ function sendTestNotification(){
         }
     });
 }
+
+$( "button[name='deactivateOta']" ).click(function(){
+    console.log("Didabling ota");
+    $.ajax({
+        url: 'ajax',
+        type: 'POST',
+        data: {
+            "ota" : 'X',
+            "action": 'disable'
+        },
+        success: function(data){
+            console.log(data);
+        },
+        error: function (request, status, error) {
+            console.log("ERROR ", request, error);
+        }
+    });
+})

@@ -77,11 +77,12 @@
 				</form>
 			</div>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
-				<h4 class="mb-4"><?php ?></h4>
-				<img src="<?php echo $QRURL;?>" />
-				<form method="post">
-
-				</form>
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_ota') ?></h4>
+				<?php if (!empty($QRURL)) {?>
+					<img src="<?php echo $QRURL;?>" />
+				<?php } else {?>
+					<button name="deactivateOta" type="button" class="button is-danger fa"><?php $LANGMNG->echo('b_disable');?> <?php $LANGMNG->echo('b_ota'); ?></button>
+				<?php }?>
 			</div>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
 				<h4 class="mb-4"><?php $LANGMNG->echo('t_createuser') ?></h4>
@@ -89,6 +90,7 @@
 					<thead>
 						<tr>
 							<th><?php $LANGMNG->echo('t_userName');?></th>
+							<th><?php $LANGMNG->echo('t_ota');?></th>
 							<th><?php $LANGMNG->echo('t_action');?></th>
 						</tr>
 					</thead>
@@ -96,6 +98,7 @@
 						<?php foreach ($USERS as $key => $user) { ?>
 							<tr>
 								<td><?php echo $user['username']; ?></td>
+								<td><?php echo ($user['ota'] ? '<span class="fa">&#xf00c;</span>' : ''); ?></td>
 								<td><button name="deleteUser" type="button" class="button is-danger fa">&#xf1f8;</button></td>
 							</tr>
 						<?php } ?>
@@ -116,14 +119,14 @@
 				</form>
 			</div>
 		</div>
-
-
+		
+		
 	</div>
-	<script src="./app/templates/js/setting.js"></script>
 	<?php
 	$partial = new Partial('footer');
 	$partial->render();
 	?>
+	<script src="./app/templates/js/setting.js"></script>
 </script>
 </body>
 </html>
