@@ -3,6 +3,7 @@ class Setting extends Template
 {
 	function __construct()
 	{
+
 		global $userManager;
 		global $langMng;
 
@@ -26,6 +27,24 @@ class Setting extends Template
 		$template->prepare('title', 'Automation');
 		$template->prepare('langMng', $langMng);
 		$template->prepare('automations', $automations);
+
+		$users = $userManager->getUsers();
+		$template->prepare('users', $users);
+
+		if ($userManager->getUserData('ota') == ''){
+			$ga = new PHPGangsta_GoogleAuthenticator();
+			$otaSecret = $ga->createSecret();
+			$qrCodeUrl = $ga->getQRCodeGoogleUrl('Smart Home', $otaSecret);
+			$oneCode = $ga->getCode($otaSecret);
+			$template->prepare('qrUrl', $qrCodeUrl);
+			$template->prepare('otaSecret', $otaSecret);
+			$template->prepare('otaCode', $oneCode);
+
+			// echo "Secret is: ".$secret."\n\n";
+			// echo "Google Charts URL for the QR-Code: ".$qrCodeUrl."\n\n";
+			// echo "Checking Code '$oneCode' and Secret '$otaSecret':\n";
+		}
+
 
 		$template->render();
 	}

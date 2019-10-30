@@ -21,7 +21,7 @@
 		</div>
 		<div class="col-md-9 main-body">
 			<div class="col-12 col-sm-9 mx-auto mt-4">
-				<h4 class="mb-4">	
+				<h4 class="mb-4">
 					<?php $LANGMNG->echo('t_pageAfterLogIn') ?>
 				</h4>
 				<form method="post" enctype="multipart/form-data">
@@ -56,15 +56,91 @@
 					<a href="rooms" class="button"><?php $LANGMNG->echo('b_rooms') ?></a>
 				</div>
 			</div>
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_changePassword') ?></h4>
+				<form method="post">
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_oldPassword') ?>:</div>
+						<input type="password" class="input" name="oldPassword" value="" data-cip-id="cIPJQ342845639">
+					</div>
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_newPassword') ?>:</div>
+						<input type="password" class="input" name="newPassword1" value="">
+					</div>
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_newPassword') ?>:</div>
+						<input type="password" class="input" name="newPassword2" value="">
+					</div>
+					<div class="field">
+						<input type="submit" name="submitPasswordChange" class="button" value="Uložit">
+					</div>
+				</form>
+			</div>
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_ota') ?></h4>
+				<?php if (!empty($QRURL)) {?>
+					<img src="<?php echo $QRURL;?>" />
+					<?php echo $OTACODE; ?>
+					<form method="post" action="setting">
+						<div class="field">
+							<div class="label"><?php $LANGMNG->echo('l_gooleAutenticatorOtaCode') ?>:</div>
+							<input type="text" class="input" name="otaCode" value="" required>
+							<input type="hidden" class="input" name="otaSecret" value="<?php echo $OTASECRET;?>" required>
+						</div>
+						<div class="field">
+							<input type="submit" name="submitEnableOta" class="button" value="Uložit">
+						</div>
+					</form>
+				<?php } else {?>
+					<button name="deactivateOta" type="button" class="button is-danger fa"><?php $LANGMNG->echo('b_disable');?> <?php $LANGMNG->echo('b_ota'); ?></button>
+				<?php }?>
+			</div>
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_listUsers') ?></h4>
+				<table class="table is-fluid">
+					<thead>
+						<tr>
+							<th><?php $LANGMNG->echo('t_userName');?></th>
+							<th><?php $LANGMNG->echo('t_ota');?></th>
+							<th><?php $LANGMNG->echo('t_action');?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($USERS as $key => $user) { ?>
+							<tr>
+								<td><?php echo $user['username']; ?></td>
+								<td><?php echo ($user['ota'] ? '<span class="fa">&#xf00c;</span>' : ''); ?></td>
+								<td><button name="deleteUser" type="button" class="button is-danger fa">&#xf1f8;</button></td>
+							</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_createuser') ?></h4>
+				<form method="post">
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_userName') ?>:</div>
+						<input type="text" class="input" name="userName" value="" data-cip-id="cIPJQ342845639">
+					</div>
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_password') ?>:</div>
+						<input type="password" class="input" name="userPassword" value="" data-cip-id="cIPJQ342845639">
+					</div>
+					<div class="field">
+						<input type="submit" name="submitCreateUser" class="button" value="Uložit">
+					</div>
+				</form>
+			</div>
 		</div>
-		
-		
+
+
 	</div>
-	<script src="./app/templates/js/setting.js"></script>
 	<?php
 	$partial = new Partial('footer');
 	$partial->render();
 	?>
-	</script>
+	<script src="./app/templates/js/setting.js"></script>
+</script>
 </body>
 </html>

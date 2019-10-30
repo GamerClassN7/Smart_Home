@@ -22,10 +22,10 @@ class Home extends Template
 		$usersAtHome = '';
 		$i = 0;
 		foreach ($users as $user) {
-			$i++;
 			if ($user['at_home'] == 'true') {
+				$i++;
 				$usersAtHome .= $user['username'];
-				if ($usersAtHome != "" && isset($users[$i + 1])){
+				if ($usersAtHome != "" && isset($users[$i + 1]) && $users[$i + 1]['at_home'] == 'true'){
 					$usersAtHome .= ', ';
 				}
 			}
@@ -44,6 +44,7 @@ class Home extends Template
 				foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
 
 					$events = RecordManager::getLastRecord($subDeviceData['subdevice_id'], 5);
+					$eventsRaw = $events;
 
 					$connectionError = true;
 					$parsedValue = "";
@@ -103,6 +104,7 @@ class Home extends Template
 								$parsedValue = $replacementTrue;
 							}
 
+
 							//parsing last events values
 							foreach ($events as $key => $value) {
 								$events[$key]['value'] = $replacementFalse;
@@ -127,6 +129,7 @@ class Home extends Template
 
 					$subDevices[$subDeviceData['subdevice_id']] = [
 						'events'=> $events,
+						'eventsRaw'=> $eventsRaw,
 						'type' => $subDeviceData['type'],
 						'unit' => $subDeviceData['unit'],
 						'comError' => $connectionError,

@@ -10,66 +10,72 @@
 		<div class="">
 			<canvas id="canvas-<?php echo $SUBDEVICEID;?>"></canvas>
 		</div>
-		
-		
-		<input 
-		type="submit" 
-		class="button col-2 graph-period" 
-		data-period="year" 
+
+
+		<input
+		type="submit"
+		class="button col-2 graph-period"
+		data-period="year"
 		data-group="month"
 		data-sub-device-id="<?php echo $SUBDEVICEID;?>"
 		value="<?php $LANGMNG->echo('b_year');?>"
-		/>	
-		
-		<input 
-		type="submit" 
-		class="button col-2  graph-period" 
-		data-period="month" 
+		/>
+
+		<input
+		type="submit"
+		class="button col-2  graph-period"
+		data-period="month"
 		data-group="day"
-		data-sub-device-id="<?php echo $SUBDEVICEID;?>"  
+		data-sub-device-id="<?php echo $SUBDEVICEID;?>"
 		value="<?php $LANGMNG->echo('b_month');?>"
-		/>	
-		
-		<input 
-		type="submit" 
-		class="button col-2 graph-period" 
-		data-period="week" 
+		/>
+
+		<input
+		type="submit"
+		class="button col-2 graph-period"
+		data-period="week"
 		data-group="day"
 		data-sub-device-id="<?php echo $SUBDEVICEID;?>"
 		value="<?php $LANGMNG->echo('b_week');?>"
 		/>
-		
-		<input 
-		type="submit" 
-		class="button col-2  graph-period" 
-		data-period="day" 
+
+		<input
+		type="submit"
+		class="button col-2  graph-period"
+		data-period="day"
 		data-group="hour"
 		data-sub-device-id="<?php echo $SUBDEVICEID;?>"
 		value="<?php $LANGMNG->echo('b_day');?>"
 		/>
-		
-		<input 
-		type="submit" 
-		class="button col-2  graph-period" 
-		data-period="hour" 
+
+		<input
+		type="submit"
+		class="button col-2  graph-period"
+		data-period="hour"
 		data-group="minute"
 		data-sub-device-id="<?php echo $SUBDEVICEID;?>"
 		value="<?php $LANGMNG->echo('b_hour');?>"
 		/>
-		
+
 		<div>
 			<table class="table is-fluid">
 				<thead>
 					<tr>
 						<th><?php $LANGMNG->echo('t_time');?></th>
+						<?php if (DEBUGMOD) { ?>
+							<th><?php $LANGMNG->echo('t_raw');?></th>
+						<?php } ?>
 						<th><?php $LANGMNG->echo('t_state');?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ($SUBDEVICE['events'] as $key => $value) { ?>
 						<tr>
-							<th><?php echo (new DateTime($value['time']))->format(DATEFORMAT); ?></th>
-							<th title="test"><?php echo $value['value'] . $SUBDEVICE['unit'];?></th>
+							<td><?php echo (new DateTime($value['time']))->format(DATEFORMAT); ?></td>
+							<?php if (DEBUGMOD) { ?>
+								<td><?php echo $SUBDEVICE['eventsRaw'][$key]['value']; ?></td>
+							<?php } ?>
+							<td title="test"><?php echo $value['value'] . $SUBDEVICE['unit'];?></td>
 							<?php //TODO: P5IDAT TOOLTIP PRO RAW VALUE?>
 						</tr>
 					<?php } ?>

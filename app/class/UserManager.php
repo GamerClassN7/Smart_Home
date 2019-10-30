@@ -3,8 +3,8 @@ class UserManager
 {
 	public function getUsers () {
 		try {
-			$allRoom = Db::loadAll ("SELECT * FROM users");
-			return $allRoom;
+			$allUsers = Db::loadAll ("SELECT user_id, username, at_home, ota FROM users");
+			return $allUsers;
 		} catch(PDOException $error) {
 			echo $error->getMessage();
 			die();
@@ -26,12 +26,12 @@ class UserManager
 			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
 					if (isset($rememberMe) && $rememberMe == 'true') {
-						setcookie ("rememberMe", $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])), $_SERVER['HTTP_HOST'], 1);
+						setcookie ("rememberMe", $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), BASEDIR, $_SERVER['HTTP_HOST'], 1);
 					}
 					$_SESSION['user']['id'] = $user['user_id'];
-					$page = "./index.php";
+					$page = "";
 					if ($user["startPage"] == 1) {
-						$page = "./dashboard.php";
+						$page = "dashboard";
 					}
 					unset($_POST['login']);
 					return $page;
@@ -62,9 +62,12 @@ class UserManager
 	}
 
 	public function logout () {
-		setcookie ("rememberMe","", time() - (30 * 24 * 60 * 60 * 1000), str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])), $_SERVER['HTTP_HOST'], 1);
 		unset($_SESSION['user']);
 		session_destroy();
+		if (isset($_COOKIE['rememberMe'])){
+			unset($_COOKIE['rememberMe']);
+			setcookie("rememberMe", 'false', time(), BASEDIR, $_SERVER['HTTP_HOST']);
+		}
 	}
 
 	public function setEncryptedCookie($value){
@@ -98,12 +101,14 @@ class UserManager
 		return false;
 	}
 
-	public static function getUserData ($type) {
+	public static function getUserData ($type, $userId = '') {
 		if (isset($_SESSION['user']['id'])) {
-			$user = Db::loadOne ('SELECT ' . $type . ' FROM users WHERE user_id=?', array ($_SESSION['user']['id']));
-			return $user[$type];
+			$userId = $_SESSION['user']['id'];
+		} else {
+			return "";
 		}
-		return "";
+		$user = Db::loadOne ('SELECT ' . $type . ' FROM users WHERE user_id=?', array ($userId));
+		return $user[$type];
 	}
 
 	public function setUserData ($type, $value) {
@@ -118,63 +123,59 @@ class UserManager
 		return $hashPassword;
 	}
 
-	public function ulozitObrazek ($file, $path = "", $name = "") {
-		if (!@is_array (getimagesize($file['tmp_name']))) {
-			throw new ChybaUzivatele("Formát obrázku ". $file['name'] ." není podporován!");
-		} else {
-			$extension = strtolower(strrchr($file['name'], '.'));
-			switch ($extension) {
-				case '.jpg':
-				case '.jpeg':
-				$img = @imagecreatefromjpeg($file['tmp_name']);
-				break;
-				case '.gif':
-					$img = @imagecreatefromgif($file['tmp_name']);
-					break;
-					case '.png':
-					$img2 = @imagecreatefrompng($file['tmp_name']);
-					break;
-					case '.ico':
-					$img3 = @$file['tmp_name'];
-					break;
-					default:
-					$img = false;
-					break;
-				}
-				if($name == ""){
-					$nazev = substr($file['name'], 0, strpos($file['name'], ".")) ."_". round(microtime(true) * 1000);
-				}else{
-					$nazev = $name;
-				}
-				if(!file_exists($path)){
-					mkdir($path, 0777, true);
-				}
-				if (@$img) {
-					if (!imagejpeg ($img, $path . $nazev .".jpg", 95)) {
-						throw new ChybaUzivatele ("Obrázek neuložen!");
-					}
-					imagedestroy ($img);
-				} else if (@$img2) {
-					if (!imagepng ($img2, $path . $nazev .".jpg")) {
-						throw new ChybaUzivatele ("Obrázek neuložen!");
-					}
-					imagedestroy ($img2);
-				} else if (@$img3) {
-					if (!copy($img3, $path . $nazev .'.ico')) {
-						throw new ChybaUzivatele ("Obrázek neuložen!");
-					}
-				}
-				return array('success' => true, 'url' => $path . $nazev .".jpg");
-			}
-		}
-
-		public function atHome($userId, $atHome){
-			try {
-				Db::edit ('users', ['at_home' => $atHome], 'WHERE user_id = ?', array($userId));
-			} catch(PDOException $error) {
-				echo $error->getMessage();
-				die();
-			}
+	public function atHome($userId, $atHome){
+		try {
+			Db::edit ('users', ['at_home' => $atHome], 'WHERE user_id = ?', array($userId));
+		} catch(PDOException $error) {
+			echo $error->getMessage();
+			die();
 		}
 	}
-	?>
+
+	public function changePassword($oldPassword, $newPassword, $newPassword2){
+		if ($newPassword == $newPassword2) {
+			//Password Criteria
+			$oldPasswordSaved = self::getUserData('password');
+			if (self::getHashPassword($oldPassword) == $oldPasswordSaved) {
+				self::setUserData('password', self::getHashPassword($newPassword));
+			} else {
+				throw new Exception ("old password did not match");
+			}
+		} else {
+			throw new Exception ("new password arent same");
+		}
+	}
+
+	public function createUser($userName, $password){
+		$userId = Db::loadOne('SELECT * FROM users WHERE username = ?;', array($userName))['user_id'];
+		if ($userId != null) {
+			return false;
+		};
+		try {
+			$user = [
+				'username' => $userName,
+				'password' => self::getHashPassword($password),
+			];
+			return Db::add ('users', $user);
+		} catch(PDOException $error) {
+			echo $error->getMessage();
+			die();
+		}
+	}
+
+	public function	haveOtaEnabled($userName){
+		$ota = $this->getUser($userName)['ota'];
+
+		if ($ota != ''){
+			return ($ota != '' ? $ota : false);
+		} else {
+			return false;
+		}
+	}
+
+	public function setOta($code, $secret){
+		$userId = $_SESSION['user']['id'];
+		Db::edit ('users', ['ota' => $secret], 'WHERE user_id = ?', array($userId));
+	}
+}
+?>
