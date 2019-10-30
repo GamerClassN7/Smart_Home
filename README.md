@@ -10,8 +10,7 @@
     <img src="./app/templates/images/icon-192x192.png" height="100" width="100">
   </a>
   <h3 align="center">Make your own Smart Home automation system</h3>
-  <p align="center"> 
-    <a href="there will be a demo one day"><strong>Watch demo »</strong></a>
+  <p align="center">
     <br>
     <a href="https://github.com/GamerClassN7/Smart_Home">Explore wikis</a>
     <sub><sup>•</sub></sup>
@@ -126,13 +125,6 @@ If you know how to fix, improve or optimze something, go ahead and contribute! H
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-## Built with
-This section briefly lists major frameworks that Smart_Home uses:
-* [PHP](https://www.php.net)
-* [JS](https://www.javascript.com)
-* HTML
-* [Arduino IDE](https://www.arduino.cc)
 
 <!-- AUTHORS -->
 ## Authors
