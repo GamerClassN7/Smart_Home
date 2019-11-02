@@ -13,7 +13,7 @@ mb_internal_encoding ("UTF-8");
 
 
 //Autoloader
-foreach (["class", "views"] as $dir) {
+foreach (["vendor","class", "views"] as $dir) {
 	$files = scandir('./app/'.$dir.'/');
 	$files = array_diff($files, array('.', '..', 'app'));
 
@@ -47,9 +47,10 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 
 //TODO: Přesunout do Login Pohledu
 $userManager = new UserManager();
-if (isset($_POST['username']) && isset($_POST['password']) ) {
-	$userManager->login($_POST['username'], $_POST['password'], (isset ($_POST['remember']) ? $_POST['remember'] : 'false'));
-}
+
+// if (isset($_POST['username']) && isset($_POST['password']) ) {
+// 	$userManager->login($_POST['username'], $_POST['password'], (isset ($_POST['remember']) ? $_POST['remember'] : 'false'));
+// }
 
 //Logs
 $logManager = new LogManager();

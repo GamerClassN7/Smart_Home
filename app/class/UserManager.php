@@ -172,10 +172,5 @@ class UserManager
 			return false;
 		}
 	}
-
-	public function setOta($code, $secret){
-		$userId = $_SESSION['user']['id'];
-		Db::edit ('users', ['ota' => $secret], 'WHERE user_id = ?', array($userId));
-	}
 }
 ?>
