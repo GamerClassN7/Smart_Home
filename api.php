@@ -172,7 +172,7 @@ if ($values != null || $values != "") {
 				];
 				break;
 			}
-
+			if (DEBUGMOD) $notificationData['body'] .= ' value='.$value['value'];
 			if ($notificationData != []) {
 				$subscribers = $notificationMng::getSubscription();
 				foreach ($subscribers as $key => $subscriber) {
