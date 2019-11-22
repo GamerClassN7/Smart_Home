@@ -12,7 +12,7 @@
                         <div class="label"><?php $LANGMNG->echo('l_owner'); ?></div>
                         <select class="input" name="deviceOwnerUserId">
                             <option value=""><?php $LANGMNG->echo('w_noOne'); ?></option>
-                            <?php foreach ($USERS as $user) { 
+                            <?php foreach ($USERS as $user) {
                                 $userId =  $user['user_id'];
                                 $userName =  $user['username'];
                                 ?>
@@ -22,13 +22,13 @@
                     </div>
                     <div class="label"><?php $LANGMNG->echo('l_permission'); ?></div>
                     <div class="row">
-                        
+
                         <div class="col-6">
                             <div class="label"> - <?php $LANGMNG->echo('l_owner'); ?></div>
                         </div>
-                        
+
                         <div class="col-6">
-                            <?php 
+                            <?php
                             $permissions = $DEVICE['permission'];
                             //Debug
                             if (DEBUGMOD == 1) {
@@ -40,7 +40,7 @@
                             <input type="radio" name="permissionOwner" value=1 <?php ECHO ($permissions[0] == 1 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_read'); ?>
                             <input type="radio" name="permissionOwner" value=2 <?php ECHO ($permissions[0] == 2 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_use'); ?>
                             <input type="radio" name="permissionOwner" value=3 <?php ECHO ($permissions[0] == 3 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_edit'); ?>
-                            
+
                         </div>
                     </div>
                     <div class="row">
@@ -60,22 +60,32 @@
                 <?php } ?>
                 <div class="field">
                     <div class="label">Token:</div>
-                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['token']; ?>" disabled>	
-                </div>	
+                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['token']; ?>" disabled>
+                </div>
+                <?php //TODO: firmware tipe send to api?>
+                <div class="field">
+                    <div class="label">Type:</div>
+                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['type']; ?>" disabled>
+                </div>
+                <?php //TODO: add Static Ip Functionality?>
+                <div class="field">
+                    <div class="label">IP:</div>
+                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['ip']; ?>" disabled>
+                </div>
                 <?php if ($DEVICE['userIsAdmin']) { ?>
                     <?php if (!in_array($SUBDEVICE['type'], ['on/off', 'door', 'water'])) { ?>
                         <div class="field">
                             <div class="label"><?php $LANGMNG->echo('l_sleepTime'); ?></div>
-                            <input class="input" type="int" name="sleepTime" value="<?php echo $DEVICE['sleepTime']; ?>"  <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>>	
+                            <input class="input" type="int" name="sleepTime" value="<?php echo $DEVICE['sleepTime']; ?>"  <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>>
                             <p>* - <?php $LANGMNG->echo('l_inMinutes'); ?></p>
                         </div>
                     <?php }?>
                     <div class="field">
                         <div class="label"><?php $LANGMNG->echo('w_room'); ?></div>
                         <select class="input" name="deviceOwnerId">
-                            <?php foreach ($ROOMS as $room) { 
+                            <?php foreach ($ROOMS as $room) {
                                 $roomId =  $room['room_id'];
-                                $roomName =  $room['name'];											
+                                $roomName =  $room['name'];
                                 ?>
                                 <option value="<?php echo $roomId; ?>" <?php ECHO ((int) $roomId === (int)  $DEVICE['room'] ? 'selected="selected"' : ''); ?>><?php echo $roomName; ?></option>
                             <?php } ?>
@@ -101,26 +111,26 @@
                     <div class="label"><?php $LANGMNG->echo('w_moduls'); ?></div>
                     <div class="row no-gutters">
                         <?php foreach ($DEVICE['subDevices'] as $subDeviceKey => $subDevice) { ?>
-                            <div class="col-4 col-sm-3 col-xl-2 square-wrap">
+                            <div class="device-button col-4 col-sm-3 col-xl-2 square-wrap">
                                 <div class="square">
                                     <div class="square-content">
-                                        <div class="row">
-                                            <div class="col">
-                                                <h3 class="fa">&#x<?php echo $DEVICE['icon']; ?></h3>
-                                            </div>
-                                            <div class="col">
-                                                <h3><?php echo $subDevice['unit']; ?></h3>
-                                            </div>
+                                      <div class="row no-gutters">
+                                        <div class="col">
+                                          <h5 unselectable="on" class="fa">&#x<?php echo $DEVICE['icon'] ?></h5>
                                         </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <?php echo $DEVICE['name']; ?>
-                                            </div>
+                                        <div class="col">
+                                          <h5 unselectable="on" class="device-button-value text-right" title="<?php echo $subDevice['lastRecort']['time']; ?>"><?php echo $subDevice['lastRecort']['value'] . $subDevice['unit']?></h5>
                                         </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col  button-text" unselectable="on" >
+                                          <?php echo $DEVICE['name']; ?>
+                                        </div>
+                                      </div>
                                     </div>
                                 </div>
                             </div>
-                        <?php } ?>	
+                        <?php } ?>
                     </div>
                 </div>
                 <input type="submit" class="button" name="saveDevice" value="<?php $LANGMNG->echo('b_save'); ?>" <?php echo (!$DEVICE['userIsAdmin'] ? 'disabled' : ''); ?>/>
@@ -130,26 +140,17 @@
                     <div class="label"><?php $LANGMNG->echo('w_moduls'); ?></div>
                     <div class="row no-gutters">
                         <?php foreach ($DEVICE['subDevices'] as $subDeviceKey => $subDevice) { ?>
-                            <div class="col-4 col-sm-3 col-xl-2 square-wrap">
+                            <div class="device-button col-4 col-sm-3 col-xl-2 square-wrap">
                                 <div class="square">
                                     <div class="square-content">
-                                        <div class="row">
-                                            <div class="col">
-                                                <h3 class="fa">&#x<?php echo $DEVICE['icon']; ?></h3>
-                                            </div>
-                                            <div class="col">
-                                                <h3><?php echo $subDevice['unit']; ?></h3>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
+
                                                 <?php echo $DEVICE['name']; ?>
-                                            </div>
-                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
-                        <?php } ?>	
+                        <?php } ?>
                     </div>
                 </div>
                 <input type="submit" class="button is-primary" name="approveDevice" value="<?php $LANGMNG->echo('b_approve'); ?>"/>
