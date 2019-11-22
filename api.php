@@ -163,6 +163,7 @@ if ($values != null || $values != "") {
 					'body' => 'Someone just open up '.$device['name'],
 					'icon' => '',
 				];
+
 				break;
 				case 'water':
 				$notificationData = [
