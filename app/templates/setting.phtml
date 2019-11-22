@@ -121,17 +121,57 @@
 				<form method="post">
 					<div class="field">
 						<div class="label"><?php $LANGMNG->echo('l_userName') ?>:</div>
-						<input type="text" class="input" name="userName" value="" data-cip-id="cIPJQ342845639">
+						<input type="text" class="input" name="userName" value="">
 					</div>
 					<div class="field">
 						<div class="label"><?php $LANGMNG->echo('l_password') ?>:</div>
-						<input type="password" class="input" name="userPassword" value="" data-cip-id="cIPJQ342845639">
+						<input type="password" class="input" name="userPassword" value="">
 					</div>
 					<div class="field">
 						<input type="submit" name="submitCreateUser" class="button" value="Uložit">
 					</div>
 				</form>
 			</div>
+
+			<!--Room Managment-->
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_listRooms') ?></h4>
+				<table class="table is-fluid">
+					<thead>
+						<tr>
+							<th><?php $LANGMNG->echo('t_roomName');?></th>
+							<th><?php $LANGMNG->echo('t_action');?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($ROOMS as $key => $room) { ?>
+							<tr>
+								<td><?php echo $room['name']; ?></td>
+								<td>
+									<button name="deleteRoom" type="button" class="button is-danger fa">&#xf1f8;</button>
+									<button name="defaultRoom" type="button" class="button fa" <?php echo ($room['default'] ? 'disabled' : ''); ?>>&#xf140;</button>
+								</td>
+							</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			</div>
+
+			<!--Room Creation-->
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h4 class="mb-4"><?php $LANGMNG->echo('t_createRoom') ?></h4>
+				<form method="post">
+					<div class="field">
+						<div class="label"><?php $LANGMNG->echo('l_roomName') ?>:</div>
+						<input type="text" class="input" name="roomName" value="">
+					</div>
+					<div class="field">
+						<input type="submit" name="submitCreateUser" class="button" value="<?php $LANGMNG->echo('b_create') ?>">
+					</div>
+				</form>
+			</div>
+
+
 		</div>
 
 

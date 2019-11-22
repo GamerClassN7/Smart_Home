@@ -14,3 +14,8 @@ table.table th {
   background-color: #121a2b;
   color: white;
 }
+
+button:disabled,
+button[disabled] {
+  opacity: .4;
+}

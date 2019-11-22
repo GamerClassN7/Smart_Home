@@ -45,6 +45,9 @@ class Setting extends Template
 			// echo "Checking Code '$oneCode' and Secret '$otaSecret':\n";
 		}
 
+		$rooms = RoomManager::getAllRooms();
+		$template->prepare('rooms', $rooms);
+
 
 		$template->render();
 	}
