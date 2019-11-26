@@ -78,7 +78,7 @@ class Home extends Template
 							$operator = '==';
 							$breakValue = 1;
 							if ($lastValue != 1 || $lastValue != 0) { //Digital Light Senzor
-								$operator = '<=';
+								$operator = '<';
 								$breakValue = 810;
 							}
 							break;
@@ -108,7 +108,7 @@ class Home extends Template
 							//parsing last events values
 							foreach ($events as $key => $value) {
 								$events[$key]['value'] = $replacementFalse;
-								if (Utilities::checkOperator($lastValue, $operator, $breakValue)) {
+								if (Utilities::checkOperator($value['value'], $operator, $breakValue)) {
 									$events[$key]['value'] = $replacementTrue;
 								}
 							}
@@ -156,6 +156,7 @@ class Home extends Template
 					'icon' => $deviceData['icon'],
 					'room' => $deviceData['room_id'],
 					'token' => $deviceData['token'],
+					'type' => $deviceData['type'],
 					'sleepTime' => $deviceData['sleep_time'],
 					'approved' => $deviceData['approved'],
 					'permission' => $permissionArray,
