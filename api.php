@@ -195,7 +195,7 @@ if ($values != null || $values != "") {
 
 	$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
 	if (!in_array($subDevicesTypeList, ['on/off', 'door', 'water'])) {
-		$jsonAnswer['sleepTime'] = $device['sleep_time'];
+		$jsonAnswer['device']['sleepTime'] = $device['sleep_time'];
 	}
 	echo json_encode($jsonAnswer);
 	header("HTTP/1.1 200 OK");
