@@ -20,6 +20,10 @@ DHT DHTs(pinDHT, DHT11);
 void setup() {
     Serial.begin(9600);
     while (!Serial) continue;
+    delay(10);
+    Serial.println('\n');
+    Serial.println("HW: " + String(hwId));
+    
     pinMode(LIGHTPIN, INPUT);
 }
 
