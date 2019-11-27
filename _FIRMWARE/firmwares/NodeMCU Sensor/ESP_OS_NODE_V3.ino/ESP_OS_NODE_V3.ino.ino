@@ -5,9 +5,9 @@
 #include <ArduinoJson.h>
 
 //Variables
-const char* ssid   = "SteelAntsNET";
-const char* pasw   = "tgr786hgtp3CZ";
-const char* hwId   = "JOK3R";
+const char* ssid   = "";
+const char* pasw   = "";
+const char* hwId   = "";
 const char* url    = "http://dev.steelants.cz/vasek/home/api.php";
 int unsuccessfulRounds = 0;
 
@@ -90,8 +90,8 @@ void loop() {
     
     //Set static ip 
     IPAddress staticIpAddress;
-IPAddress subnetIpAddress(192,168,0,1);
-IPAddress gatewayIpAddress(255, 255, 255, 0);
+    IPAddress subnetIpAddress(192,168,0,1);
+    IPAddress gatewayIpAddress(255, 255, 255, 0);
     
     if (staticIpAddress.fromString(ipAddress)) {
         WiFi.config(staticIpAddress, subnetIpAddress, gatewayIpAddress);
