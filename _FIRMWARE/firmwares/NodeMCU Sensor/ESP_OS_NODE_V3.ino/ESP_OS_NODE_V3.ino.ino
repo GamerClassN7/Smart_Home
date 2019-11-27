@@ -5,9 +5,9 @@
 #include <ArduinoJson.h>
 
 //Variables
-const char* ssid   = "";
-const char* pasw   = "";
-const char* hwId   = "";
+const char* ssid   = "SteelAntsNET";
+const char* pasw   = "tgr786hgtp3CZ";
+const char* hwId   = "JOK3R";
 const char* url    = "http://dev.steelants.cz/vasek/home/api.php";
 int unsuccessfulRounds = 0;
 
@@ -31,6 +31,10 @@ void setup() {
 void loop() {
     WiFi.begin(ssid, pasw);
     checkConnection();
+    Serial.print("IP address:\t");
+    Serial.println(WiFi.localIP());
+    Serial.print("MAC address:\t");
+    Serial.println(WiFi.macAddress());
     
     //HTTP CLIENT
     HTTPClient http;
@@ -79,15 +83,18 @@ void loop() {
     
     if (state != "succes") {
         unsuccessfulRounds++;
-        Serial.println("UNSUCCESSFUL ROUND NUMBER " + unsuccessfulRounds + "FROM 5");
+        Serial.println("UNSUCCESSFUL ROUND NUMBER " + String(unsuccessfulRounds) + "FROM 5");
     } else if (state == "succes") {
         unsuccessfulRounds = 0;
     }
     
     //Set static ip 
-    IPAddress addr;
-    if (addr.fromString(ipAddress)) {
-        IPAddress ip(addr);
+    IPAddress staticIpAddress;
+IPAddress subnetIpAddress(192,168,0,1);
+IPAddress gatewayIpAddress(255, 255, 255, 0);
+    
+    if (staticIpAddress.fromString(ipAddress)) {
+        WiFi.config(staticIpAddress, subnetIpAddress, gatewayIpAddress);
         Serial.print("IP address:\t");
         Serial.println(WiFi.localIP()); 
     }
@@ -100,7 +107,7 @@ void loop() {
     
     if(unsuccessfulRounds == 5) {
         Serial.println("RESTARTING ESP");
-        ESP.restart()
+        ESP.restart();
     }
     
     Serial.println("GOING TO SLEEP FOR " + String(sleepTime));
