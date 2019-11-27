@@ -24,7 +24,10 @@ void setup() {
     delay(10);
     Serial.println('\n');
     Serial.println("HW: " + String(hwId));
-    
+    Serial.print("IP address:\t");
+    Serial.println(WiFi.localIP());
+    Serial.print("MAC address:\t");
+    Serial.println(WiFi.macAdress());
     pinMode(LIGHTPIN, INPUT);
 }
 
@@ -85,19 +88,13 @@ void loop() {
     }
     
     //Set static ip 
-<<<<<<< HEAD:_FIRMWARE/firmwares/NodeMCU Sensor/ESP_OS_NODE_V3.ino
-    IPAddress addr;
-    if (addr.fromString(ipAddress)) {
-        IPAddress ip(addr);
-=======
     IPAddress staticIpAddress;
     IPAddress subnetIpAddress(192,168,0,1);
     IPAddress gatewayIpAddress(255, 255, 255, 0);
     
     if (staticIpAddress.fromString(ipAddress)) {
         WiFi.config(staticIpAddress, subnetIpAddress, gatewayIpAddress);
->>>>>>> d67bac14e9b4cd8a60a50b3d65b6f09d40bc944e:_FIRMWARE/firmwares/NodeMCU Sensor/ESP_OS_NODE_V3.ino/ESP_OS_NODE_V3.ino.ino
-        Serial.print("IP address:\t");
+        Serial.print("STATIC IP address:\t");
         Serial.println(WiFi.localIP()); 
     }
     
