@@ -11,7 +11,7 @@ const char* server = "http://dev.steelants.cz/vasek/home/api.php";
 int unsuccessfulRounds = 0; //time to wait before restart
 int lastState = 0;
 
-//Constant
+//Pins
 #define SONOFF 12
 #define SONOFF_LED 13
 #define SONOFF_BUT 0
@@ -80,13 +80,23 @@ void loop() {
     
     //configuration setup
     String hostName = doc["device"]["hostname"];
+    String ipAddress = doc["device"]["ipAddress"];
     String state = doc["state"];
+    
     
     if (state != "succes") {
         unsuccessfulRounds++;
         Serial.println("UNSUCCESSFUL ROUND NUMBER " + unsuccessfulRounds + "FROM 5");
     } else if (state == "succes") {
         unsuccessfulRounds = 0;
+    }
+    
+    //Set static ip 
+    IPAddress addr;
+    if (addr.fromString(ipAddress)) {
+        IPAddress ip(addr);
+        Serial.print("IP address:\t");
+        Serial.println(WiFi.localIP());  
     }
     
     WiFi.hostname(hostName);

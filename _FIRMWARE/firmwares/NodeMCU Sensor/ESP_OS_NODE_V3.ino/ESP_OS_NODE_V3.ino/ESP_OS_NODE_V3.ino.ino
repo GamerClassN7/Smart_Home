@@ -1,3 +1,4 @@
+//Includes
 #include <DHT.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -73,6 +74,7 @@ void loop() {
     //configuration setup
     String hostName = doc["device"]["hostname"];
     int sleepTime = doc["device"]["sleepTime"];
+    String ipAddress = doc["device"]["ipAddress"];
     String state = doc["state"];
     
     if (state != "succes") {
@@ -80,6 +82,14 @@ void loop() {
         Serial.println("UNSUCCESSFUL ROUND NUMBER " + unsuccessfulRounds + "FROM 5");
     } else if (state == "succes") {
         unsuccessfulRounds = 0;
+    }
+    
+    //Set static ip 
+    IPAddress addr;
+    if (addr.fromString(ipAddress)) {
+        IPAddress ip(addr);
+        Serial.print("IP address:\t");
+        Serial.println(WiFi.localIP()); 
     }
     
     WiFi.hostname(hostName);
