@@ -157,6 +157,7 @@ class Home extends Template
 					'room' => $deviceData['room_id'],
 					'token' => $deviceData['token'],
 					'type' => $deviceData['type'],
+					'ip' => $deviceData['ip_address'],
 					'sleepTime' => $deviceData['sleep_time'],
 					'approved' => $deviceData['approved'],
 					'permission' => $permissionArray,
