@@ -36,18 +36,18 @@ void loop() {
     //Start Conection to wifi
     WiFi.begin(ssid, pasw);
     checkConnection();
-    
+
     //HTTP CLIENT
     HTTPClient http;
     http.begin(url); //Begun HTTP Request
     http.addHeader("Content-Type", "text/plain");  //Specify content-type header
-    
+
     DHTs.begin();
-    
+
     //JsonDocsDefinition
     StaticJsonDocument<265> doc;
     doc["token"] = hwId;
-    
+
     //Read and Handle DHT values
     float tem = DHTs.readTemperature();
     float hum = DHTs.readHumidity();
@@ -60,65 +60,51 @@ void loop() {
         doc["values"]["humi"]["value"] = hum;
         doc["values"]["humi"]["unit"] = "%";
     }
-    
+
     //Handle Photo Rezistor Values
     doc["values"]["light"]["value"] = analogRead(LIGHTPIN);
     doc["values"]["light"]["unit"] = "";
-    
+
     /*More Senzores to come*/
     String jsonPayload = "";
     serializeJson(doc, jsonPayload);
     Serial.print("JSON: ");
     Serial.println(jsonPayload);
-    
+
     int httpCode = http.POST(jsonPayload); //Get Http response code
     String httpPayload = http.getString();  //Get the response payload
     Serial.println("HTTP CODE: " + String(httpCode) + ""); //Print HTTP return code
     Serial.println("HTTP BODY: " + String(httpPayload) + "");  //Print request response payload
-    
+
     DeserializationError error = deserializeJson(doc, httpPayload); //Get deserialization Error if exists
-    
+
     //configuration setup
     String hostName = doc["device"]["hostname"];
     int sleepTime = doc["device"]["sleepTime"];
     String ipAddress = doc["device"]["ipAddress"];
     String state = doc["state"];
-    
+
     if (state != "succes") {
         unsuccessfulRounds++;
         Serial.println("UNSUCCESSFUL ROUND NUMBER " + unsuccessfulRounds + "FROM 5");
     } else if (state == "succes") {
         unsuccessfulRounds = 0;
     }
-    
-    //Set static ip 
-    IPAddress staticIpAddress;
-    IPAddress subnetIpAddress(192,168,0,1);
-    IPAddress gatewayIpAddress(255, 255, 255, 0);
-    
-    if (staticIpAddress.fromString(ipAddress)) {
-        WiFi.config(staticIpAddress, subnetIpAddress, gatewayIpAddress);
-        Serial.print("STATIC IP address:\t");
-        Serial.println(WiFi.localIP()); 
-    }
-    
+
+    //Set static ip
+    setStaticIp(ipAddress, "192.168.0.1", "255.255.255.0")
     WiFi.hostname(hostName); //Set HostName
-    
+
     http.end();  //Close connection
     WiFi.disconnect(); //Disconect from WIFI
     Serial.println("DISCONECTED FROM WIFI");
-    
+
     if(unsuccessfulRounds == 5) { //after 5 unsucessful request restart ESP
         Serial.println("RESTARTING ESP");
         ESP.restart()
     }
-    
-    if (sleepTime > 0) { //if deep sleepTime > 0 use deep sleep
-        Serial.println("GOING TO SLEEP FOR " + String(sleepTime));
-        ESP.deepSleep((sleepTime * 60) * 1000000, RF_DEFAULT);
-    } else {
-        delay(5000);
-    }
+
+    sleep();
 }
 
 //checking if connection is working
@@ -137,4 +123,28 @@ bool checkConnection() {
     }
     Serial.println("Timed out.");
     return false;
+}
+void setStaticIp(String IpAddress, String subnet, String gateway){
+  //Set static ip
+  IPAddress staticIpAddress;
+  IPAddress subnetIpAddress;
+  IPAddress gatewayIpAddress;
+
+  if (
+    staticIpAddress.fromString(ipAddress) &&
+    subnetIpAddress.fromString(subnet) &&
+    gatewayIpAddress.fromString(gateway)
+  ) {
+      WiFi.config(staticIpAddress, subnetIpAddress, gatewayIpAddress);
+      Serial.print("STATIC IP address:\t");
+      Serial.println(WiFi.localIP());
+  }
+}
+void sleep(int sleepTime) {
+  if (sleepTime > 0) { //if deep sleepTime > 0 use deep sleep
+      Serial.println("GOING TO SLEEP FOR " + String(sleepTime));
+      ESP.deepSleep((sleepTime * 60) * 1000000, RF_DEFAULT);
+  } else {
+      delay(5000);
+  }
 }
