@@ -79,10 +79,10 @@ void loop() {
     DeserializationError error = deserializeJson(doc, httpPayload); //Get deserialization Error if exists
 
     //configuration setup
-    String hostName = doc["device"]["hostname"];
     int sleepTime = doc["device"]["sleepTime"];
-    String ipAddress = doc["device"]["ipAddress"];
-    String state = doc["state"];
+    char *hostName = doc["device"]["hostname"].c_str();
+    char *ipAddress = doc["device"]["ipAddress"].c_str();
+    char *state = doc["state"].c_str();
 
     if (state != "succes") {
         unsuccessfulRounds++;
