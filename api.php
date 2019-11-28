@@ -189,6 +189,7 @@ if ($values != null || $values != "") {
 	$jsonAnswer = [
 		'device' => [
 			'hostname' => $hostname,
+			'ipAddress' => $device['ip_address'],
 		],
 		'state' => 'succes',
 	];
@@ -223,6 +224,7 @@ if ($values != null || $values != "") {
 		'device' => [
 			'hostname' => $device['name'],
 			'sleepTime' => $device['sleep_time'],
+			'ipAddress' => $device['ip_address'],
 			],
 			'state' => 'succes',
 			'value' => $subDeviceLastReordValue

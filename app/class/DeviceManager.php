@@ -23,9 +23,11 @@ class DeviceManager{
 	}
 
 	public function create ($name, $token) {
+		$defaultRoom = RoomManager::getDefaultRoomId();
 		$device = array (
 			'name' => $name,
 			'token' => $token,
+			'room_id' => $defaultRoom,
 		);
 		try {
 			Db::add ('devices', $device);
