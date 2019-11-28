@@ -190,6 +190,8 @@ if ($values != null || $values != "") {
 		'device' => [
 			'hostname' => $hostname,
 			'ipAddress' => $device['ip_address'],
+			'subnet' => $device['subnet'],
+			'gateway' => $device['gateway'],
 		],
 		'state' => 'succes',
 	];
@@ -225,6 +227,8 @@ if ($values != null || $values != "") {
 			'hostname' => $device['name'],
 			'sleepTime' => $device['sleep_time'],
 			'ipAddress' => $device['ip_address'],
+			'subnet' => $device['subnet'],
+			'gateway' => $device['gateway'],
 			],
 			'state' => 'succes',
 			'value' => $subDeviceLastReordValue

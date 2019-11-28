@@ -158,6 +158,8 @@ class Home extends Template
 					'token' => $deviceData['token'],
 					'type' => $deviceData['type'],
 					'ip' => $deviceData['ip_address'],
+					'subnet' => $deviceData['subnet'],
+					'gateway' => $deviceData['gateway'],
 					'sleepTime' => $deviceData['sleep_time'],
 					'approved' => $deviceData['approved'],
 					'permission' => $permissionArray,
