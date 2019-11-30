@@ -133,7 +133,8 @@ void setStaticIp(String IpAddress, String subnet, String gateway){
   if (
     staticIpAddress.fromString(ipAddress) &&
     subnetIpAddress.fromString(subnet) &&
-    gatewayIpAddress.fromString(gateway)
+    gatewayIpAddress.fromString(gateway) &&
+    WiFi.localIP() != staticIpAddress
   ) {
       WiFi.config(staticIpAddress, subnetIpAddress, gatewayIpAddress);
       Serial.print("STATIC IP address:\t");

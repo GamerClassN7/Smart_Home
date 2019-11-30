@@ -4,11 +4,11 @@
 #include <ArduinoJson.h>
 
 //Variables
-const char* ssid = " ";
+const char* ssid = "";
 const char* pasw = "";
 const char* hwId = "";
 const char* server = "http://dev.steelants.cz/vasek/home/api.php";
-int unsuccessfulRounds = 0; //time to wait before restart
+int unsuccessfulRounds = 0; //Unsucesful atmpt counter
 int lastState = 0;
 
 //Pins
@@ -35,20 +35,22 @@ void setup() {
     
     Serial.println('\n');
     Serial.println("Connection established!");  
-    Serial.print("IP address:\t");
-    Serial.println(WiFi.localIP());   
+    Serial.print("IP address:");
+    Serial.println(WiFi.localIP()); 
+    Serial.print("MAC address:");
+    Serial.println(WiFi.macAddress());   
 }
 
 void loop() {
-    StaticJsonDocument<200> jsonContent;
+    StaticJsonDocument<250> jsonContent;
     jsonContent["token"] = hwId;
     
-    if (!digitalRead(SONOFF_BUT)){
+   if (!digitalRead(SONOFF_BUT)){
         jsonContent["values"]["on/off"]["value"] = (int) !lastState;
         if (!lastState == 1) {
-            digitalWrite(SONOFF, HIGH)
+            digitalWrite(SONOFF, HIGH);
         } else if (!lastState == 0){
-            digitalWrite(SONOFF, LOW)
+            digitalWrite(SONOFF, LOW);
         }
         while(!digitalRead(SONOFF_BUT)) {
             delay(100);
@@ -71,39 +73,30 @@ void loop() {
     Serial.println("HTTP CODE: " + String(httpCode) + ""); //Print HTTP return code
     Serial.println("HTTP BODY: " + String(payload) + "");  //Print request response payload
     
-    deserializeJson(jsonContent, payload);
-    String hostname = jsonContent["device"]["hostname"];
+    DeserializationError error =  deserializeJson(jsonContent, payload);
+
+    //configuration setup
+    String hostName = jsonContent["device"]["hostname"];
+    String ipAddress = jsonContent["device"]["ipAddress"];
+    String gateway = jsonContent["device"]["gateway"];
+    String subnet = jsonContent["device"]["subnet"];
+    String requestState = jsonContent["state"];
     int state = jsonContent["value"];
     
-    
-    DeserializationError error = deserializeJson(doc, httpPayload);
-    
-    //configuration setup
-    String hostName = doc["device"]["hostname"];
-    String ipAddress = doc["device"]["ipAddress"];
-    String state = doc["state"];
-    
-    
-    if (state != "succes") {
+    if (requestState != "succes") {
         unsuccessfulRounds++;
-        Serial.println("UNSUCCESSFUL ROUND NUMBER " + unsuccessfulRounds + "FROM 5");
-    } else if (state == "succes") {
+        Serial.println("UNSUCCESSFUL ROUND NUMBER " + String(unsuccessfulRounds) + "FROM 5");
+    } else if (requestState == "succes") {
         unsuccessfulRounds = 0;
     }
-    
-    //Set static ip 
-    IPAddress addr;
-    if (addr.fromString(ipAddress)) {
-        IPAddress ip(addr);
-        Serial.print("IP address:\t");
-        Serial.println(WiFi.localIP());  
-    }
-    
+
+    //Set static ip
+    setStaticIp(ipAddress, gateway, subnet);
     WiFi.hostname(hostName);
     
     if(unsuccessfulRounds == 5) {
         Serial.println("RESTARTING ESP");
-        ESP.restart()
+        ESP.restart();
     }
     
     if (state !=  lastState){
@@ -133,4 +126,22 @@ bool checkConnection() {
     }
     Serial.println("Timed out.");
     return false;
+}
+
+void setStaticIp(String ipAddress, String subnet, String gateway){
+  //Set static ip
+  IPAddress staticIpAddress;
+  IPAddress subnetIpAddress;
+  IPAddress gatewayIpAddress;
+
+  if (
+    staticIpAddress.fromString(ipAddress) &&
+    subnetIpAddress.fromString(subnet) &&
+    gatewayIpAddress.fromString(gateway) &&
+    WiFi.localIP() != staticIpAddress
+  ) {
+      WiFi.config(staticIpAddress, subnetIpAddress, gatewayIpAddress);
+      Serial.print("STATIC IP address:");
+      Serial.println(WiFi.localIP());
+  }
 }
