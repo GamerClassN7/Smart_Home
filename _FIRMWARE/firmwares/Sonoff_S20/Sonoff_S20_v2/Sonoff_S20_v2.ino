@@ -120,7 +120,10 @@ bool checkConnection() {
             Serial.println("Connected!");
             return (true);
         }
-        delay(500);
+        digitalWrite(SONOFF, HIGH);
+        delay(250);
+        digitalWrite(SONOFF, HIGH);
+        delay(250);
         Serial.print(".");
         count++;
     }
