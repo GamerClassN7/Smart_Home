@@ -1,63 +1,50 @@
 <!DOCTYPE html>
+
 <body>
-<head>
 
-<style>
-html, body {
-height: 100%;
-}
+    <head>
+        <style>
+            html,
+            body {
+                height: 100%;
+            }
 
-html {
-display: table;
-margin: auto;
-}
+            html {
+                display: table;
+                margin: auto;
+            }
 
-body {
-display: table-cell;
-vertical-align: middle;
-}
-</style>
-</head>
-<h2>WIFI Configuration</h2>
-<a href="#" >Refresh</a>
-<form>
-<div class="wifi-list">
-<table>
-<tr>
-<td>
-<a href="#" onclick="fillSSID(this.innerHTML)">WifiName</a>
-</td>
-<td>
-lock
-</td>
-</tr>
-</table>
-</div>
-<div class="wifi-form">
-<table>
-<tr>
-<td>
-<label>Name: </label>
-</td>
-<td>
-<input id="wifi-ssid" type="text"><br> 
-</td>
-</tr>
-<tr>
-<td>
-<label>Password: </label>
-</td>
-<td>
-<input id="password" type="text"><br> 
-</td>
-</tr>
-</table>
-<input type="submit" value="Connect"><br>
-</div>
-</form>
-<script>
-function fillSSID(value){
-document.getElementById("wifi-ssid").value = value;
-}
-</script>
+            body {
+                display: table-cell;
+                vertical-align: middle;
+            }
+
+            input {
+                width: 100%;
+                box-sizing: border-box
+            }
+        </style>
+    </head>
+    <h2>WIFI Configuration</h2>
+    <a href="#">Refresh</a>
+    <form>
+        <div class="wifi-list">
+            <a href="#" onclick="fillSSID(this.innerHTML)">WifiName</a><br>
+            <a href="#" onclick="fillSSID(this.innerHTML)">WifiName</a><br>
+            <a href="#" onclick="fillSSID(this.innerHTML)">WifiName</a><br>
+            <a href="#" onclick="fillSSID(this.innerHTML)">WifiName</a><br>
+            <a href="#" onclick="fillSSID(this.innerHTML)">WifiName</a><br>
+            <a href="#" onclick="fillSSID(this.innerHTML)">WifiName</a><br>
+        </div>
+        <div class="wifi-form">
+            <input id="wifi-ssid" type="text"><br>
+            <input id="password" type="text"><br>
+            <input type="submit" value="Connect">
+        </div>
+    </form>
+    <script>
+        function fillSSID(value) {
+            document.getElementById("wifi-ssid").value = value;
+        }
+    </script>
 </body>
