@@ -185,15 +185,16 @@ bool checkConnection() {
         EEPROM.commit();
         buttonActive = false;
       }
-      if (WiFi.status() == WL_CONNECTED) {
-          Serial.println();
-          Serial.println("Connected!");
-          return (true);
-      }
       digitalWrite(SONOFF_LED, HIGH);
       delay(125);
       digitalWrite(SONOFF_LED, LOW);
       delay(125);
+      if (WiFi.status() == WL_CONNECTED) {
+          Serial.println();
+          Serial.println("Connected!");
+          digitalWrite(SONOFF_LED, LOW);
+          return (true);
+      }
       Serial.print(".");
       count++;
     }
