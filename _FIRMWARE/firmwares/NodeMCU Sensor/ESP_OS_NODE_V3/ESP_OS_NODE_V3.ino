@@ -13,7 +13,7 @@ int unsuccessfulRounds = 0;
 
 //Pins
 #define pinDHT 4
-#define LIGHTPIN A0
+#define LIGHTPIN 13
 
 //Inicializations
 DHT DHTs(pinDHT, DHT11);
@@ -28,7 +28,7 @@ void setup() {
     Serial.print("IP address:\t");
     Serial.println(WiFi.localIP());
     Serial.print("MAC address:\t");
-    Serial.println(WiFi.macAdress());
+    Serial.println(WiFi.macAddress());
     pinMode(LIGHTPIN, INPUT);
 }
 
@@ -62,7 +62,7 @@ void loop() {
     }
 
     //Handle Photo Rezistor Values
-    doc["values"]["light"]["value"] = analogRead(LIGHTPIN);
+    doc["values"]["light"]["value"] = (String)!digitalRead(LIGHTPIN);
     doc["values"]["light"]["unit"] = "";
 
     /*More Senzores to come*/
@@ -80,19 +80,21 @@ void loop() {
 
     //configuration setup
     int sleepTime = doc["device"]["sleepTime"];
-    char *hostName = doc["device"]["hostname"].c_str();
-    char *ipAddress = doc["device"]["ipAddress"].c_str();
-    char *state = doc["state"].c_str();
+    String hostName = doc["device"]["hostname"];
+    String ipAddress = doc["device"]["ipAddress"];
+    String gateway = doc["device"]["gateway"];
+    String subnet = doc["device"]["subnet"];
+    String state = doc["state"];
 
     if (state != "succes") {
         unsuccessfulRounds++;
-        Serial.println("UNSUCCESSFUL ROUND NUMBER " + unsuccessfulRounds + "FROM 5");
+        Serial.println("UNSUCCESSFUL ROUND NUMBER " + (String)unsuccessfulRounds + "FROM 5");
     } else if (state == "succes") {
         unsuccessfulRounds = 0;
     }
 
     //Set static ip
-    setStaticIp(ipAddress, "192.168.0.1", "255.255.255.0")
+    setStaticIp(ipAddress, gateway, subnet);
     WiFi.hostname(hostName); //Set HostName
 
     http.end();  //Close connection
@@ -101,10 +103,10 @@ void loop() {
 
     if(unsuccessfulRounds == 5) { //after 5 unsucessful request restart ESP
         Serial.println("RESTARTING ESP");
-        ESP.restart()
+        ESP.restart();
     }
 
-    sleep();
+    sleep(sleepTime);
 }
 
 //checking if connection is working
@@ -131,7 +133,7 @@ void setStaticIp(String IpAddress, String subnet, String gateway){
   IPAddress gatewayIpAddress;
 
   if (
-    staticIpAddress.fromString(ipAddress) &&
+    staticIpAddress.fromString(IpAddress) &&
     subnetIpAddress.fromString(subnet) &&
     gatewayIpAddress.fromString(gateway) &&
     WiFi.localIP() != staticIpAddress
