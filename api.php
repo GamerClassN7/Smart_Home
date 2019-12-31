@@ -101,15 +101,25 @@ if ($token == null || $token == "") {
 
 //Vstupní Checky
 if (!DeviceManager::registeret($token)) {
+	$notificationMng = new NotificationManager;
+	$notificationData = [];
 	$notificationData = [
 		'title' => 'Info',
-		'body' => 'New device Detected',
-		'icon' => '',
+		'body' => 'New device Detected Found',
+		'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
 	];
 	$deviceId = DeviceManager::create($token, $token);
 	foreach ($values as $key => $value) {
 		if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
 			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
+		}
+
+		if ($notificationData != []) {
+			$subscribers = $notificationMng::getSubscription();
+			foreach ($subscribers as $key => $subscriber) {
+				$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ");
+				$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
+			}
 		}
 	}
 
@@ -161,7 +171,7 @@ if ($values != null || $values != "") {
 				$notificationData = [
 					'title' => 'Info',
 					'body' => 'Someone just open up '.$device['name'],
-					'icon' => '',
+					'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
 				];
 
 				break;
@@ -169,7 +179,7 @@ if ($values != null || $values != "") {
 				$notificationData = [
 					'title' => 'Alert',
 					'body' => 'Wather leak detected by '.$device['name'],
-					'icon' => '',
+					'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
 				];
 				break;
 			}
@@ -225,7 +235,6 @@ if ($values != null || $values != "") {
 	echo json_encode(array(
 		'device' => [
 			'hostname' => $device['name'],
-			'sleepTime' => $device['sleep_time'],
 			'ipAddress' => $device['ip_address'],
 			'subnet' => $device['subnet'],
 			'gateway' => $device['gateway'],
