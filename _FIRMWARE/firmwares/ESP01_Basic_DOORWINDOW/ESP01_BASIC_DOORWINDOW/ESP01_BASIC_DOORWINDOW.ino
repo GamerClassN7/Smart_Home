@@ -11,6 +11,7 @@ const char* SERVER_ADRESS = "";
 
 StaticJsonDocument<250> jsonBuffer;
 String requestJson = "";
+ADC_MODE(ADC_VCC);
 
 //Pins
 #define SENZORPIN 12 //12
@@ -26,6 +27,9 @@ void setup() {
     jsonBuffer = {};
     jsonBuffer["token"] = HW_TOKEN;
     jsonBuffer["values"]["door"]["value"] = 0;
+
+    int batteryVoltage = (ESP.getVcc() + 600) / 1000;
+    jsonBuffer["values"]["battery"]["value"] = batteryVoltage;
 
     serializeJson(jsonBuffer, requestJson);
     sendHttpRequest(requestJson);
