@@ -129,7 +129,7 @@ class Ajax extends Template
 				$notificationData = [
 					'title' => 'Alert',
 					'body' => 'test notification',
-					'icon' => '',
+					'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
 				];
 				$notificationMng = new NotificationManager;
 				$subscribers = $notificationMng::getSubscription();
