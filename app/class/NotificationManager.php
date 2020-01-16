@@ -2,6 +2,7 @@
 /**
 * Notification Manager
 */
+//TODO: Working timestamp to body or $title
 class NotificationManager
 {
 	function addSubscriber($userID = '', $token = ''){
@@ -19,7 +20,7 @@ class NotificationManager
 		return Db::loadAll('SELECT * FROM notifications;', array());
 	}
 
-	function sendSimpleNotification(string $serverKey, string $to, array $data){
+	function sendSimpleNotification(string $serverKey, string $to, array $data, bool $timeStamp = false){
 		$dataTemplate = [
 			'title' => '',
 			'body' => '',
@@ -28,6 +29,10 @@ class NotificationManager
 
 		if (array_diff_key ($dataTemplate , $data)){
 			return;
+		}
+
+		if ($timeStamp) {
+			$data['title'] = $data['title'] . date();
 		}
 
 		$notification = new Notification($serverKey);
@@ -64,8 +69,12 @@ class Notification
 		$this->jsonPayload["to"] = $to;
 	}
 
-	function notification($title = '', $body = '', $icon = '', $action = '')
+	function notification($title = '', $body = '', $icon = '', $action = '', bool $timeStamp = false)
 	{
+		if ($timeStamp) {
+			$data['title'] = $data['title'] . date();
+		}
+
 		$this->jsonPayload["data"]["notification"]["title"] = $title;
 		$this->jsonPayload["data"]["notification"]["body"] = $body;
 		$this->jsonPayload["data"]["notification"]["icon"] = $icon;

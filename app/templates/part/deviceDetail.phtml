@@ -62,9 +62,6 @@
 				<thead>
 					<tr>
 						<th><?php $LANGMNG->echo('t_time');?></th>
-						<?php if (DEBUGMOD) { ?>
-							<th><?php $LANGMNG->echo('t_raw');?></th>
-						<?php } ?>
 						<th><?php $LANGMNG->echo('t_state');?></th>
 					</tr>
 				</thead>
@@ -72,10 +69,12 @@
 					<?php foreach ($SUBDEVICE['events'] as $key => $value) { ?>
 						<tr>
 							<td><?php echo (new DateTime($value['time']))->format(DATEFORMAT); ?></td>
-							<?php if (DEBUGMOD) { ?>
-								<td><?php echo $SUBDEVICE['eventsRaw'][$key]['value']; ?></td>
-							<?php } ?>
-							<td title="test"><?php echo $value['value'] . $SUBDEVICE['unit'];?></td>
+							<td title="test"><?php 
+							echo $value['value'] . $SUBDEVICE['unit'];
+							if (DEBUGMOD) {
+								echo ' (' . $SUBDEVICE['eventsRaw'][$key]['value'] . ')';
+							}
+							?></td>
 							<?php //TODO: P5IDAT TOOLTIP PRO RAW VALUE?>
 						</tr>
 					<?php } ?>

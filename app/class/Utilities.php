@@ -119,7 +119,7 @@ class Utilities
 			case '>=': // Greater than or equal to
 			return $value1 >= $value2;
 			case '==': // Equal
-			return $value1 == $value2;
+			return ($value1 == $value2);
 			case '===': // Identical
 			return $value1 === $value2;
 			case '!==': // Not Identical

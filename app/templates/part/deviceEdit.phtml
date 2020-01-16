@@ -69,15 +69,21 @@
                 </div>
                 <div class="field">
                     <div class="label">IP:</div>
-                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['ip']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
+                    <input class="input" type="text" name="deviceIp" value="<?php echo $DEVICE['ip']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
                 </div>
                 <div class="field">
                     <div class="label">Subnet:</div>
-                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['subnet']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
+                    <input class="input" type="text" name="deviceSubnet" value="<?php echo $DEVICE['subnet']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
                 </div>
                 <div class="field">
                     <div class="label">Gateway:</div>
-                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['gateway']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
+                    <input class="input" type="text" name="deviceGateway" value="<?php echo $DEVICE['gateway']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
+                </div>
+
+                <?php //TODO: ADD DNS TO DB MAKE ALL NETWORK SETTING EDITABLE ?>
+                <div class="field">
+                    <div class="label">DNS:</div>
+                    <input class="input" type="text" name="deviceDns" value="<?php echo $DEVICE['dns']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
                 </div>
                 <?php if ($DEVICE['userIsAdmin']) { ?>
                     <?php if (!in_array($SUBDEVICE['type'], ['on/off', 'door', 'water'])) { ?>

@@ -77,9 +77,9 @@ class AutomationManager{
 						}
 
 					} else if ($onValue['type'] == 'outHome') {
-
+						//TODO: Add Ovner to automation
 					} else if ($onValue['type'] == 'inHome') {
-
+						//TODO: Add Ovner to automation
 					} else if ($onValue['type'] == 'noOneHome') {
 						$users = UserManager::getUsers();
 						$membersHome = 0;
@@ -120,14 +120,19 @@ class AutomationManager{
 						$subscribers = NotificationManager::getSubscription();
 						$i = 0;
 
-						foreach ($subscribers as $key => $subscriber) {
-							$logManager->write("[NOTIFICATION] SENDING NOTIFICATION TO" . $subscriber['id'] . " was executed" . $i);
-							$title = 'Automatization '.$automation['name']." was just executed";
-							$notification = new Notification(SERVERKEY);
-							$notification->to($subscriber['token']);
-							$notification->notification($title, ''  , '', '');
-							$notification->send();
-							$notification = null;
+						$notificationMng = new NotificationManager;
+						$notificationData = [
+							'title' => 'Automatization',
+							'body' => 'Automatization '.$automation['name']." was just executed",
+							'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
+						];
+
+						if ($notificationData != []) {
+							$subscribers = $notificationMng::getSubscription();
+							foreach ($subscribers as $key => $subscriber) {
+								$logManager->write("[NOTIFICATION/AUTOOMATION] SENDING TO" . $subscriber['id'] . " ");
+								$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
+							}
 						}
 
 						$logManager->write("[AUTOMATIONS] automation id ". $automation['automation_id'] . " was executed");
