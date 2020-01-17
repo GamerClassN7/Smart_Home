@@ -16,18 +16,19 @@
 			$partial = new Partial('menu');
 			$partial->prepare('item', 'home');
 			$partial->prepare('langMng',$LANGMNG);
+			$partial->prepare('debugMod',$DEBUGMOD);
 			$partial->render();
 			?>
 		</div>
-		
+
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
-		
+
 		<div class="col-md-9 main-body">
 			<div class="label m-1">
-				<?php 
+				<?php
 				if ($USERSATHOME != "") {
 					$LANGMNG->echo('l_atHome');
-					echo ': ' . $USERSATHOME; 	
+					echo ': ' . $USERSATHOME;
 				}
 				?>
 			</div>
@@ -42,8 +43,8 @@
 				</select>
 			</div>
 			<div class="row no-gutters">
-				<?php foreach ($DATA as $roomId => $room) { ?>					
-					<?php foreach ($room['devices'] as $deviceId => $device) { ?>				
+				<?php foreach ($DATA as $roomId => $room) { ?>
+					<?php foreach ($room['devices'] as $deviceId => $device) { ?>
 						<?php foreach ($device['subDevices'] as $subDeviceKey => $subDevice) {
 							//BUTTON
 							$partialDeviceButton = new Partial('deviceButton');
@@ -52,18 +53,18 @@
 							$partialDeviceButton->prepare('subdevice',$subDevice);
 							$partialDeviceButton->prepare('deviceid',$deviceId);
 							$partialDeviceButton->prepare('device',$device);
-							
+
 							$partialDeviceButton->render();
-							
+
 							//DETAIL
 							$partialDetail = new Partial('deviceDetail');
 							$partialDetail->prepare('subdeviceid',$subDeviceKey);
 							$partialDetail->prepare('subdevice',$subDevice);
 							$partialDetail->prepare('device',$device);
 							$partialDetail->prepare('langMng',$LANGMNG);
-							
+
 							$partialDetail->render();
-							
+
 							//SETTING
 							$partialEdit = new Partial('deviceEdit');
 							$partialEdit->prepare('deviceid',$deviceId);
@@ -72,9 +73,9 @@
 							$partialEdit->prepare('users',$USERS);
 							$partialEdit->prepare('rooms',$ROOMS);
 							$partialEdit->prepare('langMng',$LANGMNG);
-							
+
 							$partialEdit->render();
-						} 
+						}
 					}
 				} ?>
 			</div>

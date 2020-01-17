@@ -32,7 +32,11 @@
             'path' => 'log',
         ],
     ];
-    foreach ( $menuItems as $key => $value) { ?>
+    foreach ( $menuItems as $key => $value) {
+        if ($DEBUGMOD == 0 && $value['path'] == 'log') {
+            continue;
+        }
+        ?>
         <div class="nav-item <?php echo ($ITEM == $value ? 'is-active' : ''); ?>">
             <a href="<?php echo $value['path']?>">
                 <i class="fa <?php echo $key ?>"></i>
@@ -42,5 +46,5 @@
             </a>
         </div>
     <?php }?>
-    
+
 </div>

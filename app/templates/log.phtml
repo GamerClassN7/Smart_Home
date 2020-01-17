@@ -16,6 +16,7 @@
             $partial = new Partial('menu');
             $partial->prepare('item', 'log');
             $partial->prepare('langMng',$LANGMNG);
+            $partial->prepare('debugMod',$DEBUGMOD);
             $partial->render();
             ?>
         </div>
@@ -33,7 +34,7 @@
                         <input type="submit" class="button" name="selectFile" value="<?php $LANGMNG->echo('b_select');?>"/>
                     </div>
                 </form>
-                <?php 
+                <?php
                 if (isset($_POST['LogFile'])) {
                     $file_lines = file('./app/logs/' . $_POST['LogFile']);
                     echo '<pre style="overflow: auto;">';
@@ -45,7 +46,7 @@
                 ?>
             </div>
         </div>
-        
+
         <?php
         $partial = new Partial('footer');
         $partial->render();

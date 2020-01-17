@@ -16,6 +16,7 @@
 			$partial = new Partial('menu');
 			$partial->prepare('item','automation');
 			$partial->prepare('langMng',$LANGMNG);
+			$partial->prepare('debugMod',$DEBUGMOD);
 			$partial->render();
 			?>
 		</div>
@@ -29,10 +30,11 @@
 					$partial->prepare('automationId',$automationId);
 					$partial->prepare('automationData',$automationData);
 					$partial->render();
-					
+
 					//EDIT
 					$partial = new Partial('automationEdit');
 					$partial->prepare('langMng',$LANGMNG);
+					$partial->prepare('userManager',$USERMANAGER);
 					$partial->prepare('automationId',$automationId);
 					$partial->prepare('automation',$automationData);
 					$partial->prepare('subDevices',$SUBDEVICES);
@@ -41,15 +43,17 @@
 			</div>
 		</div>
 	</div>
-	<?php 
+	<?php
 	if (isset($_POST['modalNext'])) {
 		$partial = new Partial('automationCreateFinal');
 		$partial->prepare('langMng',$LANGMNG);
+		$partial->prepare('userManager',$USERMANAGER);
 		$partial->prepare('subDevices',$SUBDEVICES);
 		$partial->render();
 	} else {
 		$partial = new Partial('automationCreate');
 		$partial->prepare('langMng',$LANGMNG);
+
 		$partial->prepare('subDevices',$SUBDEVICES);
 		$partial->render();
 	}?>

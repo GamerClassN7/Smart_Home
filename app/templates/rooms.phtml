@@ -16,12 +16,13 @@
             $partial = new Partial('menu');
             $partial->prepare('item', 'rooms');
             $partial->prepare('lang',$LANG);
+            $partial->prepare('debugMod',$DEBUGMOD);
             $partial->render();
             ?>
         </div>
-        
-        
-        
+
+
+
         <div class="col-md-9 main-body">
             <div class="frame">
                 <?php foreach ($ROOMS as $roomId => $room) {  ?>
@@ -72,26 +73,26 @@
                 flex: 0 0 100%;
                 height: 100%;
             }
-            
+
             .frame {
                 overflow-x: auto;
                 width: 100%;
                 display: flex;
                 height: 100%;
             }
-            
+
             body,html{
                 height: 100%;
             }
-            
+
             .frame .single-frame:nth-child(even) {
                 background: red;
             }
-            
+
             .frame .single-frame:nth-child(odd) {
                 background: green;
             }
-            
+
             </style>
         </div>
     </div>
@@ -104,27 +105,27 @@
     var id;
     var current_element
     var elementWidth = $('.frame').width();
-    
+
     $('.frame').scroll(function(){
         //console.log('SCROLLING!');
         //console.log('scrool'+$('.single-frame').scrollLeft());
         var element_width = $('.single-frame').width();
-        
+
         var offset = $('.single-frame').offset();
         var positive =  Math.abs(offset.left)
         var divided = positive / element_width;
         var round = Math.round(divided);
-        
+
         current_element = $('.frame').children().eq(round);
         id = current_element.attr('id');
-        
+
         if (prev_id != id){
             prev_id = id;
             console.log(prev_id);
         }
         var scrollTo = $('#'+id).offset().left;
         console.log('s-f: '+ scrollTo)
-        
+
     });
     $('.frame').on('touchend', function(){ // listen to mouse up
         console.log('STOPPED SCROLLING!');
@@ -135,17 +136,17 @@
             if(a[index].id == id){
                 $('.frame').animate({
                     scrollLeft: (index * elementWidth)
-                });    
+                });
                 $('.frame').animate({
                     scrollLeft: (index * elementWidth)
-                }); 
+                });
             }
             console.log(a[index]);
         }
-        
+
         if (scrollTo > 160) {
             console.log($('#'+id).left)
-            
+
         }
     });
     </script>

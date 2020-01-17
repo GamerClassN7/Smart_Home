@@ -15,6 +15,8 @@ class Login extends Template
 		$template->prepare('title', 'Home');
 		$template->prepare('lang', $lang);
 
+
+
 		$template->render();
 	}
 }

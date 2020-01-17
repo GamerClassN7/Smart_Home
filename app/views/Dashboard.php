@@ -81,6 +81,7 @@ class Dashboard extends Template
 		}
 
 		$template->prepare('baseDir', BASEDIR);
+			$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('title', 'Nástěnka');
 		$template->prepare('langMng', $langMng);
 		$template->prepare('dashboard', $dashboard);

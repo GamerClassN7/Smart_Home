@@ -177,6 +177,7 @@ class Home extends Template
 
 		$rooms = RoomManager::getAllRooms();
 		$template->prepare('baseDir', BASEDIR);
+		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('title', 'Home');
 		$template->prepare('rooms', $rooms);
 		$template->prepare('langMng', $langMng);
