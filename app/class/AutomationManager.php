@@ -78,8 +78,20 @@ class AutomationManager{
 
 					} else if ($onValue['type'] == 'outHome') {
 						//TODO: Add Ovner to automation
+						$userHomeStatus = UserManager::getUserData('at_home', $onValue['value']);
+						if ($userHomeStatus == 'false' && $automation['executed'] == 0) {
+							$run = true;
+						} else if ($userHomeStatus == 'true' &&  $automation['executed'] == 1) {
+							$restart = true;
+						}
 					} else if ($onValue['type'] == 'inHome') {
 						//TODO: Add Ovner to automation
+						$userHomeStatus = UserManager::getUserData('at_home', $onValue['value']);
+						if ($userHomeStatus == 'true' && $automation['executed'] == 0) {
+							$run = true;
+						} else if ($userHomeStatus == 'false' &&  $automation['executed'] == 1) {
+							$restart = true;
+						}
 					} else if ($onValue['type'] == 'noOneHome') {
 						$users = UserManager::getUsers();
 						$membersHome = 0;

@@ -54,6 +54,8 @@ class Automation extends Template
 		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('title', 'Automation');
 		$template->prepare('langMng', $langMng);
+		$template->prepare('userManager', $userManager);
+
 		$template->prepare('automations', $automations);
 		$template->prepare('subDevices', $approvedSubDevices);
 

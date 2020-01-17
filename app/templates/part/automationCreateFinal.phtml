@@ -21,9 +21,12 @@
                         'value'=> $subDeviceValue,
                     ]);
                     echo  htmlspecialchars($json);
-                }
-                else {
-                    echo $_POST['atSelector'];
+                } else {
+                    if ($_POST['atSelector'] == "inHome" || $_POST['atSelector'] == "outHome") {
+                       echo $USERMANAGER->getUserData('user_id');
+                    } else {
+                        echo $_POST['atSelector'];
+                    }
                 } ?>" required/>
                 <input type="hidden" name="atDays" value="<?php echo htmlspecialchars(($_POST['day'] != '' ? json_encode($_POST['day']) : '')); ?>" required/>
                 <?php foreach ($_POST['devices'] as $value) { ?>
