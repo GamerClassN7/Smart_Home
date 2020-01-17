@@ -102,10 +102,9 @@ class UserManager
 	}
 
 	public static function getUserData ($type, $userId = '') {
-		if (isset($_SESSION['user']['id'])) {
+		if ($userId == '') {
 			$userId = $_SESSION['user']['id'];
-		} else {
-			return "";
+			echo 'no user id';
 		}
 		$user = Db::loadOne ('SELECT ' . $type . ' FROM users WHERE user_id=?', array ($userId));
 		return $user[$type];
