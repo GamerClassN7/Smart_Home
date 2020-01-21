@@ -23,6 +23,7 @@
 		<div class="col-md-9 main-body">
 			<div class="col-12 col-sm-9 mx-auto mt-4">
 				<h4 class="mb-4">
+
 					<?php $LANGMNG->echo('t_pageAfterLogIn') ?>
 				</h4>
 				<form method="post" enctype="multipart/form-data">
@@ -39,6 +40,19 @@
 			</form>
 			<div class="col-12 col-sm-9 mx-auto mt-4">
 				<h4 class="mb-4"><?php $LANGMNG->echo('t_profile') ?></h4>
+				<div class="field">
+					<div class="label"><?php $LANGMNG->echo('l_userAvatar') ?>:</div>
+					<img src="<?php echo $USERAVATARURL; ?>" />
+					<div class="label">* providet by Gavatar</div>
+				</div>
+				<div class="field">
+					<div class="label"><?php $LANGMNG->echo('l_userName') ?>:</div>
+					<input class="input" value="<?php echo $USERNAME; ?>" disabled>
+				</div>
+				<div class="field">
+					<div class="label"><?php $LANGMNG->echo('l_userEmail') ?>:</div>
+					<input class="input" value="<?php echo $USEREMAIL; ?>" disabled>
+				</div>
 				<div class="field">
 					<a href="logout" class="button is-primary"><?php $LANGMNG->echo('b_logOut') ?></a>
 				</div>

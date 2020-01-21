@@ -21,6 +21,11 @@ class UserManager
 		}
 	}
 
+	public function getAvatarUrl(){
+		$email = self::getUserData('email');
+		return 'https://secure.gravatar.com/avatar/' . md5( strtolower( trim( $email ) ) );
+	}
+
 	public function login ($username, $password, $rememberMe) {
 		try {
 			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
@@ -104,7 +109,6 @@ class UserManager
 	public static function getUserData ($type, $userId = '') {
 		if ($userId == '') {
 			$userId = $_SESSION['user']['id'];
-			echo 'no user id';
 		}
 		$user = Db::loadOne ('SELECT ' . $type . ' FROM users WHERE user_id=?', array ($userId));
 		return $user[$type];

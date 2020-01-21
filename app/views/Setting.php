@@ -24,13 +24,17 @@ class Setting extends Template
 
 		$template = new Template('setting');
 		$template->prepare('baseDir', BASEDIR);
-			$template->prepare('debugMod', DEBUGMOD);
+		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('title', 'Automation');
 		$template->prepare('langMng', $langMng);
 		$template->prepare('automations', $automations);
 
 		$users = $userManager->getUsers();
 		$template->prepare('users', $users);
+
+		$template->prepare('userName', $userManager->getUserData('username'));
+		$template->prepare('userEmail', $userManager->getUserData('email'));
+		$template->prepare('userAvatarUrl', $userManager->getAvatarUrl());
 
 		if ($userManager->getUserData('ota') == ''){
 			$ga = new PHPGangsta_GoogleAuthenticator();
