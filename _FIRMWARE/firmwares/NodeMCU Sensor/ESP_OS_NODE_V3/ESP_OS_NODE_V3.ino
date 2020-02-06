@@ -5,9 +5,9 @@
 #include <ArduinoJson.h>
 
 //Variables
-const char* ssid   = "";
-const char* pasw   = "";
-const char* hwId   = "";
+const char* ssid   = "Smart-Home";
+const char* pasw   = "S1pjg3684dcCPTUQ";
+const char* hwId   = "45235sadad";
 const char* url    = "http://dev.steelants.cz/vasek/home/api.php";
 int unsuccessfulRounds = 0;
 
