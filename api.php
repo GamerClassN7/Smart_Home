@@ -79,8 +79,8 @@ try {
 	RecordManager::clean(RECORDTIMOUT);
 } catch (\Exception $e) {
 	$logManager->write("[Record] cleaning record older that " . RECORDTIMOUT , LogRecordType::ERROR);
-
 }
+
 //Variables
 $token = $obj['token'];
 $values = null;
@@ -158,7 +158,7 @@ if ($values != null || $values != "") {
 		if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
 			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
 		}
-		RecordManager::create($deviceId, $key, round($value['value'],2));
+		RecordManager::create($deviceId, $key, round($value['value'],3));
 		$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
 
 		//notification

@@ -15,7 +15,7 @@
             <?php
             $partial = new Partial('menu');
             $partial->prepare('item', 'rooms');
-            $partial->prepare('lang',$LANG);
+            $partial->prepare('langMng',$LANGMNG);
             $partial->prepare('debugMod',$DEBUGMOD);
             $partial->render();
             ?>
@@ -30,7 +30,7 @@
                         <div class="">
                             <h1><?php echo $room['name']; ?></h1>
                             <?php foreach ($room['reading'] as $key => $value) { ?>
-                                <?php echo $LANG[$key] .": ".  $value; ?></br>
+                                <?php echo $LANGMNG->get($key) .": ".  $value; ?></br>
                             <?php } ?>
                             <?php if (DEBUGMOD == 1) { ?>
                                 <pre>

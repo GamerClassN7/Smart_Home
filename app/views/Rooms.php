@@ -6,7 +6,7 @@ class Rooms extends Template
 	function __construct()
 	{
 		global $userManager;
-		global $lang;
+		global $langMng;
 
 		if (!$userManager->isLogin()){
 			header('Location: ' . BASEDIR . 'login');
@@ -15,9 +15,9 @@ class Rooms extends Template
 		$template = new Template('rooms');
 
 		$template->prepare('baseDir', BASEDIR);
-			$template->prepare('debugMod', DEBUGMOD);
+		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('title', 'Rooms');
-		$template->prepare('lang', $lang);
+		$template->prepare('langMng', $langMng);
 
 		$roomsItems = [];
 		$roomsData = RoomManager::getAllRooms();
