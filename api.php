@@ -69,6 +69,8 @@ if (DEBUGMOD != 1) {
 
 //automationExecution
 try {
+	$fallbackManager = new FallbackManager(RANGES);
+	$fallbackManager->check();
 	AutomationManager::executeAll();
 } catch (\Exception $e) {
 	$logManager->write("[Automation] Something happen during automation execution", LogRecordType::ERROR);
