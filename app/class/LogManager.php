@@ -9,6 +9,25 @@ class LogRecordType{
 	const INFO = 'info';
 }
 
+class LogKeeper
+{
+	function purge($days){
+		$todayFileName = date("Y-m-d").'.log';
+		$seconds = $days * 86400;
+
+		$logFiles = scandir('./app/logs/');
+		foreach ($logFiles as $key => $file) {
+			if (in_array($file,array(".","..", ".gitkeep", $todayFileName)))
+			{
+				continue;
+			}
+			if (filemtime($file) > $seconds) {
+				unlink('./app/logs/'.$file);
+			}
+		}
+	}
+}
+
 class LogManager
 {
 

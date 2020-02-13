@@ -39,7 +39,7 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 $logManager->write("[API] Rest API request body \n" . $json, LogRecordType::INFO);
-$logManager->write("[API] Rest API request body -> decodet to json \n" . var_export($obj), LogRecordType::INFO);
+//$logManager->write("[API] Rest API request body -> decodet to json \n" . var_dump($obj), LogRecordType::INFO);
 
 //zabespecit proti Ddosu
 if (isset($obj['user']) && $obj['user'] != ''){
@@ -71,9 +71,11 @@ if (DEBUGMOD != 1) {
 
 //automationExecution
 try {
+	AutomationManager::executeAll();
 	$fallbackManager = new FallbackManager(RANGES);
 	$fallbackManager->check();
-	AutomationManager::executeAll();
+	LogKeeper::purge(LOGTIMOUT);
+	die();
 } catch (\Exception $e) {
 	$logManager->write("[Automation] Something happen during automation execution", LogRecordType::ERROR);
 }
