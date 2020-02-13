@@ -38,8 +38,7 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 //Read API data
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
-$logManager->write("[API] Rest API request body \n" . $json, LogRecordType::INFO);
-//$logManager->write("[API] Rest API request body -> decodet to json \n" . var_dump($obj), LogRecordType::INFO);
+$logManager->write("[API] Rest API request body -> decodet to json \n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
 
 //zabespecit proti Ddosu
 if (isset($obj['user']) && $obj['user'] != ''){
@@ -75,7 +74,6 @@ try {
 	$fallbackManager = new FallbackManager(RANGES);
 	$fallbackManager->check();
 	LogKeeper::purge(LOGTIMOUT);
-	die();
 } catch (\Exception $e) {
 	$logManager->write("[Automation] Something happen during automation execution", LogRecordType::ERROR);
 }

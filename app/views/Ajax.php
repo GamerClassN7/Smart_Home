@@ -145,6 +145,12 @@ class Ajax extends Template
 				echo 'no action detected';
 				break;
 			}
+		} else if	(
+			isset($_POST['action']) &&
+			$_POST['action'] != ''
+		) {
+			//TODO: PRO JS VRACET DATA
+			ECHO 'test';
 		}
 	}
 }
