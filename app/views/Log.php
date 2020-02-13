@@ -26,6 +26,7 @@ class Log extends Template
 		}
 
 		$template->prepare('baseDir', BASEDIR);
+		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('title', 'Logy');
 		$template->prepare('logsFiles', $result);
 		$template->prepare('langMng', $langMng);
