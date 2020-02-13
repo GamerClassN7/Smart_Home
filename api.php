@@ -38,6 +38,8 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 //Read API data
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
+$logManager->write("[INFO] Rest API request body" . $json, LogRecordType::INFO);
+$logManager->write("[INFO] Rest API request body -> decodet to json" . var_export($obj), LogRecordType::INFO);
 
 //zabespecit proti Ddosu
 if (isset($obj['user']) && $obj['user'] != ''){
