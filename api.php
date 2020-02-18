@@ -73,7 +73,11 @@ try {
 	AutomationManager::executeAll();
 	$fallbackManager = new FallbackManager(RANGES);
 	$fallbackManager->check();
+<<<<<<< HEAD
 	//LogKeeper::purge(LOGTIMOUT);
+=======
+	LogKeeper::purge(LOGTIMOUT);
+>>>>>>> 15d95dae1d1766044ec10522238bb848dff548c2
 } catch (\Exception $e) {
 	$logManager->write("[Automation] Something happen during automation execution", LogRecordType::ERROR);
 }
