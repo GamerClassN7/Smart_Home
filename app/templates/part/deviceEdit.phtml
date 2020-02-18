@@ -22,11 +22,11 @@
                     </div>
                     <div class="label"><?php $LANGMNG->echo('l_permission'); ?></div>
                     <div class="row">
-                        
+
                         <div class="col-6">
                             <div class="label"> - <?php $LANGMNG->echo('l_owner'); ?></div>
                         </div>
-                        
+
                         <div class="col-6">
                             <?php
                             $permissions = $DEVICE['permission'];
@@ -40,7 +40,7 @@
                             <input type="radio" name="permissionOwner" value=1 <?php ECHO ($permissions[0] == 1 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_read'); ?>
                             <input type="radio" name="permissionOwner" value=2 <?php ECHO ($permissions[0] == 2 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_use'); ?>
                             <input type="radio" name="permissionOwner" value=3 <?php ECHO ($permissions[0] == 3 ? 'checked' : ''); ?>/><?php $LANGMNG->echo('l_edit'); ?>
-                            
+
                         </div>
                     </div>
                     <div class="row">
@@ -156,10 +156,10 @@
                             <div class="device-button col-4 col-sm-3 col-xl-2 square-wrap">
                                 <div class="square">
                                     <div class="square-content">
-                                        
+
                                         <?php echo $DEVICE['name']; ?>
-                                        
-                                        
+
+
                                     </div>
                                 </div>
                             </div>

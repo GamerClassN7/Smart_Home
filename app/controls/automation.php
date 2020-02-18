@@ -9,15 +9,15 @@ if (isset($_POST) && !empty($_POST)){
 		$onDays = $_POST['atDays'];
 
 		//Debug
-		if (DEBUGMOD == 1) {
-			echo '<pre>';
-			echo $permissionsInJson;
-			echo $deviceId;
-			var_dump(json_decode ($permissionsInJson));
-			echo '</pre>';
-			echo '<a href="' . BASEDIR .'">CONTINUE</a>';
-			die();
-		}
+		// if (DEBUGMOD == 1) {
+		// 	echo '<pre>';
+		// 	echo $permissionsInJson;
+		// 	echo $deviceId;
+		// 	var_dump(json_decode ($permissionsInJson));
+		// 	echo '</pre>';
+		// 	echo '<a href="' . BASEDIR .'">CONTINUE</a>';
+		// 	die();
+		// }
 
 		AutomationManager::create($_POST['name'], $onDays, $doCode, $ifCode);
 

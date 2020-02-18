@@ -7,11 +7,6 @@ class Home extends Template
 	{
 		global $userManager;
 		global $langMng;
-		$roomManager = new RoomManager();
-		$deviceManager = new DeviceManager();
-		$subDeviceManager = new SubDeviceManager();
-		$recordManager = new RecordManager();
-		$utilities = new Utilities();
 
 		if (!$userManager->isLogin()){
 			header('Location: ' . BASEDIR . 'login');
@@ -20,7 +15,7 @@ class Home extends Template
 		$template = new Template('home');
 
 		//users instantialize
-		$users = $userManager->getUsers();
+		$users = UserManager::getUsers();
 		$template->prepare('users', $users);
 
 		//Users at home Info
@@ -39,16 +34,16 @@ class Home extends Template
 
 
 		$roomsItems = [];
-		$roomsData = $roomManager->getAllRooms();
+		$roomsData = RoomManager::getAllRooms();
 		foreach ($roomsData as $roomKey => $roomsData) {
 			$devices = [];
-			$devicesData = $deviceManager->getAllDevicesInRoom($roomsData['room_id']);
+			$devicesData = DeviceManager::getAllDevicesInRoom($roomsData['room_id']);
 			foreach ($devicesData as $deviceKey => $deviceData) {
 				$subDevices = [];
-				$subDevicesData = $subDeviceManager->getAllSubDevices($deviceData['device_id']);
+				$subDevicesData = SubDeviceManager::getAllSubDevices($deviceData['device_id']);
 				foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
 
-					$events = $recordManager->getLastRecord($subDeviceData['subdevice_id'], 5);
+					$events = RecordManager::getLastRecord($subDeviceData['subdevice_id'], 5);
 					$eventsRaw = $events;
 
 					$connectionError = true;
@@ -105,7 +100,7 @@ class Home extends Template
 							//parsing last values
 							$parsedValue = $replacementFalse;
 
-							if ($utilities->checkOperator($lastValue, $operator, $breakValue)) {
+							if (Utilities::checkOperator($lastValue, $operator, $breakValue)) {
 								$parsedValue = $replacementTrue;
 							}
 
@@ -113,14 +108,14 @@ class Home extends Template
 							//parsing last events values
 							foreach ($events as $key => $value) {
 								$events[$key]['value'] = $replacementFalse;
-								if ($utilities->checkOperator($value['value'], $operator, $breakValue)) {
+								if (Utilities::checkOperator($value['value'], $operator, $breakValue)) {
 									$events[$key]['value'] = $replacementTrue;
 								}
 							}
 						}
 
 						$LastRecordTime = new DateTime($lastRecord['time']);
-						$niceTime = $utilities->ago($LastRecordTime);
+						$niceTime = Utilities::ago($LastRecordTime);
 
 						$interval = $LastRecordTime->diff(new DateTime());
 						$hours   = $interval->format('%h');
@@ -180,7 +175,7 @@ class Home extends Template
 			];
 		}
 
-		$rooms = $roomManager->getAllRooms();
+		$rooms = RoomManager::getAllRooms();
 		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('title', 'Home');

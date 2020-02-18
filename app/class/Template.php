@@ -27,7 +27,7 @@ class Template extends Partial{
 	function render() {
 		extract($this->assignedValues);
 		if (!empty('app/controls/' . $this->path . '.php') && file_exists('app/controls/' . $this->path . '.php')) {
-			require_once('app/controls/' . $this->path . '.php');
+			include('app/controls/' . $this->path . '.php');
 		}
 		require_once('app/templates/' . $this->path . '.phtml');
 	}

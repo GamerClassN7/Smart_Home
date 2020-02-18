@@ -64,16 +64,16 @@ if ('serviceWorker' in navigator) {
 $('select[name="atSelector"]').change(function(e) {
     console.log($(this).val());
     if( $(this).val() == 'time') {
-        
+
         $('input[name="atTime"]').prop( "disabled", false );
-        
+
         $('select[name="atDeviceValueInt"]').prop( "disabled", true );
         $('input[name="atDeviceValue"]').prop( "disabled", true );
     } else if( $(this).val() == 'atDeviceValue') {
-        
+
         $('select[name="atDeviceValue"]').prop( "disabled", false );
         $('input[name="atDeviceValueInt"]').prop( "disabled", false );
-        
+
         $('input[name="atTime"]').prop( "disabled", true );
     }
 });
@@ -88,7 +88,7 @@ $("div.square-content").on('touchend', function (e){
 $("div.square-content").on('touchstart', function (eTarget) {
     navigator.vibrate([500]);
     var id = '';
-    
+
     var windowLoc = $(location).attr('pathname');
     windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
     console.log(windowLoc);
@@ -99,9 +99,9 @@ $("div.square-content").on('touchstart', function (eTarget) {
     } else if (windowLoc == "/automation") {
         id = $(this).attr('id').replace('automation-', '');
     }
-    
+
     var subId = $(this).attr('data-sub-device-id');
-    
+
     touch++;
     if(touch == 2 && touchSubId == subId){
         console.log("Detail");
@@ -109,7 +109,7 @@ $("div.square-content").on('touchstart', function (eTarget) {
             $("#modal-detail-"+subId).removeClass('modal-container-hiden').show();
             ajaxChart(subId);
         } else if (windowLoc == "/scene") {
-            
+
         } else if (windowLoc == "/automation") {
         }
         touch = 0;
@@ -117,7 +117,7 @@ $("div.square-content").on('touchstart', function (eTarget) {
         return;
     }
     touchSubId = subId;
-    
+
     pressTimer = window.setTimeout(function (e) {
         console.log("Setting");
         $("#modal-setting-"+id).removeClass('modal-container-hiden').show();
@@ -202,14 +202,14 @@ var windowLoc = $(location).attr('pathname');
 windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
 console.log();
 if (windowLoc == "/") {
-    
+
     var selectRoomId = localStorage.getItem("selectedRoomId");
-    
+
     if (selectRoomId == null) {
         selectRoomId = 'all';
     }
-    
-    
+
+
     console.log('Saved Selected Room ID '+ selectRoomId);
     $('[name="room"]').val(selectRoomId);
     $('.device-button').each(function(){
@@ -221,8 +221,8 @@ if (windowLoc == "/") {
             }
         }
     });
-    
-    
+
+
 }
 
 //Room selector
@@ -239,43 +239,47 @@ $( '[name="room"]' ).change(function (e) {
         });
     }
 });
+
+
 /*
 var windowLoc = $(location).attr('pathname');
 windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
 console.log();
 if (windowLoc == "/") {
-var autoUpdate = setInterval(function(){
-if (pending == false) {
-pending = true;
-$.ajax({
-url: 'ajax',
-type: 'POST',
-dataType: 'json',
-data: {
-"action": 'getState'
-},
-success: function(data){
-console.log(data);
-for (const key in data) {
-if (data.hasOwnProperty(key)) {
-const device = data[key];
-$('[data-sub-device-id="'+key+'"]')
-.find('.device-button-value')
-.text(device['value'])
-.attr('title',device['time'])
-}
-}
-},
-error: function (request, status, error) {
-console.log("ERROR ajaxChart():", request, error);
-},
-complete: function (){
-pending = false;
-}
-});
-}
-},4000);
+    var autoUpdate = setInterval(function(){
+        if (pending == false) {
+            pending = true;
+            $.ajax({
+                url: 'ajax',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    "action": 'getState'
+                },
+                success: function(data){
+                    console.log(data);
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            const device = data[key];
+                            $('[data-sub-device-id="'+key+'"]')
+                            .find('.device-button-value')
+                            .text(device['value'])
+                            .attr('title',device['time'])
+                        }
+                    }
+                },
+                error: function (request, status, error) {
+                    console.log("ERROR ajaxChart():", request, error);
+                },
+                complete: function (){
+                    pending = false;
+                }
+            });
+        }
+    },4000);
 }*/
+
+
 
 
 //Graphs
@@ -283,7 +287,7 @@ $('.graph-period').on('click', function (e) {
     var subId = $(this).attr('data-sub-device-id');
     var period = $(this).attr('data-period');
     var groupBy = $(this).attr('data-group');
-    
+
     ajaxChart(subId, period, groupBy);
 });
 

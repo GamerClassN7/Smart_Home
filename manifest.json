@@ -3,18 +3,18 @@
   "short_name": "Home",
   "description": "Smart Home interface in PWA",
   "lang": "cs-CZ",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/vasek/home/",
+  "scope": "/vasek/home/",
   "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#182239",
   "icons": [
     {
-      "src": "/app/templates/images/icon-192x192.png",
+      "src": "/vasek/home/app/templates/images/icon-192x192.png",
       "sizes": "192x192"
     },
     {
-      "src": "/app/templates/images/icon-512x512.png",
+      "src": "/vasek/home/app/templates/images/icon-512x512.png",
       "sizes": "512x512"
     }
   ],

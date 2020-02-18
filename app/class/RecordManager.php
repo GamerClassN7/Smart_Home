@@ -67,7 +67,7 @@ class RecordManager{
 
 	public static function clean ($day) {
 		if (isset($day)) {
-			Db::command ('DELETE FROM records WHERE time < ADDDATE(NOW(), INTERVAL -? DAY);', array($day));
+			Db::command ('DELETE FROM records WHERE `time` < ADDDATE(NOW(), INTERVAL -? DAY);', array($day));
 		}
 	}
 

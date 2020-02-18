@@ -7,7 +7,7 @@
 //Variables
 const char* ssid = "Smart-Home";
 const char* pasw = "S1pjg3684dcCPTUQ";
-const char* hwId = "452r5s8dad";
+const char* hwId = "55f4g8d6ggh";
 const char* server = "http://dev.steelants.cz/vasek/home/api.php";
 int unsuccessfulRounds = 0; //Unsucesful atmpt counter
 StaticJsonDocument<250> jsonContent;
@@ -18,9 +18,8 @@ int state = 0;
 String requestJson = "";
 
 //Pins
-#define SONOFF 12 //12
-#define SONOFF_LED 13
-#define SONOFF_BUT 0 //0
+#define RELAY 4 //12
+#define SWITCH 5 //0
 
 void ICACHE_RAM_ATTR handleInterrupt ();
 
@@ -32,14 +31,13 @@ void setup() {
     Serial.println('\n');
     Serial.println("HW: " + String(hwId));
 
-    pinMode(SONOFF_LED, OUTPUT);
-    pinMode(SONOFF_BUT, INPUT_PULLUP);
-    pinMode(SONOFF, OUTPUT);
+    pinMode(SWITCH, INPUT);
+    pinMode(RELAY, OUTPUT);
     state = EEPROM.read(0);
-    digitalWrite(SONOFF, state);
+    digitalWrite(RELAY, state);
     realState = state;
 
-    attachInterrupt(digitalPinToInterrupt(SONOFF_BUT), handleInterrupt, FALLING);
+    attachInterrupt(digitalPinToInterrupt(SWITCH), handleInterrupt, CHANGE);
 
 
     WiFi.persistent(false);
@@ -72,16 +70,12 @@ void loop() {
     jsonContent = {};
     jsonContent["token"] = hwId;
     requestJson = "";
-    if (buttonActive == true){
-      jsonContent["values"]["on/off"]["value"] = (String)!realState;
-      if (!realState == 1) {
-        digitalWrite(SONOFF, HIGH);
-        realState = 1;
-      } else if (!realState == 0){
-        digitalWrite(SONOFF, LOW);
-        realState = 0;
-      }
-      EEPROM.write(0, 0);
+    if (buttonActive){
+      int realStateLocal = digitalRead(SWITCH);
+      jsonContent["values"]["on/off"]["value"] = (String)realStateLocal;
+      digitalWrite(RELAY, realStateLocal);
+      realState = realStateLocal;
+      EEPROM.write(0, realState);
       EEPROM.commit();
       serializeJson(jsonContent, requestJson);
       Serial.println("JSON: " + requestJson);
@@ -91,8 +85,7 @@ void loop() {
       buttonActive = false;
     }
     jsonContent = {};
-    jsonContent["token"] = hwId;
-    
+    jsonContent["token"] = hwId;   
     requestJson = "";
     serializeJson(jsonContent, requestJson);
     Serial.println("JSON: " + requestJson);
@@ -131,11 +124,11 @@ void loop() {
     if (state != realState){
         if (state == 1 && realState == 0) {
             Serial.println("ON state: " + (String)state + ", realState: " + (String)realState);
-            digitalWrite(SONOFF, HIGH);   // Turn the LED on by making the voltage LOW
+            digitalWrite(RELAY, HIGH);   // Turn the LED on by making the voltage LOW
             realState = 1;
-        } else if (state == 0 && realState == 1) {
+        } else {
             Serial.println("OFF");
-            digitalWrite(SONOFF, LOW);   // Turn the LED on by making the voltage LOW
+            digitalWrite(RELAY, LOW);   // Turn the LED on by making the voltage LOW
             realState = 0;
         }
         EEPROM.write(0, realState);
@@ -173,26 +166,22 @@ bool checkConnection() {
     int count = 0;
     Serial.print("Waiting for Wi-Fi connection");
     while ( count < 30 ) {
-      if (buttonActive == true){
+      if (buttonActive){
         if (!realState == 1) {
-          digitalWrite(SONOFF, HIGH);
+          digitalWrite(RELAY, HIGH);
           realState = 1;
         } else if (!realState == 0){
-          digitalWrite(SONOFF, LOW);
+          digitalWrite(RELAY, LOW);
           realState = 0;
         }
         EEPROM.write(0, realState);
         EEPROM.commit();
         buttonActive = false;
       }
-      digitalWrite(SONOFF_LED, HIGH);
-      delay(125);
-      digitalWrite(SONOFF_LED, LOW);
-      delay(125);
+      delay(250);
       if (WiFi.status() == WL_CONNECTED) {
           Serial.println();
           Serial.println("Connected!");
-          digitalWrite(SONOFF_LED, HIGH);
           return (true);
       }
       Serial.print(".");

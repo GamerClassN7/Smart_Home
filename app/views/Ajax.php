@@ -145,6 +145,77 @@ class Ajax extends Template
 				echo 'no action detected';
 				break;
 			}
+		} else if	(
+			isset($_POST['action']) &&
+			$_POST['action'] != ''
+		) {
+			$updateData = [];
+			$allDevicesData = DeviceManager::getAllDevices();
+			foreach ($allDevicesData as $deviceKey => $deviceValue) {
+				$allSubDevices = SubDeviceManager::getAllSubDevices($deviceValue['device_id']);
+				foreach ($allSubDevices as $key => $subDevicesData) {
+
+					$lastRecord = RecordManager::getLastRecord($subDevicesData['subdevice_id']);
+					$parsedValue = $lastRecord['value'] . $subDevicesData['unit'];
+
+					//TODO: udělat parser a ten použít jak v houmu tak zde
+					switch ($subDevicesData['type']) {
+						case 'on/off':
+						$replacementTrue = 'On';
+						$replacementFalse = 'Off';
+						$operator = '==';
+						$breakValue = 1;
+						break;
+
+						case 'door':
+						$replacementTrue = 'Closed';
+						$replacementFalse = 'Open';
+						$operator = '==';
+						$breakValue = 1;
+						break;
+
+						case 'light':
+							$replacementTrue = 'Light';
+							$replacementFalse = 'Dark';
+							$operator = '==';
+							$breakValue = 1;
+							if ($lastRecord['value'] != 1 && $lastRecord['value'] != 0) { //Digital Light Senzor
+								$operator = '<';
+								$breakValue = 810;
+							}
+						break;
+
+						case 'water':
+						$replacementTrue = 'Wet';
+						$replacementFalse = 'Dry';
+						$operator = '==';
+						$breakValue = 1;
+						break;
+
+						default:
+						$replacementTrue = '';
+						$replacementFalse = '';
+						break;
+					}
+
+					if ($replacementTrue != '' && $replacementFalse != '') {
+						//parsing last values
+						$parsedValue = $replacementFalse;
+
+						if (Utilities::checkOperator($lastRecord['value'], $operator, $breakValue)) {
+							$parsedValue = $replacementTrue;
+						}
+					}
+
+					$updateData[$subDevicesData['subdevice_id']] = [
+						'time' => $lastRecord['time'],
+						'value' => $parsedValue,
+					];
+				}
+			}
+
+			//TODO: PRO JS VRACET DATA
+			echo json_encode($updateData, JSON_PRETTY_PRINT);
 		}
 	}
 }
