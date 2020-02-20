@@ -13,7 +13,7 @@ int unsuccessfulRounds = 0; //Unsucesful atmpt counter
 StaticJsonDocument<250> jsonContent;
 bool buttonActive = false;
 int interuptCount = 0;
-int realState = 1;
+int realState = 0;
 int state = 0;
 String requestJson = "";
 
@@ -167,13 +167,9 @@ bool checkConnection() {
     Serial.print("Waiting for Wi-Fi connection");
     while ( count < 30 ) {
       if (buttonActive){
-        if (!realState == 1) {
-          digitalWrite(RELAY, HIGH);
-          realState = 1;
-        } else if (!realState == 0){
-          digitalWrite(RELAY, LOW);
-          realState = 0;
-        }
+        int realStateLocal = digitalRead(SWITCH);
+        digitalWrite(RELAY, realStateLocal);
+        realState = realStateLocal;
         EEPROM.write(0, realState);
         EEPROM.commit();
         buttonActive = false;
