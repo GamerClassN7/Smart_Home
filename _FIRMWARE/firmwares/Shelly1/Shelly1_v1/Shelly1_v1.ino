@@ -5,9 +5,9 @@
 #include <EEPROM.h>
 
 //Variables
-const char* ssid = "Smart-Home";
-const char* pasw = "S1pjg3684dcCPTUQ";
-const char* hwId = "55f4g8d6ggh";
+const char* ssid = "ssid";
+const char* pasw = "pasw";
+const char* hwId = "hwId";
 const char* server = "http://dev.steelants.cz/vasek/home/api.php";
 int unsuccessfulRounds = 0; //Unsucesful atmpt counter
 StaticJsonDocument<250> jsonContent;
