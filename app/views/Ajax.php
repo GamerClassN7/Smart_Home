@@ -149,7 +149,6 @@ class Ajax extends Template
 			isset($_POST['action']) &&
 			$_POST['action'] != ''
 		) {
-<<<<<<< HEAD
 			$updateData = [];
 			$allDevicesData = DeviceManager::getAllDevices();
 			foreach ($allDevicesData as $deviceKey => $deviceValue) {
@@ -217,10 +216,6 @@ class Ajax extends Template
 
 			//TODO: PRO JS VRACET DATA
 			echo json_encode($updateData, JSON_PRETTY_PRINT);
-=======
-			//TODO: PRO JS VRACET DATA
-			ECHO 'test';
->>>>>>> 15d95dae1d1766044ec10522238bb848dff548c2
 		}
 	}
 }

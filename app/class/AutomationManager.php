@@ -55,7 +55,7 @@ class AutomationManager{
 			$run = false;
 			$restart = false;
 
-			if ($automation['active'] == 1 && $automation['locked'] != 1){
+		if ($automation['active'] == 1 && $automation['locked'] != 1){
 				Db::edit('automation', array('locked' => 1), 'WHERE automation_id = ?', array($automation['automation_id']));
 				if (in_array($dayNameNow, $actionDays)){
 					if (in_array($onValue['type'], ['sunSet', 'sunRise', 'time','now'])) {
@@ -117,6 +117,18 @@ class AutomationManager{
 							$restart = true;
 						} else if ($membersHome > 0 && $automation['executed'] == 0){
 							$run = true;
+						}
+					} else if ($onValue['type'] == 'atDeviceValue') {
+
+						$subDeviceId = SubDeviceManager::getSubDeviceByMaster($onValue['value']['deviceID'], $onValue['value']['type'])["subdevice_id"];
+						$lastValue = RecordManager::getLastRecord($subDeviceId);
+
+						if ($lastValue['value'] == $onValue['value']['value'] && $automation['executed'] == 0) {
+							$run = true;
+
+						} else if ($lastValue['value'] != $onValue['value']['value'] && $automation['executed'] == 1){
+							$restart = true;
+
 						}
 					}
 

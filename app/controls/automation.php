@@ -2,9 +2,20 @@
 if (isset($_POST) && !empty($_POST)){
 	if (isset($_POST['modalFinal']) && $_POST['action'] == "add") {
 		$doCode = json_encode($_POST['device'], JSON_PRETTY_PRINT);
+
+		$value = $_POST['atSelector'];
+		if ($_POST['atSelector'] == 'time'){
+			  $value = $_POST['atSelectorValue'];
+		} else if ($_POST['atSelector'] == 'atDeviceValue') {
+			$value = json_decode($_POST['atSelectorValue']);
+		} else if ($_POST['atSelector'] == 'inHome' || $_POST['atSelector'] == 'outHome') {
+			$value = UserManager::getUserData('user_id');
+		}
+
+
 		$ifCode = json_encode([
 			"type" => $_POST['atSelector'],
-			"value" => $_POST['atSelectorValue'],
+			"value" => $value,
 		], JSON_PRETTY_PRINT);
 		$onDays = $_POST['atDays'];
 
@@ -32,18 +43,28 @@ if (isset($_POST) && !empty($_POST)){
 			$subDevice = SubDeviceManager::getSubDevice($subDeviceId);
 			$subDeviceMaster = SubDeviceManager::getSubDeviceMaster($subDeviceId,$subDevice['type']);
 
-			$json = json_encode([
+			$device = [
 				'deviceID' => $subDeviceMaster['device_id'],
 				'type'=> $subDevice['type'],
 				'value'=> $subDeviceValue,
-			]);
+			];
 		}
 
 
-		$_POST['atSelectorValue'] = (isset($_POST['atTime']) ? $_POST['atTime'] : (isset($_POST['atDeviceValue']) ? $json : $_POST['atSelector']));
+		$value = $_POST['atSelector'];
+		if (isset($_POST['atTime'])){
+				$value = $_POST['atTime'];
+		} else if (isset($_POST['atDeviceValue'])) {
+			$value = $device;
+		}  else if ($_POST['atSelector'] == 'inHome' || $_POST['atSelector'] == 'outHome') {
+			//TODO: opravit edit aby vkládal id původního uživatele
+			$value = UserManager::getUserData('user_id');
+		}
+
+		$value = (isset($_POST['atTime']) ? $_POST['atTime'] : (isset($_POST['atDeviceValue']) ? $device : $_POST['atSelector']));
 		$ifCode = json_encode([
 			"type" => $_POST['atSelector'],
-			"value" => $_POST['atSelectorValue'],
+			"value" => $value,
 		], JSON_PRETTY_PRINT);
 		$onDays = ($_POST['day'] != '' ? json_encode($_POST['day']) : '');
 

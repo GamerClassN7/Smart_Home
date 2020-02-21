@@ -241,10 +241,7 @@ $( '[name="room"]' ).change(function (e) {
 });
 
 
-<<<<<<< HEAD
 /*
-=======
->>>>>>> 15d95dae1d1766044ec10522238bb848dff548c2
 var windowLoc = $(location).attr('pathname');
 windowLoc = windowLoc.substring(windowLoc.lastIndexOf("/"));
 console.log();
@@ -280,13 +277,7 @@ if (windowLoc == "/") {
             });
         }
     },4000);
-<<<<<<< HEAD
 }*/
-=======
-}
-
-
->>>>>>> 15d95dae1d1766044ec10522238bb848dff548c2
 
 
 
