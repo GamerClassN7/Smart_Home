@@ -27,12 +27,19 @@ class Automation extends Template
 					'state' => $subDeviceState,
 				];
 			}
+			//TODO: Transaltion add
+			$executionTime = 'never';
+			if ($automationData['execution_time'] != '0000-00-00 00:00:00') {
+				$executionTime = date(DATEFORMAT,strtotime($automationData['execution_time']));
+			}
 			$automations[$automationData['automation_id']] = [
 				'name' => $automationData['name'],
+				'owner_name' => $userManager->getUserId($automationData['owner_id'])['username'],
 				'onDays' => json_decode($automationData['on_days']),
 				'ifSomething' => $automationData['if_something'],
 				'doSomething' => $doSomething,
 				'active' => $automationData['active'],
+				'execution_time' => $executionTime,
 			];
 		}
 
@@ -52,7 +59,7 @@ class Automation extends Template
 
 		$template = new Template('automation');
 		$template->prepare('baseDir', BASEDIR);
-			$template->prepare('debugMod', DEBUGMOD);
+		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('title', 'Automation');
 		$template->prepare('langMng', $langMng);
 		$template->prepare('userManager', $userManager);

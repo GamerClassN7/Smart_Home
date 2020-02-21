@@ -21,6 +21,16 @@ class UserManager
 		}
 	}
 
+	public function getUserId ($userId) {
+		try {
+			$user = Db::loadOne ("SELECT * FROM users WHERE user_id = ?", [$userId]);
+			return $user;
+		} catch(PDOException $error) {
+			echo $error->getMessage();
+			die();
+		}
+	}
+
 	public function getAvatarUrl(){
 		$email = self::getUserData('email');
 		return 'https://secure.gravatar.com/avatar/' . md5( strtolower( trim( $email ) ) );

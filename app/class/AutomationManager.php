@@ -18,8 +18,10 @@ class AutomationManager{
 	}
 
 	public function create ($name, $onDays, $doCode, $ifCode, $automationId = "") {
+		$userId = UserManager::getUserData('user_id');
 		$scene = array (
 			'name' => $name,
+			'owner_id' => $userId,
 			'on_days' => $onDays,
 			'if_something' => $ifCode,
 			'do_something' => $doCode,
@@ -55,7 +57,7 @@ class AutomationManager{
 			$run = false;
 			$restart = false;
 
-		if ($automation['active'] == 1 && $automation['locked'] != 1){
+			if ($automation['active'] == 1 && $automation['locked'] != 1){
 				Db::edit('automation', array('locked' => 1), 'WHERE automation_id = ?', array($automation['automation_id']));
 				if (in_array($dayNameNow, $actionDays)){
 					if (in_array($onValue['type'], ['sunSet', 'sunRise', 'time','now'])) {
@@ -160,7 +162,7 @@ class AutomationManager{
 						}
 
 						$logManager->write("[AUTOMATIONS] automation id ". $automation['automation_id'] . " was executed");
-						Db::edit('automation', array('executed' => 1), 'WHERE automation_id = ?', array($automation['automation_id']));
+						Db::edit('automation', array('executed' => 1, 'execution_time' => date("Y-m-d H:i:s")), 'WHERE automation_id = ?', array($automation['automation_id']));
 					} else if ($restart) {
 						$logManager->write("[AUTOMATIONS] automation id ". $automation['automation_id'] . " was restarted");
 						Db::edit('automation', array('executed' => 0), 'WHERE automation_id = ?', array($automation['automation_id']));
