@@ -73,14 +73,14 @@ class Home extends Template
 							break;
 
 							case 'light':
-								$replacementTrue = 'Light';
-								$replacementFalse = 'Dark';
-								$operator = '==';
-								$breakValue = 1;
-								if ($lastValue != 1 && $lastValue != 0) { //Digital Light Senzor
-									$operator = '<';
-									$breakValue = 810;
-								}
+							$replacementTrue = 'Light';
+							$replacementFalse = 'Dark';
+							$operator = '==';
+							$breakValue = 1;
+							if ($lastValue != 1 && $lastValue != 0) { //Digital Light Senzor
+								$operator = '<';
+								$breakValue = 810;
+							}
 							break;
 
 							case 'water':
@@ -122,7 +122,11 @@ class Home extends Template
 						$minutes = $interval->format('%i');
 						$lastSeen = ($hours * 60 + $minutes);
 
-						if ($lastSeen < $deviceData['sleep_time'] || $subDeviceData['type'] == "on/off") {
+						if (
+							$lastSeen < $deviceData['sleep_time'] ||
+							$subDeviceData['type'] == "on/off" ||
+							$subDeviceData['type'] == "door"
+						) {
 							$connectionError = false;
 						}
 					}
