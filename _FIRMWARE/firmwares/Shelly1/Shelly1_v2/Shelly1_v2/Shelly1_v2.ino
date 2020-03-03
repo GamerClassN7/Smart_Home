@@ -78,7 +78,6 @@ void loop() {
       ESP.restart();
     }
     if (buttonActive) {
-      delay (500);
       jsonContent = {};
       jsonContent["token"] = apiToken;
       requestJson = "";
@@ -88,8 +87,9 @@ void loop() {
       EEPROM.commit();
       sendDataToWeb();
       buttonActive = false;
+    } else {
+      loadDataFromWeb();
     }
-    loadDataFromWeb();
   } else {
     server.handleClient();
   }
@@ -117,6 +117,7 @@ bool wifiVerify(int t) {
 }
 
 void loadDataFromWeb() {
+  delay(500);
   jsonContent = {};
   jsonContent["token"] = apiToken;
   requestJson = "";
@@ -148,16 +149,12 @@ void loadDataFromWeb() {
   WiFi.hostname(hostName);
   Serial.println("state: " + (String)state + ", realState: " + (String)realState);
   if (state != realState && !buttonActive) {
-    if (state == 1 && realState == 0) {
-      Serial.println("ON state: " + (String)state + ", realState: " + (String)realState);
-      realState = 1;
-    } else {
-      Serial.println("OFF");
-      realState = 0;
-    }
+    realState = state;
     digitalWrite(RELAY, realState);
     EEPROM.write(0, realState);
     EEPROM.commit();
+  } else {
+    state = realState;
   }
 }
 
