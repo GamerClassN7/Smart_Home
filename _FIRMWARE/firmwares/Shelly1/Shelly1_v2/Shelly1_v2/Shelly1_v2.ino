@@ -78,6 +78,7 @@ void loop() {
       ESP.restart();
     }
     if (buttonActive) {
+      realState = !state;
       jsonContent = {};
       jsonContent["token"] = apiToken;
       requestJson = "";
