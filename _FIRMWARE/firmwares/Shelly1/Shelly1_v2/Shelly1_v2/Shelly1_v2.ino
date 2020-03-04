@@ -18,7 +18,8 @@ const int httpsPort = 443;
 const char* host = "http://dev.steelants.cz";
 const char* url = "/vasek/home/api.php";
 
-const char* fingerprint = "a9 9b 91 f5 6b 8f da 18 d8 3b b3 99 91 5d f1 7e 96 00 e4 04";
+const char* fingerprint = "";
+const char* host2 = "dev.steelants.cz";
 const char* url2 = "/vasek/home/update.php";
 
 String content;
@@ -50,7 +51,6 @@ void setup() {
   pinMode(RELAY, OUTPUT);
   state = EEPROM.read(0);
   digitalWrite(RELAY, state);
-  detachInterrupt(digitalPinToInterrupt(SWITCH));
   attachInterrupt(digitalPinToInterrupt(SWITCH), handleInterrupt, CHANGE);
   //wifi
   if (ssid != "") {
@@ -59,15 +59,17 @@ void setup() {
     WiFi.begin(ssid, pasw);
     conf = wifiVerify(20);
     if (conf) {
+      configTime(3 * 3600, 0, "pool.ntp.org");
       WiFiClientSecure client;
       Serial.print("connecting to ");
-      Serial.println(host);
-      if (!client.connect(host, httpsPort)) {
+      Serial.println(host2);
+      client.setInsecure();
+      if (!client.connect(host2, httpsPort)) {
         Serial.println("connection failed");
         return;
       }
     
-      if (client.verify(fingerprint, host)) {
+      if (client.verify(fingerprint, host2)) {
         Serial.println("certificate matches");
       } else {
         Serial.println("certificate doesn't match");
@@ -79,12 +81,35 @@ void setup() {
       
       );
   
-      auto ret = ESPhttpUpdate.update(client, host, url2);
-      
+      auto ret = ESPhttpUpdate.update(client, host2, url2);
+      delay(500);
+    switch(ret) {
+        case HTTP_UPDATE_FAILED:
+            Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
+            Serial.println();
+            Serial.println();
+            Serial.println();
+            break;
+
+        case HTTP_UPDATE_NO_UPDATES:
+            Serial.println("HTTP_UPDATE_NO_UPDATES");
+            Serial.println();
+            Serial.println();
+            break;
+
+        case HTTP_UPDATE_OK:
+            Serial.println("HTTP_UPDATE_OK");
+            Serial.println();
+            Serial.println();
+            Serial.println();
+            break;
+    }
+    delay(500);
+      Serial.println("Update proběhl!");
       Serial.println(WiFi.localIP());
       jsonContent = {};
       jsonContent["token"] = apiToken;
-      jsonContent["values"]["on/off"]["value"] = (int)state;
+      jsonContent["values"]["on/off"]["value"] = (String)state;
       sendDataToWeb();
       return;
     }
@@ -102,12 +127,13 @@ void loop() {
       jsonContent = {};
       jsonContent["token"] = apiToken;
       requestJson = "";
-      jsonContent["values"]["on/off"]["value"] = (int)state;
+      jsonContent["values"]["on/off"]["value"] = (String)state;
       digitalWrite(RELAY, state);
       EEPROM.write(0, state);
       EEPROM.commit();
       sendDataToWeb();
       buttonActive = false;
+      delay(500);
     } else {
       loadDataFromWeb();
     }
@@ -138,7 +164,6 @@ bool wifiVerify(int t) {
 }
 
 void loadDataFromWeb() {
-  delay(500);
   jsonContent = {};
   jsonContent["token"] = apiToken;
   requestJson = "";
@@ -155,9 +180,13 @@ void loadDataFromWeb() {
   //configuration setup
   String hostName = jsonContent["device"]["hostname"];
   String requestState = jsonContent["state"];
-  JsonObject object = jsonContent.as<JsonObject>();
-  if (!object["value"].isNull()) {
+  if (!buttonActive) {
     state = (int)jsonContent["value"];
+    Serial.println("state: " + (String)state);
+    digitalWrite(RELAY, state);
+    EEPROM.write(0, state);
+    EEPROM.commit();
+    delay(500);
   }
 
   if (requestState != "succes") {
@@ -168,19 +197,6 @@ void loadDataFromWeb() {
   }
 
   WiFi.hostname(hostName);
-  Serial.println("state: " + (String)state;
-  if (!buttonActive) {
-    if (state == 1) {
-      Serial.println("ON");
-    } else if (state == 0) {
-      Serial.println("OFF");
-    }
-    digitalWrite(RELAY, state);
-    EEPROM.write(0, state);
-    EEPROM.commit();
-  } else {
-    state = realState;
-  }
 }
 
 void sendDataToWeb() {
