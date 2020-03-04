@@ -70,6 +70,10 @@ void loop() {
       ESP.restart();
     }
     if (buttonActive) {
+<<<<<<< HEAD
+=======
+      realState = !state;
+>>>>>>> 9d9bdc192f48b909e5406167be3e532d9b5d07e5
       jsonContent = {};
       jsonContent["token"] = apiToken;
       requestJson = "";
@@ -79,8 +83,9 @@ void loop() {
       EEPROM.commit();
       sendDataToWeb();
       buttonActive = false;
+    } else {
+      loadDataFromWeb();
     }
-    loadDataFromWeb();
   } else {
     server.handleClient();
   }
@@ -108,6 +113,7 @@ bool wifiVerify(int t) {
 }
 
 void loadDataFromWeb() {
+  delay(500);
   jsonContent = {};
   jsonContent["token"] = apiToken;
   requestJson = "";
@@ -137,6 +143,7 @@ void loadDataFromWeb() {
   }
 
   WiFi.hostname(hostName);
+<<<<<<< HEAD
   Serial.println("state: " + (String)state;
   if (!buttonActive) {
     if (state == 1) {
@@ -146,7 +153,16 @@ void loadDataFromWeb() {
     }
     digitalWrite(RELAY, state);
     EEPROM.write(0, state);
+=======
+  Serial.println("state: " + (String)state + ", realState: " + (String)realState);
+  if (state != realState && !buttonActive) {
+    realState = state;
+    digitalWrite(RELAY, realState);
+    EEPROM.write(0, realState);
+>>>>>>> 9d9bdc192f48b909e5406167be3e532d9b5d07e5
     EEPROM.commit();
+  } else {
+    state = realState;
   }
 }
 
