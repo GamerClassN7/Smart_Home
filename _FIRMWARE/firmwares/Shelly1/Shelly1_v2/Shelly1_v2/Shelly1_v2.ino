@@ -1,9 +1,12 @@
 //Includes
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <WiFiClientSecure.h>
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
 #include <EEPROM.h>
+#include <FS.h>
+#include "ESP8266httpUpdate.h"
 
 //Variables
 const char* ssidServer = "";
@@ -11,8 +14,12 @@ const char* paswServer = "";
 String ssid = "";
 String pasw = "";
 String apiToken = "";
+const int httpsPort = 443;
 const char* host = "http://dev.steelants.cz";
 const char* url = "/vasek/home/api.php";
+
+const char* fingerprint = "a9 9b 91 f5 6b 8f da 18 d8 3b b3 99 91 5d f1 7e 96 00 e4 04";
+const char* url2 = "/vasek/home/update.php";
 
 String content;
 bool conf = false;
@@ -52,6 +59,28 @@ void setup() {
     WiFi.begin(ssid, pasw);
     conf = wifiVerify(20);
     if (conf) {
+      WiFiClientSecure client;
+      Serial.print("connecting to ");
+      Serial.println(host);
+      if (!client.connect(host, httpsPort)) {
+        Serial.println("connection failed");
+        return;
+      }
+    
+      if (client.verify(fingerprint, host)) {
+        Serial.println("certificate matches");
+      } else {
+        Serial.println("certificate doesn't match");
+        return;
+      }
+
+      Serial.print("Starting OTA from: ");
+      Serial.println(url2
+      
+      );
+  
+      auto ret = ESPhttpUpdate.update(client, host, url2);
+      
       Serial.println(WiFi.localIP());
       jsonContent = {};
       jsonContent["token"] = apiToken;
@@ -70,10 +99,6 @@ void loop() {
       ESP.restart();
     }
     if (buttonActive) {
-<<<<<<< HEAD
-=======
-      realState = !state;
->>>>>>> 9d9bdc192f48b909e5406167be3e532d9b5d07e5
       jsonContent = {};
       jsonContent["token"] = apiToken;
       requestJson = "";
@@ -143,7 +168,6 @@ void loadDataFromWeb() {
   }
 
   WiFi.hostname(hostName);
-<<<<<<< HEAD
   Serial.println("state: " + (String)state;
   if (!buttonActive) {
     if (state == 1) {
@@ -153,13 +177,6 @@ void loadDataFromWeb() {
     }
     digitalWrite(RELAY, state);
     EEPROM.write(0, state);
-=======
-  Serial.println("state: " + (String)state + ", realState: " + (String)realState);
-  if (state != realState && !buttonActive) {
-    realState = state;
-    digitalWrite(RELAY, realState);
-    EEPROM.write(0, realState);
->>>>>>> 9d9bdc192f48b909e5406167be3e532d9b5d07e5
     EEPROM.commit();
   } else {
     state = realState;
