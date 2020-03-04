@@ -14,15 +14,10 @@ String apiToken = "";
 const char* host = "http://dev.steelants.cz";
 const char* url = "/vasek/home/api.php";
 
-IPAddress staticIpAddress;
-IPAddress gatewayIpAddress;
-IPAddress subnetIpAddress;
-
 String content;
 bool conf = false;
 bool buttonActive = false;
 int state = 0;
-int realState = 0;
 String requestJson = "";
 int unsuccessfulRounds = 0; //Unsucesful atmpt counter
 
@@ -48,22 +43,19 @@ void setup() {
   pinMode(RELAY, OUTPUT);
   state = EEPROM.read(0);
   digitalWrite(RELAY, state);
-  realState = state;
+  detachInterrupt(digitalPinToInterrupt(SWITCH));
   attachInterrupt(digitalPinToInterrupt(SWITCH), handleInterrupt, CHANGE);
   //wifi
   if (ssid != "") {
     WiFi.persistent(false);
     WiFi.mode(WIFI_STA);
-    //Serial.println(WiFi.localIP());
-    //Serial.println("IP nastaveny z hodnot.");
-    //WiFi.config(staticIpAddress, gatewayIpAddress, subnetIpAddress);
     WiFi.begin(ssid, pasw);
     conf = wifiVerify(20);
     if (conf) {
       Serial.println(WiFi.localIP());
       jsonContent = {};
       jsonContent["token"] = apiToken;
-      jsonContent["values"]["on/off"]["value"] = (String)realState;
+      jsonContent["values"]["on/off"]["value"] = (int)state;
       sendDataToWeb();
       return;
     }
@@ -78,13 +70,12 @@ void loop() {
       ESP.restart();
     }
     if (buttonActive) {
-      delay (500);
       jsonContent = {};
       jsonContent["token"] = apiToken;
       requestJson = "";
-      jsonContent["values"]["on/off"]["value"] = (String)realState;
-      digitalWrite(RELAY, realState);
-      EEPROM.write(0, realState);
+      jsonContent["values"]["on/off"]["value"] = (int)state;
+      digitalWrite(RELAY, state);
+      EEPROM.write(0, state);
       EEPROM.commit();
       sendDataToWeb();
       buttonActive = false;
@@ -97,8 +88,8 @@ void loop() {
 
 void handleInterrupt() {
   buttonActive = true;
-  realState = !state;
-  digitalWrite(RELAY, realState);
+  state = !state;
+  digitalWrite(RELAY, state);
 }
 
 bool wifiVerify(int t) {
@@ -146,17 +137,15 @@ void loadDataFromWeb() {
   }
 
   WiFi.hostname(hostName);
-  Serial.println("state: " + (String)state + ", realState: " + (String)realState);
-  if (state != realState && !buttonActive) {
-    if (state == 1 && realState == 0) {
-      Serial.println("ON state: " + (String)state + ", realState: " + (String)realState);
-      realState = 1;
-    } else {
+  Serial.println("state: " + (String)state;
+  if (!buttonActive) {
+    if (state == 1) {
+      Serial.println("ON");
+    } else if (state == 0) {
       Serial.println("OFF");
-      realState = 0;
     }
-    digitalWrite(RELAY, realState);
-    EEPROM.write(0, realState);
+    digitalWrite(RELAY, state);
+    EEPROM.write(0, state);
     EEPROM.commit();
   }
 }
