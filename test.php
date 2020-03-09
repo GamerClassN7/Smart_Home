@@ -1,6 +1,7 @@
 <pre>
 	<?php
 	var_dump($_POST);
+	var_dump(file_exists("./app/updater/" . "3C71BF22FDCF" . ".bin"));
 	?>
 </pre>
 

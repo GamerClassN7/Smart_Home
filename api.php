@@ -38,7 +38,9 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 //Read API data
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
-$logManager->write("[API] Rest API request body -> decodet to json \n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
+if (defined(DEBUGMOD) && DEBUGMOD == 1) {
+	$logManager->write("[API] Rest API request body -> decodet to json \n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
+}
 
 //zabespecit proti Ddosu
 if (isset($obj['user']) && $obj['user'] != ''){
@@ -48,7 +50,7 @@ if (isset($obj['user']) && $obj['user'] != ''){
 		$userId = $user['user_id'];
 		$atHome = $obj['atHome'];
 		UserManager::atHome($userId, $atHome);
-		$logManager->write("[Record] user " . $userId . "changet his home state to " . $atHome . RECORDTIMOUT , LogRecordType::WARNING);
+		$logManager->write("[Record] user " . $userId . " changet his home state to " . $atHome . " " . RECORDTIMOUT , LogRecordType::INFO);
 		echo 'Saved: ' . $atHome;
 		header("HTTP/1.1 200 OK");
 		die();

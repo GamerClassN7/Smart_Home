@@ -54,6 +54,8 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(SWITCH), handleInterrupt, CHANGE);
   //wifi
   if (ssid != "") {
+    WiFi.disconnect();
+    WiFi.softAPdisconnect(true);
     WiFi.persistent(false);
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, pasw);
@@ -81,7 +83,7 @@ void setup() {
       
       );
   
-      auto ret = ESPhttpUpdate.update(client, host2, url2);
+      auto ret = ESPhttpUpdate.update(client, host2, 80, url2);
       delay(500);
     switch(ret) {
         case HTTP_UPDATE_FAILED:
@@ -105,11 +107,11 @@ void setup() {
             break;
     }
     delay(500);
-      Serial.println("Update proběhl!");
-      Serial.println(WiFi.localIP());
       jsonContent = {};
       jsonContent["token"] = apiToken;
       jsonContent["values"]["on/off"]["value"] = (String)state;
+      jsonContent["settings"]["network"]["ip"] = WiFi.localIP().toString();
+      jsonContent["settings"]["network"]["mac"] = WiFi.macAddress();
       sendDataToWeb();
       return;
     }
