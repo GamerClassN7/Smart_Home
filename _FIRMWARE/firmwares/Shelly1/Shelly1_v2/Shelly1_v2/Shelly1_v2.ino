@@ -3,9 +3,9 @@
 #include <ESP8266WebServer.h>
 #include <WiFiClientSecure.h>
 #include <ESP8266HTTPClient.h>
+#define ARDUINOJSON_DECODE_UNICODE 1
 #include <ArduinoJson.h>
 #include <EEPROM.h>
-#include <FS.h>
 #include "ESP8266httpUpdate.h"
 
 //Variables
