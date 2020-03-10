@@ -4,9 +4,9 @@
 #include <ESP8266WebServer.h>
 #include <WiFiClientSecure.h>
 #include <ESP8266HTTPClient.h>
+#define ARDUINOJSON_DECODE_UNICODE 1
 #include <ArduinoJson.h>
 #include <EEPROM.h>
-#include <FS.h>
 #include "ESP8266httpUpdate.h"
 
 //Variables
@@ -35,11 +35,11 @@ StaticJsonDocument<250> jsonContent;
 DeserializationError error;
 
 //Pins
-#define pinDHT 4
-#define LIGHTPIN 13
+#define DHTPIN 2
+//#define LIGHTPIN 13
 
 //Inicializations
-DHT DHTs(pinDHT, DHT11);
+DHT DHTs(DHTPIN, DHT11);
 
 void setup() {
   Serial.begin(9600);
@@ -50,8 +50,10 @@ void setup() {
   ssid = ReadEeprom(1, 33);
   pasw = ReadEeprom(33, 65);
   apiToken = ReadEeprom(65, 97);
-  //set pins
-  pinMode(LIGHTPIN, INPUT);
+  #if defined(LIGHTPIN)
+    //set pins
+    pinMode(LIGHTPIN, INPUT);
+  #endif
   //wifi
   if (ssid != "") {
     WiFi.disconnect();
@@ -136,15 +138,16 @@ void loop() {
     if (isnan(tem) || isnan(hum)) {
       Serial.println("Unable to read DHT");
     } else {
-      jsonContent["values"]["temp"]["value"] = tem;
+      jsonContent["values"]["temp"]["value"] = (String)tem;
       jsonContent["values"]["temp"]["unit"] = "C";
-      jsonContent["values"]["humi"]["value"] = hum;
+      jsonContent["values"]["humi"]["value"] = (String)hum;
       jsonContent["values"]["humi"]["unit"] = "%";
     }
-
-    //Handle Photo Rezistor Values
-    jsonContent["values"]["light"]["value"] = (String)!digitalRead(LIGHTPIN);
-    jsonContent["values"]["light"]["unit"] = "";
+    #if defined(LIGHTPIN)
+      //Handle Photo Rezistor Values
+      jsonContent["values"]["light"]["value"] = (String)!digitalRead(LIGHTPIN);
+      jsonContent["values"]["light"]["unit"] = "";
+    #endif
     sendDataToWeb();
     loadDataFromWeb();
   } else {
@@ -152,15 +155,9 @@ void loop() {
   }
 }
 
-void handleInterrupt() {
-  buttonActive = true;
-  state = !state;
-  digitalWrite(RELAY, state);
-}
-
 bool wifiVerify(int t) {
   int c = 0;
-  Serial.println("Waiting for Wifi to connect to Shelly1");
+  Serial.println("Waiting for Wifi");
   while (c < t) {
     if (WiFi.status() == WL_CONNECTED) {
       c = t;
@@ -282,6 +279,7 @@ void createWeb()
     content += "input {width: 100%;box-sizing: border-box}";
     content += "</style></head>";
     content += "<h2>WIFI Configuration</h2>";
+    content += "<h4><b>" + (String)ssidServer + "</b></h4>";
     content += "<a href='#'>Refresh</a>";
     content += "<div class=\"wifi-list\">";
     int n = WiFi.scanNetworks();
