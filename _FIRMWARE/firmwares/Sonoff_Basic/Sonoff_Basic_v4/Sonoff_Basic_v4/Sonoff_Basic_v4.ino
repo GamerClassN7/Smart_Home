@@ -1,5 +1,4 @@
 //Includes
-#include <DHT.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <WiFiClientSecure.h>
@@ -35,25 +34,32 @@ StaticJsonDocument<250> jsonContent;
 DeserializationError error;
 
 //Pins
-#define DHTPIN 2
-//#define LIGHTPIN 13
+#define SONOFF 12
+#define SONOFF_LED 13
+#define SONOFF_BUT 0 //0
 
-//Inicializations
-DHT DHTs(DHTPIN, DHT11);
+void ICACHE_RAM_ATTR handleInterrupt ();
 
 void setup() {
   Serial.begin(9600);
   EEPROM.begin(100);
   while (!Serial) continue;
   delay(10);
+  
   //read saved data
   ssid = ReadEeprom(1, 33);
   pasw = ReadEeprom(33, 65);
   apiToken = ReadEeprom(65, 97);
-  #if defined(LIGHTPIN)
-    //set pins
-    pinMode(LIGHTPIN, INPUT);
-  #endif
+  
+  //set pins
+  pinMode(SONOFF_LED, OUTPUT);
+  pinMode(SONOFF_BUT, INPUT_PULLUP);
+  pinMode(SONOFF, OUTPUT);
+  state = EEPROM.read(0);
+  digitalWrite(SONOFF, state);
+  
+  attachInterrupt(digitalPinToInterrupt(SONOFF_BUT), handleInterrupt, FALLING);
+  
   //wifi
   if (ssid != "") {
     WiFi.disconnect();
@@ -87,30 +93,31 @@ void setup() {
   
       auto ret = ESPhttpUpdate.update(client, host2, 80, url2);
       delay(500);
-    switch(ret) {
-        case HTTP_UPDATE_FAILED:
-            Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
-            Serial.println();
-            Serial.println();
-            Serial.println();
-            break;
-
-        case HTTP_UPDATE_NO_UPDATES:
-            Serial.println("HTTP_UPDATE_NO_UPDATES");
-            Serial.println();
-            Serial.println();
-            break;
-
-        case HTTP_UPDATE_OK:
-            Serial.println("HTTP_UPDATE_OK");
-            Serial.println();
-            Serial.println();
-            Serial.println();
-            break;
-    }
-    delay(500);
+      switch(ret) {
+          case HTTP_UPDATE_FAILED:
+              Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
+              Serial.println();
+              Serial.println();
+              Serial.println();
+              break;
+  
+          case HTTP_UPDATE_NO_UPDATES:
+              Serial.println("HTTP_UPDATE_NO_UPDATES");
+              Serial.println();
+              Serial.println();
+              break;
+  
+          case HTTP_UPDATE_OK:
+              Serial.println("HTTP_UPDATE_OK");
+              Serial.println();
+              Serial.println();
+              Serial.println();
+              break;
+      }
+      delay(500);
       jsonContent = {};
       jsonContent["token"] = apiToken;
+      jsonContent["values"]["on/off"]["value"] = (String)state;
       jsonContent["settings"]["network"]["ip"] = WiFi.localIP().toString();
       jsonContent["settings"]["network"]["mac"] = WiFi.macAddress();
       jsonContent["settings"]["firmware_hash"] = ESP.getSketchMD5();
@@ -127,44 +134,53 @@ void loop() {
       Serial.println("RESTARTING ESP");
       ESP.restart();
     }
-    DHTs.begin();
     jsonContent = {};
     jsonContent["token"] = apiToken;
     requestJson = "";
-    
-    //Read and Handle DHT values
-    float tem = DHTs.readTemperature();
-    float hum = DHTs.readHumidity();
-    Serial.println("TEMP" + String(tem) + ";HUMI" + String(hum));
-    if (isnan(tem) || isnan(hum)) {
-      Serial.println("Unable to read DHT");
+    if (buttonActive) {
+      jsonContent["values"]["on/off"]["value"] = (String)state;
+      digitalWrite(SONOFF, state);
+      EEPROM.write(0, state);
+      EEPROM.commit();
+      sendDataToWeb();
+      buttonActive = false;
+      delay(500);
     } else {
-      jsonContent["values"]["temp"]["value"] = (String)tem;
-      jsonContent["values"]["temp"]["unit"] = "C";
-      jsonContent["values"]["humi"]["value"] = (String)hum;
-      jsonContent["values"]["humi"]["unit"] = "%";
+      sendDataToWeb();
+      loadDataFromWeb();
     }
-    #if defined(LIGHTPIN)
-      //Handle Photo Rezistor Values
-      jsonContent["values"]["light"]["value"] = (String)!digitalRead(LIGHTPIN);
-      jsonContent["values"]["light"]["unit"] = "";
-    #endif
-    sendDataToWeb();
-    loadDataFromWeb();
   } else {
     server.handleClient();
   }
 }
 
+void handleInterrupt() {
+  buttonActive = true;
+  state = !state;
+  digitalWrite(SONOFF, state);
+}
+
 bool wifiVerify(int t) {
   int c = 0;
-  Serial.println("Waiting for Wifi");
+  Serial.println("Waiting for Wifi to connect to Shelly1");
   while (c < t) {
     if (WiFi.status() == WL_CONNECTED) {
       c = t;
+      Serial.println();
+      Serial.println("Connected!");
+      digitalWrite(SONOFF_LED, HIGH);
       return true;
     }
-    delay(500);
+    if (buttonActive == true){
+      digitalWrite(SONOFF, state);
+      EEPROM.write(0, state);
+      EEPROM.commit();
+      buttonActive = false;
+    }
+    digitalWrite(SONOFF_LED, HIGH);
+    delay(125);
+    digitalWrite(SONOFF_LED, LOW);
+    delay(375);
     Serial.print(WiFi.status());
     c++;
   }
@@ -181,9 +197,16 @@ void loadDataFromWeb() {
   }
 
   //configuration setup
-  int sleepTime = jsonContent["device"]["sleepTime"];
   String hostName = jsonContent["device"]["hostname"];
   String requestState = jsonContent["state"];
+  if (!buttonActive) {
+    state = (int)jsonContent["value"];
+    Serial.println("state: " + (String)state);
+    digitalWrite(SONOFF, state);
+    EEPROM.write(0, state);
+    EEPROM.commit();
+    delay(500);
+  }
 
   if (requestState != "succes") {
     unsuccessfulRounds++;
@@ -193,22 +216,12 @@ void loadDataFromWeb() {
   }
 
   WiFi.hostname(hostName);
-  sleep(sleepTime);
 }
 
 void sendDataToWeb() {
   serializeJson(jsonContent, requestJson);
   Serial.println("JSON: " + requestJson);
   error = deserializeJson(jsonContent, sendHttpRequest());
-}
-
-void sleep(int sleepTime) {
-  if (sleepTime > 0) { //if deep sleepTime > 0 use deep sleep
-      Serial.println("GOING TO SLEEP FOR " + String(sleepTime));
-      ESP.deepSleep((sleepTime * 60) * 1000000, RF_DEFAULT);
-  } else {
-      delay(5000);
-  }
 }
 
 String sendHttpRequest () {

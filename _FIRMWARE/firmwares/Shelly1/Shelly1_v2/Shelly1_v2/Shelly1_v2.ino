@@ -112,6 +112,7 @@ void setup() {
       jsonContent["values"]["on/off"]["value"] = (String)state;
       jsonContent["settings"]["network"]["ip"] = WiFi.localIP().toString();
       jsonContent["settings"]["network"]["mac"] = WiFi.macAddress();
+      jsonContent["settings"]["firmware_hash"] = ESP.getSketchMD5();
       sendDataToWeb();
       return;
     }
