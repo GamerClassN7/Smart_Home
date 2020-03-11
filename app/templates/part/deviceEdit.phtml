@@ -4,7 +4,7 @@
             <i class="fa fa-times"></i>
         </div>
         <h4 class="mb-4"><?php $LANGMNG->echo('t_editDevice'); ?></h4>
-        <form method="post" action="">
+        <form method="post" action="" enctype="multipart/form-data">
             <input class="input" type="hidden" name="deviceId" value="<?php echo $DEVICEID; ?>">
             <?php if ($DEVICE['approved'] != 0) { ?>
                 <?php if ($DEVICE['userIsAdmin']) { ?>
@@ -69,7 +69,7 @@
                 </div>
                 <div class="field">
                     <div class="label">Mac Address:</div>
-                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['mac']; ?>" disabled>
+                    <input class="input" type="text" name="deviceMac" value="<?php echo $DEVICE['mac']; ?>" disabled>
                 </div>
                 <div class="field">
                     <div class="label">IP:</div>

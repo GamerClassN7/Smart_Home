@@ -5,6 +5,15 @@ if (isset($_POST) && !empty($_POST)){
 		$deviceName = $_POST['deviceName'];
 		$deviceIcon = $_POST['deviceIcon'];
 		$sleepTime = 0;
+		if (isset($_FILES['deviceFirmware']) && isset($_FILES['deviceFirmware']['tmp_name']) && $_FILES['deviceFirmware']['tmp_name'] != "") {
+			$file = $_FILES['deviceFirmware'];
+			$fileName = (isset ($_POST['deviceMac']) ? $_POST['deviceMac'] . ".bin" : $file['name']);
+			if (file_exists("./app/updater/" . $fileName)) {
+				unlink("./app/updater/" . $fileName);
+			}
+			copy($file['tmp_name'], "./app/updater/" . $fileName);
+		}
+
 		if (isset($_POST['sleepTime'])) {
 			$sleepTime = $_POST['sleepTime'];
 		}
