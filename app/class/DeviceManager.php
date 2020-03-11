@@ -47,6 +47,15 @@ class DeviceManager{
 		}
 	}
 
+	public function editByToken ($token, $values = []) {
+		try {
+			Db::edit ('devices', $values, 'WHERE token = ?', array($deviceId));
+		} catch(PDOException $error) {
+			echo $error->getMessage();
+			die();
+		}
+	}
+
 	/**
 	* [assignRoom Přiřazení zařízení do třídy]
 	* @param  [type] $roomId   [číslo místnosti do kter se má zařízení přiřadit]

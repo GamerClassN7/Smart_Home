@@ -6,5 +6,6 @@ _nemazat/css/main.css.map
 _nemazat/css/main.css
 _nemazat/css/font-awesome.min.css
 app/logs/*.log
+.vscode/
 .vscode/sftp.json
 app/updater/*.bin

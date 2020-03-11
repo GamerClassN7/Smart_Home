@@ -161,6 +161,7 @@ class Home extends Template
 					'room' => $deviceData['room_id'],
 					'token' => $deviceData['token'],
 					'type' => $deviceData['type'],
+					'mac' => $deviceData['mac'],
 					'ip' => $deviceData['ip_address'],
 					'subnet' => $deviceData['subnet'],
 					'gateway' => $deviceData['gateway'],

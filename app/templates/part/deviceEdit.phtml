@@ -68,6 +68,10 @@
                     <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['type']; ?>" disabled>
                 </div>
                 <div class="field">
+                    <div class="label">Mac Address:</div>
+                    <input class="input" type="text" name="deviceToken" value="<?php echo $DEVICE['mac']; ?>" disabled>
+                </div>
+                <div class="field">
                     <div class="label">IP:</div>
                     <input class="input" type="text" name="deviceIp" value="<?php echo $DEVICE['ip']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
                 </div>
@@ -85,6 +89,13 @@
                     <div class="label">DNS:</div>
                     <input class="input" type="text" name="deviceDns" value="<?php echo $DEVICE['dns']; ?>" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" disabled>
                 </div>
+
+                <h4 class="mb-4"><?php $LANGMNG->echo('t_deviceVersion'); ?></h4>
+                <div class="field">
+                    <div class="label"><?php $LANGMNG->echo('l_uploadFirmware'); ?></div>
+                    <input class="input" type="file" name="deviceFirmware" value="">
+                </div>
+
                 <?php if ($DEVICE['userIsAdmin']) { ?>
                     <?php if (!in_array($SUBDEVICE['type'], ['on/off', 'door', 'water'])) { ?>
                         <div class="field">

@@ -38,8 +38,9 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 //Read API data
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
+
 if (defined(DEBUGMOD) && DEBUGMOD == 1) {
-	$logManager->write("[API] Rest API request body -> decodet to json \n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
+	$logManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
 }
 
 //zabespecit proti Ddosu
@@ -52,7 +53,7 @@ if (isset($obj['user']) && $obj['user'] != ''){
 		UserManager::atHome($userId, $atHome);
 		$logManager->write("[Record] user " . $userId . " changet his home state to " . $atHome . " " . RECORDTIMOUT , LogRecordType::INFO);
 		echo 'Saved: ' . $atHome;
-		header("HTTP/1.1 200 OK");
+		header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
 		die();
 	}
 }
@@ -64,7 +65,7 @@ if (DEBUGMOD != 1) {
 			'state' => 'unsuccess',
 			'errorMSG' => "Using API from your IP insnt alowed!",
 		));
-		header("HTTP/1.1 401 Unauthorized");
+		header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
 		$logManager->write("[API] acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordType::WARNING);
 		exit();
 	}
@@ -90,9 +91,14 @@ try {
 //Variables
 $token = $obj['token'];
 $values = null;
+$settings = null;
 
 if (isset($obj['values'])) {
 	$values = $obj['values'];
+}
+
+if (isset($obj['settings'])) {
+	$settings = $obj['settings'];
 }
 
 //Checks
@@ -101,7 +107,7 @@ if ($token == null || $token == "") {
 		'state' => 'unsuccess',
 		'errorMSG' => "Missing Value Token in JSON payload",
 	));
-	header("HTTP/1.1 401 Unauthorized");
+	header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
 	die();
 }
 
@@ -119,24 +125,24 @@ if (!DeviceManager::registeret($token)) {
 		if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
 			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
 		}
-
+		
 		if ($notificationData != []) {
 			$subscribers = $notificationMng::getSubscription();
 			foreach ($subscribers as $key => $subscriber) {
-				$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ");
+				$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordType::INFO);
 				$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
 			}
 		}
 	}
-
+	
 	//Notification for newly added Device
 	$subscribers = $notificationMng::getSubscription();
 	foreach ($subscribers as $key => $subscriber) {
-		$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ");
+		$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordType::INFO);
 		$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
 	}
-
-	header("HTTP/1.1 401 Unauthorized");
+	
+	header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
 	echo json_encode(array(
 		'state' => 'unsuccess',
 		'errorMSG' => "Device not registeret",
@@ -146,7 +152,7 @@ if (!DeviceManager::registeret($token)) {
 }
 
 if (!DeviceManager::approved($token)) {
-	header("HTTP/1.1 401 Unauthorized");
+	header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
 	echo json_encode(array(
 		'state' => 'unsuccess',
 		'errorMSG' => "Unaproved Device",
@@ -154,9 +160,14 @@ if (!DeviceManager::approved($token)) {
 	exit();
 }
 
+// Diagnostic Data Write to DB
+if (isset($settings)){
+	DeviceManager::editByToken($token, ['mac' => $settings["network"]["mac"], 'ip_address' => $settings["network"]["ip"]]);
+}
+
 // Subdevices first data!
 if ($values != null || $values != "") {
-
+	
 	//ZAPIS
 	$device = DeviceManager::getDeviceByToken($token);
 	$deviceId = $device['device_id'];
@@ -166,40 +177,40 @@ if ($values != null || $values != "") {
 		}
 		RecordManager::create($deviceId, $key, round($value['value'],3));
 		$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
-
+		
 		//notification
 		if ($key == 'door' || $key == 'water') {
 			$notificationMng = new NotificationManager;
 			$notificationData = [];
-
+			
 			switch ($key) {
 				case 'door':
-				$notificationData = [
-					'title' => 'Info',
-					'body' => 'Someone just open up '.$device['name'],
-					'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
-				];
-
+					$notificationData = [
+						'title' => 'Info',
+						'body' => 'Someone just open up '.$device['name'],
+						'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
+					];
+					
 				break;
 				case 'water':
-				$notificationData = [
-					'title' => 'Alert',
-					'body' => 'Wather leak detected by '.$device['name'],
-					'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
-				];
+					$notificationData = [
+						'title' => 'Alert',
+						'body' => 'Wather leak detected by '.$device['name'],
+						'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
+					];
 				break;
 			}
 			if (DEBUGMOD) $notificationData['body'] .= ' value='.$value['value'];
 			if ($notificationData != []) {
 				$subscribers = $notificationMng::getSubscription();
 				foreach ($subscribers as $key => $subscriber) {
-					$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ");
+					$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordType::INFO);
 					$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
 				}
 			}
 		}
 	}
-
+	
 	$hostname = strtolower($device['name']);
 	$hostname = str_replace(' ', '_', $hostname);
 	$jsonAnswer = [
@@ -211,46 +222,45 @@ if ($values != null || $values != "") {
 		],
 		'state' => 'succes',
 	];
-
+	
 	$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
 	if (!in_array($subDevicesTypeList, ['on/off', 'door', 'water'])) {
 		$jsonAnswer['device']['sleepTime'] = $device['sleep_time'];
 	}
 	echo json_encode($jsonAnswer);
-	header("HTTP/1.1 200 OK");
+	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
 } else {
 	//Vypis
-	//TODO: doděla uložení výpisu jinými slovy zda li byl comman vykonán
 	$device = DeviceManager::getDeviceByToken($token);
 	$deviceId = $device['device_id'];
-
+	
 	if (count(SubDeviceManager::getAllSubDevices($deviceId)) == 0) {
 		SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
 		//RecordManager::create($deviceId, 'on/off', 0);
 	}
-
+	
 	$subDeviceId = SubDeviceManager::getAllSubDevices($deviceId)[0]['subdevice_id'];
 	$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
 	$subDeviceLastReordValue = $subDeviceLastReord['value'];
-
+	
 	if ($subDeviceLastReord['execuded'] == 0){
 		$logManager->write("[API] subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
 		RecordManager::setExecuted($subDeviceLastReord['record_id']);
 	}
-
+	
 	echo json_encode(array(
 		'device' => [
 			'hostname' => $device['name'],
 			'ipAddress' => $device['ip_address'],
 			'subnet' => $device['subnet'],
 			'gateway' => $device['gateway'],
-			],
-			'state' => 'succes',
-			'value' => $subDeviceLastReordValue
-		));
-		header("HTTP/1.1 200 OK");
-	}
+		],
+		'state' => 'succes',
+		'value' => $subDeviceLastReordValue
+	));
+	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+}
 
-	unset($logManager);
-	Db::disconect();
-	die();
+unset($logManager);
+Db::disconect();
+die();
