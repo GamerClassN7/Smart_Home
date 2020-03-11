@@ -7,11 +7,15 @@ if (isset($_POST) && !empty($_POST)){
 		$sleepTime = 0;
 		if (isset($_FILES['deviceFirmware']) && isset($_FILES['deviceFirmware']['tmp_name']) && $_FILES['deviceFirmware']['tmp_name'] != "") {
 			$file = $_FILES['deviceFirmware'];
-			$fileName = (isset ($_POST['deviceMac']) ? $_POST['deviceMac'] . ".bin" : $file['name']);
+			$fileName = (isset ($_POST['deviceMac']) ? str_replace(":", "", $_POST['deviceMac']) . ".bin" : "");
 			if (file_exists("./app/updater/" . $fileName)) {
 				unlink("./app/updater/" . $fileName);
 			}
-			copy($file['tmp_name'], "./app/updater/" . $fileName);
+			if ($fileName != "") {
+				copy($file['tmp_name'], "./app/updater/" . $fileName);
+			} else {
+
+			}
 		}
 
 		if (isset($_POST['sleepTime'])) {
