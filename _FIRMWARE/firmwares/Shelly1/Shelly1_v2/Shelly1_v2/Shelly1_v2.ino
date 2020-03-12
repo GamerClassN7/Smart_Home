@@ -37,6 +37,8 @@ DeserializationError error;
 #define RELAY 4 //12
 #define SWITCH 5 //0
 
+void ICACHE_RAM_ATTR handleInterrupt ();
+
 void setup() {
   Serial.begin(115200);
   EEPROM.begin(100);
