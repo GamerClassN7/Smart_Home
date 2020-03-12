@@ -98,18 +98,17 @@ void setup() {
               Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
               Serial.println();
               Serial.println();
-              Serial.println();
               break;
   
           case HTTP_UPDATE_NO_UPDATES:
               Serial.println("HTTP_UPDATE_NO_UPDATES");
               Serial.println();
               Serial.println();
+              Serial.println();
               break;
   
           case HTTP_UPDATE_OK:
               Serial.println("HTTP_UPDATE_OK");
-              Serial.println();
               Serial.println();
               Serial.println();
               break;
@@ -214,7 +213,6 @@ void loadDataFromWeb() {
   } else if (requestState == "succes") {
     unsuccessfulRounds = 0;
   }
-
   WiFi.hostname(hostName);
 }
 

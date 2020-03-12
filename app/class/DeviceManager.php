@@ -49,7 +49,7 @@ class DeviceManager{
 
 	public function editByToken ($token, $values = []) {
 		try {
-			Db::edit ('devices', $values, 'WHERE token = ?', array($deviceId));
+			Db::edit ('devices', $values, 'WHERE token = ?', array($token));
 		} catch(PDOException $error) {
 			echo $error->getMessage();
 			die();

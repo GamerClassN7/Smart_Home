@@ -125,7 +125,7 @@ if (!DeviceManager::registeret($token)) {
 		if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
 			SubDeviceManager::create($deviceId, $key, UNITS[$key]);
 		}
-		
+
 		if ($notificationData != []) {
 			$subscribers = $notificationMng::getSubscription();
 			foreach ($subscribers as $key => $subscriber) {
@@ -134,14 +134,14 @@ if (!DeviceManager::registeret($token)) {
 			}
 		}
 	}
-	
+
 	//Notification for newly added Device
 	$subscribers = $notificationMng::getSubscription();
 	foreach ($subscribers as $key => $subscriber) {
 		$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordType::INFO);
 		$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
 	}
-	
+
 	header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
 	echo json_encode(array(
 		'state' => 'unsuccess',
@@ -164,14 +164,14 @@ if (!DeviceManager::approved($token)) {
 if ($settings != null || $settings != ""){
 	$data = ['mac' => $settings["network"]["mac"], 'ip_address' => $settings["network"]["ip"]];
 	if (array_key_exists("firmware_hash", $settings)) {
-		$data .= ['firmware_hash'=>$settings["firmware_hash"]];
+		$data['firmware_hash'] = $settings["firmware_hash"];
 	}
 	DeviceManager::editByToken($token, $data);
 }
 
 // Subdevices first data!
 if ($values != null || $values != "") {
-	
+
 	//ZAPIS
 	$device = DeviceManager::getDeviceByToken($token);
 	$deviceId = $device['device_id'];
@@ -181,12 +181,12 @@ if ($values != null || $values != "") {
 		}
 		RecordManager::create($deviceId, $key, round($value['value'],3));
 		$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
-		
+
 		//notification
 		if ($key == 'door' || $key == 'water') {
 			$notificationMng = new NotificationManager;
 			$notificationData = [];
-			
+
 			switch ($key) {
 				case 'door':
 					$notificationData = [
@@ -194,7 +194,7 @@ if ($values != null || $values != "") {
 						'body' => 'Someone just open up '.$device['name'],
 						'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
 					];
-					
+
 				break;
 				case 'water':
 					$notificationData = [
@@ -214,9 +214,10 @@ if ($values != null || $values != "") {
 			}
 		}
 	}
-	
+
 	$hostname = strtolower($device['name']);
 	$hostname = str_replace(' ', '_', $hostname);
+	//upravit format na setings-> netvork etc
 	$jsonAnswer = [
 		'device' => [
 			'hostname' => $hostname,
@@ -226,7 +227,7 @@ if ($values != null || $values != "") {
 		],
 		'state' => 'succes',
 	];
-	
+
 	$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
 	if (!in_array($subDevicesTypeList, ['on/off', 'door', 'water'])) {
 		$jsonAnswer['device']['sleepTime'] = $device['sleep_time'];
@@ -237,21 +238,21 @@ if ($values != null || $values != "") {
 	//Vypis
 	$device = DeviceManager::getDeviceByToken($token);
 	$deviceId = $device['device_id'];
-	
+
 	if (count(SubDeviceManager::getAllSubDevices($deviceId)) == 0) {
 		SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
 		//RecordManager::create($deviceId, 'on/off', 0);
 	}
-	
+
 	$subDeviceId = SubDeviceManager::getAllSubDevices($deviceId)[0]['subdevice_id'];
 	$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
 	$subDeviceLastReordValue = $subDeviceLastReord['value'];
-	
+
 	if ($subDeviceLastReord['execuded'] == 0){
 		$logManager->write("[API] subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
 		RecordManager::setExecuted($subDeviceLastReord['record_id']);
 	}
-	
+
 	echo json_encode(array(
 		'device' => [
 			'hostname' => $device['name'],

@@ -7,8 +7,9 @@ if (isset($_POST) && !empty($_POST)){
 		$sleepTime = 0;
 		if (isset($_FILES['deviceFirmware']) && isset($_FILES['deviceFirmware']['tmp_name']) && $_FILES['deviceFirmware']['tmp_name'] != "") {
 			$file = $_FILES['deviceFirmware'];
-			$fileName = (isset ($_POST['deviceMac']) ? str_replace(":", "", $_POST['deviceMac']) . ".bin" : "");
-			if (file_exists("./app/updater/" . $fileName)) {
+			$deviceMac = DeviceManager::getDeviceById($deviceId)['mac'];
+			$fileName = (isset ($deviceMac) && $deviceMac != "" ? str_replace(":", "", $deviceMac) . ".bin" : "");
+			if ($fileName != "" && file_exists("./app/updater/" . $fileName)) {
 				unlink("./app/updater/" . $fileName);
 			}
 			if ($fileName != "") {

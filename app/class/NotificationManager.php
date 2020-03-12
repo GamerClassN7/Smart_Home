@@ -16,8 +16,8 @@ class NotificationManager
 		}
 	}
 
-	function getSubscription(){
-		return Db::loadAll('SELECT * FROM notifications;', array());
+	function getSubscription () {
+		return Db::loadAll ("SELECT * FROM notifications");
 	}
 
 	function sendSimpleNotification(string $serverKey, string $to, array $data, bool $timeStamp = false){

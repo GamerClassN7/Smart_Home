@@ -22,6 +22,10 @@ $files = array_diff($files, array(
 foreach($files as $file) {
 	include './app/class/'.  $file;
 }
+
+//DB Conector
+Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
+
 $logManager = new LogManager();
 
 header('Content-type: text/plain; charset=utf8', true);
@@ -52,33 +56,28 @@ function sendFile($path)
 $localBinary = "./app/updater/" . str_replace(':', '', $_SERVER['HTTP_X_ESP8266_STA_MAC']) . ".bin";
 $logManager->write("[Updater] url: " . $localBinary, LogRecordType::INFO);
 $logManager->write("[Updater] version: " . $_SERVER['HTTP_X_ESP8266_SKETCH_MD5'], LogRecordType::INFO);
-
 if (file_exists($localBinary)) {
 	$logManager->write("[Updater] version PHP: " . md5_file($localBinary), LogRecordType::INFO);
 	if ($_SERVER['HTTP_X_ESP8266_SKETCH_MD5'] != md5_file($localBinary)) {
 		sendFile($localBinary);
-
 		//notification
-			$notificationMng = new NotificationManager;
-			$notificationData = [
-				'title' => 'Info',
-				'body' => 'Someone device was just updated to new version',
-				'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
-			];
-		
-			if ($notificationData != []) {
-				$subscribers = $notificationMng::getSubscription();
-				foreach ($subscribers as $key => $subscriber) {
-					$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordType::INFO);
-					$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
-				}
+		$notificationMng = new NotificationManager;
+		$notificationData = [
+			'title' => 'Info',
+			'body' => 'Someone device was just updated to new version',
+			'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
+		];
+		if ($notificationData != []) {
+			$subscribers = $notificationMng->getSubscription();
+			foreach ($subscribers as $key => $subscriber) {
+				$logManager->write("[NOTIFICATION] SENDING TO " . $subscriber['id'] . " ", LogRecordType::INFO);
+				$answer = $notificationMng->sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
 			}
-		} else {
-			header($_SERVER["SERVER_PROTOCOL"].' 304 Not Modified', true, 304);
 		}
 	} else {
-		header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+			header($_SERVER["SERVER_PROTOCOL"].' 304 Not Modified', true, 304);
 	}
-	header($_SERVER["SERVER_PROTOCOL"].' 500 no version for ESP MAC', true, 500);
-	die();
-	
+} else {
+	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+}
+die();
