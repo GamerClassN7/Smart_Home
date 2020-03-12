@@ -56,7 +56,9 @@ class Utilities
 			'data' => [
 				'datasets' => [
 					[
-						'data' => $data
+						'data' => $data,
+						'borderColor' => "#d4def7",
+						'backgroundColor' => "#d4def7"
 					]
 				]
 			],

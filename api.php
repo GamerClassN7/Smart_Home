@@ -161,7 +161,7 @@ if (!DeviceManager::approved($token)) {
 }
 
 // Diagnostic Data Write to DB
-if (isset($settings)){
+if ($settings != null || $settings != ""){
 	$data = ['mac' => $settings["network"]["mac"], 'ip_address' => $settings["network"]["ip"]];
 	if (array_key_exists("firmware_hash", $settings)) {
 		$data .= ['firmware_hash'=>$settings["firmware_hash"]];
