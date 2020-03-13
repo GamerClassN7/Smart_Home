@@ -92,6 +92,7 @@ try {
 $token = $obj['token'];
 $values = null;
 $settings = null;
+$command = "null";
 
 if (isset($obj['values'])) {
 	$values = $obj['values'];
@@ -169,6 +170,21 @@ if ($settings != null || $settings != ""){
 	DeviceManager::editByToken($token, $data);
 }
 
+// Issuing command
+if ($command == "null"){
+	$deviceCommand = DeviceManager::getDeviceByToken($token)["command"];
+	if ($deviceCommand != '' || $deviceCommand != null)
+	{
+		$command = $deviceCommand;
+	} 
+
+	$data = [
+		'command'=>'null'
+	];
+	DeviceManager::editByToken($token, $data);
+	$logManager->write("[API] Device_ID " . $deviceId . " executing command " . $command, LogRecordType::INFO);
+}
+
 // Subdevices first data!
 if ($values != null || $values != "") {
 
@@ -226,7 +242,7 @@ if ($values != null || $values != "") {
 			'gateway' => $device['gateway'],
 		],
 		'state' => 'succes',
-		'command' => "null",
+		'command' => $command,
 	];
 
 	$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
@@ -263,7 +279,7 @@ if ($values != null || $values != "") {
 		],
 		'state' => 'succes',
 		'value' => $subDeviceLastReordValue,
-		'command' => "null",
+		'command' => $command,
 	));
 	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
 }
