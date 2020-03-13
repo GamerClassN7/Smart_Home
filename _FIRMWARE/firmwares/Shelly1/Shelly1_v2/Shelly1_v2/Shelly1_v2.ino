@@ -185,6 +185,7 @@ void loadDataFromWeb() {
   //configuration setup
   String hostName = jsonContent["device"]["hostname"];
   String requestState = jsonContent["state"];
+  String command = jsonContent["command"];
   if (!buttonActive) {
     state = (int)jsonContent["value"];
     Serial.println("state: " + (String)state);
@@ -192,6 +193,14 @@ void loadDataFromWeb() {
     EEPROM.write(0, state);
     EEPROM.commit();
     delay(500);
+  }
+
+  if (command == "reset"){
+    ESP.reset();
+  } else if (command == "config") {
+    CleanEeprom();
+    EEPROM.commit();
+    ESP.restart();
   }
 
   if (requestState != "succes") {
