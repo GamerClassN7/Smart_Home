@@ -64,7 +64,7 @@ if (DEBUGMOD != 1) {
 		echo json_encode(array(
 			'state' => 'unsuccess',
 			'errorMSG' => "Using API from your IP insnt alowed!",
-		));
+		), JSON_PRETTY_PRINT);
 		header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
 		$logManager->write("[API] acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordType::WARNING);
 		exit();
@@ -107,7 +107,7 @@ if ($token == null || $token == "") {
 	echo json_encode(array(
 		'state' => 'unsuccess',
 		'errorMSG' => "Missing Value Token in JSON payload",
-	));
+	), JSON_PRETTY_PRINT);
 	header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
 	die();
 }
@@ -147,7 +147,7 @@ if (!DeviceManager::registeret($token)) {
 	echo json_encode(array(
 		'state' => 'unsuccess',
 		'errorMSG' => "Device not registeret",
-	));
+	), JSON_PRETTY_PRINT);
 	$logManager->write("[API] Registering Device", LogRecordType::INFO);
 	exit();
 }
@@ -157,7 +157,7 @@ if (!DeviceManager::approved($token)) {
 	echo json_encode(array(
 		'state' => 'unsuccess',
 		'errorMSG' => "Unaproved Device",
-	));
+	), JSON_PRETTY_PRINT);
 	exit();
 }
 
@@ -251,7 +251,7 @@ if ($values != null || $values != "") {
 	if (!in_array($subDevicesTypeList, ['on/off', 'door', 'water'])) {
 		$jsonAnswer['device']['sleepTime'] = $device['sleep_time'];
 	}
-	echo json_encode($jsonAnswer);
+	echo json_encode($jsonAnswer, JSON_PRETTY_PRINT);
 	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
 } else {
 	//Vypis
@@ -282,7 +282,7 @@ if ($values != null || $values != "") {
 		'state' => 'succes',
 		'value' => $subDeviceLastReordValue,
 		'command' => $command,
-	));
+	), JSON_PRETTY_PRINT);
 	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
 }
 
