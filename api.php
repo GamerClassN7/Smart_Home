@@ -226,6 +226,7 @@ if ($values != null || $values != "") {
 			'gateway' => $device['gateway'],
 		],
 		'state' => 'succes',
+		'command' => "null",
 	];
 
 	$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
@@ -261,7 +262,8 @@ if ($values != null || $values != "") {
 			'gateway' => $device['gateway'],
 		],
 		'state' => 'succes',
-		'value' => $subDeviceLastReordValue
+		'value' => $subDeviceLastReordValue,
+		'command' => "null",
 	));
 	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
 }
