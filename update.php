@@ -53,7 +53,8 @@ function sendFile($path)
 	readfile($path);
 }
 
-$localBinary = "./app/updater/" . str_replace(':', '', $_SERVER['HTTP_X_ESP8266_STA_MAC']) . ".bin";
+$macAddress = $_SERVER['HTTP_X_ESP8266_STA_MAC'];
+$localBinary = "./app/updater/" . str_replace(':', '', $macAddress) . ".bin";
 $logManager->write("[Updater] url: " . $localBinary, LogRecordType::INFO);
 $logManager->write("[Updater] version: " . $_SERVER['HTTP_X_ESP8266_SKETCH_MD5'], LogRecordType::INFO);
 if (file_exists($localBinary)) {
@@ -61,10 +62,11 @@ if (file_exists($localBinary)) {
 	if ($_SERVER['HTTP_X_ESP8266_SKETCH_MD5'] != md5_file($localBinary)) {
 		sendFile($localBinary);
 		//notification
+		$deviceName = DeviceManager::getDeviceByMac($macAddress)['name'];
 		$notificationMng = new NotificationManager;
 		$notificationData = [
 			'title' => 'Info',
-			'body' => 'Someone device was just updated to new version',
+			'body' => $deviceName.' was just updated to new version',
 			'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
 		];
 		if ($notificationData != []) {

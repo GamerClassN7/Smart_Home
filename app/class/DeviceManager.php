@@ -18,6 +18,10 @@ class DeviceManager{
 		return Db::loadOne("SELECT * FROM devices WHERE token = ?", array($deviceToken));
 	}
 
+	function getDeviceByMac($deviceMac) {
+		return Db::loadOne("SELECT * FROM devices WHERE mac = ?", array($deviceMac));
+	}
+
 	function getDeviceById($deviceId) {
 		return Db::loadOne("SELECT * FROM devices WHERE device_id = ?", array($deviceId));
 	}
