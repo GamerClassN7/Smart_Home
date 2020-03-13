@@ -172,7 +172,9 @@ if ($settings != null || $settings != ""){
 
 // Issuing command
 if ($command == "null"){
-	$deviceCommand = DeviceManager::getDeviceByToken($token)["command"];
+	$device = DeviceManager::getDeviceByToken($token);
+	$deviceId = $device['device_id'];
+	$deviceCommand = $device["command"];
 	if ($deviceCommand != '' || $deviceCommand != null)
 	{
 		$command = $deviceCommand;
