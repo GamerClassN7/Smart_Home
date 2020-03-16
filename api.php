@@ -31,6 +31,7 @@ if (!$restAcess){
 
 //Log
 $logManager = new LogManager();
+$apiLogManager = new LogManager('./app/logs/api/'. date("Y-m-d").'.log');
 
 //DB Conector
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
@@ -39,8 +40,9 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 
-if (defined(DEBUGMOD) && DEBUGMOD == 1) {
-	$logManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
+//Log RAW api request
+if (API_DEBUGMOD == 1) {
+	$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
 }
 
 //zabespecit proti Ddosu
