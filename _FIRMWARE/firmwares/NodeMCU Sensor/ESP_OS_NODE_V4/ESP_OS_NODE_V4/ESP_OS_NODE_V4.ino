@@ -24,6 +24,7 @@ const char* host2 = "dev.steelants.cz";
 const char* url2 = "/vasek/home/update.php";
 
 String content;
+String Logs;
 bool conf = false;
 bool buttonActive = false;
 int state = 0;
@@ -31,7 +32,7 @@ String requestJson = "";
 int unsuccessfulRounds = 0; //Unsucesful atmpt counter
 
 ESP8266WebServer server(80);
-StaticJsonDocument<250> jsonContent;
+StaticJsonDocument<265> jsonContent;
 DeserializationError error;
 
 //Pins
@@ -69,6 +70,7 @@ void setup() {
       Serial.println(host2);
       client.setInsecure();
       if (!client.connect(host2, httpsPort)) {
+        addLog("connection failed");
         Serial.println("connection failed");
         return;
       }
@@ -76,6 +78,7 @@ void setup() {
       if (client.verify(fingerprint, host2)) {
         Serial.println("certificate matches");
       } else {
+        addLog("certificate doesn't match");
         Serial.println("certificate doesn't match");
         return;
       }
@@ -89,6 +92,7 @@ void setup() {
       delay(500);
     switch(ret) {
         case HTTP_UPDATE_FAILED:
+            addLog("HTTP_UPDATE_FAILD Error (" + (String)ESPhttpUpdate.getLastError() + ") : " + (String)ESPhttpUpdate.getLastErrorString().c_str());
             Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
             Serial.println();
             Serial.println();
@@ -123,6 +127,7 @@ void setup() {
 
 void loop() {
   if (conf) {
+    LogErrors();
     if (unsuccessfulRounds >= 5) {
       Serial.println("RESTARTING ESP");
       ESP.restart();
@@ -173,6 +178,7 @@ bool wifiVerify(int t) {
 
 void loadDataFromWeb() {
   if (error.code() != DeserializationError::Ok) {
+    addLog(error.c_str());
     Serial.println(error.c_str());
     unsuccessfulRounds++;
     Serial.println("UNSUCCESSFUL ROUND NUMBER " + String(unsuccessfulRounds) + "FROM 5");
@@ -187,8 +193,10 @@ void loadDataFromWeb() {
   String command = jsonContent["command"];
 
   if (command == "reset"){
+    command = "";
     ESP.reset();
   } else if (command == "config") {
+    command = "";
     CleanEeprom();
     EEPROM.commit();
     ESP.restart();
@@ -240,6 +248,23 @@ String sendHttpRequest () {
     return "";
   }
   return payload;
+}
+
+void LogErrors() {
+  jsonContent = {};
+  error = deserializeJson(jsonContent, "{\"logs\":[" + Logs + "]}");
+  jsonContent["token"] = apiToken;
+  requestJson = "";
+  Logs = "";
+  sendDataToWeb();  
+}
+
+void addLog(String logText) {
+  if (Logs == "") {
+    Logs = "\"" + logText + "\"";
+  } else {
+    Logs += ",\"" + logText + "\"";
+  }
 }
 
 void CleanEeprom() {
