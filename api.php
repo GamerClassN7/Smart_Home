@@ -31,6 +31,7 @@ if (!$restAcess){
 
 //Log
 $logManager = new LogManager();
+$apiLogManager = new LogManager('./app/logs/api/'. date("Y-m-d").'.log');
 
 //DB Conector
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
@@ -39,19 +40,23 @@ Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 
-if (defined(DEBUGMOD) && DEBUGMOD == 1) {
-	$logManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
+//Log RAW api request
+if (API_DEBUGMOD == 1) {
+	$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
 }
 
 //zabespecit proti Ddosu
 if (isset($obj['user']) && $obj['user'] != ''){
 	//user at home
 	$user = UserManager::getUser($obj['user']);
+	$userAtHome = $user['atHome'];
 	if (!empty($user)) {
 		$userId = $user['user_id'];
 		$atHome = $obj['atHome'];
-		UserManager::atHome($userId, $atHome);
-		$logManager->write("[Record] user " . $userId . " changet his home state to " . $atHome . " " . RECORDTIMOUT , LogRecordType::INFO);
+		if($userAtHome != $atHome){
+			UserManager::atHome($userId, $atHome);
+			$logManager->write("[USER] user " . $userId . " changet his home state to " . $atHome , LogRecordType::INFO);
+		}
 		echo 'Saved: ' . $atHome;
 		header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
 		die();
@@ -92,6 +97,7 @@ try {
 $token = $obj['token'];
 $values = null;
 $settings = null;
+$deviceLogs = null;
 $command = "null";
 
 if (isset($obj['values'])) {
@@ -101,6 +107,12 @@ if (isset($obj['values'])) {
 if (isset($obj['settings'])) {
 	$settings = $obj['settings'];
 }
+
+if (isset($obj['logs'])) {
+	$deviceLogs = $obj['logs'];
+}
+
+
 
 //Checks
 if ($token == null || $token == "") {
@@ -162,7 +174,7 @@ if (!DeviceManager::approved($token)) {
 }
 
 // Diagnostic Data Write to DB
-if ($settings != null || $settings != ""){
+if ($settings != null && $settings != ""){
 	$data = ['mac' => $settings["network"]["mac"], 'ip_address' => $settings["network"]["ip"]];
 	if (array_key_exists("firmware_hash", $settings)) {
 		$data['firmware_hash'] = $settings["firmware_hash"];
@@ -175,20 +187,33 @@ if ($command == "null"){
 	$device = DeviceManager::getDeviceByToken($token);
 	$deviceId = $device['device_id'];
 	$deviceCommand = $device["command"];
-	if ($deviceCommand != '' || $deviceCommand != null)
+	if ($deviceCommand != '' && $deviceCommand != null && $deviceCommand != "null")
 	{
-		$command = $deviceCommand;
+		$command = $deviceCommand;		
+		$data = [
+			'command'=>'null'
+		];
+		DeviceManager::editByToken($token, $data);
+		$logManager->write("[API] Device_ID " . $deviceId . " executing command " . $command, LogRecordType::INFO);
 	} 
+}
 
-	$data = [
-		'command'=>'null'
+// Diagnostic Logs Write To log File
+if ($deviceLogs != null && $deviceLogs != ""){
+	foreach ($deviceLogs as $log) {
+		$logManager->write("[Device Log Msg] Device_ID " . $deviceId . "->" . $log, LogRecordType::ERROR);
+	}
+	$jsonAnswer = [
+		'state' => 'succes',
+		'command' => $command,
 	];
-	DeviceManager::editByToken($token, $data);
-	$logManager->write("[API] Device_ID " . $deviceId . " executing command " . $command, LogRecordType::INFO);
+	echo json_encode($jsonAnswer, JSON_PRETTY_PRINT);
+	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+	die();
 }
 
 // Subdevices first data!
-if ($values != null || $values != "") {
+if ($values != null && $values != "") {
 
 	//ZAPIS
 	$device = DeviceManager::getDeviceByToken($token);
@@ -268,7 +293,7 @@ if ($values != null || $values != "") {
 	$subDeviceLastReordValue = $subDeviceLastReord['value'];
 
 	if ($subDeviceLastReord['execuded'] == 0){
-		$logManager->write("[API] subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
+		$logManager->write("[API] subDevice_ID ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded'], LogRecordType::INFO);
 		RecordManager::setExecuted($subDeviceLastReord['record_id']);
 	}
 
