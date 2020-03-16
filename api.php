@@ -47,11 +47,14 @@ if (defined(DEBUGMOD) && DEBUGMOD == 1) {
 if (isset($obj['user']) && $obj['user'] != ''){
 	//user at home
 	$user = UserManager::getUser($obj['user']);
+	$userAtHome = $user['atHome'];
 	if (!empty($user)) {
 		$userId = $user['user_id'];
 		$atHome = $obj['atHome'];
-		UserManager::atHome($userId, $atHome);
-		$logManager->write("[Record] user " . $userId . " changet his home state to " . $atHome . " " . RECORDTIMOUT , LogRecordType::INFO);
+		if($userAtHome != $atHome){
+			UserManager::atHome($userId, $atHome);
+			$logManager->write("[USER] user " . $userId . " changet his home state to " . $atHome , LogRecordType::INFO);
+		}
 		echo 'Saved: ' . $atHome;
 		header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
 		die();
