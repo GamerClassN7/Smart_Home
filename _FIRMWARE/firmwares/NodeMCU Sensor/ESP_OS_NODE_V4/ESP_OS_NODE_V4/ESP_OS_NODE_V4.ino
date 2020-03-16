@@ -184,6 +184,15 @@ void loadDataFromWeb() {
   int sleepTime = jsonContent["device"]["sleepTime"];
   String hostName = jsonContent["device"]["hostname"];
   String requestState = jsonContent["state"];
+  String command = jsonContent["command"];
+
+  if (command == "reset"){
+    ESP.reset();
+  } else if (command == "config") {
+    CleanEeprom();
+    EEPROM.commit();
+    ESP.restart();
+  }
 
   if (requestState != "succes") {
     unsuccessfulRounds++;
