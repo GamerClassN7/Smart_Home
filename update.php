@@ -61,8 +61,14 @@ if (file_exists($localBinary)) {
 	$logManager->write("[Updater] version PHP: " . md5_file($localBinary), LogRecordType::INFO);
 	if ($_SERVER['HTTP_X_ESP8266_SKETCH_MD5'] != md5_file($localBinary)) {
 		sendFile($localBinary);
+		//get device data
+		$device = DeviceManager::getDeviceByMac($macAddress);
+		$deviceName = $device['name'];
+		$deviceId = $device['device_id'];
+		//logfile write
+		$logManager->write("[Device] device_ID " . $deviceId . "was just updated to new version", LogRecordType::WARNING);
+		$logManager->write("[Device] version hash:" . md5_file($localBinary), LogRecordType::INFO);
 		//notification
-		$deviceName = DeviceManager::getDeviceByMac($macAddress)['name'];
 		$notificationMng = new NotificationManager;
 		$notificationData = [
 			'title' => 'Info',

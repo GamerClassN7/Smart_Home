@@ -288,7 +288,7 @@ if ($values != null && $values != "") {
 	$subDeviceLastReordValue = $subDeviceLastReord['value'];
 
 	if ($subDeviceLastReord['execuded'] == 0){
-		$logManager->write("[API] subDevice_ID ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
+		$logManager->write("[API] subDevice_ID ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded'], LogRecordType::INFO);
 		RecordManager::setExecuted($subDeviceLastReord['record_id']);
 	}
 
