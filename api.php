@@ -92,6 +92,7 @@ try {
 $token = $obj['token'];
 $values = null;
 $settings = null;
+$deviceLogs = null;
 $command = "null";
 
 if (isset($obj['values'])) {
@@ -101,6 +102,12 @@ if (isset($obj['values'])) {
 if (isset($obj['settings'])) {
 	$settings = $obj['settings'];
 }
+
+if (isset($obj['logs'])) {
+	$deviceLogs = $obj['logs'];
+}
+
+
 
 //Checks
 if ($token == null || $token == "") {
@@ -162,7 +169,7 @@ if (!DeviceManager::approved($token)) {
 }
 
 // Diagnostic Data Write to DB
-if ($settings != null || $settings != ""){
+if ($settings != null && $settings != ""){
 	$data = ['mac' => $settings["network"]["mac"], 'ip_address' => $settings["network"]["ip"]];
 	if (array_key_exists("firmware_hash", $settings)) {
 		$data['firmware_hash'] = $settings["firmware_hash"];
@@ -175,20 +182,33 @@ if ($command == "null"){
 	$device = DeviceManager::getDeviceByToken($token);
 	$deviceId = $device['device_id'];
 	$deviceCommand = $device["command"];
-	if ($deviceCommand != '' || $deviceCommand != null)
+	if ($deviceCommand != '' && $deviceCommand != null && $deviceCommand != "null")
 	{
-		$command = $deviceCommand;
+		$command = $deviceCommand;		
+		$data = [
+			'command'=>'null'
+		];
+		DeviceManager::editByToken($token, $data);
+		$logManager->write("[API] Device_ID " . $deviceId . " executing command " . $command, LogRecordType::INFO);
 	} 
+}
 
-	$data = [
-		'command'=>'null'
+// Diagnostic Logs Write To log File
+if ($deviceLogs != null && $deviceLogs != ""){
+	foreach ($deviceLogs as $log) {
+		$logManager->write("[Device Log Msg] Device_ID " . $deviceId . "->" . $log, LogRecordType::ERROR);
+	}
+	$jsonAnswer = [
+		'state' => 'succes',
+		'command' => $command,
 	];
-	DeviceManager::editByToken($token, $data);
-	$logManager->write("[API] Device_ID " . $deviceId . " executing command " . $command, LogRecordType::INFO);
+	echo json_encode($jsonAnswer, JSON_PRETTY_PRINT);
+	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+	die();
 }
 
 // Subdevices first data!
-if ($values != null || $values != "") {
+if ($values != null && $values != "") {
 
 	//ZAPIS
 	$device = DeviceManager::getDeviceByToken($token);
@@ -268,7 +288,7 @@ if ($values != null || $values != "") {
 	$subDeviceLastReordValue = $subDeviceLastReord['value'];
 
 	if ($subDeviceLastReord['execuded'] == 0){
-		$logManager->write("[API] subDevice id ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
+		$logManager->write("[API] subDevice_ID ".$subDeviceId . " executed comand with value " .$subDeviceLastReordValue . " record id " . $subDeviceLastReord['record_id'] . " executed " . $subDeviceLastReord['execuded']);
 		RecordManager::setExecuted($subDeviceLastReord['record_id']);
 	}
 
