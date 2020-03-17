@@ -49,7 +49,7 @@ if (API_DEBUGMOD == 1) {
 if (isset($obj['user']) && $obj['user'] != ''){
 	//user at home
 	$user = UserManager::getUser($obj['user']);
-	$userAtHome = $user['atHome'];
+	$userAtHome = $user['at_home'];
 	if (!empty($user)) {
 		$userId = $user['user_id'];
 		$atHome = $obj['atHome'];
