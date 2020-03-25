@@ -115,6 +115,7 @@
 				<table class="table is-fluid">
 					<thead>
 						<tr>
+							<th><?php $LANGMNG->echo('t_avatar');?></th>
 							<th><?php $LANGMNG->echo('t_userName');?></th>
 							<th><?php $LANGMNG->echo('t_ota');?></th>
 							<th><?php $LANGMNG->echo('t_action');?></th>
@@ -123,6 +124,7 @@
 					<tbody>
 						<?php foreach ($USERS as $key => $user) { ?>
 							<tr>
+								<td><img src="<?php echo $user['gavatar_url']; ?>" /></td>
 								<td><?php echo $user['username']; ?></td>
 								<td><?php echo ($user['ota'] ? '<span class="fa">&#xf00c;</span>' : ''); ?></td>
 								<td><button name="deleteUser" type="button" class="button is-danger fa">&#xf1f8;</button></td>

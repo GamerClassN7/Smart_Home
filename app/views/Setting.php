@@ -30,6 +30,9 @@ class Setting extends Template
 		$template->prepare('automations', $automations);
 
 		$users = $userManager->getUsers();
+		foreach ($users as $key => $value) {
+			$users[$key]['gavatar_url'] = $userManager->getAvatarUrl($value['user_id']);
+		}
 		$template->prepare('users', $users);
 
 		$template->prepare('userName', $userManager->getUserData('username'));

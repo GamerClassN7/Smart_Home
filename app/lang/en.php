@@ -28,6 +28,7 @@ return $lang = [
 	'b_restart' => 'Restart',
 	'b_disable' => 'disabele',
 	'b_select' => 'Select',
+	'b_ota' => 'ota',
 
 	//labels
 	'l_choseDevice' => 'Chose device:',
@@ -57,6 +58,10 @@ return $lang = [
 	'l_password' => 'Password',
 	'l_oldPassword' => 'Old Password',
 	'l_newPassword' => 'New Password',
+	'l_uploadFirmware' => 'Upload Firmware',
+	'l_userAvatar' => 'Avatar',
+	'l_userEmail' => 'Email',
+	'l_roomName' => 'Room Name',
 
 	//Title
 	't_createScene' => 'Create Scene',
@@ -70,6 +75,14 @@ return $lang = [
 	't_experimental' => 'Experimental',
 	't_createuser' => 'Create User',
 	't_changePassword' => 'Change Password',
+	't_networkSetting' => 'Network Setting',
+	't_deviceVersion' => 'Version Setting',
+	't_ota' => 'OTA',
+	't_listUsers' => 'User List',
+	't_avatar' => 'Avatar',
+	't_listRooms' => 'Room List',	
+	't_roomName' => 'Room Name',
+	't_createRoom' => 'Create Rom',
 
 	//constants
 	'humi' => 'Humidity',

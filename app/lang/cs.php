@@ -28,6 +28,7 @@ return $lang = [
 	'b_restart' => 'Restart',
 	'b_disable' => 'Deaktivovat',
 	'b_select' => 'Zvolit',
+	'b_ota' => 'ota',
 
 	//labels
 	'l_choseDevice' => 'Zvolte zařízení:',
@@ -57,6 +58,10 @@ return $lang = [
 	'l_password' => 'Heslo',
 	'l_oldPassword' => 'Staré Heslo',
 	'l_newPassword' => 'Nové Heslo',
+	'l_uploadFirmware' => 'Nahrát Firmware',
+	'l_userAvatar' => 'Avatar',
+	'l_userEmail' => 'Email',
+	'l_roomName' => 'Jméno Místnosti',
 
 	//Title
 	't_createScene' => 'Vytvořit scénu',
@@ -70,6 +75,14 @@ return $lang = [
 	't_experimental' => 'Experimental',
 	't_createuser' => 'Vytvořit Uživatele',
 	't_changePassword' => 'Změnit Heslo',
+	't_networkSetting' => 'Nastavení Sítě',
+	't_deviceVersion' => 'Nastavení Verze',
+	't_ota' => 'OTA',
+	't_listUsers' => 'Seznam Uživatelů',
+	't_avatar' => 'Avatar',
+	't_listRooms' => 'Seznam Místností',	
+	't_roomName' => 'Jméno Místnosti',
+	't_createRoom' => 'Vytvořit Místnost',
 
 	//constants
 	'temp' => 'Teplota',

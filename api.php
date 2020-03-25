@@ -180,6 +180,13 @@ if ($settings != null && $settings != ""){
 		$data['firmware_hash'] = $settings["firmware_hash"];
 	}
 	DeviceManager::editByToken($token, $data);
+	$jsonAnswer = [
+		'state' => 'succes',
+		'command' => $command,
+	];
+	echo json_encode($jsonAnswer, JSON_PRETTY_PRINT);
+	header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+	die();
 }
 
 // Issuing command

@@ -31,8 +31,11 @@ class UserManager
 		}
 	}
 
-	public function getAvatarUrl(){
+	public function getAvatarUrl($userId = null){
 		$email = self::getUserData('email');
+		if ($userId != null){
+			$email = self::getUserData('email',$userId);
+		}
 		return 'https://secure.gravatar.com/avatar/' . md5( strtolower( trim( $email ) ) );
 	}
 
