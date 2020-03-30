@@ -15,7 +15,17 @@ if ($SUBDEVICE['type'] == 'on/off') {
 						<h5 unselectable="on" class="fa">&#x<?php echo $DEVICE['icon'] ?></h5>
 					</div>
 					<div class="col">
+					<?php if ($SUBDEVICE['type'] == 'temp_cont') { ?>
+						<input type="number" step="5" class="device-button-value text-right" id="value_control" value="<?php echo $SUBDEVICE['lastRecort']['value'] ?>"><?php echo $SUBDEVICE['unit']?>
+						<style>
+							input.device-button-value.text-right {
+    							width: inherit;
+							}
+						</style>
+					
+					<?php } else { ?>
 						<h5 unselectable="on" class="device-button-value text-right" title="<?php echo $SUBDEVICE['lastRecort']['time']; ?>"><?php echo $SUBDEVICE['lastRecort']['value'] . $SUBDEVICE['unit']?></h5>
+					<?php } ?>	
 					</div>
 				</div>
 				<div class="row">

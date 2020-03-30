@@ -5,6 +5,7 @@ function ajaxPostSimple(path, params, reload = false) {
         type: 'POST',
         data: params,
         success: function(msg){
+            console.log("message");
             console.log(msg);
             if (reload){
                 location.reload();

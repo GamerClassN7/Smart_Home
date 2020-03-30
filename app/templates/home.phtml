@@ -85,5 +85,23 @@
 	$partial = new Partial('footer');
 	$partial->render();
 	?>
+	<script>
+		$(document).on('keyup mouseup', '#value_control', function(event) { 					
+			$.ajax({
+				url: 'ajax',
+				type: 'POST',
+				//TODO: GET Attribute from ID
+				data: { subDevice_id : '46', action : 'set', value: this.value},
+				success: function(msg){
+					console.log("message");
+					console.log(msg);
+				},
+				error: function (request, status, error) {
+					console.log('0');
+				}
+			});
+			console.log(this.value);
+		});	
+	</script>
 </body>
 </html>
