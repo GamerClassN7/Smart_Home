@@ -65,6 +65,24 @@ class UserManager
 		}
 	}
 
+	public function loginNew ($username, $password) {
+		try {
+			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
+				if ($user['password'] == UserManager::getHashPassword($password)) {
+					echo "user loged in";
+					return $user['user_id'];
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} catch(PDOException $error) {
+			echo $error->getMessage();
+			die();
+		}
+	}
+
 	public function isLogin () {
 		if (isset ($_SESSION['user']) && isset($_SESSION['user']['id'])) {
 			return true;
