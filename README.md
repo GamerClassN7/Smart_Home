@@ -135,3 +135,34 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Project Link: [https://github.com/GamerClassN7/Smart_Home/](https://github.com/GamerClassN7/Smart_Home/) <br> <br>
 <sup><sub>Tags (ignore): ESP32 ESP12 ESP08 ESP01 ESP Smart Home Automation System PWA PHP HTML JS DHT11 DHT22
+
+## Folder structure
+- /app
+	- /controllers
+		- UserController.php
+	- /models
+		- UserModal.php
+	- /views
+		- /layouts
+			- default.phtml
+		- /templates
+			- /components
+			- /pages
+	- Bootstrap.php
+	- Db.php
+	- Routes.php
+- /library
+	- /types
+		- Units.php
+	- /vendor
+	- Controller.php
+	- Db.php
+	- Router.php
+- config
+	- config.php /
+- public
+	- /css
+	- /images
+	- /js
+	- .htaccess
+	- index.php
