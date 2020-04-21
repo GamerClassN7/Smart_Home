@@ -18,4 +18,4 @@ $router->any('/ajax', 'Ajax');
 $router->any('/log', 'Log');
 $router->any('/rooms', 'Rooms');
 
-$router->run($_SERVER['REQUEST_METHOD'], '/'.$_GET['url']);
+$router->run($_SERVER['REQUEST_METHOD'], '/'.(isset($_GET['url']) ? $_GET['url'] : ''));
