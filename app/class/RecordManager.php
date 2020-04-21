@@ -2,7 +2,7 @@
 class RecordManager{
 	public static $records;
 
-	public function create ($deviceId, $type, $value) {
+	public static function create ($deviceId, $type, $value) {
 		$subDeviceId = Db::loadOne('SELECT * FROM subdevices WHERE device_id = ? AND type = ?;', array($deviceId, $type))['subdevice_id'];
 		if ($subDeviceId == '') {
 			return false;
@@ -19,7 +19,7 @@ class RecordManager{
 		}
 	}
 
-	public static function setExecuted($recordId) {
+	public static static function setExecuted($recordId) {
 		try {
 			Db::edit ('records', ['execuded' => 1], 'WHERE record_id = ?', array($recordId));
 		} catch(PDOException $error) {
