@@ -1,13 +1,13 @@
 <?php
-class Template extends Partial{
-	var $assignedValues = [];
-	var $partBuffer;
-	var $path;
-	var $debug;
+class Template{
+	private $assignedValues = [];
+	private $partBuffer;
+	private $path;
+	private $debug;
 
 	function __construct($path = "", $debug = false) {
 		$this->debug = $debug;
-		if (!empty('app/templates/' . $path . '.phtml') && file_exists('app/templates/' . $path . '.phtml')) {
+		if (!empty('../app/templates/' . $path . '.phtml') && file_exists('../app/templates/' . $path . '.phtml')) {
 			$this->path = $path;
 		} else {
 			echo '<pre>';
@@ -26,9 +26,9 @@ class Template extends Partial{
 
 	function render() {
 		extract($this->assignedValues);
-		if (!empty('app/controls/' . $this->path . '.php') && file_exists('app/controls/' . $this->path . '.php')) {
-			include('app/controls/' . $this->path . '.php');
+		if (!empty('../app/controls/' . $this->path . '.php') && file_exists('../app/controls/' . $this->path . '.php')) {
+			include('../app/controls/' . $this->path . '.php');
 		}
-		require_once('app/templates/' . $this->path . '.phtml');
+		require_once('../app/templates/' . $this->path . '.phtml');
 	}
 }

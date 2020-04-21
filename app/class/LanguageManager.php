@@ -17,18 +17,19 @@ class LanguageManager
 
 	function load()
 	{
-		$file = './app/lang/en.php';
+		$file = '../lang/en.php';
 		if (!file_exists($file)){
+			echo 'ERROR: en.php not found';
 			die();
 			//TODO add lng EXEPTIONS
 		}
 		$arrayFirst = include($file);
-		$file = './app/lang/' . $this->lngCode . '.php';
+		$file = '../lang/' . $this->lngCode . '.php';
 		$arraySecond = [];
 		if (file_exists($file)){
 			$arraySecond = include($file);
 		}
-		$this->lngDatabase = array_merge($arrayFirst,$arraySecond);
+		$this->lngDatabase = array_merge($arrayFirst, $arraySecond);
 		return true;
 	}
 

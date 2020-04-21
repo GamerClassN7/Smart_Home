@@ -1,13 +1,13 @@
 <?php
 class Partial{
-	var $assignedValues = [];
-	var $partBuffer;
-	var $path;
-	var $debug;
+	private $assignedValues = [];
+	private $partBuffer;
+	private $path;
+	private $debug;
 
 	function __construct($path = "", $debug = false) {
 		$this->debug = $debug;
-		if (!empty('app/templates/part/' . $path . '.phtml') && file_exists('app/templates/part/' . $path . '.phtml')) {
+		if (!empty('../app/templates/part/' . $path . '.phtml') && file_exists('../app/templates/part/' . $path . '.phtml')) {
 			$this->path = $path;
 		} else {
 			echo '<pre>';
@@ -29,6 +29,6 @@ class Partial{
 			extract($this->assignedValues);
 		}
 
-		require('app/templates/part/' . $this->path . '.phtml');
+		require('../app/templates/part/' . $this->path . '.phtml');
 	}
 }

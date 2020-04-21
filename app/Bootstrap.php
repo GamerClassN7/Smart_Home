@@ -1,39 +1,37 @@
 <?php
-// import autoload
+
 //Autoloader
+class Autoloader {
+	protected static $extension = ".php";
+	protected static $root = __DIR__;
+	protected static $files = [];
 
-Class Autoloader {
-    protected static $extension = ".php";
-    protected static $root = __DIR__;
-    protected static $files = [];
+	static function ClassLoader ($className = ""){
+		$directorys = new RecursiveDirectoryIterator(static::$root, RecursiveDirectoryIterator::SKIP_DOTS);
 
-    static function ClassLoader ($className = ""){
-        $directorys = new RecursiveDirectoryIterator(static::$root, RecursiveDirectoryIterator::SKIP_DOTS);
+		//echo '<pre>';
+		//var_dump($directorys);
+		//echo '</pre>';
 
-        //echo '<pre>';
-        //var_dump($directorys);
-        //echo '</pre>';
-        
-        $files = new RecursiveIteratorIterator($directorys, RecursiveIteratorIterator::LEAVES_ONLY);
+		$files = new RecursiveIteratorIterator($directorys, RecursiveIteratorIterator::LEAVES_ONLY);
 
-        $filename = $className . static::$extension;
+		$filename = $className . static::$extension;
 
-        foreach ($files as $key => $file) {
-            if (strtolower($file->getFilename()) === strtolower($filename) && $file->isReadable()) {
-                include_once $file->getPathname();
-                return;
-            }
-        }
-    }
+		foreach ($files as $key => $file) {
+			if (strtolower($file->getFilename()) === strtolower($filename) && $file->isReadable()) {
+				include_once $file->getPathname();
+				return;
+			}
+		}
+	}
 
-    static function setRoot($rootPath){
-        static::$root = $rootPath;
-    }
+	static function setRoot($rootPath){
+		static::$root = $rootPath;
+	}
 }
 
 spl_autoload_register("Autoloader::ClassLoader");
 Autoloader::setRoot('/var/www/dev.steelants.cz/vasek/home-update/');
-
 
 //Debug
 error_reporting(E_ALL);
@@ -47,22 +45,22 @@ ini_set('session.cookie_secure', '1');
 session_start ();
 mb_internal_encoding ("UTF-8");
 
-//Logs
+// import configs
+require_once '../config/config.php';
+
+// Logs
 $logManager = new LogManager();
 
-//Language
+// Language
 $langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 $langMng = new LanguageManager($langTag);
 $langMng->load();
 
-//DB Conector
-//Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
+//D B Conector
+Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 
-
-
-//TODO: Přesunout do Login Pohledu
+// TODO: Přesunout do Login Pohledu
 $userManager = new UserManager();
-
 
 // import routes
 require_once '../app/Routes.php';
