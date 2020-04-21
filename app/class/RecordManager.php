@@ -19,7 +19,7 @@ class RecordManager{
 		}
 	}
 
-	public static static function setExecuted($recordId) {
+	public static function setExecuted($recordId) {
 		try {
 			Db::edit ('records', ['execuded' => 1], 'WHERE record_id = ?', array($recordId));
 		} catch(PDOException $error) {
