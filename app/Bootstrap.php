@@ -47,16 +47,18 @@ ini_set('session.cookie_secure', '1');
 session_start ();
 mb_internal_encoding ("UTF-8");
 
+//Logs
+$logManager = new LogManager();
+
 //Language
-//$langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-//$langMng = new LanguageManager($langTag);
-//$langMng->load();
+$langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+$langMng = new LanguageManager($langTag);
+$langMng->load();
 
 //DB Conector
 //Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 
-//Logs
-$logManager = new LogManager();
+
 
 //TODO: Přesunout do Login Pohledu
 $userManager = new UserManager();
