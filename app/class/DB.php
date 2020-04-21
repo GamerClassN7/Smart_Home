@@ -1,4 +1,5 @@
 <?php
+
 class Db{
 	private static $join;
 	private static $commandDatabase = array (
@@ -57,44 +58,41 @@ class Db{
 	public static function add ($table, $values = array()) {
 		return self::command (
 			"INSERT INTO `$table` (`" .
-				implode('`, `', array_keys($values)) .
-				"`) VALUES (" .
-					str_repeat('?,', (count($values) > 0 ? count($values)-1 : 0)) .
-					"?)"
-					, array_values ($values));
-				}
-				// TODO: pokud vlozim prazdne pole tak chyba ??
-				public static function addAll ($table, $values = array ()) {
-					try {
-						foreach ($values as $value) {
-							self::add ($table, $value);
-						}
-					} catch (PDOException $ex) {
-						throw new PDOException ($ex->getMessage());
-					}
-				}
+			implode('`, `', array_keys($values)) .
+			"`) VALUES (" .
+			str_repeat('?,', (count($values) > 0 ? count($values)-1 : 0)) .
+			"?)"
+			, array_values ($values)
+		);
+	}
+	// TODO: pokud vlozim prazdne pole tak chyba ??
+	public static function addAll ($table, $values = array ()) {
+		try {
+			foreach ($values as $value) {
+				self::add ($table, $value);
+			}
+		} catch (PDOException $ex) {
+			throw new PDOException ($ex->getMessage());
+		}
+	}
 
-				public static function edit (
-					$table,
-					$values = array(),
-					$conditions,
-					$values2 = array()
-				) {
-					return self::command (
-						"UPDATE `$table` SET `" .
-						implode('` =?, `', array_keys($values)) .
-						"` =? " .
-						$conditions
-						, array_merge (array_values ($values), $values2));
-					}
+	public static function edit ($table, $values = array(), $conditions, $values2 = array()) {
+		return self::command (
+			"UPDATE `$table` SET `" .
+			implode('` =?, `', array_keys($values)) .
+			"` =? " .
+			$conditions
+			, array_merge (array_values ($values), $values2)
+		);
+	}
 
-					public static function insertId () {
-						return self::$join->lastInsertId ();
-					}
+	public static function insertId () {
+		return self::$join->lastInsertId ();
+	}
 
-					public static function addId ($lastTable, $lastIdName) {
-						$answer = self::$join->prepare ("SELECT `$lastIdName` FROM `$lastTable` ORDER BY `$lastIdName` DESC");
-						$answer->execute ();
-						return $answer->fetch (PDO::FETCH_NUM)[0];
-					}
-				}
+	public static function addId ($lastTable, $lastIdName) {
+		$answer = self::$join->prepare ("SELECT `$lastIdName` FROM `$lastTable` ORDER BY `$lastIdName` DESC");
+		$answer->execute ();
+		return $answer->fetch (PDO::FETCH_NUM)[0];
+	}
+}
