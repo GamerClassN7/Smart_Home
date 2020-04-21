@@ -2,7 +2,7 @@ Options -Indexes
 Options -MultiViews -Indexes
 
 RewriteEngine On
-RewriteBase /vasek/home/
+RewriteBase /vasek/home-update/public/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
