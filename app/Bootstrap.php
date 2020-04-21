@@ -44,7 +44,7 @@ ini_set('session.cookie_secure', '1');
 session_start ();
 mb_internal_encoding ("UTF-8");
 
-/** Language **/
+//Language
 $langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 $langMng = new LanguageManager($langTag);
 $langMng->load();
