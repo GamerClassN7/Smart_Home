@@ -60,16 +60,18 @@ class Router{
       }
 
       if($this->function !== NULL){
-         if(strpos($this->function, '@') !== false){
-            list($class, $function) = explode('@', $this->function);
-            $method = new ReflectionMethod($class, $function);
-            if($method->isStatic()){
-               call_user_func_array([$class, $function], $this->params);
-            }else{
-               call_user_func_array([new $class, $function], $this->params);
-            }
-         }else if(class_exists($this->function)){
-            new $this->function(...$this->params);
+			if(is_string($this->function)){
+				if(strpos($this->function, '@') !== false){
+					list($class, $function) = explode('@', $this->function);
+					$method = new ReflectionMethod($class, $function);
+					if($method->isStatic()){
+						call_user_func_array([$class, $function], $this->params);
+					}else{
+						call_user_func_array([new $class, $function], $this->params);
+					}
+				}else if(class_exists($this->function)){
+					new $this->function(...$this->params);
+				}
          }else if (is_callable($this->function)) {
             call_user_func_array($this->function, $this->params);
          }
