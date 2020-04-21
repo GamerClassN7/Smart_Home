@@ -2,7 +2,7 @@
 class SceneManager{
 	public static $scenes;
 
-	public function create ($icon, $name, $doCode) {
+	public static function create ($icon, $name, $doCode) {
 		$scene = array (
 			'icon' => $icon,
 			'name' => $name,
@@ -16,15 +16,15 @@ class SceneManager{
 		}
 	}
 
-	public function getAllScenes () {
+	public static function getAllScenes () {
 		return Db::loadAll ("SELECT * FROM scenes");
 	}
 
-	public function getScene ($sceneId) {
+	public static function getScene ($sceneId) {
 		return Db::loadOne("SELECT * FROM scenes WHERE scene_id = ?", array($sceneId));
 	}
 
-	public function execScene ($sceneId) {
+	public static function execScene ($sceneId) {
 		$sceneData = SceneManager::getScene($sceneId);
 		$sceneDoJson = $sceneData['do_something'];
 		$sceneDoArray = json_decode($sceneDoJson);
@@ -34,7 +34,7 @@ class SceneManager{
 		return true;
 	}
 
-	public function delete($sceneId){
+	public static function delete($sceneId){
 		Db::command ('DELETE FROM scenes WHERE scene_id=?', array ($sceneId));
 	}
 }

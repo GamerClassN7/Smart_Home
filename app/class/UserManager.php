@@ -1,7 +1,7 @@
 <?php
 class UserManager
 {
-	public function getUsers () {
+	public static function getUsers () {
 		try {
 			$allUsers = Db::loadAll ("SELECT user_id, username, at_home, ota FROM users");
 			return $allUsers;
@@ -11,7 +11,7 @@ class UserManager
 		}
 	}
 
-	public function getUser ($userName) {
+	public static function getUser ($userName) {
 		try {
 			$user = Db::loadOne ("SELECT * FROM users WHERE username = ?", [$userName]);
 			return $user;
@@ -21,7 +21,7 @@ class UserManager
 		}
 	}
 
-	public function getUserId ($userId) {
+	public static function getUserId ($userId) {
 		try {
 			$user = Db::loadOne ("SELECT * FROM users WHERE user_id = ?", [$userId]);
 			return $user;
@@ -31,7 +31,7 @@ class UserManager
 		}
 	}
 
-	public function getAvatarUrl($userId = null){
+	public static function getAvatarUrl($userId = null){
 		$email = self::getUserData('email');
 		if ($userId != null){
 			$email = self::getUserData('email',$userId);
@@ -39,12 +39,12 @@ class UserManager
 		return 'https://secure.gravatar.com/avatar/' . md5( strtolower( trim( $email ) ) );
 	}
 
-	public function login ($username, $password, $rememberMe) {
+	public static function login ($username, $password, $rememberMe) {
 		try {
 			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
 					if (isset($rememberMe) && $rememberMe == 'true') {
-						setcookie ("rememberMe", $this->setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), BASEDIR, $_SERVER['HTTP_HOST'], 1);
+						setcookie ("rememberMe", self::setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), BASEDIR, $_SERVER['HTTP_HOST'], 1);
 					}
 					$_SESSION['user']['id'] = $user['user_id'];
 					$page = "";
@@ -65,7 +65,7 @@ class UserManager
 		}
 	}
 
-	public function loginNew ($username, $password) {
+	public static function loginNew ($username, $password) {
 		try {
 			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
@@ -83,12 +83,12 @@ class UserManager
 		}
 	}
 
-	public function isLogin () {
+	public static function isLogin () {
 		if (isset ($_SESSION['user']) && isset($_SESSION['user']['id'])) {
 			return true;
 		} else {
 			if (isset ($_COOKIE['rememberMe'])){
-				if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($this->getDecryptedCookie($_COOKIE['rememberMe'])))) {
+				if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array (self::getDecryptedCookie($_COOKIE['rememberMe'])))) {
 					$_SESSION['user']['id'] = $user['user_id'];
 					return true;
 				}
@@ -97,7 +97,7 @@ class UserManager
 		return false;
 	}
 
-	public function logout () {
+	public static function logout () {
 		unset($_SESSION['user']);
 		session_destroy();
 		if (isset($_COOKIE['rememberMe'])){
@@ -106,7 +106,7 @@ class UserManager
 		}
 	}
 
-	public function setEncryptedCookie($value){
+	public static function setEncryptedCookie($value){
 		$first_key = base64_decode(FIRSTKEY);
 		$second_key = base64_decode(SECONDKEY);
 
@@ -119,7 +119,7 @@ class UserManager
 		return $newvalue;
 	}
 
-	public function getDecryptedCookie($value){
+	public static function getDecryptedCookie($value){
 		$first_key = base64_decode(FIRSTKEY);
 		$second_key = base64_decode(SECONDKEY);
 
@@ -145,19 +145,19 @@ class UserManager
 		return $user[$type];
 	}
 
-	public function setUserData ($type, $value) {
+	public static function setUserData ($type, $value) {
 		if (isset ($_SESSION['user']['id'])) {
 			Db::command ('UPDATE users SET ' . $type . '=? WHERE user_id=?', array ($value, $_SESSION['user']['id']));
 		}
 	}
 
-	public function getHashPassword ($password) {
+	public static function getHashPassword ($password) {
 		$salt = "s0mRIdlKvI";
 		$hashPassword = hash('sha512', ($password . $salt));
 		return $hashPassword;
 	}
 
-	public function atHome($userId, $atHome){
+	public static function atHome($userId, $atHome){
 		try {
 			Db::edit ('users', ['at_home' => $atHome], 'WHERE user_id = ?', array($userId));
 		} catch(PDOException $error) {
@@ -166,7 +166,7 @@ class UserManager
 		}
 	}
 
-	public function changePassword($oldPassword, $newPassword, $newPassword2){
+	public static function changePassword($oldPassword, $newPassword, $newPassword2){
 		if ($newPassword == $newPassword2) {
 			//Password Criteria
 			$oldPasswordSaved = self::getUserData('password');
@@ -180,7 +180,7 @@ class UserManager
 		}
 	}
 
-	public function createUser($userName, $password){
+	public static function createUser($userName, $password){
 		$userId = Db::loadOne('SELECT * FROM users WHERE username = ?;', array($userName))['user_id'];
 		if ($userId != null) {
 			return false;
@@ -197,8 +197,8 @@ class UserManager
 		}
 	}
 
-	public function	haveOtaEnabled($userName){
-		$ota = $this->getUser($userName)['ota'];
+	public static function	haveOtaEnabled($userName){
+		$ota = self::getUser($userName)['ota'];
 
 		if ($ota != ''){
 			return ($ota != '' ? $ota : false);

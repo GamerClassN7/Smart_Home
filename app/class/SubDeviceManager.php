@@ -3,17 +3,17 @@ class SubDeviceManager
 {
 	public static $devices;
 
-	public function getAllSubDevices($deviceId)
+	public static function getAllSubDevices($deviceId)
 	{
 		return Db::loadAll("SELECT * FROM subdevices WHERE device_id = ?", array($deviceId));
 	}
 
-	public function getSubDeviceMaster($subDeviceId)
+	public static function getSubDeviceMaster($subDeviceId)
 	{
 		return Db::loadOne("SELECT * FROM devices WHERE device_id = (SELECT device_id FROM subdevices WHERE subdevice_id = ?)", array($subDeviceId));
 	}
 
-	public function getSubDeviceByMaster($deviceId, $subDeviceType = null)
+	public static function getSubDeviceByMaster($deviceId, $subDeviceType = null)
 	{
 		if ($subDeviceType == null) {
 			return Db::loadOne("SELECT * FROM subdevices WHERE device_id = ?;", array($deviceId));
@@ -22,7 +22,7 @@ class SubDeviceManager
 		}
 	}
 
-	public function getSubDeviceByMasterAndType($deviceId, $subDeviceType = null)
+	public static function getSubDeviceByMasterAndType($deviceId, $subDeviceType = null)
 	{
 		if (!empty($subDeviceType)) {
 			return Db::loadOne("SELECT * FROM subdevices WHERE device_id = ?;", array($deviceId));
@@ -31,12 +31,12 @@ class SubDeviceManager
 		}
 	}
 
-	public function getSubDevice($subDeviceId)
+	public static function getSubDevice($subDeviceId)
 	{
 		return Db::loadOne("SELECT * FROM subdevices WHERE subdevice_id = ?;", array($subDeviceId));
 	}
 
-	public function getSubDevicesTypeForMater($deviceId)
+	public static function getSubDevicesTypeForMater($deviceId)
 	{
 		$parsedTypes = [];
 		$types = Db::loadAll("SELECT type FROM subdevices WHERE device_id = ?;", array($deviceId));
@@ -48,7 +48,7 @@ class SubDeviceManager
 
 	//check if dubdevice exist
 
-	public function create($deviceId, $type, $unit)
+	public static function create($deviceId, $type, $unit)
 	{
 		$record = array(
 			'device_id' => $deviceId,
@@ -63,7 +63,7 @@ class SubDeviceManager
 		}
 	}
 
-	public function remove($subDeviceId)
+	public static function remove($subDeviceId)
 	{
 		RecordManager::cleanSubdeviceRecords($subDeviceId);
 		return Db::loadAll("DELETE FROM subdevices WHERE subdevice_id = ?", array($subDeviceId));

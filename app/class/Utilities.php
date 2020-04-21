@@ -4,7 +4,7 @@
 */
 class Utilities
 {
-	function cleanString($text) {
+	static function cleanString($text) {
 		$utf8 = array(
 			'/[áàâãªä]/u'   =>   'a',
 			'/[ÁÀÂÃÄ]/u'    =>   'A',
@@ -36,7 +36,7 @@ class Utilities
 		return preg_replace(array_keys($utf8), array_values($utf8), $text);
 	}
 
-	function stringInsert($str,$insertstr,$pos)
+	static function stringInsert($str,$insertstr,$pos)
 	{
 		$str = substr($str, 0, $pos) . $insertstr . substr($str, $pos);
 		return $str;
@@ -50,7 +50,7 @@ class Utilities
 	* @return [type]          [description]
 	*/
 
-	function generateGraphJson(string $type = 'line', array $data = [], array $options = []){
+	static function generateGraphJson(string $type = 'line', array $data = [], array $options = []){
 		$array = [
 			'type' => $type,
 			'data' => [
@@ -94,7 +94,7 @@ class Utilities
 		return json_encode($array, JSON_PRETTY_PRINT);
 	}
 
-	function ago( $datetime )
+	static function ago( $datetime )
 	{
 		$interval = date_create('now')->diff( $datetime );
 		$suffix = ( $interval->invert ? ' ago' : '' );
@@ -105,12 +105,12 @@ class Utilities
 		return self::pluralize( $interval->s, 'second' ) . $suffix;
 	}
 
-	function pluralize( $count, $text )
+	static function pluralize( $count, $text )
 	{
 		return $count . ( ( $count == 1 ) ? ( " $text" ) : ( " ${text}s" ) );
 	}
 
-	function checkOperator($value1, $operator, $value2) {
+	static function checkOperator($value1, $operator, $value2) {
 		switch ($operator) {
 			case '<': // Less than
 			return $value1 < $value2;

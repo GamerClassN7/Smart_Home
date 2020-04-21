@@ -2,31 +2,31 @@
 class DeviceManager{
 	public static $devices;
 
-	function getAllDevices () {
+	static function getAllDevices () {
 		return Db::loadAll ("SELECT * FROM devices WHERE approved != ?", Array(2));
 	}
 
-	function getAllDevicesInRoom ($roomId = "") {
+	static function getAllDevicesInRoom ($roomId = "") {
 		return Db::loadAll ("SELECT * FROM devices WHERE room_id = ? AND approved != ?", Array($roomId, 2));
 	}
 
-	function getOtherDevices(){
+	static function getOtherDevices(){
 		return Db::loadAll ("SELECT * FROM devices WHERE room_id IS NULL ");
 	}
 
-	function getDeviceByToken($deviceToken) {
+	static function getDeviceByToken($deviceToken) {
 		return Db::loadOne("SELECT * FROM devices WHERE token = ?", array($deviceToken));
 	}
 
-	function getDeviceByMac($deviceMac) {
+	static function getDeviceByMac($deviceMac) {
 		return Db::loadOne("SELECT * FROM devices WHERE mac = ?", array($deviceMac));
 	}
 
-	function getDeviceById($deviceId) {
+	static function getDeviceById($deviceId) {
 		return Db::loadOne("SELECT * FROM devices WHERE device_id = ?", array($deviceId));
 	}
 
-	public function create ($name, $token) {
+	public static function create ($name, $token) {
 		$defaultRoom = RoomManager::getDefaultRoomId();
 		$device = array (
 			'name' => $name,
@@ -42,7 +42,7 @@ class DeviceManager{
 		}
 	}
 
-	public function edit ($deviceId, $values = []) {
+	public static function edit ($deviceId, $values = []) {
 		try {
 			Db::edit ('devices', $values, 'WHERE device_id = ?', array($deviceId));
 		} catch(PDOException $error) {
@@ -51,7 +51,7 @@ class DeviceManager{
 		}
 	}
 
-	public function editByToken ($token, $values = []) {
+	public static function editByToken ($token, $values = []) {
 		try {
 			Db::edit ('devices', $values, 'WHERE token = ?', array($token));
 		} catch(PDOException $error) {
@@ -65,7 +65,7 @@ class DeviceManager{
 	* @param  [type] $roomId   [číslo místnosti do kter se má zařízení přiřadit]
 	* @param  [type] $deviceId [Číslo zařízení které chcete přiřadit do místnosti]
 	*/
-	public function assignRoom ($roomId, $deviceId) {
+	public static function assignRoom ($roomId, $deviceId) {
 		$device = array (
 			'room_id' => $roomId,
 		);
@@ -81,15 +81,15 @@ class DeviceManager{
 	* [delete Smazání zařízení]
 	* @param  [type] $deviceId [Id zařízení ke smazání]
 	*/
-	public function delete ($deviceId) {
+	public static function delete ($deviceId) {
 		Db::command ('DELETE FROM devices WHERE device_id=?', array ($deviceId));
 	}
 
-	public function registeret ($deviceToken) {
+	public static function registeret ($deviceToken) {
 		return (count(Db::loadAll ("SELECT * FROM devices WHERE token=?", array($deviceToken))) == 1 ? true : false);
 	}
 
-	public function approved ($deviceToken) {
+	public static function approved ($deviceToken) {
 		return (count(Db::loadAll ("SELECT * FROM devices WHERE token=? AND approved = ?", array($deviceToken, 1))) == 1 ? true : false);
 	}
 }

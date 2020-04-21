@@ -3,21 +3,21 @@
 class AutomationManager{
 	public static $automation;
 
-	public function remove($automationId) {
+	public static function remove($automationId) {
 		return Db::command ('DELETE FROM automation WHERE automation_id=?', array ($automationId));
 	}
 
-	public function deactive($automationId) {
+	public static function deactive($automationId) {
 		$automation = Db::loadOne ("SELECT * FROM automation WHERE automation_id=?" , array ($automationId));
 		$flipedValue = ($automation['active'] == 1 ? 0 : 1);
 		return Db::command ('UPDATE automation SET active = ? WHERE automation_id=?', array ($flipedValue,$automationId));
 	}
 
-	public function restart($automationId) {
+	public static function restart($automationId) {
 		return Db::command ('UPDATE automation SET executed = 0 WHERE automation_id=?', array ($automationId));
 	}
 
-	public function create ($name, $onDays, $doCode, $ifCode, $automationId = "") {
+	public static function create ($name, $onDays, $doCode, $ifCode, $automationId = "") {
 		$userId = UserManager::getUserData('user_id');
 		$scene = array (
 			'name' => $name,
@@ -38,12 +38,12 @@ class AutomationManager{
 		}
 	}
 
-	public function getAll(){
+	public static function getAll(){
 		return Db::loadAll ("SELECT * FROM automation");
 
 	}
 
-	public function executeAll(){
+	public static function executeAll(){
 		global $logManager;
 
 		$automations = Db::loadAll ("SELECT * FROM automation");

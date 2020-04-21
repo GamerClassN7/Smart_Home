@@ -2,17 +2,17 @@
 class RoomManager{
 	public static $rooms;
 
-	function getDefaultRoomId() {
+	static function getDefaultRoomId() {
 		$defaultRoom = Db::loadOne("SELECT room_id FROM rooms WHERE 'default' = 1");
 		return $defaultRoom['room_id'];
 	}
 
-	function getAllRooms () {
+	static function getAllRooms () {
 		$allRoom = Db::loadAll ("SELECT rooms.*, COUNT(devices.device_id) as device_count FROM rooms LEFT JOIN devices ON (devices.room_id=rooms.room_id) GROUP BY rooms.room_id");
 		return $allRoom;
 	}
 
-	public function create ($name) {
+	public static function create ($name) {
 		$room = array (
 			'name' => $name,
 		);
@@ -24,7 +24,7 @@ class RoomManager{
 		}
 	}
 
-	public function delete ($roomId) {
+	public static function delete ($roomId) {
 		Db::command ('DELETE FROM rooms WHERE room_id=?', array ($roomId));
 	}
 }
