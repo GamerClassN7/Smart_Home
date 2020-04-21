@@ -3,7 +3,7 @@
 $router = new Router();
 
 $router->setDefault(function(){
-	echo $_GET['URL'].': 404';
+	echo $_GET['url'].': 404';
 });
 
 //Pages
