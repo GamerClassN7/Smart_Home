@@ -36,10 +36,6 @@ Class Autoloader {
 Autoloader::setRoot('/var/www/dev.steelants.cz/vasek/home-update/');
 spl_autoload_register("Autoloader::ClassLoader");
 
-
-// import routes
-require_once './Routes.php';
-
 //setup
 ini_set ('session.cookie_httponly', '1');
 ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
@@ -62,3 +58,5 @@ $userManager = new UserManager();
 //Logs
 $logManager = new LogManager();
 
+// import routes
+require_once './Routes.php';
