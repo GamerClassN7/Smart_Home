@@ -20,9 +20,9 @@ Class Autoloader {
 
         foreach ($files as $key => $file) {
             if (strtolower($file->getFilename()) === strtolower($filename) && $file->isReadable()) {
-
+                echo $file->getPathname();
                 include_once $file->getPathname();
-                break;
+                return;
             }
         }
     }
@@ -32,8 +32,13 @@ Class Autoloader {
     }
 }
 
-Autoloader::setRoot('/var/www/dev.steelants.cz/vasek/home-update/');
 spl_autoload_register("Autoloader::ClassLoader");
+Autoloader::setRoot('/var/www/dev.steelants.cz/vasek/home-update/');
+
+
+//Debug
+error_reporting(E_ALL);
+ini_set( 'display_errors','1');
 
 //setup
 ini_set ('session.cookie_httponly', '1');
@@ -44,18 +49,19 @@ session_start ();
 mb_internal_encoding ("UTF-8");
 
 //Language
-$langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-$langMng = new LanguageManager($langTag);
-$langMng->load();
+//$langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+//$langMng = new LanguageManager($langTag);
+//$langMng->load();
 
 //DB Conector
-Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
+//Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
+
+//Logs
+$logManager = new LogManager();
 
 //TODO: Přesunout do Login Pohledu
 $userManager = new UserManager();
 
-//Logs
-$logManager = new LogManager();
 
 // import routes
 require_once './Routes.php';
