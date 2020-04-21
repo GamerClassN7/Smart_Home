@@ -20,7 +20,6 @@ Class Autoloader {
 
         foreach ($files as $key => $file) {
             if (strtolower($file->getFilename()) === strtolower($filename) && $file->isReadable()) {
-                echo $file->getPathname();
 
                 include_once $file->getPathname();
                 break;
