@@ -1,11 +1,15 @@
 RewriteEngine On
-DirectoryIndex ./public/
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (.*) ./public/index.php?url=/$1 [QSA,L]
-
+# require https
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# serve all files from public subfolder
+RewriteCond %{REQUEST_FILENAME} !.php
+RewriteCond %{REQUEST_FILENAME} \.
+RewriteRule (.*) ./public/$1 [L]
+
+# serve all other request as query parameters
+RewriteRule (.*) ./public/index.php?url=$1 [L,QSA]
 
 AddType application/x-httpd-php .php .phtml
