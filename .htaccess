@@ -1,16 +1,11 @@
 RewriteEngine On
-RewriteBase /vasek/home-update/
-DirectoryIndex ./public/index.php
+DirectoryIndex ./public/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !.css
-RewriteCond %{REQUEST_FILENAME} !.js
-RewriteRule (.*) ./public/index.php?url=$1 [QSA,L]
+RewriteRule (.*) ./public/index.php?url=/$1 [QSA,L]
 
 RewriteCond %{HTTPS} off
-RewriteCond %{REQUEST_FILENAME} !api.php
-RewriteCond %{REQUEST_FILENAME} !apiFront.php
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 AddType application/x-httpd-php .php .phtml
