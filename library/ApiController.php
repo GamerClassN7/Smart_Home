@@ -1,7 +1,7 @@
 <?php
 class ApiController {
-	private $input;
-	private $authenticated;
+	protected $input;
+	protected $authenticated;
 
 	function __construct() {
 		$this->authenticated = false;
@@ -17,7 +17,7 @@ class ApiController {
 		}
 	}
 
-	private function requireAuth(){
+	protected function requireAuth(){
 		if (isset($this->headers['HTTP_AUTHORIZATION'])) {
 			// TODO: call appropriate class/method
 			$authManager = new AuthManager();
@@ -30,7 +30,7 @@ class ApiController {
 		}
 	}
 
-	private function response($data = [], $httpCode = '200'){
+	protected function response($data = [], $httpCode = '200'){
 		http_response_code($httpCode);
 		echo json_encode($data);
 	}
