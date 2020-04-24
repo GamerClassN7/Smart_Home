@@ -22,9 +22,9 @@ class ApiCOntroller {
 		}
     }
 
-	function response(){
-        http_response_code($this->httpCode);
-        echo json_encode($this->data);
+	function response($data = [], $httpCode = '200'){
+        http_response_code($httpCode);
+        echo json_encode($data);
         die();
 	}
 }
