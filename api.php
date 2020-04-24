@@ -19,15 +19,17 @@ $files = array_diff($files, array(
 	'Ajax.php',
 ));
 
+
+
 foreach($files as $file) {
 	include './app/class/'.  $file;
 }
 
 //Allow acces only wia Curl, Ajax ETC
-$restAcess = 'XMLHttpRequest' == ( $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '' );
+/*$restAcess = 'XMLHttpRequest' == ( $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '' );
 if (!$restAcess){
 	header('Location: ./');
-}
+}*/
 
 //Log
 $logManager = new LogManager();
@@ -215,6 +217,11 @@ if ($deviceLogs != null && $deviceLogs != ""){
 	die();
 }
 
+
+//
+if (count($values) == 1){
+	unset($values["wifi"]);
+}
 // Subdevices first data!
 if ($values != null && $values != "") {
 
