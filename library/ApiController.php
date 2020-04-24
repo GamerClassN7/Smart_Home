@@ -17,7 +17,7 @@ class ApiController {
 		}
 	}
 
-	function requireAuth(){
+	private function requireAuth(){
 		if (isset($this->headers['HTTP_AUTHORIZATION'])) {
 			// TODO: call appropriate class/method
 			$authManager = new AuthManager();
@@ -30,7 +30,7 @@ class ApiController {
 		}
 	}
 
-	function response($data = [], $httpCode = '200'){
+	private function response($data = [], $httpCode = '200'){
 		http_response_code($httpCode);
 		echo json_encode($data);
 	}
