@@ -1,13 +1,12 @@
 <?php
-class ApiObject {
+class ApiCOntroller {
 	private $data = [];
     public $httpCode = 200;
     public $autenticated = false;
 
 
-	function __construct($objectName, $httpHeaders) {
-		$this->table = $objectName;
-		$this->headers = $httpHeaders;
+	function __construct() {
+		$this->headers = $_SERVER;
     }
 
 	function requireAuth(){
