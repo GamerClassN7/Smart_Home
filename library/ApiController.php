@@ -18,10 +18,10 @@ class ApiController {
 	}
 
 	protected function requireAuth(){
-		if (isset($this->headers['HTTP_AUTHORIZATION'])) {
+		if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
 			// TODO: call appropriate class/method
 			$authManager = new AuthManager();
-			$this->authenticated = $authManager>validateToken($this->headers['HTTP_AUTHORIZATION']);
+			$this->authenticated = $authManager>validateToken($_SERVER['HTTP_AUTHORIZATION']);
 			if(!$this->authenticated){
 				throw new Exception("Auth required", 401);
 			}

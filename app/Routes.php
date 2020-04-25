@@ -19,5 +19,6 @@ $router->any('/log', 'Log');
 $router->any('/rooms', 'Rooms');
 
 $router->get('/api/devices', 'DevicesApi@getAllDevices');
+$router->get('/api/login', 'AuthApi@login');
 
 $router->run($_SERVER['REQUEST_METHOD'], '/'.(isset($_GET['url']) ? $_GET['url'] : ''));

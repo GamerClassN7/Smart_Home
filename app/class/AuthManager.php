@@ -1,7 +1,7 @@
 <?php
 
-class ApiManager {
-    public function generateToken($username, $password){
+class AuthManager {
+    public function getToken($username, $password){
         $userManager = new UserManager();
         if ($username != '' || $password != ''){               
             $userLogedIn = $userManager->loginNew($username, $password);
@@ -25,6 +25,21 @@ class ApiManager {
                 return $jwt;
             }
         }
+        return false;
+    }
+
+    public function deleteToken($token){
+        Db::command ('DELETE FROM tokens WHERE token=?', array ($token));
+        return true;
+    }
+
+    public function validateToken($token){
+        $tokens = Db::loadAll('SELECT * FROM tokens WHERE token = ? AND expire >= CURRENT_TIMESTAMP AND blocked = 0;', array($token));
+        if (count($tokens) == 1) {
+			return true;
+        } else if (count($tokens) == 0) {
+            return false;
+        };
         return false;
     }
 }
