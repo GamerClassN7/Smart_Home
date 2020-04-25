@@ -36,7 +36,7 @@ Autoloader::setRoot('/var/www/dev.steelants.cz/vasek/home-update/');
 class ErrorHandler {
     static function exception($exception){
         error_log($exception);
-        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, $exception->getCode());
         echo '<h1>Oops!</h1><p>Something went wrong!</p>';
         exit;
     }
