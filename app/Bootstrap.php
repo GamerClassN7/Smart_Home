@@ -32,6 +32,7 @@ class Autoloader {
 
 spl_autoload_register("Autoloader::ClassLoader");
 Autoloader::setRoot('/var/www/dev.steelants.cz/vasek/home-update/');
+set_exception_handler("ErrorHandler::exception");
 
 //Debug
 error_reporting(E_ALL);
