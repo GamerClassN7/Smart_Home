@@ -23,10 +23,10 @@ class ApiController {
 			$authManager = new AuthManager();
 			$this->authenticated = $authManager>validateToken($this->headers['HTTP_AUTHORIZATION']);
 			if(!$this->authenticated){
-				throw new Exception("Auth required", 401);
+				throw new Exception("Authorization required", 401);
 			}
 		} else {
-			throw new Exception("Auth required", 401);
+			throw new Exception("Authorization required", 401);
 		}
 	}
 

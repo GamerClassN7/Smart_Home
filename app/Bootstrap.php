@@ -34,12 +34,15 @@ spl_autoload_register("Autoloader::ClassLoader");
 Autoloader::setRoot('/var/www/dev.steelants.cz/vasek/home-update/');
 
 class ErrorHandler {
-    static function exception($exception){
-        error_log($exception);
-        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, $exception->getCode());
-        echo '<h1>Oops!</h1><p>Something went wrong!</p>';
-        exit;
-    }
+	static function exception($exception){
+		error_log($exception);
+		http_response_code($exception->getCode());
+		$message = [
+			'code' => $exception->getCode(),
+			'message' => $exception->getMessage(),
+		];
+		echo json_encode($message);
+	}
 }
 set_exception_handler("ErrorHandler::exception");
 
