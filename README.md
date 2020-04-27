@@ -137,10 +137,15 @@ Project Link: [https://github.com/GamerClassN7/Smart_Home/](https://github.com/G
 <sup><sub>Tags (ignore): ESP32 ESP12 ESP08 ESP01 ESP Smart Home Automation System PWA PHP HTML JS DHT11 DHT22
 
 ## Folder structure
-- /app
+```
+- /app								# app specific files
 	- /controllers
 		- UserController.php
+	- /library						# helpers etc.
+		- Mailer.php
 	- /models
+		- /types
+			- Units.php
 		- UserModal.php
 	- /views
 		- /layouts
@@ -151,9 +156,7 @@ Project Link: [https://github.com/GamerClassN7/Smart_Home/](https://github.com/G
 	- Bootstrap.php
 	- Db.php
 	- Routes.php
-- /library
-	- /types
-		- Units.php
+- /library 							# framework, 3rd libraries etc.
 	- /vendor
 	- Controller.php
 	- Db.php
@@ -166,3 +169,4 @@ Project Link: [https://github.com/GamerClassN7/Smart_Home/](https://github.com/G
 	- /js
 	- .htaccess
 	- index.php
+```
