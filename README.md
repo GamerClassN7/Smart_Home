@@ -142,7 +142,6 @@ Project Link: [https://github.com/GamerClassN7/Smart_Home/](https://github.com/G
 	- /controllers
 		- UserController.php
 	- /library						# helpers etc.
-		- Mailer.php
 	- /models
 		- /types
 			- Units.php
