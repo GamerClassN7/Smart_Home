@@ -7,7 +7,7 @@ class Template{
 
 	function __construct($path = "", $debug = false) {
 		$this->debug = $debug;
-		if (!empty('../app/templates/' . $path . '.phtml') && file_exists('../app/templates/' . $path . '.phtml')) {
+		if (!empty('../app/views/templates/' . $path . '.phtml') && file_exists('../app/views/templates/' . $path . '.phtml')) {
 			$this->path = $path;
 		} else {
 			echo '<pre>';
@@ -29,6 +29,6 @@ class Template{
 		if (!empty('../app/controls/' . $this->path . '.php') && file_exists('../app/controls/' . $this->path . '.php')) {
 			include('../app/controls/' . $this->path . '.php');
 		}
-		require_once('../app/templates/' . $this->path . '.phtml');
+		require_once('../app/views/templates/' . $this->path . '.phtml');
 	}
 }
