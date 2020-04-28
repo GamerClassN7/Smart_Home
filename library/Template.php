@@ -26,8 +26,8 @@ class Template{
 
 	function render() {
 		extract($this->assignedValues);
-		if (!empty('../app/controls/' . $this->path . '.php') && file_exists('../app/controls/' . $this->path . '.php')) {
-			include('../app/controls/' . $this->path . '.php');
+		if (!empty('../app/controllers/' . $this->path . 'Controller.php') && file_exists('../app/controllers/' . $this->path . 'Controller.php')) {
+			include('../app/controllers/' . $this->path . 'Controller.php');
 		}
 		require_once('../app/views/templates/' . $this->path . '.phtml');
 	}

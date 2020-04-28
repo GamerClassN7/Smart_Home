@@ -7,7 +7,7 @@ class Partial{
 
 	function __construct($path = "", $debug = false) {
 		$this->debug = $debug;
-		if (!empty('../app/templates/part/' . $path . '.phtml') && file_exists('../app/templates/part/' . $path . '.phtml')) {
+		if (!empty('../app/views/templates/part/' . $path . '.phtml') && file_exists('../app/views/templates/part/' . $path . '.phtml')) {
 			$this->path = $path;
 		} else {
 			echo '<pre>';
@@ -29,6 +29,6 @@ class Partial{
 			extract($this->assignedValues);
 		}
 
-		require('../app/templates/part/' . $this->path . '.phtml');
+		require('../app/views/templates/part/' . $this->path . '.phtml');
 	}
 }
