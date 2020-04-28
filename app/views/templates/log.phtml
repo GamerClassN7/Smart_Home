@@ -22,7 +22,18 @@
         </div>
         <div class="col-md-9 main-body">
             <div class="col-12 col-sm-9 mx-auto mt-4">
-                <label><?php echo $LANGMNG->get('l_logMaxLiveTime') . " " . $LOGTOLIVETIME . " days";?></label>
+                <label><?php echo $LANGMNG->get('l_logMaxLiveTime') . " " . $LOGTOLIVETIME . " days";?></label></br>
+
+                <label>CPU: <?php echo $CPU;?></label></br>
+					 <progress value="<?php echo $CPU;?>" max="1"> <?php echo $RAMFREE;?> </progress></br>
+                <label>UPTIME: <?php echo $UPTIME;?></label></br>
+                <label>RAM TOTAL: <?php echo $RAMTOTAL;?></label></br>
+                <label>RAM FREE: <?php echo $RAMFREE;?></label></br>
+					 <progress value="<?php echo explode(" ", $RAMFREE)[0];?>" max="<?php echo explode(" ", $RAMTOTAL)[0];?>"> <?php echo $RAMFREE;?> </progress></br>
+
+                <label>DISKTOTAL: <?php echo $DISKTOTAL;?> bytes available</label></br>
+
+
                 <form method="post" action="">
                     <div class="field">
                         <select class="input" name="LogFile">
