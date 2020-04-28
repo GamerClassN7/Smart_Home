@@ -8,7 +8,7 @@ class Setting extends Template
 		global $langMng;
 
 		if (!$userManager->isLogin()){
-			header('Location: ' . BASEDIR . 'login');
+			header('Location: ' . BASEURL . 'login');
 		}
 
 		$automations = [];

@@ -15,14 +15,14 @@ class LogKeeper
 		$todayFileName = date("Y-m-d").'.log';
 		$seconds = $days * 86400;
 
-		$logFiles = scandir('../app/logs/');
+		$logFiles = scandir('../logs/');
 		foreach ($logFiles as $key => $file) {
 			if (in_array($file,array(".","..", ".gitkeep", $todayFileName)))
 			{
 				continue;
 			}
 			if (filemtime($file) > $seconds) {
-				unlink('../app/logs/'.$file);
+				unlink('../logs/'.$file);
 			}
 		}
 	}
@@ -35,11 +35,11 @@ class LogManager
 	function __construct($fileName = "")
 	{
 		if ($fileName == ""){
-			$fileName = '../app/logs/'. date("Y-m-d").'.log';
+			$fileName = '../logs/'. date("Y-m-d").'.log';
 		}
-		if(!is_dir("../app/logs/"))
+		if(!is_dir("../logs/"))
 		{
-			mkdir("../app/logs/");
+			mkdir("../logs/");
 		}
 		$this->logFile = fopen($fileName, "a") or die("Unable to open file!");
 	}

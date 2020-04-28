@@ -9,14 +9,14 @@ class Log extends Template
 		global $langMng;
 
 		if (!$userManager->isLogin()){
-			header('Location: ' . BASEDIR . 'login');
+			header('Location: ' . BASEURL . 'login');
 		}
 
 		$template = new Template('log');
 		$template->prepare('title', 'Log');
 
 		$result = array();
-		$cdir = scandir('./app/logs/');
+		$cdir = scandir('../logs/');
 		foreach ($cdir as $key => $value)
 		{
 			if (!in_array($value,array(".","..", ".gitkeep")))

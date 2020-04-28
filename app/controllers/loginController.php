@@ -15,7 +15,7 @@ if (
 	$ota = $userManager->haveOtaEnabled($userName);
 	if ($ota == "") {
 		$landingPage = $userManager->login($userName, $userPassword, $rememberMe);
-		header('Location: ' . BASEDIR . $landingPage);
+		header('Location: ' . BASEURL . $landingPage);
 		die();
 	}
 
@@ -40,7 +40,7 @@ if (
 	$checkResult = $ga->verifyCode($otaSecret, $otaCode, 2);    // 2 = 2*30sec clock tolerance
 	if ($checkResult) {
 		$landingPage = $userManager->login($userName, $userPassword, $rememberMe);
-		header('Location: ' . BASEDIR . $landingPage);
+		header('Location: ' . BASEURL . $landingPage);
 		echo 'OK';
 	} else {
 		echo 'FAILED';

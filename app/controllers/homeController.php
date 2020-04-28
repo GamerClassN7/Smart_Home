@@ -78,10 +78,10 @@ if (isset($_POST) && !empty($_POST)){
 		echo '<pre>';
 		var_dump($POST);
 		echo '</pre>';
-		echo '<a href="' . BASEDIR . '">CONTINUE</a>';
+		echo '<a href="' . BASEURL . '">CONTINUE</a>';
 		die();
 	}
-	header('Location: ' . BASEDIR );
+	header('Location: ' . BASEURL );
 	die();
 }
 ?>

@@ -7,7 +7,7 @@ if (isset($_POST) && !empty($_POST)){
 			DashboardManager::Add($subDeviceId);
 		}
 	}
-	header('Location: ' . BASEDIR . strtolower(basename(__FILE__, '.php')));
+	header('Location: ' . BASEURL . strtolower(basename(__FILE__, '.php')));
 	die();
 }
 ?>

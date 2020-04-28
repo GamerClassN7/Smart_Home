@@ -32,7 +32,7 @@ if (isset($_POST) && !empty($_POST)){
 
 		AutomationManager::create($_POST['name'], $onDays, $doCode, $ifCode);
 
-		header('Location: ' . BASEDIR . strtolower(basename(__FILE__, '.php')));
+		header('Location: ' . BASEURL . strtolower(basename(__FILE__, '.php')));
 		die();
 	} else if (isset($_POST['modalFinal']) && $_POST['action'] == "edit") {
 		$doCode = json_encode($_POST['device'], JSON_PRETTY_PRINT);
@@ -70,7 +70,7 @@ if (isset($_POST) && !empty($_POST)){
 
 		AutomationManager::create($_POST['name'], $onDays, $doCode, $ifCode, (isset ($_POST['automation_id']) ? $_POST['automation_id'] : ""));
 
-		header('Location: ' . BASEDIR . strtolower(basename(__FILE__, '.php')));
+		header('Location: ' . BASEURL . strtolower(basename(__FILE__, '.php')));
 		die();
 	}
 }

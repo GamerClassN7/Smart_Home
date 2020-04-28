@@ -5,7 +5,7 @@ class Logout extends Template
 	{
 		global $userManager;
 		$userManager->logout();
-		header('Location: ' . BASEDIR . 'login');
+		header('Location: ' . BASEURL . 'login');
 		die();
 	}
 }

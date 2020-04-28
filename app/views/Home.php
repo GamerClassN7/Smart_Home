@@ -9,7 +9,7 @@ class Home extends Template
 		global $langMng;
 
 		if (!$userManager->isLogin()){
-			header('Location: ' . BASEDIR . 'login');
+			header('Location: ' . BASEURL . 'login');
 		}
 
 		$template = new Template('home');

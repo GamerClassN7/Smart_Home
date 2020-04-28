@@ -1,10 +1,4 @@
 <?php
-$files = scandir('app/class/');
-$files = array_diff($files, array('.', '..'));
-foreach($files as $file) {
-	include_once 'app/class/'.  $file;
-}
-
 class Automation extends Template
 {
 	function __construct()
@@ -13,7 +7,7 @@ class Automation extends Template
 		global $langMng;
 
 		if (!$userManager->isLogin()){
-			header('Location: ' . BASEDIR . 'login');
+			header('Location: ' . BASEURL . 'login');
 		}
 
 		$automations = [];
