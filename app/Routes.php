@@ -23,5 +23,9 @@ $router->post('/api/login', 'AuthApi@login');
 
 $router->post('/api/HA', 'GoogleHome@response');
 
+// examples
+$router->any('/api/example', 'ExampleApi@example');
+$router->any('/example', 'ExampleController@index');
+$router->any('/example/subpage', 'ExampleController@subpage');
 
 $router->run($_SERVER['REQUEST_METHOD'], '/'.(isset($_GET['url']) ? $_GET['url'] : ''));
