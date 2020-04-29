@@ -65,9 +65,11 @@ require_once '../config/config.php';
 $logManager = new LogManager();
 
 // Language
-$langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-$langMng = new LanguageManager($langTag);
-$langMng->load();
+if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
+	$langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+	$langMng = new LanguageManager($langTag);
+	$langMng->load();
+}
 
 //D B Conector
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
