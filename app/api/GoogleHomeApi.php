@@ -1,5 +1,5 @@
-<?php 
-class GoogleHome {
+<?php
+class GoogleHomeApi {
     function response()
     {
         header('Content-Type: application/json');
