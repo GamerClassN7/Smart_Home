@@ -3,8 +3,11 @@ class SubDeviceManager
 {
 	public static $devices;
 
-	public static function getAllSubDevices($deviceId)
+	public static function getAllSubDevices($deviceId = null)
 	{
+		if ($deviceId == null){
+			return Db::loadAll("SELECT * FROM subdevices");
+		}
 		return Db::loadAll("SELECT * FROM subdevices WHERE device_id = ?", array($deviceId));
 	}
 
