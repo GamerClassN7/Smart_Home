@@ -46,9 +46,6 @@ class LogManager
 
 	function write($value, $type = LogRecordType::ERROR){
 		$record = "[".date("H:m:s")."][".$type."]" . $value . "\n";
-		if (strlen($record) > 65 ) {
-			$record = Utilities::stringInsert($record,"\n",65);
-		}
 		fwrite($this->logFile, $record);
 	}
 

@@ -22,7 +22,7 @@ $router->post('/api/devices', 'DevicesApi@getAllDevices');
 $router->post('/api/login', 'AuthApi@login');
 
 $router->get('/api/HA/auth', 'GoogleHomeApi@autorize');
-$router->post('/api/HA', 'GoogleHomeApi@response');
+$router->any('/api/HA', 'GoogleHomeApi@response');
 
 // examples
 $router->any('/api/example', 'ExampleApi@example');

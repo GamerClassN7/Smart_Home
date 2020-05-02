@@ -2,6 +2,19 @@
 class RecordManager{
 	public static $records;
 
+	public static function createWithSubId ($subDeviceId,  $value) {
+		$record = array (
+			'subdevice_id' => $subDeviceId,
+			'value' => $value,
+		);
+		try {
+			return Db::add ('records', $record);
+		} catch(PDOException $error) {
+			echo $error->getMessage();
+			die();
+		}
+	}
+
 	public static function create ($deviceId, $type, $value) {
 		$subDeviceId = Db::loadOne('SELECT * FROM subdevices WHERE device_id = ? AND type = ?;', array($deviceId, $type))['subdevice_id'];
 		if ($subDeviceId == '') {
@@ -18,6 +31,7 @@ class RecordManager{
 			die();
 		}
 	}
+
 
 	public static function setExecuted($recordId) {
 		try {

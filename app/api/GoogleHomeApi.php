@@ -1,32 +1,64 @@
 <?php
 class GoogleHomeApi {
-	function response()
+	public static function response()
 	{
+		set_time_limit (5);
 		$json = file_get_contents('php://input');
 		$obj = json_decode($json, true);
-
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-
-		$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
-		$apiLogManager->write("[API] POST  body\n" . json_encode($_POST, JSON_PRETTY_PRINT), LogRecordType::INFO);
-		$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordType::INFO);
-
 		header('Content-Type: application/json');
+
 		switch ($obj['inputs'][0]['intent']) {
 			case 'action.devices.SYNC':
-				self::sync($obj['requestId']);
+			self::sync($obj['requestId']);
 			break;
 
 			case 'action.devices.QUERY':
-
+			self::query($obj['requestId'], $obj['inputs'][0]['payload']);
 			break;
 
 			case 'action.devices.EXECUTE':
-				self::execute($obj['requestId'], $obj['inputs'][0]['payload']);
+			self::execute($obj['requestId'], $obj['inputs'][0]['payload']);
 			break;
 		}
 	}
 
+	static function query($requestId, $payload){
+
+		foreach ($payload['devices'] as $deviceId) {
+			$subDeviceData = SubDeviceManager::getSubDevice($deviceId['id']);
+			if ($subDeviceData['type'] != "on/off") continue;
+
+			$state = false;
+			if (RecordManager::getLastRecord($deviceId['id'])['value'] == 1){
+				$state = true;
+			}
+
+			$online = false;
+			if (RecordManager::getLastRecord($deviceId['id'])['execuded'] == 1){
+				$online = true;
+			}
+
+			$devices[] = [
+				$deviceId['id'] => [
+					'on' => $state,
+					'online' => $online,
+					'status'=> 'SUCCESS',
+				]
+			];
+		}
+
+
+		$response = [
+			'requestId' => $requestId,
+			'payload' => [
+				'devices' => $devices,
+			],
+		];
+
+		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
+		echo json_encode($response);
+	}
 	static function sync($requestId){
 		$devices = [];
 
@@ -53,49 +85,67 @@ class GoogleHomeApi {
 		$response = [
 			'requestId' => $requestId,
 			'payload' => [
-				'agentUserId'=>'simple-Home',
-				'devices' => $devices,],
+				'agentUserId'=>'651351531531',
+				'devices' => $devices,
+			],
 		];
-
 		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-
 		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
 		echo json_encode($response);
 	}
 
-	static function execute($subdeviceId, $payload){
-		$commands = [
-			'ids' => 
-		];
+	static function execute($requestId, $payload){
+		$commands = [];
+
 		foreach ($payload['commands'] as $key => $command) {
 			foreach ($command['devices'] as $key => $device) {
-				$executionCommand = $command['execution'][$key];
-				$subDeviceId = $device['id'];
-
-				switch ($executionCommand) {
-					case 'action.devices.commands.OnOff':
-						if ($executionCommand['on'] == true){
-							//turn ddeivce on
-							
-						}
-						break;
-					default:
-						# code...
-						break;
+				$executionCommand = $command['execution'][0];
+				if (isset($command['execution'][$key])) {
+					$executionCommand = $command['execution'][$key];
 				}
 
+				$subDeviceId = $device['id'];
+
+				switch ($executionCommand['command']) {
+					case 'action.devices.commands.OnOff':
+					$value = 0;
+					if ($executionCommand['params']['on']) $value = 1;
+
+					RecordManager::createWithSubId($subDeviceId, $value);
+
+					$timeout = 0;
+					while(RecordManager::getLastRecord($subDeviceId)['execuded'] == 0 && $timeout < 5 ){
+						sleep(1);
+						$timeout++;
+					}
+
+					$commandTemp = [
+						'ids' => [$subDeviceId],
+						'status' => 'SUCCESS',
+						'states' => [
+							'on' => $executionCommand['params']['on'],
+						],
+					];
+
+					if ($timeout >= 5){
+						$commandTemp['status'] = "ERROR";
+					}
+					$commands[] = $commandTemp;
+
+					break;
+				}
 			}
 		}
 
 		$response = [
 			'requestId' => $requestId,
 			'payload' => [
-				'commands' => $commands,],
+				'commands' => $commands,
+			],
 		];
-
 		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-
 		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
+
 		echo json_encode($response);
 	}
 
@@ -111,21 +161,21 @@ class GoogleHomeApi {
 		//tel: zemanová 607979429
 
 		/*echo json_encode(array (
-			'access_token' => '',
-			'token_type' => 'bearer',
-			'expires_in' => 3600,
-			'refresh_token' => '',
-			'scope' => 'create',
-		));*/
+		'access_token' => '',
+		'token_type' => 'bearer',
+		'expires_in' => 3600,
+		'refresh_token' => '',
+		'scope' => 'create',
+	));*/
 
-		$get = [
-			"access_token"=>"23165133",
-			"token_type"=>"Bearer",
-			"expires_in"=>600,
-			"state"=>$_GET["state"],
-		];
+	$get = [
+		"access_token"=>"23165133",
+		"token_type"=>"Bearer",
+		"expires_in"=>600,
+		"state"=>$_GET["state"],
+	];
 
-		echo $_GET["redirect_uri"] . '#' . http_build_query($get) ;
-		echo '<a href="'.$_GET["redirect_uri"] . '#' . http_build_query($get) . '">FINISH</a>';
-	}
+	echo $_GET["redirect_uri"] . '#' . http_build_query($get) ;
+	echo '<a href="'.$_GET["redirect_uri"] . '#' . http_build_query($get) . '">FINISH</a>';
+}
 }
