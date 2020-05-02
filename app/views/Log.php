@@ -49,6 +49,8 @@ class Log extends Template
 		$template->prepare('ramFree', $this->getSystemMemInfo()["MemFree"]);
 		$template->prepare('ramTotal', $this->getSystemMemInfo()["MemTotal"]);
 		$template->prepare('diskTotal', disk_total_space("/"));
+		$template->prepare('serverTime', date('m. d. Y H:i:s - e'));
+
 
 
 
