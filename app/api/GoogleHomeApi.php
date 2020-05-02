@@ -2,22 +2,29 @@
 class GoogleHomeApi {
 	public static function response()
 	{
-		set_time_limit (5);
+		set_time_limit (20);
 		$json = file_get_contents('php://input');
 		$obj = json_decode($json, true);
+
+		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+
 		header('Content-Type: application/json');
 
 		switch ($obj['inputs'][0]['intent']) {
 			case 'action.devices.SYNC':
 			self::sync($obj['requestId']);
+			$apiLogManager->write("[Google Home] action.devices.SYNC", LogRecordType::INFO);
 			break;
 
 			case 'action.devices.QUERY':
 			self::query($obj['requestId'], $obj['inputs'][0]['payload']);
+			$apiLogManager->write("[Google Home] action.devices.QUERY", LogRecordType::INFO);
 			break;
+
 
 			case 'action.devices.EXECUTE':
 			self::execute($obj['requestId'], $obj['inputs'][0]['payload']);
+			$apiLogManager->write("[Google Home] action.devices.EXECUTE", LogRecordType::INFO);
 			break;
 		}
 	}
@@ -34,10 +41,10 @@ class GoogleHomeApi {
 			}
 
 			$online = false;
-			$status = 'SUCCESS';
+			$status = 'OFFLINE';
 			if (RecordManager::getLastRecord($deviceId['id'])['execuded'] == 1){
 				$online = true;
-				$status = 'ERROR';
+				$status = 'SUCCESS';
 			}
 
 			$devices[] = [
@@ -65,20 +72,21 @@ class GoogleHomeApi {
 		$devices = [];
 
 		$roomsData = RoomManager::getAllRooms();
-		foreach ($roomsData as $roomKey => $roomsData) {
-			$devicesData = DeviceManager::getAllDevicesInRoom($roomsData['room_id']);
+		foreach ($roomsData as $roomKey => $roomData) {
+			$devicesData = DeviceManager::getAllDevicesInRoom($roomData['room_id']);
 			foreach ($devicesData as $deviceKey => $deviceData) {
 				$subDevicesData = SubDeviceManager::getAllSubDevices($deviceData['device_id']);
 				foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
 					if ($subDeviceData['type'] != "on/off") continue;
 					$devices[] = [
-						'id' => $subDeviceData['subdevice_id'],
+						'id' => (string) $subDeviceData['subdevice_id'],
 						'type' => 'action.devices.types.OUTLET',
 						'traits' => [ 'action.devices.traits.OnOff' ],
 						'name' => [
-							'name' => [$deviceData['name']],
+							'name' => $deviceData['name'],
 						],
 						'willReportState' => false,
+						'roomHint' => $roomData['name']
 					];
 				}
 			}
@@ -130,7 +138,7 @@ class GoogleHomeApi {
 					];
 
 					if ($timeout >= 5){
-						$commandTemp['status'] = "ERROR";
+						$commandTemp['status'] = "OFFLINE";
 					}
 					$commands[] = $commandTemp;
 
@@ -173,7 +181,6 @@ class GoogleHomeApi {
 	$get = [
 		"access_token"=>"23165133",
 		"token_type"=>"Bearer",
-		"expires_in"=>600,
 		"state"=>$_GET["state"],
 	];
 
