@@ -34,15 +34,17 @@ class GoogleHomeApi {
 			}
 
 			$online = false;
+			$status = 'SUCCESS';
 			if (RecordManager::getLastRecord($deviceId['id'])['execuded'] == 1){
 				$online = true;
+				$status = 'ERROR';
 			}
 
 			$devices[] = [
 				$deviceId['id'] => [
 					'on' => $state,
 					'online' => $online,
-					'status'=> 'SUCCESS',
+					'status'=> $status,
 				]
 			];
 		}
