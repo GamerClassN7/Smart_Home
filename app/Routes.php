@@ -7,16 +7,12 @@ $router->setDefault(function(){
 });
 
 //Pages
-$router->any('/', 'Home');
+$router->any('/', 'Log');
 $router->any('/login', 'Login');
 $router->any('/logout', 'Logout');
 $router->any('/automation', 'Automation');
-$router->any('/dashboard', 'Dashboard');
 $router->any('/setting', 'Setting');
-$router->any('/scene', 'Scene');
 $router->any('/ajax', 'Ajax');
-$router->any('/log', 'Log');
-$router->any('/rooms', 'Rooms');
 
 $router->post('/api/devices', 'DevicesApi@getAllDevices');
 $router->post('/api/login', 'AuthApi@login');

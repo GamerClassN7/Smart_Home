@@ -40,7 +40,7 @@ if (
 	$checkResult = $ga->verifyCode($otaSecret, $otaCode, 2);    // 2 = 2*30sec clock tolerance
 	if ($checkResult) {
 		$landingPage = $userManager->login($userName, $userPassword, $rememberMe);
-		header('Location: ' . BASEURL . $landingPage);
+		header('Location: ' . BASEURL . '/');
 		echo 'OK';
 	} else {
 		echo 'FAILED';
