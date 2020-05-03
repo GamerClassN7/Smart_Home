@@ -83,7 +83,9 @@ class GoogleHomeDeviceTypes {
 	static function getSyncObj($deviceBaseObj, $deviceType){
 		switch ($deviceType) {
 			case 'action.devices.types.OUTLET':
-			$deviceBaseObj['traits'] = 'action.devices.traits.OnOff';
+			$deviceBaseObj['traits'] = [
+				'action.devices.traits.OnOff'
+			];
 			break;
 			case 'action.devices.types.THERMOSTAT':
 			$deviceBaseObj['traits'] = [

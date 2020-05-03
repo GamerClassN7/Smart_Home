@@ -38,9 +38,11 @@ class GoogleHomeApi {
 				foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
 					if ($subDeviceData['type'] != "on/off" && $subDeviceData['type'] != "temp_cont") continue;
 
+					//Google Compatibile Action Type
+					$actionType = GoogleHomeDeviceTypes::getAction($subDeviceData['type']);
 					$tempDevice = [
 						'id' => (string) $subDeviceData['subdevice_id'],
-						'type' => GoogleHomeDeviceTypes::getAction($subDeviceData['type']),
+						'type' => $actionType,
 						'name' => [
 							'name' => $deviceData['name'],
 						],
@@ -49,12 +51,10 @@ class GoogleHomeApi {
 					];
 
 					//traids & Attributes
-					$tempDevice = GoogleHomeDeviceTypes::getSyncObj($tempDevice, GoogleHomeDeviceTypes::getAction($subDeviceData['type']));
-					$devices[] = $tempDevice;
+					$devices[] = GoogleHomeDeviceTypes::getSyncObj($tempDevice, $actionType);
 				}
 			}
 		}
-
 
 		$response = [
 			'requestId' => $requestId,
