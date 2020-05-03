@@ -1,13 +1,11 @@
 <?php
 class GoogleHomeApi {
-	public static function response()
-	{
+	static function response(){
 		set_time_limit (20);
 		$json = file_get_contents('php://input');
 		$obj = json_decode($json, true);
 
 		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-
 		header('Content-Type: application/json');
 
 		switch ($obj['inputs'][0]['intent']) {
@@ -42,7 +40,7 @@ class GoogleHomeApi {
 
 					$tempDevice = [
 						'id' => (string) $subDeviceData['subdevice_id'],
-						'type' => GoogleHomeDeviceTypes::getEquivalent($subDeviceData['type']),
+						'type' => GoogleHomeDeviceTypes::getAction($subDeviceData['type']),
 						'name' => [
 							'name' => $deviceData['name'],
 						],
@@ -50,37 +48,11 @@ class GoogleHomeApi {
 						'roomHint' => $roomData['name']
 					];
 
-					//traids
-					switch ($subDeviceData['type']) {
-						case 'on/off':
-						$tempDevice['traits'] = [ 'action.devices.traits.OnOff' ];
-						break;
-
-						case 'temp_cont':
-						$tempDevice['attributes'] = [
-							"availableThermostatModes" => "off,heat,on",
-							"thermostatTemperatureRange" => [
-								'minThresholdCelsius' => 5,
-								'maxThresholdCelsius' => 15,
-							],
-							"thermostatTemperatureUnit" => "C",
-							"commandOnlyTemperatureSetting" => false,
-							"queryOnlyTemperatureSetting" => false,
-							"bufferRangeCelsius" => 0,
-						];
-						$tempDevice['traits'] = [
-							'action.devices.traits.TemperatureSetting',
-						];
-						break;
-					}
-
-
+					//traids & Attributes
+					$tempDevice = GoogleHomeDeviceTypes::getSyncObj($tempDevice, GoogleHomeDeviceTypes::getAction($subDeviceData['type']));
 					$devices[] = $tempDevice;
-
 				}
 			}
-
-
 		}
 
 
