@@ -29,56 +29,6 @@ class GoogleHomeApi {
 		}
 	}
 
-	static function query($requestId, $payload){
-		$devices = [];
-		foreach ($payload['devices'] as $deviceId) {
-			$subDeviceData = SubDeviceManager::getSubDevice($deviceId['id']);
-			if ($subDeviceData['type'] != "on/off" && $subDeviceData['type'] != "temp_cont") continue;
-
-			$state = false;
-			if (RecordManager::getLastRecord($deviceId['id'])['value'] == 1){
-				$state = true;
-			}
-
-			$online = false;
-			$status = 'OFFLINE';
-			if (RecordManager::getLastRecord($deviceId['id'])['execuded'] == 1){
-				$online = true;
-				$status = 'SUCCESS';
-			}
-
-			$tempDevice = [
-				$deviceId['id'] => [
-					'online' => $online,
-					'status'=> $status,
-				]
-			];
-
-			if ($subDeviceData['type'] == "temp_cont"){
-				$tempDevice[$deviceId['id']]['thermostatMode'] = 'heat';
-				$tempDevice[$deviceId['id']]['thermostatTemperatureAmbient'] = RecordManager::getLastRecord($deviceId['id'])['value'];
-				$tempDevice[$deviceId['id']]['thermostatTemperatureSetpoint'] = RecordManager::getLastRecord($deviceId['id'])['value'];
-			} else {
-					$tempDevice[$deviceId['id']]['on'] = $state;
-			}
-			$devices = $tempDevice;
-			if (count($devices)> 1){
-				$devices[] = $tempDevice;
-			}
-		}
-
-
-		$response = [
-			'requestId' => $requestId,
-			'payload' => [
-				'devices' => $devices,
-			],
-		];
-
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
-		echo json_encode($response);
-	}
 	static function sync($requestId){
 		$devices = [];
 
@@ -125,7 +75,7 @@ class GoogleHomeApi {
 					}
 
 
-						$devices[] = $tempDevice;
+					$devices[] = $tempDevice;
 
 				}
 			}
@@ -141,6 +91,57 @@ class GoogleHomeApi {
 				'devices' => $devices,
 			],
 		];
+		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
+		echo json_encode($response);
+	}
+
+	static function query($requestId, $payload){
+		$devices = [];
+		foreach ($payload['devices'] as $deviceId) {
+			$subDeviceData = SubDeviceManager::getSubDevice($deviceId['id']);
+			if ($subDeviceData['type'] != "on/off" && $subDeviceData['type'] != "temp_cont") continue;
+
+			$state = false;
+			if (RecordManager::getLastRecord($deviceId['id'])['value'] == 1){
+				$state = true;
+			}
+
+			$online = false;
+			$status = 'OFFLINE';
+			if (RecordManager::getLastRecord($deviceId['id'])['execuded'] == 1){
+				$online = true;
+				$status = 'SUCCESS';
+			}
+
+			$tempDevice = [
+				$deviceId['id'] => [
+					'online' => $online,
+					'status'=> $status,
+				]
+			];
+
+			if ($subDeviceData['type'] == "temp_cont"){
+				$tempDevice[$deviceId['id']]['thermostatMode'] = 'heat';
+				$tempDevice[$deviceId['id']]['thermostatTemperatureAmbient'] = RecordManager::getLastRecord($deviceId['id'])['value'];
+				$tempDevice[$deviceId['id']]['thermostatTemperatureSetpoint'] = RecordManager::getLastRecord($deviceId['id'])['value'];
+			} else {
+				$tempDevice[$deviceId['id']]['on'] = $state;
+			}
+			$devices = $tempDevice;
+			if (count($devices)> 1){
+				$devices[] = $tempDevice;
+			}
+		}
+
+
+		$response = [
+			'requestId' => $requestId,
+			'payload' => [
+				'devices' => $devices,
+			],
+		];
+
 		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
 		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
 		echo json_encode($response);
@@ -230,32 +231,21 @@ class GoogleHomeApi {
 		echo json_encode($response);
 	}
 
-	function autorize(){
+	static function autorize(){
 		$json = file_get_contents('php://input');
 		$obj = json_decode($json, true);
 
 		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
 		$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
-
 		$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordType::INFO);
 
-		//tel: zemanová 607979429
+		$get = [
+			"access_token"=>"23165133",
+			"token_type"=>"Bearer",
+			"state"=>$_GET["state"],
+		];
 
-		/*echo json_encode(array (
-		'access_token' => '',
-		'token_type' => 'bearer',
-		'expires_in' => 3600,
-		'refresh_token' => '',
-		'scope' => 'create',
-	));*/
-
-	$get = [
-		"access_token"=>"23165133",
-		"token_type"=>"Bearer",
-		"state"=>$_GET["state"],
-	];
-
-	echo $_GET["redirect_uri"] . '#' . http_build_query($get) ;
-	echo '<a href="'.$_GET["redirect_uri"] . '#' . http_build_query($get) . '">FINISH</a>';
-}
+		echo $_GET["redirect_uri"] . '#' . http_build_query($get) ;
+		echo '<a href="'.$_GET["redirect_uri"] . '#' . http_build_query($get) . '">FINISH</a>';
+	}
 }
