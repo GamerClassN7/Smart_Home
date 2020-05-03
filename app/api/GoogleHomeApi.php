@@ -30,10 +30,10 @@ class GoogleHomeApi {
 	}
 
 	static function query($requestId, $payload){
-
+		$devices = [];
 		foreach ($payload['devices'] as $deviceId) {
 			$subDeviceData = SubDeviceManager::getSubDevice($deviceId['id']);
-			if ($subDeviceData['type'] != "on/off") continue;
+			if ($subDeviceData['type'] != "on/off" && $subDeviceData['type'] != "temp_cont") continue;
 
 			$state = false;
 			if (RecordManager::getLastRecord($deviceId['id'])['value'] == 1){
@@ -47,13 +47,24 @@ class GoogleHomeApi {
 				$status = 'SUCCESS';
 			}
 
-			$devices[] = [
+			$tempDevice = [
 				$deviceId['id'] => [
-					'on' => $state,
 					'online' => $online,
 					'status'=> $status,
 				]
 			];
+
+			if ($subDeviceData['type'] == "temp_cont"){
+				$tempDevice[$deviceId['id']]['thermostatMode'] = 'heat';
+				$tempDevice[$deviceId['id']]['thermostatTemperatureAmbient'] = RecordManager::getLastRecord($deviceId['id'])['value'];
+				$tempDevice[$deviceId['id']]['thermostatTemperatureSetpoint'] = RecordManager::getLastRecord($deviceId['id'])['value'];
+			} else {
+					$tempDevice[$deviceId['id']]['on'] = $state;
+			}
+			$devices = $tempDevice;
+			if (count($devices)> 1){
+				$devices[] = $tempDevice;
+			}
 		}
 
 
@@ -77,20 +88,51 @@ class GoogleHomeApi {
 			foreach ($devicesData as $deviceKey => $deviceData) {
 				$subDevicesData = SubDeviceManager::getAllSubDevices($deviceData['device_id']);
 				foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
-					if ($subDeviceData['type'] != "on/off") continue;
-					$devices[] = [
+					if ($subDeviceData['type'] != "on/off" && $subDeviceData['type'] != "temp_cont") continue;
+
+					$tempDevice = [
 						'id' => (string) $subDeviceData['subdevice_id'],
-						'type' => 'action.devices.types.OUTLET',
-						'traits' => [ 'action.devices.traits.OnOff' ],
+						'type' => GoogleHomeDeviceTypes::getEquivalent($subDeviceData['type']),
 						'name' => [
 							'name' => $deviceData['name'],
 						],
 						'willReportState' => false,
 						'roomHint' => $roomData['name']
 					];
+
+					//traids
+					switch ($subDeviceData['type']) {
+						case 'on/off':
+						$tempDevice['traits'] = [ 'action.devices.traits.OnOff' ];
+						break;
+
+						case 'temp_cont':
+						$tempDevice['attributes'] = [
+							"availableThermostatModes" => "off,heat,on",
+							"thermostatTemperatureRange" => [
+								'minThresholdCelsius' => 5,
+								'maxThresholdCelsius' => 15,
+							],
+							"thermostatTemperatureUnit" => "C",
+							"commandOnlyTemperatureSetting" => false,
+							"queryOnlyTemperatureSetting" => false,
+							"bufferRangeCelsius" => 0,
+						];
+						$tempDevice['traits'] = [
+							'action.devices.traits.TemperatureSetting',
+						];
+						break;
+					}
+
+
+						$devices[] = $tempDevice;
+
 				}
 			}
+
+
 		}
+
 
 		$response = [
 			'requestId' => $requestId,
@@ -134,6 +176,35 @@ class GoogleHomeApi {
 						'status' => 'SUCCESS',
 						'states' => [
 							'on' => $executionCommand['params']['on'],
+						],
+					];
+
+					if ($timeout >= 5){
+						$commandTemp['status'] = "OFFLINE";
+					}
+					$commands[] = $commandTemp;
+
+					break;
+
+					case 'action.devices.commands.ThermostatTemperatureSetpoint':
+					$value = 0;
+					if (isset($executionCommand['params']['thermostatTemperatureSetpoint'])) $value = $executionCommand['params']['thermostatTemperatureSetpoint'];
+
+					RecordManager::createWithSubId($subDeviceId, $value);
+
+					$timeout = 0;
+					while(RecordManager::getLastRecord($subDeviceId)['execuded'] == 0 && $timeout < 5 ){
+						sleep(1);
+						$timeout++;
+					}
+
+					$commandTemp = [
+						'ids' => [$subDeviceId],
+						'status' => 'SUCCESS',
+						'states' => [
+							'thermostatMode' => 'heat',
+							'thermostatTemperatureSetpoint' => $value,
+							'thermostatTemperatureAmbient' => $value,
 						],
 					];
 
