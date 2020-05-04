@@ -1,12 +1,11 @@
 <?php
 class ApiController {
 	protected $input;
-	protected $authenticated;
+	protected $authenticated = false;
 
 	function __construct() {
-		$this->authenticated = false;
-
 		$input = file_get_contents('php://input');
+
 		if(empty($input)){
 			$this->input = NULL;
 		}else{

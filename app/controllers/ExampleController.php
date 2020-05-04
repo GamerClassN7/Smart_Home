@@ -3,12 +3,8 @@
 class ExampleController extends Controller{
 
 	public function index(){
-		echo 'example';
-
-		// TODO:
-		// - set view
-		// - process POST variables
-		// ...
+		$this->view->title = 'Example title';
+		$this->view->render('example.phtml');
 	}
 
 	public function subpage(){
