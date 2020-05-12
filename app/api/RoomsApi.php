@@ -1,6 +1,6 @@
 <?php
 
-class DevicesApi extends ApiController{
+class RoomsApi extends ApiController{
 
 	public function default(){
 		$this->requireAuth();
@@ -9,9 +9,5 @@ class DevicesApi extends ApiController{
 		// TODO: process the request
 
 		$this->response($response);
-	}
-
-	public function getDevicesByRoom($roomId){
-
 	}
 }

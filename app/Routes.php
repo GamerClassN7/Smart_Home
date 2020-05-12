@@ -14,8 +14,11 @@ $router->any('/automation', 'Automation');
 $router->any('/setting', 'Setting');
 $router->any('/ajax', 'Ajax');
 
-$router->post('/api/devices', 'DevicesApi@getAllDevices');
 $router->post('/api/login', 'AuthApi@login');
+$router->post('/api/logout', 'AuthApi@logout');
+
+$router->post('/api/devices', 'DevicesApi@default');
+$router->post('/api/rooms', 'RoomsApi@default');
 
 $router->get('/api/HA/auth', 'GoogleHomeApi@autorize');
 $router->any('/api/HA', 'GoogleHomeApi@response');
