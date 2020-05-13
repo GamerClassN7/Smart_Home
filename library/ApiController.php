@@ -31,6 +31,6 @@ class ApiController {
 
 	protected function response($data = [], $httpCode = '200'){
 		http_response_code($httpCode);
-		echo json_encode($data);
+		echo json_encode($data, JSON_UNESCAPED_UNICODE);
 	}
 }
