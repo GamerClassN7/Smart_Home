@@ -17,8 +17,8 @@ $router->any('/ajax', 'Ajax');
 $router->post('/api/login', 'AuthApi@login');
 $router->post('/api/logout', 'AuthApi@logout');
 
-$router->post('/api/devices', 'DevicesApi@default');
-$router->post('/api/rooms', 'RoomsApi@default');
+$router->get('/api/devices', 'DevicesApi@default');
+$router->get('/api/rooms', 'RoomsApi@default');
 
 $router->get('/api/HA/auth', 'GoogleHomeApi@autorize');
 $router->any('/api/HA', 'GoogleHomeApi@response');
