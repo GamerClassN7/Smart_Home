@@ -1,7 +1,7 @@
 <?php
 class GoogleHomeApi {
 	static function response(){
-		set_time_limit (20);
+
 		$json = file_get_contents('php://input');
 		$obj = json_decode($json, true);
 
@@ -10,197 +10,21 @@ class GoogleHomeApi {
 
 		switch ($obj['inputs'][0]['intent']) {
 			case 'action.devices.SYNC':
-			self::sync($obj['requestId']);
+			GoogleHome::sync($obj['requestId']);
 			$apiLogManager->write("[Google Home] action.devices.SYNC", LogRecordType::INFO);
 			break;
 
 			case 'action.devices.QUERY':
-			self::query($obj['requestId'], $obj['inputs'][0]['payload']);
-			$apiLogManager->write("[Google Home] action.devices.QUERY", LogRecordType::INFO);
+			GoogleHome::query($obj['requestId'], $obj['inputs'][0]['payload']);
+			//$apiLogManager->write("[Google Home] action.devices.QUERY", LogRecordType::INFO);
 			break;
 
 
 			case 'action.devices.EXECUTE':
-			self::execute($obj['requestId'], $obj['inputs'][0]['payload']);
+			GoogleHome::execute($obj['requestId'], $obj['inputs'][0]['payload']);
 			$apiLogManager->write("[Google Home] action.devices.EXECUTE", LogRecordType::INFO);
 			break;
 		}
-	}
-
-	static function sync($requestId){
-		$devices = [];
-
-		$roomsData = RoomManager::getAllRooms();
-		foreach ($roomsData as $roomKey => $roomData) {
-			$devicesData = DeviceManager::getAllDevicesInRoom($roomData['room_id']);
-			foreach ($devicesData as $deviceKey => $deviceData) {
-				$subDevicesData = SubDeviceManager::getAllSubDevices($deviceData['device_id']);
-				foreach ($subDevicesData as $subDeviceKey => $subDeviceData) {
-					if ($subDeviceData['type'] != "on/off" && $subDeviceData['type'] != "temp_cont") continue;
-
-					//Google Compatibile Action Type
-					$actionType = GoogleHomeDeviceTypes::getAction($subDeviceData['type']);
-					$tempDevice = [
-						'id' => (string) $subDeviceData['subdevice_id'],
-						'type' => $actionType,
-						'name' => [
-							'name' => $deviceData['name'],
-						],
-						'willReportState' => false,
-						'roomHint' => $roomData['name']
-					];
-
-					//traids & Attributes
-					$devices[] = GoogleHomeDeviceTypes::getSyncObj($tempDevice, $actionType);
-				}
-			}
-		}
-
-		$response = [
-			'requestId' => $requestId,
-			'payload' => [
-				'agentUserId'=>'651351531531',
-				'devices' => $devices,
-			],
-		];
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
-		echo json_encode($response);
-	}
-
-	static function query($requestId, $payload){
-		$devices = [];
-		foreach ($payload['devices'] as $deviceId) {
-			$subDeviceData = SubDeviceManager::getSubDevice($deviceId['id']);
-			if ($subDeviceData['type'] != "on/off" && $subDeviceData['type'] != "temp_cont") continue;
-
-			$state = false;
-			if (RecordManager::getLastRecord($deviceId['id'])['value'] == 1){
-				$state = true;
-			}
-
-			$online = false;
-			$status = 'OFFLINE';
-			if (RecordManager::getLastRecord($deviceId['id'])['execuded'] == 1){
-				$online = true;
-				$status = 'SUCCESS';
-			}
-
-			$tempDevice = [
-				$deviceId['id'] => [
-					'online' => $online,
-					'status'=> $status,
-				]
-			];
-
-			if ($subDeviceData['type'] == "temp_cont"){
-				$tempDevice[$deviceId['id']]['thermostatMode'] = 'heat';
-				$tempDevice[$deviceId['id']]['thermostatTemperatureAmbient'] = RecordManager::getLastRecord($deviceId['id'])['value'];
-				$tempDevice[$deviceId['id']]['thermostatTemperatureSetpoint'] = RecordManager::getLastRecord($deviceId['id'])['value'];
-			} else {
-				$tempDevice[$deviceId['id']]['on'] = $state;
-			}
-			$devices = $tempDevice;
-			if (count($devices)> 1){
-				$devices[] = $tempDevice;
-			}
-		}
-
-
-		$response = [
-			'requestId' => $requestId,
-			'payload' => [
-				'devices' => $devices,
-			],
-		];
-
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
-		echo json_encode($response);
-	}
-
-	static function execute($requestId, $payload){
-		$commands = [];
-
-		foreach ($payload['commands'] as $key => $command) {
-			foreach ($command['devices'] as $key => $device) {
-				$executionCommand = $command['execution'][0];
-				if (isset($command['execution'][$key])) {
-					$executionCommand = $command['execution'][$key];
-				}
-
-				$subDeviceId = $device['id'];
-
-				switch ($executionCommand['command']) {
-					case 'action.devices.commands.OnOff':
-					$value = 0;
-					if ($executionCommand['params']['on']) $value = 1;
-
-					RecordManager::createWithSubId($subDeviceId, $value);
-
-					$timeout = 0;
-					while(RecordManager::getLastRecord($subDeviceId)['execuded'] == 0 && $timeout < 5 ){
-						sleep(1);
-						$timeout++;
-					}
-
-					$commandTemp = [
-						'ids' => [$subDeviceId],
-						'status' => 'SUCCESS',
-						'states' => [
-							'on' => $executionCommand['params']['on'],
-						],
-					];
-
-					if ($timeout >= 5){
-						$commandTemp['status'] = "OFFLINE";
-					}
-					$commands[] = $commandTemp;
-
-					break;
-
-					case 'action.devices.commands.ThermostatTemperatureSetpoint':
-					$value = 0;
-					if (isset($executionCommand['params']['thermostatTemperatureSetpoint'])) $value = $executionCommand['params']['thermostatTemperatureSetpoint'];
-
-					RecordManager::createWithSubId($subDeviceId, $value);
-
-					$timeout = 0;
-					while(RecordManager::getLastRecord($subDeviceId)['execuded'] == 0 && $timeout < 5 ){
-						sleep(1);
-						$timeout++;
-					}
-
-					$commandTemp = [
-						'ids' => [$subDeviceId],
-						'status' => 'SUCCESS',
-						'states' => [
-							'thermostatMode' => 'heat',
-							'thermostatTemperatureSetpoint' => $value,
-							'thermostatTemperatureAmbient' => $value,
-						],
-					];
-
-					if ($timeout >= 5){
-						$commandTemp['status'] = "OFFLINE";
-					}
-					$commands[] = $commandTemp;
-
-					break;
-				}
-			}
-		}
-
-		$response = [
-			'requestId' => $requestId,
-			'payload' => [
-				'commands' => $commands,
-			],
-		];
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[API] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
-
-		echo json_encode($response);
 	}
 
 	static function autorize(){

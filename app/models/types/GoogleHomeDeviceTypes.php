@@ -98,8 +98,8 @@ class GoogleHomeDeviceTypes {
 					'maxThresholdCelsius' => 30,
 				],
 				"thermostatTemperatureUnit" => "C",
-				"commandOnlyTemperatureSetting" => false,
-				"queryOnlyTemperatureSetting" => false,
+				"commandOnlyTemperatureSetting" => true,
+				"queryOnlyTemperatureSetting" => true,
 				"bufferRangeCelsius" => 0,
 			];
 			break;

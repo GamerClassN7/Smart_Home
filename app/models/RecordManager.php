@@ -3,11 +3,15 @@ class RecordManager{
 	public static $records;
 
 	public static function createWithSubId ($subDeviceId,  $value) {
-		$record = array (
-			'subdevice_id' => $subDeviceId,
-			'value' => $value,
-		);
 		try {
+			$record = [
+				'execuded' => 1,
+			];
+			Db::edit ('records', $record, 'WHERE subdevice_id = ?', array ($subDeviceId));
+			$record = array (
+				'subdevice_id' => $subDeviceId,
+				'value' => $value,
+			);
 			return Db::add ('records', $record);
 		} catch(PDOException $error) {
 			echo $error->getMessage();
@@ -20,11 +24,15 @@ class RecordManager{
 		if ($subDeviceId == '') {
 			return false;
 		};
-		$record = array (
-			'subdevice_id' => $subDeviceId,
-			'value' => $value,
-		);
 		try {
+			$record = [
+				'execuded' => 1,
+			];
+			Db::edit ('records', $record, 'WHERE subdevice_id = ?', array ($subDeviceId));
+			$record = array (
+				'subdevice_id' => $subDeviceId,
+				'value' => $value,
+			);
 			return Db::add ('records', $record);
 		} catch(PDOException $error) {
 			echo $error->getMessage();
@@ -54,6 +62,10 @@ class RecordManager{
 		if ($num == 1)
 		return Db::loadOne('SELECT * FROM records WHERE subdevice_id = ? AND value != ? ORDER BY time DESC;', array($subDeviceId, 999));
 		return Db::loadAll('SELECT * FROM records WHERE subdevice_id = ? AND value != ? ORDER BY time DESC LIMIT ?;', array($subDeviceId, 999, $num));
+	}
+
+	public static function getLastRecordNotNull($subDeviceId) {
+		return Db::loadOne('SELECT * FROM records WHERE subdevice_id = ? AND value != ? ORDER BY time DESC;', array($subDeviceId, 0));
 	}
 
 	public static function getAllRecord($subDeviceId, $timeFrom, $timeTo) {
