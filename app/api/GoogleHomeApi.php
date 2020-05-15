@@ -19,7 +19,6 @@ class GoogleHomeApi {
 			//$apiLogManager->write("[Google Home] action.devices.QUERY", LogRecordType::INFO);
 			break;
 
-
 			case 'action.devices.EXECUTE':
 			GoogleHome::execute($obj['requestId'], $obj['inputs'][0]['payload']);
 			$apiLogManager->write("[Google Home] action.devices.EXECUTE", LogRecordType::INFO);
@@ -36,7 +35,7 @@ class GoogleHomeApi {
 		$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordType::INFO);
 
 		$get = [
-			"access_token"=>"23165133",
+			"access_token"=>"2222255888",
 			"token_type"=>"Bearer",
 			"state"=>$_GET["state"],
 		];

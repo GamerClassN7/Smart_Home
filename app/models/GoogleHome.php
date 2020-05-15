@@ -12,6 +12,14 @@ class GoogleHome {
 
 					//Google Compatibile Action Type
 					$actionType = GoogleHomeDeviceTypes::getAction($subDeviceData['type']);
+
+					if (
+						strpos($deviceData['name'], 'Světlo') !== false ||
+						strpos($deviceData['name'], 'světlo') !== false
+					) {
+						$actionType = 'action.devices.types.LIGHT';
+					}
+
 					$tempDevice = [
 						'id' => (string) $subDeviceData['subdevice_id'],
 						'type' => $actionType,

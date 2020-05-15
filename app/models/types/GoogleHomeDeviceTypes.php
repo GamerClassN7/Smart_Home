@@ -82,6 +82,7 @@ class GoogleHomeDeviceTypes {
 
 	static function getSyncObj($deviceBaseObj, $deviceType){
 		switch ($deviceType) {
+			case 'action.devices.types.LIGHT':
 			case 'action.devices.types.OUTLET':
 			$deviceBaseObj['traits'] = [
 				'action.devices.traits.OnOff'
@@ -92,15 +93,8 @@ class GoogleHomeDeviceTypes {
 				'action.devices.traits.TemperatureSetting',
 			];
 			$deviceBaseObj['attributes'] = [
-				"availableThermostatModes" => "off,heat,on",
-				"thermostatTemperatureRange" => [
-					'minThresholdCelsius' => 5,
-					'maxThresholdCelsius' => 30,
-				],
+				"availableThermostatModes" => "off,heat",
 				"thermostatTemperatureUnit" => "C",
-				"commandOnlyTemperatureSetting" => true,
-				"queryOnlyTemperatureSetting" => true,
-				"bufferRangeCelsius" => 0,
 			];
 			break;
 		}
