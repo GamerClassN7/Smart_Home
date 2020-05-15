@@ -71,4 +71,27 @@ class SubDeviceManager
 		RecordManager::cleanSubdeviceRecords($subDeviceId);
 		return Db::loadAll("DELETE FROM subdevices WHERE subdevice_id = ?", array($subDeviceId));
 	}
+
+	public static function getSubdevicesByRoomIds($roomIds = NULL) {
+		if(empty($roomIds)) return NULL;
+
+		$rows = Db::loadAll("
+			SELECT d.room_id, sd.subdevice_id, sd.device_id, d.name, sd.type, sd.unit, r.value FROM subdevices sd
+			JOIN devices d ON sd.device_id = d.device_id
+			JOIN records r ON r.subdevice_id = sd.subdevice_id
+			WHERE d.room_id IN (".str_repeat("?,", count($roomIds)-1)."?)
+			AND r.record_id IN (
+				SELECT MAX(record_id)
+				FROM records
+				GROUP BY subdevice_id
+		  	)
+		", $roomIds);
+
+		$ret = [];
+		foreach($rows as $row){
+			$ret[$row['room_id']][] = $row;
+		}
+
+		return $ret;
+	}
 }

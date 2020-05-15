@@ -12,6 +12,11 @@ class RoomManager{
 		return $allRoom;
 	}
 
+	static function getRoomsDefault () {
+		$allRoom = Db::loadAll ("SELECT room_id, name FROM rooms");
+		return $allRoom;
+	}
+
 	public static function create ($name) {
 		$room = array (
 			'name' => $name,
