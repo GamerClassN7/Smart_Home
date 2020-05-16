@@ -1,7 +1,11 @@
 <?php
 
 class AuthManager {
-	public function getToken($username, $password){
+	public function getToken($username, $password, $userAgent = null){
+		if ($userAgent == null) {
+			$userAgent = $this->headers['HTTP_USER_AGENT'];
+		}
+
 		$userManager = new UserManager();
 		if ($username != '' || $password != ''){
 			$userLogedIn = $userManager->loginNew($username, $password);
@@ -10,7 +14,11 @@ class AuthManager {
 				// Create token header as a JSON string
 				$header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
 				// Create token payload as a JSON string
-				$payload = json_encode(['user_id' => $userLogedIn]);
+				$payload = json_encode([
+					'user_id' => $userLogedIn,
+					'exp' => date('Y-m-d H:i:s',strtotime("+90 Days")),
+					'iat' => date('Y-m-d H:i:s',time()),
+			  ]);
 				// Encode Header to Base64Url String
 				$base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
 				// Encode Payload to Base64Url String
@@ -22,7 +30,17 @@ class AuthManager {
 				// Create JWT
 				$jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
 
-				return $jwt;
+
+				$token = [
+					'user_id' => $userLogedIn,
+					'user_agent' => $userAgent,
+					'token' => $jwt,
+					'expire' => date('Y-m-d H:i:s',strtotime("+90 Days")),
+					'issued' => date('Y-m-d H:i:s',time()),
+				];
+				if (Db::add ('tokens', $token)){
+					return $jwt;
+				}
 			}
 		}
 		return false;

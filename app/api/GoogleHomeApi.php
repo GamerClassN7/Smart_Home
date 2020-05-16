@@ -1,7 +1,7 @@
 <?php
-class GoogleHomeApi {
+class GoogleHomeApi{
 	static function response(){
-
+		//$this->requireAuth();
 		$json = file_get_contents('php://input');
 		$obj = json_decode($json, true);
 

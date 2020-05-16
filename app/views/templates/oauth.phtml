@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<?php
+	$partial = new Partial('head');
+	$partial->prepare('baseDir',$BASEDIR);
+	$partial->render();
+	?>
+	<title><?php echo $TITLE ?></title>
+</head>
+<body class="no-transitions">
+
+	<?php
+	if (isset($ota) && $ota != '') {
+		$partial = new Partial('oauthLoginOta');
+		$partial->prepare('ota',$ota);
+		$partial->render();
+	} else {
+		$partial = new Partial('oauthLoginForm');
+		$partial->prepare('responseType',$RESPONSETYPE);
+		$partial->prepare('redirectUrl',$REDIRECTURL);
+		$partial->prepare('clientId',$CLIENTID);
+		$partial->prepare('state',$STATE);
+		$partial->render();
+	}
+	?>
+
+	<?php
+	$partial = new Partial('footer');
+	$partial->render();
+	?>
+</body>
+</html>

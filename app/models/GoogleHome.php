@@ -12,6 +12,11 @@ class GoogleHome {
 
 					//Google Compatibile Action Type
 					$actionType = GoogleHomeDeviceTypes::getAction($subDeviceData['type']);
+
+					if (strpos($deviceData['name'], 'Světlo') !== false || strpos($deviceData['name'], 'světlo') !== false) {
+						$actionType = 'action.devices.types.LIGHT';
+					}
+
 					$tempDevice = [
 						'id' => (string) $subDeviceData['subdevice_id'],
 						'type' => $actionType,
@@ -78,181 +83,181 @@ class GoogleHome {
 				$deviceId['id'] => [
 					'online' => $online,
 					'status'=> $status,
-				]
-			];
+					]
+				];
 
-			if ($subDeviceData['type'] == "temp_cont"){
-				$tempDevice[$deviceId['id']]['thermostatMode'] = 'off';
-				if (RecordManager::getLastRecord($deviceId['id'])['value'] != 0) {
-					$tempDevice[$deviceId['id']]['thermostatMode'] = 'heat';
-				}
+				if ($subDeviceData['type'] == "temp_cont"){
+					$tempDevice[$deviceId['id']]['thermostatMode'] = 'off';
+					if (RecordManager::getLastRecord($deviceId['id'])['value'] != 0) {
+						$tempDevice[$deviceId['id']]['thermostatMode'] = 'heat';
+					}
 					$tempDevice[$deviceId['id']]['thermostatTemperatureAmbient'] = RecordManager::getLastRecord($deviceId['id'])['value'];
 					$tempDevice[$deviceId['id']]['thermostatTemperatureSetpoint'] = RecordManager::getLastRecord($deviceId['id'])['value'];
-			} else {
-				$tempDevice[$deviceId['id']]['on'] = $state;
-			}
-			$devices = $tempDevice;
-			if (count($devices)> 1){
-				$devices[] = $tempDevice;
-			}
-		}
-
-		$response = [
-			'requestId' => $requestId,
-			'payload' => [
-				'devices' => $devices,
-			],
-		];
-
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
-		echo json_encode($response);
-	}
-
-	static function execute($requestId, $payload){
-		$commands = [];
-
-		foreach ($payload['commands'] as $key => $command) {
-			foreach ($command['devices'] as $key => $device) {
-				$executionCommand = $command['execution'][0];
-				if (isset($command['execution'][$key])) {
-					$executionCommand = $command['execution'][$key];
+				} else {
+					$tempDevice[$deviceId['id']]['on'] = $state;
 				}
-
-				$subDeviceId = $device['id'];
-
-				switch ($executionCommand['command']) {
-					case 'action.devices.commands.OnOff':
-						$commands[] = self::executeSwitch($subDeviceId, $executionCommand);
-						break;
-
-					case 'action.devices.commands.ThermostatTemperatureSetpoint':
-						$commands[] = self::executeTermostatValue($subDeviceId, $executionCommand);
-						break;
-
-					case 'action.devices.commands.ThermostatSetMode':
-						$commands[] = self::executeTermostatMode($subDeviceId, $executionCommand);
-						break;
+				$devices = $tempDevice;
+				if (count($devices)> 1){
+					$devices[] = $tempDevice;
 				}
 			}
+
+			$response = [
+				'requestId' => $requestId,
+				'payload' => [
+					'devices' => $devices,
+				],
+			];
+
+			$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+			$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
+			echo json_encode($response);
 		}
 
-		$response = [
-			'requestId' => $requestId,
-			'payload' => [
-				'commands' => $commands,
-			],
-		];
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[API][EXECUTE][$requestId]\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
+		static function execute($requestId, $payload){
+			$commands = [];
 
-		echo json_encode($response);
-	}
+			foreach ($payload['commands'] as $key => $command) {
+				foreach ($command['devices'] as $key => $device) {
+					$executionCommand = $command['execution'][0];
+					if (isset($command['execution'][$key])) {
+						$executionCommand = $command['execution'][$key];
+					}
 
-	static function executeSwitch($subDeviceId, $executionCommand){
-		$value = 0;
-		$status = 'SUCCESS';
-		if ($executionCommand['params']['on']) $value = 1;
+					$subDeviceId = $device['id'];
 
-		RecordManager::createWithSubId($subDeviceId, $value);
+					switch ($executionCommand['command']) {
+						case 'action.devices.commands.OnOff':
+							$commands[] = self::executeSwitch($subDeviceId, $executionCommand);
+						break;
 
-		$executed = 0;
-		$waiting = 0;
-		foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $value) {
-			if ($value['execuded'] == 1){
-				$executed++;
-			} else {
-				$waiting++;
+						case 'action.devices.commands.ThermostatTemperatureSetpoint':
+							$commands[] = self::executeTermostatValue($subDeviceId, $executionCommand);
+						break;
+
+						case 'action.devices.commands.ThermostatSetMode':
+							$commands[] = self::executeTermostatMode($subDeviceId, $executionCommand);
+						break;
+					}
+				}
 			}
-		}
-		if ($waiting < $executed){
-			$status = "PENDING";
-		} else {
-			$status = "OFFLINE";
-		}
 
-		$commandTemp = [
-			'ids' => [$subDeviceId],
-			'status' => $status,
-			'states' => [
-				'on' => $executionCommand['params']['on'],
-			],
-		];
-		return $commandTemp;
-	}
+			$response = [
+				'requestId' => $requestId,
+				'payload' => [
+					'commands' => $commands,
+				],
+			];
+			$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+			$apiLogManager->write("[API][EXECUTE][$requestId]\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
 
-	static function executeTermostatValue($subDeviceId, $executionCommand){
-		$value = 0;
-		$status = 'SUCCESS';
-
-		if (isset($executionCommand['params']['thermostatTemperatureSetpoint'])) {
-			$value = $executionCommand['params']['thermostatTemperatureSetpoint'];
+			echo json_encode($response);
 		}
 
-		RecordManager::createWithSubId($subDeviceId, $value);
+		static function executeSwitch($subDeviceId, $executionCommand){
+			$value = 0;
+			$status = 'SUCCESS';
+			if ($executionCommand['params']['on']) $value = 1;
 
-		$executed = 0;
-		$waiting = 0;
-		foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $lastValue) {
-			if ($lastValue['execuded'] == 1){
-				$executed++;
-			} else {
-				$waiting++;
+			RecordManager::createWithSubId($subDeviceId, $value);
+
+			$executed = 0;
+			$waiting = 0;
+			foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $value) {
+				if ($value['execuded'] == 1){
+					$executed++;
+				} else {
+					$waiting++;
+				}
 			}
+			if ($waiting < $executed){
+				$status = "PENDING";
+			} else {
+				$status = "OFFLINE";
+			}
+
+			$commandTemp = [
+				'ids' => [$subDeviceId],
+				'status' => $status,
+				'states' => [
+					'on' => $executionCommand['params']['on'],
+				],
+			];
+			return $commandTemp;
 		}
-		if ($waiting < $executed){
-			$status = "PENDING";
+
+		static function executeTermostatValue($subDeviceId, $executionCommand){
+			$value = 0;
+			$status = 'SUCCESS';
+
+			if (isset($executionCommand['params']['thermostatTemperatureSetpoint'])) {
+				$value = $executionCommand['params']['thermostatTemperatureSetpoint'];
+			}
+
+			RecordManager::createWithSubId($subDeviceId, $value);
+
+			$executed = 0;
+			$waiting = 0;
+			foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $lastValue) {
+				if ($lastValue['execuded'] == 1){
+					$executed++;
+				} else {
+					$waiting++;
+				}
+			}
+			if ($waiting < $executed){
+				$status = "PENDING";
+				$status = "SUCCESS";
+			} else {
+				$status = "OFFLINE";
+			}
+
+			$commandTemp = [
+				'ids' => [$subDeviceId],
+				'status' => $status,
+				'states' => [
+					'thermostatMode' => 'heat',
+					'thermostatTemperatureSetpoint' => $value,
+					'thermostatTemperatureAmbient' => $value,
+					//ambient z dalšího zenzoru v roomu
+				],
+			];
+			return $commandTemp;
+		}
+
+		static function executeTermostatMode($subDeviceId, $executionCommand){
+			$mode = "off";
+			$value = 0;
 			$status = "SUCCESS";
-		} else {
-			$status = "OFFLINE";
-		}
 
-		$commandTemp = [
-			'ids' => [$subDeviceId],
-			'status' => $status,
-			'states' => [
-				'thermostatMode' => 'heat',
-				'thermostatTemperatureSetpoint' => $value,
-				'thermostatTemperatureAmbient' => $value,
-				//ambient z dalšího zenzoru v roomu
-			],
-		];
-		return $commandTemp;
-	}
-
-	static function executeTermostatMode($subDeviceId, $executionCommand){
-		$mode = "off";
-		$value = 0;
-		$status = "SUCCESS";
-
-		if (isset($executionCommand['params']['thermostatMode']) && $executionCommand['params']['thermostatMode'] != 'off') {
-			$mode = $executionCommand['params']['thermostatMode'];
-			$value = RecordManager::getLastRecordNotNull($subDeviceId)['value'];
-		}
-
-		RecordManager::createWithSubId($subDeviceId, $value);
-
-		$executed = 0;
-		$waiting = 0;
-		foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $value) {
-			if ($value['execuded'] == 1){
-				$executed++;
-			} else {
-				$waiting++;
+			if (isset($executionCommand['params']['thermostatMode']) && $executionCommand['params']['thermostatMode'] != 'off') {
+				$mode = $executionCommand['params']['thermostatMode'];
+				$value = RecordManager::getLastRecordNotNull($subDeviceId)['value'];
 			}
-		}
-		if ($waiting < $executed){
-			$status = "PENDING";
-		}
 
-		$commandTemp = [
-			'ids' => [$subDeviceId],
-			'status' => $status,
-			'states' => [
-				'thermostatMode' => $mode
-			],
-		];
+			RecordManager::createWithSubId($subDeviceId, $value);
 
-		return $commandTemp;
+			$executed = 0;
+			$waiting = 0;
+			foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $value) {
+				if ($value['execuded'] == 1){
+					$executed++;
+				} else {
+					$waiting++;
+				}
+			}
+			if ($waiting < $executed){
+				$status = "PENDING";
+			}
+
+			$commandTemp = [
+				'ids' => [$subDeviceId],
+				'status' => $status,
+				'states' => [
+					'thermostatMode' => $mode
+				],
+			];
+
+			return $commandTemp;
+		}
 	}
-}

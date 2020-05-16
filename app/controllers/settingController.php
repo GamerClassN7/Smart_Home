@@ -14,9 +14,8 @@ if (isset($_POST) && !empty($_POST)){
 		header('Location: ' . BASEURL . 'setting');
 		die();
 	} else if (isset($_POST['submitEnableOta']) && $_POST['submitEnableOta'] != "") {
-		echo $otaCode = $_POST['otaCode'];
-		echo $otaSecret = $_POST['otaSecret'];
-
+		$otaCode = $_POST['otaCode'];
+		$otaSecret = $_POST['otaSecret'];
 
 		$ga = new PHPGangsta_GoogleAuthenticator();
 		$checkResult = $ga->verifyCode($otaSecret, $otaCode, 2);    // 2 = 2*30sec clock tolerance

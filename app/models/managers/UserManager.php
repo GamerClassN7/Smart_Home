@@ -206,5 +206,15 @@ class UserManager
 			return false;
 		}
 	}
+
+	public static function setOta($otaCode, $otaSecret){
+		$ga = new PHPGangsta_GoogleAuthenticator();
+		$checkResult = $ga->verifyCode($otaSecret, $otaCode, 2);    // 2 = 2*30sec clock tolerance
+		if ($checkResult) {
+			self::setUserData('ota', $otaSecret);
+			return true;
+		}
+		return false;
+	}
 }
 ?>
