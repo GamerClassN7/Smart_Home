@@ -69,6 +69,7 @@ class GoogleHome {
 				}
 				if ($waiting < $executed){
 					$status = "PENDING";
+
 					$online = true;
 				}
 			}
@@ -84,9 +85,9 @@ class GoogleHome {
 				$tempDevice[$deviceId['id']]['thermostatMode'] = 'off';
 				if (RecordManager::getLastRecord($deviceId['id'])['value'] != 0) {
 					$tempDevice[$deviceId['id']]['thermostatMode'] = 'heat';
+				}
 					$tempDevice[$deviceId['id']]['thermostatTemperatureAmbient'] = RecordManager::getLastRecord($deviceId['id'])['value'];
 					$tempDevice[$deviceId['id']]['thermostatTemperatureSetpoint'] = RecordManager::getLastRecord($deviceId['id'])['value'];
-				}
 			} else {
 				$tempDevice[$deviceId['id']]['on'] = $state;
 			}
@@ -201,6 +202,7 @@ class GoogleHome {
 		}
 		if ($waiting < $executed){
 			$status = "PENDING";
+			$status = "SUCCESS";
 		} else {
 			$status = "OFFLINE";
 		}
@@ -215,10 +217,6 @@ class GoogleHome {
 				//ambient z dalšího zenzoru v roomu
 			],
 		];
-
-		if ($timeout >= 5){
-			$commandTemp['status'] = "OFFLINE";
-		}
 		return $commandTemp;
 	}
 
@@ -236,7 +234,7 @@ class GoogleHome {
 
 		$executed = 0;
 		$waiting = 0;
-		foreach (RecordManager::getLastRecord($deviceId['id'], 4) as $key => $value) {
+		foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $value) {
 			if ($value['execuded'] == 1){
 				$executed++;
 			} else {
