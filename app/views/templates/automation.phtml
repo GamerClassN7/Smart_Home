@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<?php
+	$partial = new Partial('head');
+	$partial->prepare('baseDir', $BASEDIR);
+	$partial->render();
+	?>
+	<title><?php echo $TITLE ?></title>
+</head>
+<body class="no-transitions">
+	<div class="row no-gutters main">
+		<div class="col-md-3 d-sm-none"></div>
+		<div class="col-md-3 nav-container">
+			<?php
+			$partial = new Partial('menu');
+			$partial->prepare('item','automation');
+			$partial->prepare('langMng',$LANGMNG);
+			$partial->prepare('debugMod',$DEBUGMOD);
+			$partial->render();
+			?>
+		</div>
+		<div class="col-md-9 main-body">
+			<a class="button is-primary m-1" onClick="$('#modal').removeClass('modal-container-hiden').show();"><?php $LANGMNG->echo('t_createAutomation'); ?></a>
+			<div class="row no-gutters">
+				<?php foreach ($AUTOMATIONS as $automationId => $automationData) {
+					//BUTTON
+					$partial = new Partial('automationButton');
+					$partial->prepare('langMng',$LANGMNG);
+					$partial->prepare('automationId',$automationId);
+					$partial->prepare('automationData',$automationData);
+					$partial->render();
+
+					//EDIT
+					$partial = new Partial('automationEdit');
+					$partial->prepare('langMng',$LANGMNG);
+					$partial->prepare('userManager',$USERMANAGER);
+					$partial->prepare('automationId',$automationId);
+					$partial->prepare('automation',$automationData);
+					$partial->prepare('subDevices',$SUBDEVICES);
+					$partial->render();
+				} ?>
+			</div>
+		</div>
+	</div>
+	<?php
+	if (isset($_POST['modalNext'])) {
+		$partial = new Partial('automationCreateFinal');
+		$partial->prepare('langMng',$LANGMNG);
+		$partial->prepare('userManager',$USERMANAGER);
+		$partial->prepare('subDevices',$SUBDEVICES);
+		$partial->render();
+	} else {
+		$partial = new Partial('automationCreate');
+		$partial->prepare('langMng',$LANGMNG);
+
+		$partial->prepare('subDevices',$SUBDEVICES);
+		$partial->render();
+	}?>
+	<script src="./app/templates/js/automation.js"></script>
+	<?php
+	$partial = new Partial('footer');
+	$partial->render();
+	?>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<div class="col-12 col-md-6 col-xl-4 square-wrap">
+    <div class="rectangle-2">
+        <div class="square-content double <?php echo ($AUTOMATIONDATA['active'] == 0 ? 'is-inactive' : ''); ?>" id="automation-<?php echo $AUTOMATIONID; ?>">
+            <div class="row">
+                <div class="col-1">
+                    <h5 class="fa">
+                        <?php
+                        //echo $AUTOMATIONDATA['ifSomething'];
+                        $ifCode = json_decode($AUTOMATIONDATA['ifSomething']);
+                        switch ($ifCode->type) {
+                            case 'sunSet':
+                            echo'&#xf186';
+                            break;
+
+                            case 'sunRise':
+                            echo'&#xf185 ';
+                            break;
+
+                            case 'inHome':
+                            echo'&#xf090';
+                            break;
+
+                            case 'outHome':
+                            echo'&#xf08b';
+                            break;
+
+                            case 'outDevice':
+                            echo'&#xf2db';
+                            break;
+
+                            default:
+                            echo'&#xf017';
+                            break;
+                        }
+                        ?>
+                    </h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-right break-all">
+                        <?php
+                        /*if (!in_array($AUTOMATIONDATA['ifSomething'], ["sunRise", "sunSet"])) {
+                            echo $AUTOMATIONDATA['ifSomething'];
+                        }*/
+                        echo $AUTOMATIONDATA['name'];
+                        ?>
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <?php echo implode(', ',$AUTOMATIONDATA['onDays']);?>
+                </div>
+                <div class="col">
+                    <?php echo $AUTOMATIONDATA['owner_name'];?>
+                </div>
+                <div class="col">
+                    <?php echo $AUTOMATIONDATA['execution_time'];?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a class="button is-primary m-1" onClick="restartAutomation(<?php echo $AUTOMATIONID; ?>);"><?php $LANGMNG->echo('b_restart')?></a>
+                </div>
+                <div class="col">
+                    <a class="button is-primary m-1" onClick="toggleAutomation(<?php echo $AUTOMATIONID; ?>);"><?php $LANGMNG->echo('b_disable')?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

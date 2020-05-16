@@ -1,0 +1,44 @@
+<div class="modal-container" id="modal">
+    <div class="modal" action="" >
+        <a href=""><i class="fa fa-times close"></i></a>
+        <h4 class="mb-4"><?php $LANGMNG->echo('t_createAutomation'); ?></h4>
+        <form method="post">
+            <div class="field">
+                <input type="hidden" name="action" value="add" required/>
+                <input type="hidden" name="atSelector" value="<?php echo $_POST['atSelector']; ?>" required/>
+                <input type="hidden" name="name" value="<?php echo $_POST['name']; ?>" required/>
+                <input type="hidden" name="atSelectorValue" value="<?php if (isset($_POST['atTime'])) {
+                    echo $_POST['atTime'];
+                } else if (isset($_POST['atDeviceValue'])) {
+                    $subDeviceId = $_POST['atDeviceValue'];
+                    $subDeviceValue = $_POST['atDeviceValueInt'];
+                    $subDevice = SubDeviceManager::getSubDevice($subDeviceId);
+                    $subDeviceMaster = SubDeviceManager::getSubDeviceMaster($subDeviceId,$subDevice['type']);
+
+                    $json = json_encode([
+                        'deviceID' => $subDeviceMaster['device_id'],
+                        'type'=> htmlspecialchars($subDevice['type']),
+                        'value'=> $subDeviceValue,
+                    ]);
+                    echo  htmlspecialchars($json);
+                } else {
+                    if ($_POST['atSelector'] == "inHome" || $_POST['atSelector'] == "outHome") {
+                       echo $USERMANAGER->getUserData('user_id');
+                    } else {
+                        echo $_POST['atSelector'];
+                    }
+                } ?>" required/>
+                <input type="hidden" name="atDays" value="<?php echo htmlspecialchars(($_POST['day'] != '' ? json_encode($_POST['day']) : '')); ?>" required/>
+                <?php foreach ($_POST['devices'] as $value) { ?>
+                    <?php $deviceData = DeviceManager::getDeviceById($value); ?>
+                    <div class="label"><?php echo $deviceData['name'];?></div>
+                    <select class="input" name="device[<?php echo $deviceData['device_id'];?>]">
+                        <option	value="1">ON</option>
+                        <option	value="0">OFF</option>
+                    </select>
+                <?php } ?>
+            </div>
+            <input type="submit" class="button" name="modalFinal" value="<?php $LANGMNG->echo('b_finish'); ?>"/>
+        </form>
+    </div>
+</div>

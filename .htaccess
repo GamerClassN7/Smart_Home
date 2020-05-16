@@ -10,6 +10,7 @@ RewriteRule . - [e=HTTP_AUTHORIZATION:%1]
 
 # serve all files from public subfolder
 RewriteCond %{REQUEST_FILENAME} !.php
+RewriteCond %{REQUEST_FILENAME} !.log
 RewriteCond %{REQUEST_FILENAME} \.
 RewriteRule (.*) ./public/$1 [L]
 
