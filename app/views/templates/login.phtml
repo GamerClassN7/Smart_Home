@@ -3,13 +3,14 @@
 <head>
 	<?php
 	$partial = new Partial('head');
+	$partial->prepare('baseDir',$BASEDIR);
 	$partial->render();
 	?>
 	<title><?php echo $TITLE ?></title>
 </head>
 <body class="no-transitions">
 	<?php
-	if (isset($ota) && $ota != '') {	
+	if (isset($ota) && $ota != '') {
 		$partial = new Partial('loginOta');
 		$partial->prepare('ota',$ota);
 		$partial->render();
@@ -18,7 +19,7 @@
 		$partial->render();
 	}
 	?>
-	
+
 	<?php
 	$partial = new Partial('footer');
 	$partial->render();
