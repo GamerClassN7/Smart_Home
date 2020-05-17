@@ -3,7 +3,7 @@
 class AuthManager {
 	public function getToken($username, $password, $userAgent = null){
 		if ($userAgent == null) {
-			$userAgent = $this->headers['HTTP_USER_AGENT'];
+			$userAgent = $_SERVER['HTTP_USER_AGENT'];
 		}
 
 		$userManager = new UserManager();
