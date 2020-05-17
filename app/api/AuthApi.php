@@ -1,7 +1,7 @@
 <?php
-class AuthApi {
+class AuthApi extends ApiController {
 	public function login(){
-		$token = (new AuthManager)->getToken($this->input->username,$this->input->password);
+		$token = (new AuthManager)->getToken($this->input['username'],$this->input['password']);
 		if (!$token) {
 			throw new Exception("Auth failed", 401);
 		}
