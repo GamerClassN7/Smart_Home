@@ -69,7 +69,6 @@ class UserManager
 		try {
 			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
-					echo "user loged in";
 					return $user['user_id'];
 				} else {
 					return false;
