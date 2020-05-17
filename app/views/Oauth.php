@@ -8,7 +8,7 @@ class Oauth extends Template
 
 		$template = new Template('oauth');
 		$template->prepare('baseDir', BASEDIR);
-		$template->prepare('title', 'Home');
+		$template->prepare('title', 'Simple Home - Oauth');
 
 		$template->prepare('lang', $lang);
 
