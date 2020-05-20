@@ -76,7 +76,7 @@ class Notification
 		}
 
 		$this->jsonPayload["data"]["notification"]["title"] = $title;
-		$this->jsonPayload["data"]["notification"]["body"] = date("h:i") . " - " . $body;
+		$this->jsonPayload["data"]["notification"]["body"] = $body;
 		$this->jsonPayload["data"]["notification"]["icon"] = $icon;
 		$this->jsonPayload["data"]["notification"]["click_action"] = $action;
 	}
