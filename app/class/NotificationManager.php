@@ -37,7 +37,7 @@ class NotificationManager
 
 		$notification = new Notification($serverKey);
 		$notification->to($to);
-		$notification->notification($data['title'], date("h:i") . " - " . $data['body'], $data['icon'], '');
+		$notification->notification($data['title'], $data['body'], $data['icon'], '');
 		$answer = $notification->send();
 		$notification = null;
 
