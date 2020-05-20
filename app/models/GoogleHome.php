@@ -40,7 +40,7 @@ class GoogleHome {
 				'devices' => $devices,
 			],
 		];
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+		$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
 		$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
 		echo json_encode($response);
 	}
@@ -109,7 +109,7 @@ class GoogleHome {
 				],
 			];
 
-			$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+			$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
 			$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
 			echo json_encode($response);
 		}
@@ -148,7 +148,7 @@ class GoogleHome {
 					'commands' => $commands,
 				],
 			];
-			$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+			$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
 			$apiLogManager->write("[API][EXECUTE][$requestId]\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
 
 			echo json_encode($response);

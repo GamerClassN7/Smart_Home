@@ -44,7 +44,7 @@ class ErrorHandler {
 		];
 		echo json_encode($message);
 
-		$apiLogManager = new LogManager('../logs/'. date("Y-m-d").'.log');
+		$apiLogManager = new LogManager('../logs/apache/'. date("Y-m-d").'.log');
 		$apiLogManager->write("[APACHE] ERROR\n" . json_encode($message, JSON_PRETTY_PRINT), LogRecordType::INFO);
 	}
 }
@@ -53,7 +53,7 @@ set_exception_handler("ErrorHandler::exception");
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 
-$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+$apiLogManager = new LogManager('../logs/api/'. date("Y-m-d").'.log');
 
 $apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
 $apiLogManager->write("[API] POST  body\n" . json_encode($_POST, JSON_PRETTY_PRINT), LogRecordType::INFO);

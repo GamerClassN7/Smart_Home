@@ -5,7 +5,7 @@ class GoogleHomeApi{
 		$json = file_get_contents('php://input');
 		$obj = json_decode($json, true);
 
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+		$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
 		header('Content-Type: application/json');
 
 		switch ($obj['inputs'][0]['intent']) {
@@ -30,7 +30,7 @@ class GoogleHomeApi{
 		$json = file_get_contents('php://input');
 		$obj = json_decode($json, true);
 
-		$apiLogManager = new LogManager('../logs/api/HA/'. date("Y-m-d").'.log');
+		$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
 		$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
 		$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordType::INFO);
 
