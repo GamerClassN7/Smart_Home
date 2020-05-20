@@ -37,7 +37,7 @@ class NotificationManager
 
 		$notification = new Notification($serverKey);
 		$notification->to($to);
-		$notification->notification($data['title'], $data['body'], $data['icon'], '');
+		$notification->notification($data['title'], date("h:i") . " - " . $data['body'], $data['icon'], '');
 		$answer = $notification->send();
 		$notification = null;
 
@@ -76,7 +76,7 @@ class Notification
 		}
 
 		$this->jsonPayload["data"]["notification"]["title"] = $title;
-		$this->jsonPayload["data"]["notification"]["body"] = $body;
+		$this->jsonPayload["data"]["notification"]["body"] = date("h:i") . " - " .  $body;
 		$this->jsonPayload["data"]["notification"]["icon"] = $icon;
 		$this->jsonPayload["data"]["notification"]["click_action"] = $action;
 	}

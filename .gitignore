@@ -9,3 +9,5 @@ app/logs/*.log
 .vscode/
 .vscode/sftp.json
 app/updater/*.bin
+logs/*
+
