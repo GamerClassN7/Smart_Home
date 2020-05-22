@@ -60,6 +60,7 @@ class Router{
 		}
 
 		if($this->function !== NULL){
+			Debugger::flag('execution');
 			if(is_string($this->function)){
 				if(strpos($this->function, '@') !== false){
 					list($class, $function) = explode('@', $this->function);

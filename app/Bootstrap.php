@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+// import configs
+require_once '../library/Debugger.php';
+
+Debugger::flag('loaders');
+
 //Autoloader
 class Autoloader {
 	protected static $extension = ".php";
@@ -50,6 +55,8 @@ class ErrorHandler {
 }
 set_exception_handler("ErrorHandler::exception");
 
+Debugger::flag('preload');
+
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 
@@ -73,21 +80,13 @@ mb_internal_encoding ("UTF-8");
 // import configs
 require_once '../config/config.php';
 
-// Logs
-$logManager = new LogManager();
-
-// Language
-if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
-	$langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-	$langMng = new LanguageManager($langTag);
-	$langMng->load();
-}
-
+Debugger::flag('dbconnect');
 //D B Conector
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 
-// TODO: Přesunout do Login Pohledu
-$userManager = new UserManager();
-
+Debugger::flag('routes');
 // import routes
 require_once '../app/Routes.php';
+
+Debugger::flag('done');
+// echo Debugger::showFlags(false);
