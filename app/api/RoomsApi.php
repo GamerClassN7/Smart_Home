@@ -27,11 +27,7 @@ class RoomsApi extends ApiController{
 	public function update($roomId){
 		//$this->requireAuth();
 
-		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
-
-		foreach ($roomsData as $roomKey => $roomData) {
-			$response[] = isset($subDevicesData[$roomData['room_id']]) ? $subDevicesData[$roomData['room_id']] : [];
-		}
-		$this->response($response);
+		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds([$roomId]);
+		$this->response($subDevicesData);
 	}
 }
