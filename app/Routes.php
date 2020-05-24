@@ -19,11 +19,11 @@ $router->post('/api/login', 'AuthApi@login');
 $router->post('/api/logout', 'AuthApi@logout');
 
 $router->get('/api/rooms', 'RoomsApi@default');
-$router->get('/api/rooms/:roomId/update', 'RoomsApi@update');
+$router->get('/api/rooms/{roomId}/update', 'RoomsApi@update');
 
 $router->get('/api/devices', 'DevicesApi@default');
 
-$router->get('/api/widgets/:widgetId/run', 'WidgetApi@run');
+$router->get('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 
 $router->any('/api/HA/auth', 'Oauth');
 $router->any('/api/HA', 'GoogleHomeApi@response');
