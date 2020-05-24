@@ -18,8 +18,12 @@ $router->any('/oauth', 'Oauth');
 $router->post('/api/login', 'AuthApi@login');
 $router->post('/api/logout', 'AuthApi@logout');
 
-$router->get('/api/devices', 'DevicesApi@default');
 $router->get('/api/rooms', 'RoomsApi@default');
+$router->get('/api/rooms/:id/update', 'RoomsApi@update');
+
+$router->get('/api/devices', 'DevicesApi@default');
+
+$router->get('/api/widget/:id/run', 'WidgetApi@default');
 
 $router->any('/api/HA/auth', 'Oauth');
 $router->any('/api/HA', 'GoogleHomeApi@response');

@@ -3,7 +3,7 @@
 class RoomsApi extends ApiController{
 
 	public function default(){
-		//$this->requireAuth();
+		$this->requireAuth();
 		$response = [];
 		$roomIds = [];
 		$roomsData = RoomManager::getRoomsDefault();
@@ -20,6 +20,17 @@ class RoomsApi extends ApiController{
 				'name' => $roomData['name'],
 				'widgets' => isset($subDevicesData[$roomData['room_id']]) ? $subDevicesData[$roomData['room_id']] : [],
 			];
+		}
+		$this->response($response);
+	}
+
+	public function update($roomId){
+		//$this->requireAuth();
+
+		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
+
+		foreach ($roomsData as $roomKey => $roomData) {
+			$response[] = isset($subDevicesData[$roomData['room_id']]) ? $subDevicesData[$roomData['room_id']] : [];
 		}
 		$this->response($response);
 	}
