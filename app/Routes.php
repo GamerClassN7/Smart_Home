@@ -23,7 +23,7 @@ $router->get('/api/rooms/:id/update', 'RoomsApi@update');
 
 $router->get('/api/devices', 'DevicesApi@default');
 
-$router->get('/api/widget/:id/run', 'WidgetApi@default');
+$router->get('/api/widget/:id/run', 'WidgetApi@run');
 
 $router->any('/api/HA/auth', 'Oauth');
 $router->any('/api/HA', 'GoogleHomeApi@response');

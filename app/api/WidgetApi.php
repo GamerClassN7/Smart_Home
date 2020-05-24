@@ -1,7 +1,7 @@
 <?php
 class WidgetApi extends ApiController{
 
-	public function default($subDeviceId){
+	public function run($subDeviceId){
 		//$this->requireAuth();
 		$response = null;
 
