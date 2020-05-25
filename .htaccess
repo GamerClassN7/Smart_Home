@@ -5,7 +5,7 @@ RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 #token to HTTP_AUTHORIZATION
-RewriteCond %{HTTP:Authorization} ^(.)
+RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule . - [e=HTTP_AUTHORIZATION:%1]
 
 # serve all files from public subfolder

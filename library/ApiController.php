@@ -20,7 +20,7 @@ class ApiController {
 		if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
 			// TODO: call appropriate class/method
 			$authManager = new AuthManager();
-			$this->authenticated = $authManager>validateToken($_SERVER['HTTP_AUTHORIZATION']);
+			$this->authenticated = $authManager->validateToken($_SERVER['HTTP_AUTHORIZATION']);
 			if(!$this->authenticated){
 				throw new Exception("Authorization required", 401);
 			}

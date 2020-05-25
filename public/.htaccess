@@ -7,6 +7,10 @@ RewriteCond %{REQUEST_FILENAME} !.css
 RewriteCond %{REQUEST_FILENAME} !.js
 RewriteRule (.*) ./index.php?url=$1 [QSA,L]
 
+#token to HTTP_AUTHORIZATION
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule . - [e=HTTP_AUTHORIZATION:%1]
+
 RewriteCond %{HTTPS} off
 RewriteCond %{REQUEST_FILENAME} !api.php
 RewriteCond %{REQUEST_FILENAME} !apiFront.php

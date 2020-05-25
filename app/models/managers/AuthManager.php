@@ -52,8 +52,9 @@ class AuthManager {
 	}
 
 	public function validateToken($token){
-		$tokens = Db::loadAll('SELECT * FROM tokens WHERE token = ? AND expire >= CURRENT_TIMESTAMP AND blocked = 0;', array($token));
-		if (count($tokens) == 1) {
+		list($type, $hash) = explode(' ', $token);
+		$tokens = Db::loadAll('SELECT * FROM tokens WHERE token = ? AND expire >= CURRENT_TIMESTAMP AND blocked = 0;', array($hash));
+		if ($type == 'Bearer' && count($tokens) == 1) {
 			return true;
 		} else if (count($tokens) == 0) {
 			return false;
