@@ -14,4 +14,17 @@ class WidgetApi extends ApiController{
 
 		$this->response(['value' => $response]);
 	}
+
+	public function check($subDeviceId){
+		//$this->requireAuth();
+		$response = null;
+		$lastRecord = RecordManager::getLastRecord($subDeviceId);
+
+		$response = [
+			'executet' => $lastRecord['execuded'],
+			'value' => $lastRecord['value'],
+		];
+
+		$this->response($response);
+	}
 }
