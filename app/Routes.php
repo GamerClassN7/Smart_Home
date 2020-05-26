@@ -25,6 +25,8 @@ $router->get('/api/devices', 'DevicesApi@default');
 
 $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 $router->post('/api/widgets/{widgetId}/check', 'WidgetApi@check');
+$router->post('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
+
 
 
 $router->any('/api/HA/auth', 'Oauth');

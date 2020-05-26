@@ -27,4 +27,11 @@ class WidgetApi extends ApiController{
 
 		$this->response($response);
 	}
+
+	public function detail($subDeviceId){
+		//$this->requireAuth();
+		$response = null;
+
+		$this->response($response);
+	}
 }
