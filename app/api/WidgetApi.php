@@ -12,6 +12,6 @@ class WidgetApi extends ApiController{
 			$response = !$lastValue;
 		}
 
-		$this->response($response);
+		$this->response(['value' => $response]);
 	}
 }
