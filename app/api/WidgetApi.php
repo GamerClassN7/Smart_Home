@@ -31,6 +31,33 @@ class WidgetApi extends ApiController{
 	public function detail($subDeviceId){
 		//$this->requireAuth();
 		$response = null;
+		$connectionError = true;
+
+		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
+		$deviceData = DeviceManager::getDeviceById($deviceId);
+		$events = RecordManager::getLastRecord($subDeviceId, 5);
+
+		$LastRecordTime = new DateTime($$events[4]['time']);
+		$niceTime = Utilities::ago($LastRecordTime);
+
+		$interval = $LastRecordTime->diff(new DateTime());
+		$hours   = $interval->format('%h');
+		$minutes = $interval->format('%i');
+		$lastSeen = ($hours * 60 + $minutes);
+
+		if (
+			$lastSeen < $deviceData['sleep_time'] ||
+			$subDeviceData['type'] == "on/off" ||
+			$subDeviceData['type'] == "door"
+		) {
+			$connectionError = false;
+		}
+
+		$response = [
+			'records'=> $events,
+			'comError' => $connectionError,
+			'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
+		];
 
 		$this->response($response);
 	}
