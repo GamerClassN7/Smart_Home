@@ -13,6 +13,11 @@ if (isset($_POST) && !empty($_POST)){
 		UserManager::createUser($userName, $password);
 		header('Location: ' . BASEDIR . 'setting');
 		die();
+	} else if (isset($_POST['submitCreateRoom']) && $_POST['submitCreateRoom'] != "") {
+		$roomName = $_POST['roomName'];
+		RoomManager::create($roomName);
+		header('Location: ' . BASEDIR . 'setting');
+		die();
 	} else if (isset($_POST['submitEnableOta']) && $_POST['submitEnableOta'] != "") {
 		echo $otaCode = $_POST['otaCode'];
 		echo $otaSecret = $_POST['otaSecret'];
