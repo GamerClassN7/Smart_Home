@@ -1,9 +1,9 @@
 <?php
 class UserManager
 {
-	public static function getUsers () {
+	public static function getUsers ($filtr = ['*']) {
 		try {
-			$allUsers = Db::loadAll ("SELECT user_id, username, at_home, ota FROM users");
+			$allUsers = Db::loadAll ("SELECT " . implode($filtr, ",") . " FROM users");
 			return $allUsers;
 		} catch(PDOException $error) {
 			echo $error->getMessage();
@@ -32,8 +32,10 @@ class UserManager
 	}
 
 	public static function getAvatarUrl($userId = null){
-		$email = self::getUserData('email');
-		if ($userId != null){
+		if ($userId == null) {
+			$email = self::getUserData('email');
+		}
+		else if ($userId != null){
 			$email = self::getUserData('email',$userId);
 		}
 		return 'https://secure.gravatar.com/avatar/' . md5( strtolower( trim( $email ) ) );

@@ -2,7 +2,7 @@
 /**
 * Notification Manager
 */
-//TODO: Working timestamp to body or $title
+//TODO: Working timestamp to $title
 class NotificationManager
 {
 	function addSubscriber($userID = '', $token = ''){
