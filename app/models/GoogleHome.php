@@ -193,7 +193,9 @@ static function execute($requestId, $payload){
 
 static function executeSwitch($subDeviceId, $executionCommand){
 	$value = 0;
-	$status = 'SUCCESS';
+	$status = 'OFFLINE';
+	$online = false;
+
 	if ($executionCommand['params']['on']) $value = 1;
 
 	RecordManager::createWithSubId($subDeviceId, $value);
@@ -207,17 +209,19 @@ static function executeSwitch($subDeviceId, $executionCommand){
 			$waiting++;
 		}
 	}
+
 	if ($waiting < $executed){
 		$status = "PENDING";
-	} else {
-		$status = "OFFLINE";
+		$online = true;
 	}
 
+	$deviceId = SubDeviceManager::getSubDeviceMaster($subDeviceId)['device_id'];
 	$commandTemp = [
-		'ids' => [$subDeviceId],
+		'ids' => [(string) $deviceId],
 		'status' => $status,
 		'states' => [
 			'on' => $executionCommand['params']['on'],
+			'online' => $online,
 		],
 	];
 	return $commandTemp;
@@ -225,7 +229,8 @@ static function executeSwitch($subDeviceId, $executionCommand){
 
 static function executeTermostatValue($subDeviceId, $executionCommand){
 	$value = 0;
-	$status = 'SUCCESS';
+	$status = 'OFFLINE';
+	$online = false;
 
 	if (isset($executionCommand['params']['thermostatTemperatureSetpoint'])) {
 		$value = $executionCommand['params']['thermostatTemperatureSetpoint'];
@@ -242,20 +247,21 @@ static function executeTermostatValue($subDeviceId, $executionCommand){
 			$waiting++;
 		}
 	}
+
 	if ($waiting < $executed){
 		$status = "PENDING";
-		$status = "SUCCESS";
-	} else {
-		$status = "OFFLINE";
+		$online = true;;
 	}
 
+	$deviceId = SubDeviceManager::getSubDeviceMaster($subDeviceId)['device_id'];
 	$commandTemp = [
-		'ids' => [$subDeviceId],
+		'ids' => [(string) $deviceId],
 		'status' => $status,
 		'states' => [
 			'thermostatMode' => 'heat',
 			'thermostatTemperatureSetpoint' => $value,
 			'thermostatTemperatureAmbient' => $value,
+			'online' => $online,
 			//ambient z dalšího zenzoru v roomu
 		],
 	];
@@ -265,7 +271,8 @@ static function executeTermostatValue($subDeviceId, $executionCommand){
 static function executeTermostatMode($subDeviceId, $executionCommand){
 	$mode = "off";
 	$value = 0;
-	$status = "SUCCESS";
+	$status = 'OFFLINE';
+	$online = false;
 
 	if (isset($executionCommand['params']['thermostatMode']) && $executionCommand['params']['thermostatMode'] != 'off') {
 		$mode = $executionCommand['params']['thermostatMode'];
@@ -283,15 +290,19 @@ static function executeTermostatMode($subDeviceId, $executionCommand){
 			$waiting++;
 		}
 	}
+
 	if ($waiting < $executed){
 		$status = "PENDING";
+		$online = true;
 	}
 
+	$deviceId = SubDeviceManager::getSubDeviceMaster($subDeviceId)['device_id'];
 	$commandTemp = [
-		'ids' => [$subDeviceId],
+		'ids' => [(string) $deviceId],
 		'status' => $status,
 		'states' => [
-			'thermostatMode' => $mode
+			'thermostatMode' => $mode,
+			'online' => $online,
 		],
 	];
 
@@ -299,7 +310,9 @@ static function executeTermostatMode($subDeviceId, $executionCommand){
 }
 
 static function executeVolume($subDeviceId, $executionCommand){
-	$status = "SUCCESS";
+	$status = 'OFFLINE';
+	$online = false;
+
 	$currentVolume = RecordManager::getLastRecord($subDeviceId)['value'];
 
 	if (isset($executionCommand['params']['volumeLevel'])) {
@@ -313,18 +326,20 @@ static function executeVolume($subDeviceId, $executionCommand){
 				$waiting++;
 			}
 		}
-		if ($waiting < $executed){
+		if ($waiting > $executed){
 			$status = "PENDING";
-		} else {
+			$online = true;
 			$currentVolume = $executionCommand['params']['volumeLevel'];
 		}
 	}
 
+	$deviceId = SubDeviceManager::getSubDeviceMaster($subDeviceId)['device_id'];
 	$commandTemp = [
-		'ids' => [$subDeviceId],
+		'ids' => [(string) $deviceId],
 		'status' => $status,
 		'states' => [
 			'currentVolume' => $currentVolume,
+			'online' => $online,
 		],
 	];
 
