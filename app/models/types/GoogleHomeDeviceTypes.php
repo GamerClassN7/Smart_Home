@@ -72,34 +72,85 @@ class GoogleHomeDeviceTypes {
 	const YogurtMaker					= 'action.devices.types.YOGURTMAKER';*/
 
 	private static $actionWordBook = [
-		'on/off' 	=> 'action.devices.types.OUTLET',
-		'temp_cont'	=> 'action.devices.types.THERMOSTAT',
+		'control-light' 			=> 'action.devices.types.OUTLET',
+		'control-socket' 			=> 'action.devices.types.OUTLET',
+		'control-temp'				=> 'action.devices.types.THERMOSTAT',
+		'control-media'			=> 'action.devices.types.REMOTECONTROL',
+	];
+
+	private static $traidWordBook = [
+		'on/off' 					=> 'action.devices.traits.OnOff',
+		'temp_cont' 				=> 'action.devices.traits.TemperatureSetting',
+		'vol_cont'					=> 'action.devices.traits.Volume',
+	];
+
+	private static $commandWordBook = [
+		'action.devices.commands.OnOff' => 'on/off',
+		'action.devices.commands.ThermostatTemperatureSetpoint' => 'temp_cont',
+		'action.devices.commands.ThermostatSetMode' => 'temp_cont',
+		'action.devices.commands.setVolume' => 'vol_cont',
+	];
+
+	private static $attributeWordBook = [
+		'temp_cont' 				=> [
+			'availableThermostatModes' => 'off,heat',
+			'thermostatTemperatureUnit' => 'C'
+		],
+		'vol_cont' 				=> [
+			'volumeCanMuteAndUnmute' => false,
+			'volumeDefaultPercentage' => 6,
+			'volumeMaxLevel' => 100,
+			'levelStepSize' => 2,
+			'commandOnlyVolume' => false,
+		],
 	];
 
 	static function getAction($deviceType){
+		if (!isset(self::$actionWordBook[$deviceType])) return;
 		return self::$actionWordBook[$deviceType];
 	}
 
-	static function getSyncObj($deviceBaseObj, $deviceType){
-		switch ($deviceType) {
-			case 'action.devices.types.LIGHT':
-			case 'action.devices.types.OUTLET':
-			$deviceBaseObj['traits'] = [
-				'action.devices.traits.OnOff'
-			];
-			break;
-			case 'action.devices.types.THERMOSTAT':
-			$deviceBaseObj['traits'] = [
-				'action.devices.traits.TemperatureSetting',
-			];
-			$deviceBaseObj['attributes'] = [
-				"availableThermostatModes" => "off,heat",
-				"thermostatTemperatureUnit" => "C",
-			];
-			break;
-		}
-		return $deviceBaseObj;
+	static function getTraid($subDeviceType){
+		if (!isset(self::$traidWordBook[$subDeviceType])) return;
+		return self::$traidWordBook[$subDeviceType];
 	}
+
+	static function getType($subDeviceCommand){
+		if (!isset(self::$commandWordBook[$subDeviceCommand])) return;
+		return self::$commandWordBook[$subDeviceCommand];
+	}
+
+	static function getAttribute($subDeviceType){
+		if (!isset(self::$attributeWordBook[$subDeviceType])) return;
+		return self::$attributeWordBook[$subDeviceType];
+	}
+	// static function getSyncObj($deviceBaseObj, $deviceType){
+	// 	switch ($deviceType) {
+	// 		case 'action.devices.types.LIGHT':
+	// 		case 'action.devices.types.OUTLET':
+	// 		$deviceBaseObj['traits'] = [
+	// 			'action.devices.traits.OnOff'
+	// 		];
+	// 		break;
+	// 		case 'action.devices.types.THERMOSTAT':
+	// 		$deviceBaseObj['traits'] = [
+	// 			'action.devices.traits.TemperatureSetting',
+	// 		];
+	// 		$deviceBaseObj['attributes'] = [
+	// 			"availableThermostatModes" => "off,heat",
+	// 			"thermostatTemperatureUnit" => "C",
+	// 		];
+	// 		break;
+	// 		case 'action.devices.types.REMOTECONTROL':
+	// 		$deviceBaseObj['traits'] = [
+	// 			'action.devices.traits.Volume',
+	// 			'action.devices.traits.MediaState',
+	// 			'action.devices.traits.OnOff',
+	// 		];
+	// 		break;
+	// 	}
+	// 	return $deviceBaseObj;
+	// }
 
 	static function getQueryJson($deviceType, $type){
 		return self::$wordBook[$type];
