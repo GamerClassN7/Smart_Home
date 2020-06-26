@@ -62,7 +62,8 @@
         </div>
 
         <?php
-        $partial = new Partial('footer');
+		  $partial = new Partial('footer');
+		  $partial->prepare('baseDir', BASEDIR);
         $partial->render();
         //TODO js do main.js
         ?>

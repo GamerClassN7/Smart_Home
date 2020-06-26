@@ -27,6 +27,7 @@
 
 	<?php
 	$partial = new Partial('footer');
+	$partial->prepare('baseDir', BASEDIR);
 	$partial->render();
 	?>
 </body>

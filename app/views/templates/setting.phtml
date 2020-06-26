@@ -194,6 +194,7 @@
 	</div>
 	<?php
 	$partial = new Partial('footer');
+	$partial->prepare('baseDir', BASEDIR);
 	$partial->render();
 	?>
 	<script src="./app/templates/js/setting.js"></script>

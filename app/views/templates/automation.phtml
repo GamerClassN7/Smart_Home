@@ -60,6 +60,7 @@
 	<script src="./app/templates/js/automation.js"></script>
 	<?php
 	$partial = new Partial('footer');
+	$partial->prepare('baseDir', $BASEDIR);
 	$partial->render();
 	?>
 </body>
