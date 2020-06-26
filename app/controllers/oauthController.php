@@ -1,6 +1,5 @@
 <?php
-global $userManager;
-
+$userManager = new UserManager();
 
 if (
 	isset($_POST['username']) &&
@@ -10,6 +9,7 @@ if (
 ){
 	$ota = false;
 	$userName = $_POST['username'];
+	echo $_POST['username'];
 	$userPassword = $_POST['password'];
 	$state = $_POST["state"];
 	$clientId = $_POST["clientId"];

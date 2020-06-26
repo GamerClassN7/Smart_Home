@@ -24,7 +24,6 @@ class Oauth extends Template
 			$template->prepare('state', $_POST['state']);
 		}
 
-
 		$template->render();
 	}
 }
