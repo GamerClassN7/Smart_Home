@@ -100,9 +100,12 @@ class GoogleHome {
 						$tempDevice[$deviceId['id']]['thermostatTemperatureAmbient'] = $lastRecord['value'];
 						$tempDevice[$deviceId['id']]['thermostatTemperatureSetpoint'] = $lastRecord['value'];
 					break;
+					case 'vol_cont':
+						$tempDevice[$deviceId['id']]['currentVolume'] = $lastRecord['value'];
+					break;
 					default:
-					$tempDevice[$deviceId['id']]['on'] = ($lastRecord['value'] == 1 ? true : false);
-				break;
+						$tempDevice[$deviceId['id']]['on'] = ($lastRecord['value'] == 1 ? true : false);
+						break;
 			}
 		}
 
@@ -310,6 +313,7 @@ static function executeTermostatMode($subDeviceId, $executionCommand){
 }
 
 static function executeVolume($subDeviceId, $executionCommand){
+	echo $executionCommand['params']['volumeLevel'];
 	$status = 'OFFLINE';
 	$online = false;
 
@@ -326,7 +330,7 @@ static function executeVolume($subDeviceId, $executionCommand){
 				$waiting++;
 			}
 		}
-		if ($waiting > $executed){
+		if ($waiting < $executed){
 			$status = "PENDING";
 			$online = true;
 			$currentVolume = $executionCommand['params']['volumeLevel'];
