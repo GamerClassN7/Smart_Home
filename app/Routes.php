@@ -30,9 +30,12 @@ $router->post('/api/widgets/{widgetId}/check', 'WidgetApi@check');
 $router->post('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
 
 
-
+//Google Home - API
 $router->any('/api/HA/auth', 'Oauth');
 $router->any('/api/HA', 'GoogleHomeApi@response');
+
+//Endpoints API
+$router->post('/api/endpoint', 'EndpointsApi@default');
 
 // examples
 $router->any('/api/example', 'ExampleApi@example');

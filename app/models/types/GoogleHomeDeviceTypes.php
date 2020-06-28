@@ -72,7 +72,7 @@ class GoogleHomeDeviceTypes {
 	const YogurtMaker					= 'action.devices.types.YOGURTMAKER';*/
 
 	private static $actionWordBook = [
-		'control-light' 			=> 'action.devices.types.OUTLET',
+		'control-light' 			=> 'action.devices.types.LIGHT',
 		'control-socket' 			=> 'action.devices.types.OUTLET',
 		'control-temp'				=> 'action.devices.types.THERMOSTAT',
 		'control-media'			=> 'action.devices.types.REMOTECONTROL',
@@ -103,6 +103,35 @@ class GoogleHomeDeviceTypes {
 			'levelStepSize' => 2,
 			'commandOnlyVolume' => false,
 		],
+		'media_status'=> [
+			'transportControlSupportedCommands' => [
+				"NEXT",
+            "PREVIOUS",
+            "PAUSE",
+            "STOP",
+            "RESUME",
+			],
+		],
+		'media_apps' => [
+			[
+				"key" => "kodi",
+				"names" => [
+					 "name_synonym" => [
+						"Kodi",
+					 ],
+					 "lang" => "en"
+				]
+			],
+		],
+		'media_inputs' => [
+			"key" => "pc",
+              "names" => [
+                  "name_synonym"  => [
+                    "PC",
+                  ],
+                  "lang"  => "en"
+              ]
+		]
 	];
 
 	static function getAction($deviceType){
