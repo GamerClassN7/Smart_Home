@@ -106,82 +106,57 @@ class GoogleHomeDeviceTypes {
 		'media_status'=> [
 			'transportControlSupportedCommands' => [
 				"NEXT",
-            "PREVIOUS",
-            "PAUSE",
-            "STOP",
-            "RESUME",
+				"PREVIOUS",
+				"PAUSE",
+				"STOP",
+				"RESUME",
 			],
 		],
 		'media_apps' => [
 			[
 				"key" => "kodi",
 				"names" => [
-					 "name_synonym" => [
+					"name_synonym" => [
 						"Kodi",
-					 ],
-					 "lang" => "en"
-				]
+					],
+					"lang" => "en"
+					]
+				],
 			],
-		],
-		'media_inputs' => [
-			"key" => "pc",
-              "names" => [
-                  "name_synonym"  => [
-                    "PC",
-                  ],
-                  "lang"  => "en"
-              ]
-		]
-	];
+			'media_inputs' => [
+				[
+					"key" => "pc",
+					"names" => [
+						"name_synonym"  => [
+							"PC",
+						],
+						"lang"  => "en"
+					],
+				],
+			],
+		];
 
-	static function getAction($deviceType){
-		if (!isset(self::$actionWordBook[$deviceType])) return;
-		return self::$actionWordBook[$deviceType];
-	}
+		static function getAction($deviceType){
+			if (!isset(self::$actionWordBook[$deviceType])) return;
+			return self::$actionWordBook[$deviceType];
+		}
 
-	static function getTraid($subDeviceType){
-		if (!isset(self::$traidWordBook[$subDeviceType])) return;
-		return self::$traidWordBook[$subDeviceType];
-	}
+		static function getTraid($subDeviceType){
+			if (!isset(self::$traidWordBook[$subDeviceType])) return;
+			return self::$traidWordBook[$subDeviceType];
+		}
 
-	static function getType($subDeviceCommand){
-		if (!isset(self::$commandWordBook[$subDeviceCommand])) return;
-		return self::$commandWordBook[$subDeviceCommand];
-	}
+		static function getType($subDeviceCommand){
+			if (!isset(self::$commandWordBook[$subDeviceCommand])) return;
+			return self::$commandWordBook[$subDeviceCommand];
+		}
 
-	static function getAttribute($subDeviceType){
-		if (!isset(self::$attributeWordBook[$subDeviceType])) return;
-		return self::$attributeWordBook[$subDeviceType];
-	}
-	// static function getSyncObj($deviceBaseObj, $deviceType){
-	// 	switch ($deviceType) {
-	// 		case 'action.devices.types.LIGHT':
-	// 		case 'action.devices.types.OUTLET':
-	// 		$deviceBaseObj['traits'] = [
-	// 			'action.devices.traits.OnOff'
-	// 		];
-	// 		break;
-	// 		case 'action.devices.types.THERMOSTAT':
-	// 		$deviceBaseObj['traits'] = [
-	// 			'action.devices.traits.TemperatureSetting',
-	// 		];
-	// 		$deviceBaseObj['attributes'] = [
-	// 			"availableThermostatModes" => "off,heat",
-	// 			"thermostatTemperatureUnit" => "C",
-	// 		];
-	// 		break;
-	// 		case 'action.devices.types.REMOTECONTROL':
-	// 		$deviceBaseObj['traits'] = [
-	// 			'action.devices.traits.Volume',
-	// 			'action.devices.traits.MediaState',
-	// 			'action.devices.traits.OnOff',
-	// 		];
-	// 		break;
-	// 	}
-	// 	return $deviceBaseObj;
-	// }
+		static function getAttribute($subDeviceType){
+			if (!isset(self::$attributeWordBook[$subDeviceType])) return;
+			return self::$attributeWordBook[$subDeviceType];
+		}
 
-	static function getQueryJson($deviceType, $type){
-		return self::$wordBook[$type];
+		static function getQueryJson($deviceType, $type){
+			return self::$wordBook[$type];
+		}
 	}
-}
