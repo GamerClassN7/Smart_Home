@@ -7,7 +7,7 @@ class GoogleHome {
 			$devicesData = DeviceManager::getAllDevicesInRoom($roomData['room_id']);
 			foreach ($devicesData as $deviceKey => $deviceData) {
 				$traids = [];
-				$attributes = null;
+				$attributes = [];
 
 				//Google Compatibile Action Type
 				$actionType = GoogleHomeDeviceTypes::getAction($deviceData['type']);
@@ -22,7 +22,7 @@ class GoogleHome {
 
 					$deviceAttributes = GoogleHomeDeviceTypes::getAttribute($subDeviceData['type']);
 					if ($deviceAttributes != "") {
-						$attributes = $deviceAttributes;
+						$attributes += $deviceAttributes;
 					}
 				}
 

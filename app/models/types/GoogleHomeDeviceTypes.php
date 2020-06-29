@@ -113,50 +113,53 @@ class GoogleHomeDeviceTypes {
 			],
 		],
 		'media_apps' => [
-			[
-				"key" => "kodi",
-				"names" => [
-					"name_synonym" => [
-						"Kodi",
-					],
-					"lang" => "en"
-					]
-				],
-			],
-			'media_inputs' => [
+			"availableApplications" => [
 				[
-					"key" => "pc",
+					"key" => "kodi",
 					"names" => [
-						"name_synonym"  => [
-							"PC",
+						"name_synonym" => [
+							"Kodi",
 						],
-						"lang"  => "en"
+						"lang" => "en"
 					],
 				],
 			],
-		];
+		],
+		'media_inputs' => [
+			"availableApplications" => [
+				"key" => "pc",
+				"names" => [
+					"name_synonym"  => [
+						"PC",
+					],
+					"lang"  => "en",
+				],
 
-		static function getAction($deviceType){
-			if (!isset(self::$actionWordBook[$deviceType])) return;
-			return self::$actionWordBook[$deviceType];
-		}
+			],
+		],
+	];
 
-		static function getTraid($subDeviceType){
-			if (!isset(self::$traidWordBook[$subDeviceType])) return;
-			return self::$traidWordBook[$subDeviceType];
-		}
-
-		static function getType($subDeviceCommand){
-			if (!isset(self::$commandWordBook[$subDeviceCommand])) return;
-			return self::$commandWordBook[$subDeviceCommand];
-		}
-
-		static function getAttribute($subDeviceType){
-			if (!isset(self::$attributeWordBook[$subDeviceType])) return;
-			return self::$attributeWordBook[$subDeviceType];
-		}
-
-		static function getQueryJson($deviceType, $type){
-			return self::$wordBook[$type];
-		}
+	static function getAction($deviceType){
+		if (!isset(self::$actionWordBook[$deviceType])) return;
+		return self::$actionWordBook[$deviceType];
 	}
+
+	static function getTraid($subDeviceType){
+		if (!isset(self::$traidWordBook[$subDeviceType])) return;
+		return self::$traidWordBook[$subDeviceType];
+	}
+
+	static function getType($subDeviceCommand){
+		if (!isset(self::$commandWordBook[$subDeviceCommand])) return;
+		return self::$commandWordBook[$subDeviceCommand];
+	}
+
+	static function getAttribute($subDeviceType){
+		if (!isset(self::$attributeWordBook[$subDeviceType])) return;
+		return self::$attributeWordBook[$subDeviceType];
+	}
+
+	static function getQueryJson($deviceType, $type){
+		return self::$wordBook[$type];
+	}
+}
