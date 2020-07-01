@@ -9,7 +9,7 @@ class UsersApi extends ApiController{
 		foreach ($users as $key => $user) {
 			$response[] = [
 				"userName" => $user['username'],
-				"homeStatus" => ($user['at_home']) ? true : false,
+				"homeStatus" => ($user['at_home'] == 'true') ? true : false,
 				"avatarUrl" => UserManager::getAvatarUrl($user['user_id']),
 			];
 		}

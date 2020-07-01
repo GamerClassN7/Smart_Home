@@ -75,7 +75,7 @@ class GoogleHomeDeviceTypes {
 		'control-light' 			=> 'action.devices.types.LIGHT',
 		'control-socket' 			=> 'action.devices.types.OUTLET',
 		'control-temp'				=> 'action.devices.types.THERMOSTAT',
-		'control-media'			=> 'action.devices.types.REMOTECONTROL',
+		'control-media'			=> 'action.devices.types.REMOTE',
 	];
 
 	private static $traidWordBook = [
@@ -101,7 +101,7 @@ class GoogleHomeDeviceTypes {
 			'volumeDefaultPercentage' => 6,
 			'volumeMaxLevel' => 100,
 			'levelStepSize' => 2,
-			'commandOnlyVolume' => false,
+			'commandOnlyVolume' => true,
 		],
 		'media_status'=> [
 			'transportControlSupportedCommands' => [
