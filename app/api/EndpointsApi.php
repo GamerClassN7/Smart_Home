@@ -92,6 +92,71 @@ class EndpointsApi extends ApiController{
 
 			if (isset($obj['values'])) {
 				//zapis
+
+				//ZAPIS
+				$device = DeviceManager::getDeviceByToken($obj['token']);
+				$deviceId = $device['device_id'];
+				foreach ($obj['values'] as $key => $value) {
+					if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
+						SubDeviceManager::create($deviceId, $key, UNITS[$key]);
+					}
+					RecordManager::create($deviceId, $key, round($value['value'],3));
+					$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
+
+					//notification
+					if ($key == 'door' || $key == 'water') {
+						$notificationMng = new NotificationManager;
+						$notificationData = [];
+
+						switch ($key) {
+							case 'door':
+								$notificationData = [
+									'title' => 'Info',
+									'body' => 'Someone just open up '.$device['name'],
+									'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
+								];
+
+							break;
+							case 'water':
+								$notificationData = [
+									'title' => 'Alert',
+									'body' => 'Wather leak detected by '.$device['name'],
+									'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
+								];
+							break;
+						}
+						if (DEBUGMOD) $notificationData['body'] .= ' value='.$value['value'];
+						if ($notificationData != []) {
+							$subscribers = $notificationMng::getSubscription();
+							foreach ($subscribers as $key => $subscriber) {
+								$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordType::INFO);
+								$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
+							}
+						}
+					}
+				}
+
+				$hostname = strtolower($device['name']);
+				$hostname = str_replace(' ', '_', $hostname);
+				//upravit format na setings-> netvork etc
+				$jsonAnswer = [
+					'device' => [
+						'hostname' => $hostname,
+						'ipAddress' => $device['ip_address'],
+						'subnet' => $device['subnet'],
+						'gateway' => $device['gateway'],
+					],
+					'state' => 'succes',
+					'command' => $command,
+				];
+
+				$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
+				if (!in_array($subDevicesTypeList, ['on/off', 'door', 'water'])) {
+					$jsonAnswer['device']['sleepTime'] = $device['sleep_time'];
+				}
+
+				$this->response($jsonAnswer);
+
 			} else {
 				//Vypis
 				$device = DeviceManager::getDeviceByToken($obj['token']);
