@@ -61,21 +61,19 @@ class GoogleHome {
 
 	static function query($requestId, $payload){
 		$devices = [];
+		$num = 0;
 		foreach ($payload['devices'] as $deviceId) {
 			$subDevicesData = SubDeviceManager::getAllSubDevices($deviceId['id']);
 
-			$tempDevice = [
-				$deviceId['id'] => [
-					'online' => false,
-					'status'=> 'OFFLINE',
-					]
-				];
-
+			$tempDevice[$deviceId['id']] = [
+				'online' => false,
+				'status' => 'OFFLINE',
+			];
 			foreach ($subDevicesData as $key => $subDeviceData) {
 				$lastRecord = RecordManager::getLastRecord($subDeviceData['subdevice_id']);
 				if ($lastRecord['execuded'] == 1){
 					$tempDevice[$deviceId['id']]['online'] = true;
-					$tempDevice[$deviceId['id']]['status'] = 'SUCCESS';
+					$tempDevice[$deviceId['id']]['status'] = "SUCCESS";
 				} else {
 					$executed = 0;
 					$waiting = 0;
@@ -103,13 +101,21 @@ class GoogleHome {
 					case 'vol_cont':
 						$tempDevice[$deviceId['id']]['currentVolume'] = $lastRecord['value'];
 					break;
-					default:
+					case 'media_apps':
+						$tempDevice[$deviceId['id']]['currentApplication'] = "kodi";
+					break;
+					case 'media_input':
+						$tempDevice[$deviceId['id']]['currentInput'] = "pc";
+					break;
+					case 'media_status':
+						$tempDevice[$deviceId['id']]['activityState'] = "ACTIVE";
+						$tempDevice[$deviceId['id']]['playbackState'] = "PLAYING";
+					break;
+					case 'on/off':
 						$tempDevice[$deviceId['id']]['on'] = ($lastRecord['value'] == 1 ? true : false);
-						break;
+					break;
 			}
 		}
-
-
 
 		if ($lastRecord['execuded'] == 1){
 			$online = true;
@@ -129,11 +135,10 @@ class GoogleHome {
 				$online = true;
 			}
 		}
-
 		$devices = $tempDevice;
-		if (count($devices)> 1){
+		/*if (count($devices)> 1){
 			$devices[] = $tempDevice;
-		}
+		}*/
 	}
 	$response = [
 		'requestId' => $requestId,
@@ -141,7 +146,6 @@ class GoogleHome {
 			'devices' => $devices,
 		],
 	];
-
 	$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
 	$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
 	echo json_encode($response);
@@ -149,9 +153,8 @@ class GoogleHome {
 
 static function execute($requestId, $payload){
 	$commands = [];
-
 	foreach ($payload['commands'] as $key => $command) {
-		foreach ($command['devices'] as $key => $device) {
+		foreach ($command['devices'] as $key2 => $device) {
 			$executionCommand = $command['execution'][0];
 			if (isset($command['execution'][$key])) {
 				$executionCommand = $command['execution'][$key];
@@ -159,7 +162,6 @@ static function execute($requestId, $payload){
 
 			$deviceType = GoogleHomeDeviceTypes::getType($executionCommand['command']);
 			$subDeviceId = SubDeviceManager::getSubDeviceByMasterAndType($device['id'], $deviceType)['subdevice_id'];
-
 			switch ($executionCommand['command']) {
 				case 'action.devices.commands.OnOff':
 					$commands[] = self::executeSwitch($subDeviceId, $executionCommand);
@@ -177,10 +179,37 @@ static function execute($requestId, $payload){
 					$commands[] = self::executeVolume($subDeviceId, $executionCommand);
 				break;
 
+				case 'action.devices.commands.appSelect':
+					$commands[] = self::executeApp($subDeviceId, $executionCommand);
+				break;
+
+				case 'action.devices.commands.SetInput':
+					$commands[] = self::executeInput($subDeviceId, $executionCommand);
+				break;
+
+				case 'action.devices.commands.mediaNext':
+					$commands[] = self::executeMediaCont($subDeviceId, $executionCommand);
+				break;
+
+				case 'action.devices.commands.mediaPrevious':
+					$commands[] = self::executeMediaCont($subDeviceId, $executionCommand);
+				break;
+
+				case 'action.devices.commands.mediaPause':
+					$commands[] = self::executeMediaCont($subDeviceId, $executionCommand);
+				break;
+
+				case 'action.devices.commands.mediaResume':
+					$commands[] = self::executeMediaCont($subDeviceId, $executionCommand);
+				break;
+
+				case 'action.devices.commands.mediaStop':
+					$commands[] = self::executeMediaCont($subDeviceId, $executionCommand);
+				break;
+
 			}
 		}
 	}
-
 	$response = [
 		'requestId' => $requestId,
 		'payload' => [
@@ -313,7 +342,7 @@ static function executeTermostatMode($subDeviceId, $executionCommand){
 }
 
 static function executeVolume($subDeviceId, $executionCommand){
-	echo $executionCommand['params']['volumeLevel'];
+	//echo $executionCommand['params']['volumeLevel'];
 	$status = 'OFFLINE';
 	$online = false;
 
@@ -343,6 +372,98 @@ static function executeVolume($subDeviceId, $executionCommand){
 		'status' => $status,
 		'states' => [
 			'currentVolume' => $currentVolume,
+			'online' => $online,
+		],
+	];
+
+	return $commandTemp;
+}
+
+static function executeApp($subDeviceId, $executionCommand){
+	//echo $executionCommand['params']['newApplication'];
+	$status = 'OFFLINE';
+	$online = false;
+
+	$currentApplication = RecordManager::getLastRecord($subDeviceId)['value'];
+
+	if (isset($executionCommand['params']['newApplication'])) {
+		RecordManager::createWithSubId($subDeviceId, $executionCommand['params']['newApplication']);
+		$executed = 0;
+		$waiting = 0;
+		foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $value) {
+			if ($value['execuded'] == 1){
+				$executed++;
+			} else {
+				$waiting++;
+			}
+		}
+		if ($waiting < $executed){
+			$status = "PENDING";
+			$online = true;
+			$currentApplication = $executionCommand['params']['newApplication'];
+		}
+	}
+
+	$deviceId = SubDeviceManager::getSubDeviceMaster($subDeviceId)['device_id'];
+	$commandTemp = [
+		'ids' => [(string) $deviceId],
+		'status' => $status,
+		'states' => [
+			'currentApplication' => $currentApplication,
+			'online' => $online,
+		],
+	];
+
+	return $commandTemp;
+}
+
+static function executeInput($subDeviceId, $executionCommand){
+	//echo $executionCommand['params']['newInput'];
+	$status = 'OFFLINE';
+	$online = false;
+
+	$currentInput = RecordManager::getLastRecord($subDeviceId)['value'];
+
+	if (isset($executionCommand['params']['newInput'])) {
+		RecordManager::createWithSubId($subDeviceId, $executionCommand['params']['newInput']);
+		$executed = 0;
+		$waiting = 0;
+		foreach (RecordManager::getLastRecord($subDeviceId, 4) as $key => $value) {
+			if ($value['execuded'] == 1){
+				$executed++;
+			} else {
+				$waiting++;
+			}
+		}
+		if ($waiting < $executed){
+			$status = "PENDING";
+			$online = true;
+			$currentInput = $executionCommand['params']['newInput'];
+		}
+	}
+
+	$deviceId = SubDeviceManager::getSubDeviceMaster($subDeviceId)['device_id'];
+	$commandTemp = [
+		'ids' => [(string) $deviceId],
+		'status' => $status,
+		'states' => [
+			'currentInput' => $currentInput,
+			'online' => $online,
+		],
+	];
+
+	return $commandTemp;
+}
+
+static function executeMediaCont($subDeviceId, $executionCommand){
+	$status = 'SUCCESS';
+	$online = true;
+
+	$deviceId = SubDeviceManager::getSubDeviceMaster($subDeviceId)['device_id'];
+	$commandTemp = [
+		'ids' => [(string) $deviceId],
+		'status' => $status,
+		'states' => [
 			'online' => $online,
 		],
 	];

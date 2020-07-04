@@ -25,9 +25,9 @@ class SubDeviceManager
 		}
 	}
 
-	public static function getSubDeviceByMasterAndType($deviceId, $subDeviceType = null)
+	public static function getSubDeviceByMasterAndType($deviceId, $subDeviceType = '')
 	{
-		if (!empty($subDeviceType)) {
+		if ($subDeviceType == '') {
 			return Db::loadOne("SELECT * FROM subdevices WHERE device_id = ?;", array($deviceId));
 		} else {
 			return Db::loadOne("SELECT * FROM subdevices WHERE device_id = ? AND type = ?;", array($deviceId, $subDeviceType));

@@ -21,6 +21,7 @@ class GoogleHomeApi{
 			break;
 
 			case 'action.devices.EXECUTE':
+
 			GoogleHome::execute($obj['requestId'], $obj['inputs'][0]['payload']);
 			$apiLogManager->write("[Google Home] action.devices.EXECUTE", LogRecordType::INFO);
 			$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);

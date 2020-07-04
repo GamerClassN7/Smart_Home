@@ -75,13 +75,17 @@ class GoogleHomeDeviceTypes {
 		'control-light' 			=> 'action.devices.types.LIGHT',
 		'control-socket' 			=> 'action.devices.types.OUTLET',
 		'control-temp'				=> 'action.devices.types.THERMOSTAT',
-		'control-media'			=> 'action.devices.types.REMOTE',
+		'control-media'			=> 'action.devices.types.REMOTECONTROL',
 	];
 
 	private static $traidWordBook = [
 		'on/off' 					=> 'action.devices.traits.OnOff',
 		'temp_cont' 				=> 'action.devices.traits.TemperatureSetting',
 		'vol_cont'					=> 'action.devices.traits.Volume',
+		'media_cont'            => 'action.devices.traits.TransportControl',
+		'media_status'          => 'action.devices.traits.MediaState',
+		'media_apps'            => 'action.devices.traits.AppSelector',
+		'media_input'           => 'action.devices.traits.InputSelector',
 	];
 
 	private static $commandWordBook = [
@@ -89,28 +93,43 @@ class GoogleHomeDeviceTypes {
 		'action.devices.commands.ThermostatTemperatureSetpoint' => 'temp_cont',
 		'action.devices.commands.ThermostatSetMode' => 'temp_cont',
 		'action.devices.commands.setVolume' => 'vol_cont',
+		'action.devices.commands.mediaNext' => 'media_status',
+		'action.devices.commands.mediaPause' => 'media_status',
+		'action.devices.commands.mediaPrevious' => 'media_status',
+		'action.devices.commands.mediaResume' => 'media_status',
+		'action.devices.commands.mediaStop' => 'media_status',
+		'action.devices.commands.appSelect' => 'media_apps',
+		'action.devices.commands.SetInput' => 'media_input',
 	];
 
 	private static $attributeWordBook = [
+		'on/off' => [
+			'commandOnlyOnOff' => false,
+		],
 		'temp_cont' 				=> [
 			'availableThermostatModes' => 'off,heat',
-			'thermostatTemperatureUnit' => 'C'
+			'thermostatTemperatureUnit' => 'C',
 		],
 		'vol_cont' 				=> [
 			'volumeCanMuteAndUnmute' => false,
 			'volumeDefaultPercentage' => 6,
 			'volumeMaxLevel' => 100,
 			'levelStepSize' => 2,
-			'commandOnlyVolume' => true,
+			'commandOnlyVolume' => false,
 		],
-		'media_status'=> [
+		'media_cont'=> [
 			'transportControlSupportedCommands' => [
 				"NEXT",
 				"PREVIOUS",
 				"PAUSE",
 				"STOP",
 				"RESUME",
+				"CAPTION_CONTROL"
 			],
+		],
+		'media_status'=> [
+			'supportActivityState' => true,
+			'supportPlaybackState' => true,
 		],
 		'media_apps' => [
 			"availableApplications" => [
@@ -120,22 +139,23 @@ class GoogleHomeDeviceTypes {
 						"name_synonym" => [
 							"Kodi",
 						],
-						"lang" => "en"
+						"lang" => "en",
 					],
 				],
 			],
 		],
-		'media_inputs' => [
-			"availableApplications" => [
-				"key" => "pc",
-				"names" => [
-					"name_synonym"  => [
-						"PC",
+		'media_input' => [
+			"availableInputs" => [
+				[
+					"key" => "pc",
+					"names" => [
+						"name_synonym"  => [
+							"PC",
+						],
+						"lang"  => "en",
 					],
-					"lang"  => "en",
 				],
-
-			],
+			]
 		],
 	];
 
