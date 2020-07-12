@@ -18,6 +18,7 @@ class EndpointsApi extends ApiController{
 				'state' => 'unsuccess',
 				'errorMSG' => "Missing Value Token in JSON payload",
 			], 401);
+			die();
 		}
 
 		//Vstupní Checky
@@ -90,16 +91,18 @@ class EndpointsApi extends ApiController{
 				}
 			}
 
-			if (isset($obj['values'])) {
-				//zapis
+			$jsonAnswer = [];
+			$subDeviceLastReordValue = [];
+			$device = DeviceManager::getDeviceByToken($obj['token']);
+			$deviceId = $device['device_id'];
 
+			if (isset($obj['values'])) {
 				//ZAPIS
-				$device = DeviceManager::getDeviceByToken($obj['token']);
-				$deviceId = $device['device_id'];
 				foreach ($obj['values'] as $key => $value) {
 					if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
 						SubDeviceManager::create($deviceId, $key, UNITS[$key]);
 					}
+					$subDeviceLastReordValue[$key] = $value['value'];
 					RecordManager::create($deviceId, $key, round($value['value'],3));
 					$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
 
@@ -136,62 +139,43 @@ class EndpointsApi extends ApiController{
 					}
 				}
 
-				$hostname = strtolower($device['name']);
-				$hostname = str_replace(' ', '_', $hostname);
+
 				//upravit format na setings-> netvork etc
-				$jsonAnswer = [
-					'device' => [
-						'hostname' => $hostname,
-						'ipAddress' => $device['ip_address'],
-						'subnet' => $device['subnet'],
-						'gateway' => $device['gateway'],
-					],
-					'state' => 'succes',
-					'command' => $command,
-				];
 
 				$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
 				if (!in_array($subDevicesTypeList, ['on/off', 'door', 'water'])) {
 					$jsonAnswer['device']['sleepTime'] = $device['sleep_time'];
 				}
-
-				$this->response($jsonAnswer);
-
 			} else {
-				//Vypis
-				$device = DeviceManager::getDeviceByToken($obj['token']);
-				$deviceId = $device['device_id'];
-
 				if (count(SubDeviceManager::getAllSubDevices($deviceId)) == 0) {
 					SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
 					//RecordManager::create($deviceId, 'on/off', 0);
 				}
 
 				$subDevicesData = SubDeviceManager::getAllSubDevices($deviceId);
-				$subDeviceLastReordValue = [];
 
 				foreach ($subDevicesData as $key => $subDeviceData) {
 					$subDeviceId = $subDeviceData['subdevice_id'];
 					$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
-					$subDeviceLastReordValue[] = [$subDeviceData['type'] => $subDeviceLastReord['value']];
+					$subDeviceLastReordValue[$subDeviceData['type']] = $subDeviceLastReord['value'];
 
 					if ($subDeviceLastReord['execuded'] == 0){
 						$logManager->write("[API] subDevice_ID ".$subDeviceId . " executed comand with value " . json_encode($subDeviceLastReordValue) ." executed " . $subDeviceLastReord['execuded'], LogRecordType::INFO);
 						RecordManager::setExecuted($subDeviceLastReord['record_id']);
 					}
 				}
-
-
-				$this->response(['device' => [
-					'hostname' => $device['name'],
-					'ipAddress' => $device['ip_address'],
-					'subnet' => $device['subnet'],
-					'gateway' => $device['gateway'],
-				],
-				'state' => 'succes',
-				'value' => $subDeviceLastReordValue,
-				'command' => $command]);
 			}
+
+			$hostname = "";
+			$hostname = strtolower($device['name']);
+			$hostname = str_replace(' ', '_', $hostname);
+
+			$jsonAnswer['device']['hostname'] = $hostname;
+			$jsonAnswer['state'] = 'succes';
+			$jsonAnswer['values'] = $subDeviceLastReordValue;
+			$jsonAnswer['command'] = $command;
+
+			$this->response($jsonAnswer);
 			// this method returns response as json
 
 		}
