@@ -33,8 +33,8 @@ $router->any('/api/HA', 'GoogleHomeApi@response');
 
 //Endpoints API
 $router->post('/api/endpoint/', 'EndpointsApi@default');
-$router->post('/api/update/', 'EndpointsApi@update');
-$router->post('/api/users/status', 'UsersApi@status');
+$router->any('/api/update/', 'EndpointsApi@update');
+$router->any('/api/users/status', 'UsersApi@status');
 
 // examples
 $router->any('/api/example', 'ExampleApi@example');

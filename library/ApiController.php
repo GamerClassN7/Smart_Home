@@ -29,9 +29,13 @@ class ApiController {
 		}
 	}
 
-	protected function response($data = [], $httpCode = '200'){
-		header('Content-Type: application/json');
+	protected function response($data = [], $httpCode = '200', $contentType = 'application/json', $jsonEncode = true){
+		header('Content-Type: ' . $contentType);
 		http_response_code($httpCode);
-		echo json_encode($data, JSON_UNESCAPED_UNICODE);
+		if ($jsonEncode) {
+			echo json_encode($data, JSON_UNESCAPED_UNICODE);
+		} else {
+			echo $data;
+		}
 	}
 }

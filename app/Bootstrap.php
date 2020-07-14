@@ -62,6 +62,7 @@ $obj = json_decode($json, true);
 
 $apiLogManager = new LogManager('../logs/api/'. date("Y-m-d").'.log');
 
+$apiLogManager->write("[API] headers\n" . json_encode($_SERVER, JSON_PRETTY_PRINT), LogRecordType::INFO);
 $apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
 $apiLogManager->write("[API] POST  body\n" . json_encode($_POST, JSON_PRETTY_PRINT), LogRecordType::INFO);
 $apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordType::INFO);
