@@ -15,16 +15,13 @@ $router->any('/setting', 'Setting');
 $router->any('/ajax', 'Ajax');
 $router->any('/oauth', 'Oauth');
 
+//Vue APP
 $router->post('/api/login', 'AuthApi@login');
 $router->post('/api/logout', 'AuthApi@logout');
-
 $router->get('/api/rooms', 'RoomsApi@default');
 $router->get('/api/rooms/{roomId}/update', 'RoomsApi@update');
-
 $router->get('/api/devices', 'DevicesApi@default');
-
 $router->get('/api/users', 'UsersApi@default');
-
 $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 $router->post('/api/widgets/{widgetId}/check', 'WidgetApi@check');
 $router->post('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
@@ -35,7 +32,9 @@ $router->any('/api/HA/auth', 'Oauth');
 $router->any('/api/HA', 'GoogleHomeApi@response');
 
 //Endpoints API
-$router->post('/api/endpoint', 'EndpointsApi@default');
+$router->post('/api/endpoint/', 'EndpointsApi@default');
+$router->post('/api/update/', 'EndpointsApi@update');
+$router->post('/api/users/status', 'UsersApi@status');
 
 // examples
 $router->any('/api/example', 'ExampleApi@example');
