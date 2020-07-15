@@ -12,8 +12,7 @@ RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule . - [e=HTTP_AUTHORIZATION:%1]
 
 RewriteCond %{HTTPS} off
-RewriteCond %{REQUEST_FILENAME} !api.php
-RewriteCond %{REQUEST_FILENAME} !apiFront.php
+RewriteCond %{REQUEST_URI} !^/api/update
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 AddType application/x-httpd-php .php .phtml
