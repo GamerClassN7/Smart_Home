@@ -84,7 +84,8 @@ class SubDeviceManager
 				SELECT MAX(record_id)
 				FROM records
 				GROUP BY subdevice_id
-		  	)
+			  )
+			ORDER BY type DESC
 		", $roomIds);
 
 		$ret = [];
