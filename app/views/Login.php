@@ -3,7 +3,7 @@ class Login extends Template
 {
 	function __construct()
 	{
-		global $userManager;
+		$userManager = new UserManager();
 		global $lang;
 
 		if ($userManager->isLogin()){

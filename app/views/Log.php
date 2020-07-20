@@ -18,8 +18,8 @@ class Log extends Template
 
 	function __construct()
 	{
-		global $userManager;
-		global $langMng;
+		$userManager = new UserManager();
+		global $lang;
 
 		if (!$userManager->isLogin()){
 			header('Location: ' . BASEURL . 'login');

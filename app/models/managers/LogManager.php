@@ -11,20 +11,27 @@ class LogRecordType{
 
 class LogKeeper
 {
-	function purge($days){
-		$todayFileName = date("Y-m-d").'.log';
-		$seconds = $days * 86400;
-
-		$logFiles = scandir('../logs/');
+	function cleaningDir ($dir, $seconds) {
+		$todayFileName = date ("Y-m-d").'.log';
+		$logFiles = scandir ($dir);
 		foreach ($logFiles as $key => $file) {
-			if (in_array($file,array(".","..", ".gitkeep", $todayFileName)))
+			if (in_array ($file,array (".", "..", ".gitkeep", $todayFileName)))
 			{
 				continue;
 			}
-			if (filemtime($file) > $seconds) {
-				unlink('../logs/'.$file);
+			if (!is_dir($dir . $file)) {
+				if (strtotime(str_replace(".log", "", $file)) < (strtotime("now") - $seconds)) {
+					unlink ($dir . $file);
+				}
+			} else {
+				$this->cleaningDir ($path . $file . "/", $seconds);
 			}
 		}
+	}
+
+	function purge ($days) {
+		$seconds = $days * 86400;
+		$this->cleaningDir ('../logs/', $seconds);
 	}
 }
 
