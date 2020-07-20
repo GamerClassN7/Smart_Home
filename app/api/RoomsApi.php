@@ -15,12 +15,13 @@ class RoomsApi extends ApiController{
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
 
 		foreach ($roomsData as $roomKey => $roomData) {
-			if ($roomData['device_count'] <= 0) continue;
-			$response[] = [
-				'room_id' => $roomData['room_id'],
-				'name' => $roomData['name'],
-				'widgets' => isset($subDevicesData[$roomData['room_id']]) ? $subDevicesData[$roomData['room_id']] : [],
-			];
+			if ($roomData['device_count'] != 0){
+				$response[] = [
+					'room_id' => $roomData['room_id'],
+					'name' => $roomData['name'],
+					'widgets' => isset($subDevicesData[$roomData['room_id']]) ? $subDevicesData[$roomData['room_id']] : [],
+				];
+			}
 		}
 		$this->response($response);
 	}

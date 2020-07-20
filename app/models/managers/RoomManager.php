@@ -8,11 +8,13 @@ class RoomManager{
 	}
 
 	static function getAllRooms () {
+		//TODO: ignore Widgets withoud data
 		$allRoom = Db::loadAll ("SELECT rooms.*, COUNT(devices.device_id) as device_count FROM rooms LEFT JOIN devices ON (devices.room_id=rooms.room_id) GROUP BY rooms.room_id");
 		return $allRoom;
 	}
 
 	static function getRoomsDefault () {
+		//TODO: ignore Widgets withoud data
 		$allRoom = Db::loadAll ("SELECT rooms.room_id, rooms.name, COUNT(devices.device_id) as device_count FROM rooms LEFT JOIN devices ON (devices.room_id=rooms.room_id) GROUP BY rooms.room_id;");
 		return $allRoom;
 	}
