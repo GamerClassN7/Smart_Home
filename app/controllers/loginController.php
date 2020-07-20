@@ -1,5 +1,5 @@
 <?php
-global $userManager;
+$userManager = new UserManager();
 
 
 if (
