@@ -12,28 +12,27 @@ class UpdatesApi {
     public function default(){
 		 header('Content-type: text/plain; charset=utf8', true);
         $logManager = new LogManager('../logs/ota/'. date("Y-m-d").'.log');
-		  $logManager->write("[Updater] Client Connected", LogRecordType::WARNING);
-
 
         //Filtrování IP adress
-        if (DEBUGMOD != 1) {
+       	/* if (DEBUGMOD != 1) {
             if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {
                 echo json_encode(array(
                     'state' => 'unsuccess',
                     'errorMSG' => "Using API from your IP insnt alowed!",
                 ));
                 header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
-                $logManager->write("[Updater] acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordType::INFO);
+                $logManager->write("[Updater] acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordType::WARNING);
                 exit();
             }
-        }
+        }*/
 
         $macAddress = $_SERVER['HTTP_X_ESP8266_STA_MAC'];
-        $localBinary = "../updater/" . str_replace(':', '', $macAddress) . ".bin";
+		  $localBinary = "../updater/" . str_replace(':', '', $macAddress) . ".bin";
+
         $logManager->write("[Updater] url: " . $localBinary, LogRecordType::INFO);
-        $logManager->write("[Updater] version:      " . $_SERVER['HTTP_X_ESP8266_SKETCH_MD5'], LogRecordType::INFO);
+        $logManager->write("[Updater] version: " . $_SERVER['HTTP_X_ESP8266_SKETCH_MD5'], LogRecordType::INFO);
         if (file_exists($localBinary)) {
-            $logManager->write("[Updater] version PHP: " . md5_file($localBinary), LogRecordType::INFO);
+            $logManager->write("[Updater] version PHP: \n" . md5_file($localBinary), LogRecordType::INFO);
             if ($_SERVER['HTTP_X_ESP8266_SKETCH_MD5'] != md5_file($localBinary)) {
                 $this->sendFile($localBinary);
                 //get device data
@@ -42,7 +41,7 @@ class UpdatesApi {
                 $deviceId = $device['device_id'];
                 //logfile write
                 $logManager->write("[Device] device_ID " . $deviceId . " was just updated to new version", LogRecordType::WARNING);
-                $logManager->write("[Device] version hash: " . md5_file($localBinary), LogRecordType::INFO);
+                $logManager->write("[Device] version hash: \n" . md5_file($localBinary), LogRecordType::INFO);
                 //notification
                 $notificationMng = new NotificationManager;
                 $notificationData = [

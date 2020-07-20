@@ -3,7 +3,7 @@
 class RoomsApi extends ApiController{
 
 	public function default(){
-		$this->requireAuth();
+		//$this->requireAuth();
 		$response = [];
 		$roomIds = [];
 		$roomsData = RoomManager::getRoomsDefault();
@@ -15,6 +15,7 @@ class RoomsApi extends ApiController{
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
 
 		foreach ($roomsData as $roomKey => $roomData) {
+			if ($roomData['device_count'] <= 0) continue;
 			$response[] = [
 				'room_id' => $roomData['room_id'],
 				'name' => $roomData['name'],

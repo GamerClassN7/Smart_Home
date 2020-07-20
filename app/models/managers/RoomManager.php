@@ -13,7 +13,7 @@ class RoomManager{
 	}
 
 	static function getRoomsDefault () {
-		$allRoom = Db::loadAll ("SELECT room_id, name FROM rooms");
+		$allRoom = Db::loadAll ("SELECT rooms.room_id, rooms.name, COUNT(devices.device_id) as device_count FROM rooms LEFT JOIN devices ON (devices.room_id=rooms.room_id) GROUP BY rooms.room_id;");
 		return $allRoom;
 	}
 

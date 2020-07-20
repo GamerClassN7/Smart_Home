@@ -3,29 +3,32 @@ class WidgetApi extends ApiController{
 
 	public function run($subDeviceId){
 		//$this->requireAuth();
+
 		$response = null;
+		if (RecordManager::getLastRecord($subDeviceId)['execuded'] === 0) {
+			throw new Exception("Unreachable", 409);
+		}
 
 		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
 		if ($subDeviceData['type'] == 'on/off'){
 			$lastValue = RecordManager::getLastRecord($subDeviceData['subdevice_id'])['value'];
 			RecordManager::create($subDeviceData['device_id'], 'on/off', !$lastValue);
 			$response = !$lastValue;
+		} else {
+			throw new Exception("Bad Request", 403);
+		}
+
+		$i = 0;
+		$timeout = 20;
+		while (RecordManager::getLastRecord($subDeviceId)['execuded'] == 0){
+			if ($i == $timeout) {
+				throw new Exception("Timeout", 444);
+			}
+			$i++;
+			usleep(250000);
 		}
 
 		$this->response(['value' => $response]);
-	}
-
-	public function check($subDeviceId){
-		//$this->requireAuth();
-		$response = null;
-		$lastRecord = RecordManager::getLastRecord($subDeviceId);
-
-		$response = [
-			'executet' => $lastRecord['execuded'],
-			'value' => $lastRecord['value'],
-		];
-
-		$this->response($response);
 	}
 
 	public function detail($subDeviceId){
@@ -37,7 +40,7 @@ class WidgetApi extends ApiController{
 		$deviceData = DeviceManager::getDeviceById($deviceId);
 		$events = RecordManager::getLastRecord($subDeviceId, 5);
 
-		$LastRecordTime = new DateTime($$events[4]['time']);
+		$LastRecordTime = new DateTime($events[4]['time']);
 		$niceTime = Utilities::ago($LastRecordTime);
 
 		$interval = $LastRecordTime->diff(new DateTime());
