@@ -75,6 +75,7 @@ class SubDeviceManager
 	public static function getSubdevicesByRoomIds($roomIds = NULL) {
 		if(empty($roomIds)) return NULL;
 
+		//TODO: @Patrik Check line 89
 		$rows = Db::loadAll("
 			SELECT d.room_id, sd.subdevice_id, sd.device_id, d.name, sd.type, sd.unit, r.value FROM subdevices sd
 			JOIN devices d ON sd.device_id = d.device_id
@@ -85,6 +86,7 @@ class SubDeviceManager
 				FROM records
 				GROUP BY subdevice_id
 			  )
+			GROUP BY subdevice_id
 			ORDER BY type DESC
 		", $roomIds);
 
