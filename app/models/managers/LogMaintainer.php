@@ -14,7 +14,11 @@ class LogMaintainer
 					unlink ($dir . $file);
 				}
 			} else {
+<<<<<<< HEAD
 				$this->cleaningDir ($dir . $file . "/", $seconds);
+=======
+				$this->cleaningDir ($path . $file . "/", $seconds);
+>>>>>>> 1a448663f05f2b4ad7456a89d50312be302cd494
 			}
 		}
 	}
@@ -23,4 +27,8 @@ class LogMaintainer
 		$seconds = $days * 86400;
 		$this->cleaningDir ('../logs/', $seconds);
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 1a448663f05f2b4ad7456a89d50312be302cd494
