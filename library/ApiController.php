@@ -3,6 +3,7 @@ class ApiController {
 	protected $input;
 	protected $authenticated = false;
 
+	//TODO: Add Local Switch Only 
 	function __construct() {
 		$input = file_get_contents('php://input');
 
