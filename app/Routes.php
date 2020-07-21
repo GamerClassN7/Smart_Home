@@ -26,6 +26,8 @@ $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 $router->post('/api/widgets/{widgetId}/check', 'WidgetApi@check');
 $router->post('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
 
+//cron
+$router->post('/cron/clean', 'CronApi@clean');
 
 //Google Home - API
 $router->any('/api/HA/auth', 'Oauth');
