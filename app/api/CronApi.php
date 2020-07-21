@@ -1,7 +1,7 @@
 <?php 
 class CronApi extends ApiController {
     public function clean(){
-        $logKeeper = new LogKeeper();
+        $logKeeper = new LogMaintainer();
         $logKeeper->purge(LOGTIMOUT);
     }
 }
