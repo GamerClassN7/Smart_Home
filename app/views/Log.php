@@ -34,6 +34,7 @@ class Log extends Template
 		{
 			if (!in_array($value,array(".","..", ".gitkeep")))
 			{
+		
 				$result[$value] = $value;
 			}
 		}

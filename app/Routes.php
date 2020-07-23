@@ -7,6 +7,7 @@ $router->setDefault(function(){
 });
 
 //Pages
+$router->any('/', 'Log');
 $router->any('/log', 'Log');
 $router->any('/login', 'Login');
 $router->any('/logout', 'Logout');
