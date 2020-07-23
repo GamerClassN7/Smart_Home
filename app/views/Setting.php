@@ -5,7 +5,7 @@ class Setting extends Template
 	{
 
 		$userManager = new UserManager();
-		global $lang;
+		$langMng = new LanguageManager('en');
 
 		if (!$userManager->isLogin()){
 			header('Location: ' . BASEURL . 'login');

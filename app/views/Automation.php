@@ -4,7 +4,7 @@ class Automation extends Template
 	function __construct()
 	{
 		$userManager = new UserManager();
-		global $lang;
+		$langMng = new LanguageManager('en');
 
 		if (!$userManager->isLogin()){
 			header('Location: ' . BASEURL . 'login');

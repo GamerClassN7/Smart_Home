@@ -19,7 +19,7 @@ class Log extends Template
 	function __construct()
 	{
 		$userManager = new UserManager();
-		global $lang;
+		$langMng = new LanguageManager('en');
 
 		if (!$userManager->isLogin()){
 			header('Location: ' . BASEURL . 'login');
@@ -48,6 +48,8 @@ class Log extends Template
 		$template->prepare('UPTIME', shell_exec('uptime -p'));
 		$template->prepare('ramFree', $this->getSystemMemInfo()["MemFree"]);
 		$template->prepare('ramTotal', $this->getSystemMemInfo()["MemTotal"]);
+		
+		$template->prepare('diskFree', disk_free_space("/"));
 		$template->prepare('diskTotal', disk_total_space("/"));
 		$template->prepare('serverTime', date('m. d. Y H:i:s - e'));
 

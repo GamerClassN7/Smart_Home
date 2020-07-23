@@ -4,13 +4,11 @@ class Oauth extends Template
 	function __construct()
 	{
 		global $userManager;
-		global $lang;
+		$langMng = new LanguageManager('en');
 
 		$template = new Template('oauth');
 		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('title', 'Simple Home - Oauth');
-
-		$template->prepare('lang', $lang);
 
 		if (isset($_GET['redirect_uri'])) {
 			$template->prepare('responseType', $_GET['response_type']);
