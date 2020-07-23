@@ -3,19 +3,6 @@
 
 class Log extends Template
 {
-	//TODO: to server manager
-	function getSystemMemInfo()
-	{
-		$data = explode("\n", file_get_contents("/proc/meminfo"));
-		$meminfo = array();
-		foreach ($data as $line) {
-			$data = explode(":", $line);
-			if (count($data)!=2) continue;
-			$meminfo[$data[0]] = trim($data[1]);
-		}
-		return $meminfo;
-	}
-
 	function __construct()
 	{
 		$userManager = new UserManager();
@@ -45,22 +32,7 @@ class Log extends Template
 		$template->prepare('title', 'Logy');
 		$template->prepare('logsFiles', $result);
 		$template->prepare('langMng', $langMng);
-		$template->prepare('CPU', sys_getloadavg()[0]);
-		$template->prepare('UPTIME', shell_exec('uptime -p'));
-		$template->prepare('ramFree', $this->getSystemMemInfo()["MemFree"]);
-		$template->prepare('ramTotal', $this->getSystemMemInfo()["MemTotal"]);
-		
-		$template->prepare('diskFree', disk_free_space("/"));
-		$template->prepare('diskTotal', disk_total_space("/"));
-		$template->prepare('serverTime', date('m. d. Y H:i:s - e'));
-
-
-
-
-
-
 
 		$template->render();
-
 	}
 }
