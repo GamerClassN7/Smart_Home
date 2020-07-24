@@ -1,60 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php
-    $partial = new Partial('head');
-    $partial->prepare('baseDir', $BASEDIR);
-    $partial->render();
-    ?>
-    <title><?php echo $TITLE ?></title>
+	<?php
+	$partial = new Partial('head');
+	$partial->prepare('baseDir', $BASEDIR);
+	$partial->render();
+	?>
+	<title><?php echo $TITLE ?></title>
 </head>
 <body class="no-transitions">
-    <div class="row no-gutters main">
-        <div class="col-md-3 d-sm-none"></div>
-        <div class="col-md-3 nav-container">
-            <?php
-            $partial = new Partial('menu');
-            $partial->prepare('item', 'log');
-            $partial->prepare('langMng',$LANGMNG);
-            $partial->prepare('debugMod',$DEBUGMOD);
-            $partial->render();
-            ?>
-        </div>
-        <div class="col-md-9 main-body">
-            <div class="col-12 col-sm-9 mx-auto mt-4">
-                <h1><?php echo $LANGMNG->get('t_Logs'); ?></h1>
-                <label><?php echo $LANGMNG->get('l_logMaxLiveTime') . " " . $LOGTOLIVETIME . " days";?></label></br>
-                
-                <form method="post" action="">
-                    <div class="field">
-                        <select class="input" name="LogFile">
-                            <?php foreach ($LOGSFILES as $key => $value) { ?>
-                                <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <input type="submit" class="button" name="selectFile" value="<?php $LANGMNG->echo('b_select');?>"/>
-                    </div>
-                </form>
-                <?php
-                if (isset($_POST['LogFile'])) {
-                    $file_lines = file('../logs/' . $_POST['LogFile']);
-                    echo '<pre style="overflow: auto;">';
-                    foreach ($file_lines as $line) {
-                        echo $line;
-                    }
-                    echo '</pre>';
-                }
-                ?>
-            </div>
-        </div>
+	<div class="row no-gutters main">
+		<div class="col-md-3 d-sm-none"></div>
+		<div class="col-md-3 nav-container">
+			<?php
+			$partial = new Partial('menu');
+			$partial->prepare('item', 'log');
+			$partial->prepare('langMng',$LANGMNG);
+			$partial->prepare('debugMod',$DEBUGMOD);
+			$partial->render();
+			?>
+		</div>
+		<div class="col-md-9 main-body">
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h1><?php echo $LANGMNG->get('t_Logs'); ?></h1>
+				<label><?php echo $LANGMNG->get('l_logMaxLiveTime') . " " . $LOGTOLIVETIME . " days";?></label></br>
 
-        <?php
-		  $partial = new Partial('footer');
-		  $partial->prepare('baseDir', BASEDIR);
-        $partial->render();
-        //TODO js do main.js
-        ?>
-    </body>
-    </html>
+				<form method="post" action="">
+					<div class="field">
+						<select class="input" name="LogFile">
+							<?php foreach ($LOGSFILES as $key => $value) { ?>
+								<optgroup label="<?php echo str_replace("../", "", $key); ?>">
+									<?php foreach ($value as $valueSub) { ?>
+										<option value="<?php echo $key . $valueSub; ?>"><?php echo $valueSub; ?></option>
+									<?php } ?>
+								</optgroup>
+							<?php } ?>
+						</select>
+					</div>
+					<div class="field">
+						<input type="submit" class="button" name="selectFile" value="<?php $LANGMNG->echo('b_select');?>"/>
+					</div>
+				</form>
+				<?php
+				if (isset($_POST['LogFile'])) {
+					$file_lines = file($_POST['LogFile']);
+					echo '<pre style="overflow: auto;">';
+					foreach ($file_lines as $line) {
+						echo $line;
+					}
+					echo '</pre>';
+				}
+				?>
+			</div>
+		</div>
+
+		<?php
+		$partial = new Partial('footer');
+		$partial->prepare('baseDir', BASEDIR);
+		$partial->render();
+		//TODO js do main.js
+		?>
+	</body>
+	</html>
