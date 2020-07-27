@@ -24,6 +24,7 @@ $router->get('/api/rooms', 'RoomsApi@default');
 $router->get('/api/rooms/{roomId}/update', 'RoomsApi@update');
 $router->get('/api/devices', 'DevicesApi@default');
 $router->get('/api/users', 'UsersApi@default');
+$router->get('/api/server', 'ServerApi@default');
 $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 $router->post('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
 
