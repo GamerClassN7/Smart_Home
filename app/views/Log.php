@@ -16,15 +16,7 @@ class Log extends Template
 		$template->prepare('title', 'Log');
 
 		$result = array();
-		$cdir = scandir('../logs/');
-		foreach ($cdir as $key => $value)
-		{
-			if (!in_array($value,array(".","..", ".gitkeep")))
-			{
-		
-				$result[$value] = $value;
-			}
-		}
+		$result = $this->logFinder ('../logs/', $result);
 
 		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('debugMod', DEBUGMOD);
@@ -34,5 +26,21 @@ class Log extends Template
 		$template->prepare('langMng', $langMng);
 
 		$template->render();
+	}
+
+	private function logFinder ($dir, $result) {
+		$logFiles = scandir ($dir);
+		foreach ($logFiles as $key => $file) {
+			if (in_array ($file,array (".", "..", ".gitkeep")))
+			{
+				continue;
+			}
+			if (!is_dir($dir . $file)) {
+				$result[$dir][] = $file;
+			} else {
+				$result = $this->logFinder ($dir . $file . "/", $result);
+			}
+		}
+		return $result;
 	}
 }
