@@ -37,9 +37,6 @@ class Server extends Template
 		$template->prepare('ip', $_SERVER['SERVER_ADDR']);
 		$template->prepare('name', $_SERVER['SERVER_NAME']);
 
-
-		
-		echo $_SERVER['SERVER_NAME'];
 		$template->prepare('CPU', sys_getloadavg()[0]);
 		$template->prepare('ramFree', $this->getSystemMemInfo()["MemFree"]);
 		$template->prepare('ramTotal', $this->getSystemMemInfo()["MemTotal"]);

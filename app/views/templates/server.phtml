@@ -34,11 +34,11 @@
                 <hr> 
                 <label>RAM TOTAL: <?php echo $RAMTOTAL;?></label></br>
                 <label>RAM FREE: <?php echo $RAMFREE;?></label></br>
-				<label>RAM Usage: </label><progress value="<?php echo explode(" ", $RAMFREE)[0];?>" max="<?php echo explode(" ", $RAMTOTAL)[0];?>"> <?php echo $RAMFREE;?> </progress></br>
+				<label>RAM Usage: </label><progress value="<?php echo explode(" ", $RAMTOTAL)[0] - explode(" ", $RAMFREE)[0];?>" max="<?php echo explode(" ", $RAMTOTAL)[0];?>"> <?php echo $RAMFREE;?> </progress></br>
                 <hr> 
                 <label>DISK TOTAL: <?php echo $DISKTOTAL;?> bytes</label></br>
                 <label>DISK FREE: <?php echo $DISKFREE;?> bytes</label></br>
-                <label>DISK Usage: </label><progress value="<?php echo explode(" ", $DISKFREE)[0];?>" max="<?php echo explode(" ", $DISKTOTAL)[0];?>"> <?php echo $DISKFREE;?> </progress></br>
+                <label>DISK Usage: </label><progress value="<?php echo explode(" ", $DISKTOTAL)[0] - explode(" ", $DISKFREE)[0];?>" max="<?php echo explode(" ", $DISKTOTAL)[0];?>"> <?php echo $DISKFREE;?> </progress></br>
                 <hr> 
             </div>
         </div>

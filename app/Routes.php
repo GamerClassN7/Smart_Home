@@ -4,6 +4,10 @@ $router = new Router();
 
 $router->setDefault(function(){
 	echo $_GET['url'].': 404';
+	$logManager = new LogManager();
+	$logManager->setLevel(LOGLEVEL);
+	$logManager->write("[ROUTER]" . $_GET['url'] . "not found", LogRecordTypes::WARNING);
+	unset($logManager);
 });
 
 //Pages

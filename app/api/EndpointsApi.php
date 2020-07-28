@@ -79,7 +79,7 @@ class EndpointsApi extends ApiController{
 			foreach ($deviceLogs as $log) {
 				$logManager = new LogManager('../logs/devices/'. date("Y-m-d").'.log');
 				$logManager->setLevel(LOGLEVEL);
-				$logManager->write("[Device Log Msg] Device_ID " . $deviceId . "->" . $log, LogRecordType::ERROR);
+				$logManager->write("[Device Log Msg] Device_ID " . $deviceId . "->" . $log, LogRecordTypes::ERROR);
 				unset($logManager);
 			}
 		}
