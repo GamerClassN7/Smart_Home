@@ -9,8 +9,8 @@ class EndpointsApi extends ApiController{
 
 		//Log
 		$logManager = new LogManager();
-		$apiLogManager->setLevel(LOGLEVEL);
-		$apiLogManager = new LogManager('../logs//api/'. date("Y-m-d").'.log');
+		$logManager->setLevel(LOGLEVEL);
+		$logManager = new LogManager('../logs/api/'. date("Y-m-d").'.log');
 
 		//Token Checks
 		if ($obj['token'] == null || !isset($obj['token'])) {

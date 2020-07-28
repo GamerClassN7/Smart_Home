@@ -3,7 +3,7 @@
 class RoomsApi extends ApiController{
 	
 	public function default(){
-		//$this->requireAuth();
+		$this->requireAuth();
 		$response = [];
 		$roomIds = [];
 		$roomsData = RoomManager::getRoomsDefault();

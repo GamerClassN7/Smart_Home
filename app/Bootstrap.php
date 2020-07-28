@@ -56,7 +56,7 @@ class ErrorHandler {
 
 		$apiLogManager = new LogManager('../logs/apache/'. date("Y-m-d").'.log');
 		$apiLogManager->setLevel(LOGLEVEL);
-		$apiLogManager->write("[APACHE] ERROR\n" . json_encode($message, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
+		$apiLogManager->write("[APACHE]\n" . json_encode($message, JSON_PRETTY_PRINT), LogRecordTypes::ERROR);
 	}
 }
 set_exception_handler("ErrorHandler::exception");
@@ -84,8 +84,6 @@ ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
 ini_set('session.cookie_path', str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])));
 ini_set('session.cookie_secure', '1');
 mb_internal_encoding ("UTF-8");
-
-
 
 Debugger::flag('dbconnect');
 //D B Conector
