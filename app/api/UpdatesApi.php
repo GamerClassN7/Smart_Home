@@ -13,7 +13,7 @@ class UpdatesApi {
         header('Content-type: text/plain; charset=utf8', true);
         $logManager = new LogManager('../logs/ota/'. date("Y-m-d").'.log');
         $logManager->setLevel(LOGLEVEL);
-        $logManager->write("[Updater] Client Connected", LogRecordTypes::WARNING);
+        $logManager->write("[Updater] Client Connected", LogRecordTypes::INFO);
 
 
         //Filtrování IP adress
@@ -42,7 +42,7 @@ class UpdatesApi {
                 $deviceName = $device['name'];
                 $deviceId = $device['device_id'];
                 //logfile write
-                $logManager->write("[Device] device_ID " . $deviceId . " was just updated to new version", LogRecordTypes::WARNING);
+                $logManager->write("[Device] device_ID " . $deviceId . " was just updated to new version", LogRecordTypes::INFO);
                 $logManager->write("[Device] version hash: " . md5_file($localBinary), LogRecordTypes::INFO);
                 //notification
                 $notificationMng = new NotificationManager;

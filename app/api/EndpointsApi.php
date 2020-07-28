@@ -8,9 +8,8 @@ class EndpointsApi extends ApiController{
 		$command = "null";
 
 		//Log
-		$logManager = new LogManager();
-		$logManager->setLevel(LOGLEVEL);
 		$logManager = new LogManager('../logs/api/'. date("Y-m-d").'.log');
+		$logManager->setLevel(LOGLEVEL);
 
 		//Token Checks
 		if ($obj['token'] == null || !isset($obj['token'])) {
@@ -62,7 +61,7 @@ class EndpointsApi extends ApiController{
 			], 401);
 		}
 
-		//Diagnostic/Log Data Save
+		//Diagnostic
 		if (isset($obj['settings'])){
 			$data = ['mac' => $obj['settings']["network"]["mac"], 'ip_address' => $obj['settings']["network"]["ip"]];
 			if (array_key_exists("firmware_hash", $obj['settings'])) {
@@ -73,6 +72,16 @@ class EndpointsApi extends ApiController{
 				'state' => 'succes',
 				'command' => $command,
 			], 200);
+		}
+
+		//Log Data Save
+		if (isset($obj['logs'])){
+			foreach ($deviceLogs as $log) {
+				$logManager = new LogManager('../logs/devices/'. date("Y-m-d").'.log');
+				$logManager->setLevel(LOGLEVEL);
+				$logManager->write("[Device Log Msg] Device_ID " . $deviceId . "->" . $log, LogRecordType::ERROR);
+				unset($logManager);
+			}
 		}
 
 		// Issuing command
@@ -148,7 +157,7 @@ class EndpointsApi extends ApiController{
 			}
 		} else {
 			if (count(SubDeviceManager::getAllSubDevices($deviceId)) == 0) {
-				SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
+				//SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
 				//RecordManager::create($deviceId, 'on/off', 0);
 			}
 
@@ -177,5 +186,6 @@ class EndpointsApi extends ApiController{
 
 		$this->response($jsonAnswer);
 		// this method returns response as json
+		unset($logManager)
 	}
 }
