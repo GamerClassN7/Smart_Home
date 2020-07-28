@@ -9,6 +9,7 @@ class EndpointsApi extends ApiController{
 
 		//Log
 		$logManager = new LogManager();
+		$apiLogManager->setLevel(LOGLEVEL);
 		$apiLogManager = new LogManager('../logs//api/'. date("Y-m-d").'.log');
 
 		//Token Checks
@@ -42,12 +43,12 @@ class EndpointsApi extends ApiController{
 			if ($notificationData != []) {
 				$subscribers = $notificationMng::getSubscription();
 				foreach ($subscribers as $key => $subscriber) {
-					$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordType::INFO);
+					$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordTypes::INFO);
 					$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
 				}
 			}
 
-			$logManager->write("[API] Registering Device", LogRecordType::INFO);
+			$logManager->write("[API] Registering Device", LogRecordTypes::INFO);
 			$this->response([
 				'state' => 'unsuccess',
 				'errorMSG' => "Device not registeret",
@@ -86,7 +87,7 @@ class EndpointsApi extends ApiController{
 					'command'=>'null'
 				];
 				DeviceManager::editByToken($obj['token'], $data);
-				$logManager->write("[API] Device_ID " . $deviceId . " executing command " . $command, LogRecordType::INFO);
+				$logManager->write("[API] Device_ID " . $deviceId . " executing command " . $command, LogRecordTypes::INFO);
 			}
 		}
 
@@ -103,7 +104,7 @@ class EndpointsApi extends ApiController{
 				}
 				$subDeviceLastReordValue[$key] = $value['value'];
 				RecordManager::create($deviceId, $key, round($value['value'],3));
-				$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordType::INFO);
+				$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordTypes::INFO);
 
 				//notification
 				if ($key == 'door' || $key == 'water') {
@@ -131,7 +132,7 @@ class EndpointsApi extends ApiController{
 					if ($notificationData != []) {
 						$subscribers = $notificationMng::getSubscription();
 						foreach ($subscribers as $key => $subscriber) {
-							$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordType::INFO);
+							$logManager->write("[NOTIFICATION] SENDING TO" . $subscriber['id'] . " ", LogRecordTypes::INFO);
 							$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
 						}
 					}
@@ -159,7 +160,7 @@ class EndpointsApi extends ApiController{
 				$subDeviceLastReordValue[$subDeviceData['type']] = $subDeviceLastReord['value'];
 
 				if ($subDeviceLastReord['execuded'] == 0){
-					$logManager->write("[API] subDevice_ID ".$subDeviceId . " executed comand with value " . json_encode($subDeviceLastReordValue) ." executed " . $subDeviceLastReord['execuded'], LogRecordType::INFO);
+					$logManager->write("[API] subDevice_ID ".$subDeviceId . " executed comand with value " . json_encode($subDeviceLastReordValue) ." executed " . $subDeviceLastReord['execuded'], LogRecordTypes::INFO);
 					RecordManager::setExecuted($subDeviceLastReord['record_id']);
 				}
 			}

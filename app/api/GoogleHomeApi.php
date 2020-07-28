@@ -6,25 +6,27 @@ class GoogleHomeApi{
 		$obj = json_decode($json, true);
 
 		$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
+		$apiLogManager->setLevel(LOGLEVEL);
+
 		header('Content-Type: application/json');
 
 		switch ($obj['inputs'][0]['intent']) {
 			case 'action.devices.SYNC':
 			GoogleHome::sync($obj['requestId']);
-			$apiLogManager->write("[Google Home] action.devices.SYNC", LogRecordType::INFO);
+			$apiLogManager->write("[Google Home] action.devices.SYNC", LogRecordTypes::INFO);
 			break;
 
 			case 'action.devices.QUERY':
 			GoogleHome::query($obj['requestId'], $obj['inputs'][0]['payload']);
-			$apiLogManager->write("[Google Home] action.devices.QUERY", LogRecordType::INFO);
-			$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
+			$apiLogManager->write("[Google Home] action.devices.QUERY", LogRecordTypes::INFO);
+			$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 			break;
 
 			case 'action.devices.EXECUTE':
 
 			GoogleHome::execute($obj['requestId'], $obj['inputs'][0]['payload']);
-			$apiLogManager->write("[Google Home] action.devices.EXECUTE", LogRecordType::INFO);
-			$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
+			$apiLogManager->write("[Google Home] action.devices.EXECUTE", LogRecordTypes::INFO);
+			$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 
 			break;
 		}
@@ -35,8 +37,10 @@ class GoogleHomeApi{
 		$obj = json_decode($json, true);
 
 		$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
-		$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordType::INFO);
+		$apiLogManager->setLevel(LOGLEVEL);
+		
+		$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
+		$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 
 		$get = [
 			"access_token"=>"2222255888",

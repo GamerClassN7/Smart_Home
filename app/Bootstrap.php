@@ -39,6 +39,9 @@ class Autoloader {
 spl_autoload_register("Autoloader::ClassLoader");
 Autoloader::setRoot('/var/www/dev.steelants.cz/vasek/home-update/');
 
+// import configs
+require_once '../config/config.php';
+
 class ErrorHandler {
 	static function exception($exception){
 		error_log($exception);
@@ -52,7 +55,8 @@ class ErrorHandler {
 		echo json_encode($message);
 
 		$apiLogManager = new LogManager('../logs/apache/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[APACHE] ERROR\n" . json_encode($message, JSON_PRETTY_PRINT), LogRecordType::INFO);
+		$apiLogManager->setLevel(LOGLEVEL);
+		$apiLogManager->write("[APACHE] ERROR\n" . json_encode($message, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 	}
 }
 set_exception_handler("ErrorHandler::exception");
@@ -63,11 +67,12 @@ $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 
 $apiLogManager = new LogManager('../logs/api/'. date("Y-m-d").'.log');
+$apiLogManager->setLevel(LOGLEVEL);
 
-$apiLogManager->write("[API] headers\n" . json_encode($_SERVER, JSON_PRETTY_PRINT), LogRecordType::INFO);
-$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordType::INFO);
-$apiLogManager->write("[API] POST  body\n" . json_encode($_POST, JSON_PRETTY_PRINT), LogRecordType::INFO);
-$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordType::INFO);
+$apiLogManager->write("[API] headers\n" . json_encode($_SERVER, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
+$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
+$apiLogManager->write("[API] POST  body\n" . json_encode($_POST, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
+$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 
 //Debug
 error_reporting(E_ALL);
@@ -80,8 +85,7 @@ ini_set('session.cookie_path', str_replace("login", "", str_replace('https://' .
 ini_set('session.cookie_secure', '1');
 mb_internal_encoding ("UTF-8");
 
-// import configs
-require_once '../config/config.php';
+
 
 Debugger::flag('dbconnect');
 //D B Conector

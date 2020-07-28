@@ -55,7 +55,8 @@ class GoogleHome {
 		];
 
 		$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
-		$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
+		$apiLogManager->setLevel(LOGLEVEL);
+		$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 		echo json_encode($response);
 	}
 
@@ -147,7 +148,8 @@ class GoogleHome {
 		],
 	];
 	$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
-	$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
+	$apiLogManager->write("[API][$requestId] request response\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
+	$apiLogManager->setLevel(LOGLEVEL);
 	echo json_encode($response);
 }
 
@@ -218,7 +220,8 @@ static function execute($requestId, $payload){
 	];
 
 	$apiLogManager = new LogManager('../logs/google-home/'. date("Y-m-d").'.log');
-	$apiLogManager->write("[API][EXECUTE][$requestId]\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordType::INFO);
+	$apiLogManager->setLevel(LOGLEVEL);
+	$apiLogManager->write("[API][EXECUTE][$requestId]\n" . json_encode($response, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 
 	echo json_encode($response);
 }
