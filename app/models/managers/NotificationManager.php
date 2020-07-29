@@ -5,7 +5,7 @@
 //TODO: Working timestamp to $title
 class NotificationManager
 {
-	function addSubscriber($userID = '', $token = ''){
+	public static function addSubscriber($userID = '', $token = ''){
 		$notificationSubscriber = $subDeviceId = Db::loadOne('SELECT id FROM notifications WHERE token = ?;', array($token));
 		if ($notificationSubscriber == ''){
 			$notification = array (
@@ -16,11 +16,11 @@ class NotificationManager
 		}
 	}
 
-	function getSubscription () {
+	public static function getSubscription () {
 		return Db::loadAll ("SELECT * FROM notifications");
 	}
 
-	function sendSimpleNotification(string $serverKey, string $to, array $data, bool $timeStamp = false){
+	public static function sendSimpleNotification(string $serverKey, string $to, array $data, bool $timeStamp = false){
 		$dataTemplate = [
 			'title' => '',
 			'body' => '',

@@ -51,6 +51,7 @@ class ErrorHandler {
 			'message' => $exception->getMessage(),
 			'file' => $exception->getFile(),
 			'line' => $exception->getLine(),
+			'trace' => $exception->getTraceAsString(),
 		];
 		echo json_encode($message);
 

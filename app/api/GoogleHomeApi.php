@@ -42,7 +42,7 @@ class GoogleHomeApi{
 		$apiLogManager->setLevel(LOGLEVEL);
 		$apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 		$apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
-		unset($apiLogManager)
+		unset($apiLogManager);
 
 		$get = [
 			"access_token"=>"2222255888", //TODO: FIX

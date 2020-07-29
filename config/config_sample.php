@@ -19,7 +19,7 @@ define('LOGTIMOUT', 5); //Deleate logfiles older than XX days
 	LogRecordTypes::WARNING
 	LogRecordTypes::INFO
 */
-define('LOGLEVEL', LogRecordTypes::WARNING);
+define('LOGLEVEL', LogRecordTypes::INFO);
 
 //Restrict acess to API
 $allowerdIp = [

@@ -186,6 +186,6 @@ class EndpointsApi extends ApiController{
 
 		$this->response($jsonAnswer);
 		// this method returns response as json
-		unset($logManager)
+		unset($logManager);
 	}
 }
