@@ -5,14 +5,16 @@
 //TODO: Working timestamp to $title
 class NotificationManager
 {
-	public static function addSubscriber($userID = '', $token = ''){
-		$notificationSubscriber = $subDeviceId = Db::loadOne('SELECT id FROM notifications WHERE token = ?;', array($token));
-		if ($notificationSubscriber == ''){
-			$notification = array (
-				'user_id' => $userID,
-				'token' => $token,
-			);
-			Db::add ('notifications', $notification);
+	public static function addSubscriber($userID, $token){
+		if (!empty($userID) && !empty($token)) {
+			$notificationSubscriber = $subDeviceId = Db::loadOne('SELECT id FROM notifications WHERE token = ?;', array($token));
+			if ($notificationSubscriber == ''){
+				$notification = array (
+					'user_id' => $userID,
+					'token' => $token,
+				);
+				Db::add ('notifications', $notification);
+			}
 		}
 	}
 

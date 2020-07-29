@@ -24,7 +24,7 @@ class LogManager
 	}
 
 	public function setLevel($type = LogRecordTypess::WARNING){
-		$logLevel = $type['level'];
+		$this->logLevel = $type['level'];
 	}
 
 	public function write($value, $type = LogRecordTypess::ERROR){
