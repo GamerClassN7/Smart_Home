@@ -22,6 +22,7 @@ class Log extends Template
 		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('logToLiveTime', LOGTIMOUT);
 		$template->prepare('title', 'Logy');
+		$template->prepare('logStats', LogMaintainer::getStats());
 		$template->prepare('logsFiles', $result);
 		$template->prepare('langMng', $langMng);
 

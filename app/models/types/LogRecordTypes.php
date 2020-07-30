@@ -8,8 +8,12 @@ class LogRecordTypes{
 		'level' => 1,
 		'identifier' =>'warning',
 	];
-	const INFO = [
+	const EXEPTION = [
 		'level' => 2,
+		'identifier' => 'exeption',
+	];
+	const INFO = [
+		'level' => 3,
 		'identifier' => 'info',
 	];
 }

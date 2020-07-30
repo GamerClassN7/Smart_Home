@@ -23,6 +23,34 @@
 		<div class="col-md-9 main-body">
 			<div class="col-12 col-sm-9 mx-auto mt-4">
 				<h1><?php echo $LANGMNG->get('t_Logs'); ?></h1>
+
+				<div class="row mb-4">
+					<div class="col-6 col-lg-3">
+						<div class="panel alert alert-danger p-4 is-danger">
+							<h5><?php $LANGMNG->echo('error'); ?></h5>
+							<?php echo $LOGSTATS['ERROR'];?>
+						</div>
+					</div>
+					<div class="col-6 col-lg-3">
+						<div class="panel alert alert-warning p-4">
+							<h5><?php $LANGMNG->echo('warning'); ?></h5>
+							<?php echo $LOGSTATS['WARNING'];?>
+						</div>
+					</div>
+					<div class="col-6 col-lg-3">
+						<div class="panel alert alert-warning p-4">
+							<h5><?php $LANGMNG->echo('exeption'); ?></h5>
+							<?php echo $LOGSTATS['EXEPTION'];?>
+						</div>
+					</div>
+					<div class="col-6 col-lg-3">
+						<div class="panel alert p-4">
+							<h5><?php $LANGMNG->echo('log'); ?></h5>
+							<?php echo $LOGSTATS['INFO'];?>
+						</div>
+					</div>
+				</div>
+
 				<label><?php echo $LANGMNG->get('l_logMaxLiveTime') . " " . $LOGTOLIVETIME . " days";?></label></br>
 
 				<form method="post" action="">

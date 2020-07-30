@@ -25,4 +25,11 @@ class ServerApi extends ApiController {
         ];
         $this->response($response);
     }
+
+    public function logStatus()
+    {
+        $logKeeper = new LogMaintainer();
+        $response = $logKeeper::getStats();
+        $this->response($response);
+    }
 }
