@@ -23,9 +23,6 @@
         ],
     ];
     foreach ( $menuItems as $key => $value) {
-        if ($DEBUGMOD == 0 && $value['path'] == 'log') {
-            continue;
-        }
         ?>
         <div class="nav-item <?php echo ($ITEM == $value ? 'is-active' : ''); ?>">
             <a href="<?php echo $value['path']?>">
