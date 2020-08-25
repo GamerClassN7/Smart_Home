@@ -31,10 +31,11 @@ $router->get('/api/users', 'UsersApi@default');
 $router->get('/api/server', 'ServerApi@default');
 $router->get('/api/server/log', 'ServerApi@logStatus');
 $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
-$router->post('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
+$router->get('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
 
 //cron
 $router->post('/cron/clean', 'CronApi@clean');
+#$router->post('/cron/fetch', 'CronApi@fetch');
 
 //Google Home - API
 $router->any('/api/HA/auth', 'Oauth');

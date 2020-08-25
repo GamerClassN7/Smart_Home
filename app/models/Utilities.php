@@ -1,10 +1,12 @@
 <?php
+
 /**
-*
-*/
+ *
+ */
 class Utilities
 {
-	static function cleanString($text) {
+	static function cleanString($text)
+	{
 		$utf8 = array(
 			'/[áàâãªä]/u'   =>   'a',
 			'/[ÁÀÂÃÄ]/u'    =>   'A',
@@ -36,21 +38,22 @@ class Utilities
 		return preg_replace(array_keys($utf8), array_values($utf8), $text);
 	}
 
-	static function stringInsert($str,$insertstr,$pos)
+	static function stringInsert($str, $insertstr, $pos)
 	{
 		$str = substr($str, 0, $pos) . $insertstr . substr($str, $pos);
 		return $str;
 	}
 
 	/**
-	* [generateGraphJson description]
-	* @param  string $type    [line/bar]
-	* @param  array  $data    [description]
-	* @param  array  $options [description]
-	* @return [type]          [description]
-	*/
+	 * [generateGraphJson description]
+	 * @param  string $type    [line/bar]
+	 * @param  array  $data    [description]
+	 * @param  array  $options [description]
+	 * @return [type]          [description]
+	 */
 
-	static function generateGraphJson(string $type = 'line', array $data = [], array $options = []){
+	static function generateGraphJson(string $type = 'line', array $data = [], array $options = [])
+	{
 		$array = [
 			'type' => $type,
 			'data' => [
@@ -94,51 +97,85 @@ class Utilities
 		return json_encode($array, JSON_PRETTY_PRINT);
 	}
 
-	static function ago( $datetime )
+	static function ago($datetime)
 	{
-		$interval = date_create('now')->diff( $datetime );
-		$suffix = ( $interval->invert ? ' ago' : '' );
-		if ( $v = $interval->y >= 1 ) return self::pluralize( $interval->m, 'month' ) . $suffix;
-		if ( $v = $interval->d >= 1 ) return self::pluralize( $interval->d, 'day' ) . $suffix;
-		if ( $v = $interval->h >= 1 ) return self::pluralize( $interval->h, 'hour' ) . $suffix;
-		if ( $v = $interval->i >= 1 ) return self::pluralize( $interval->i, 'minute' ) . $suffix;
-		return self::pluralize( $interval->s, 'second' ) . $suffix;
+		$interval = date_create('now')->diff($datetime);
+		$suffix = ($interval->invert ? ' ago' : '');
+		if ($v = $interval->y >= 1) return self::pluralize($interval->m, 'month') . $suffix;
+		if ($v = $interval->d >= 1) return self::pluralize($interval->d, 'day') . $suffix;
+		if ($v = $interval->h >= 1) return self::pluralize($interval->h, 'hour') . $suffix;
+		if ($v = $interval->i >= 1) return self::pluralize($interval->i, 'minute') . $suffix;
+		return self::pluralize($interval->s, 'second') . $suffix;
 	}
 
-	static function pluralize( $count, $text )
+	static function pluralize($count, $text)
 	{
-		return $count . ( ( $count == 1 ) ? ( " $text" ) : ( " ${text}s" ) );
+		return $count . (($count == 1) ? (" $text") : (" ${text}s"));
 	}
 
-	static function checkOperator($value1, $operator, $value2) {
+	static function checkOperator($value1, $operator, $value2)
+	{
 		switch ($operator) {
 			case '<': // Less than
-			return $value1 < $value2;
+				return $value1 < $value2;
 			case '<=': // Less than or equal to
-			return $value1 <= $value2;
+				return $value1 <= $value2;
 			case '>': // Greater than
-			return $value1 > $value2;
+				return $value1 > $value2;
 			case '>=': // Greater than or equal to
-			return $value1 >= $value2;
+				return $value1 >= $value2;
 			case '==': // Equal
-			return ($value1 == $value2);
+				return ($value1 == $value2);
 			case '===': // Identical
-			return $value1 === $value2;
+				return $value1 === $value2;
 			case '!==': // Not Identical
-			return $value1 !== $value2;
+				return $value1 !== $value2;
 			case '!=': // Not equal
 			case '<>': // Not equal
-			return $value1 != $value2;
+				return $value1 != $value2;
 			case '||': // Or
 			case 'or': // Or
-			return $value1 || $value2;
+				return $value1 || $value2;
 			case '&&': // And
 			case 'and': // And
-			return $value1 && $value2;
+				return $value1 && $value2;
 			case 'xor': // Or
-			return $value1 xor $value2;
+				return $value1 xor $value2;
 			default:
-			return FALSE;
+				return FALSE;
 		} // end switch
+	}
+
+	static function CallAPI($method, $url, $data = false)
+	{
+		$curl = curl_init();
+
+		switch ($method) {
+			case "POST":
+				curl_setopt($curl, CURLOPT_POST, 1);
+
+				if ($data)
+					curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+				break;
+			case "PUT":
+				curl_setopt($curl, CURLOPT_PUT, 1);
+				break;
+			default:
+				if ($data)
+					$url = sprintf("%s?%s", $url, http_build_query($data));
+		}
+
+		// Optional Authentication:
+		curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+		$result = curl_exec($curl);
+
+		curl_close($curl);
+
+		return $result;
 	}
 }
