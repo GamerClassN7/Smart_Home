@@ -7,6 +7,7 @@ return $lang = [
 	'm_automatization' => 'Automatization',
 	'm_scenes' => 'Scenes',
 	'm_log' => 'Log',
+	'm_devices' => 'Devices',
 
 	//Buttons
 	'b_year' => 'Year',
@@ -80,7 +81,7 @@ return $lang = [
 	't_ota' => 'OTA',
 	't_listUsers' => 'User List',
 	't_avatar' => 'Avatar',
-	't_listRooms' => 'Room List',	
+	't_listRooms' => 'Room List',
 	't_roomName' => 'Room Name',
 	't_createRoom' => 'Create Rom',
 

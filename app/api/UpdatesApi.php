@@ -9,13 +9,23 @@ class UpdatesApi {
         readfile($path);
     }
 
+    private function validateHeader($headers){
+        if (
+            isset($_SERVER['HTTP_X_ESP8266_STA_MAC']) &&
+            isset($_SERVER['HTTP_X_ESP8266_SKETCH_MD5']) 
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     public function default(){
-        header('Content-type: text/plain; charset=utf8', true);
         $logManager = new LogManager('../logs/ota/'. date("Y-m-d").'.log');
         $logManager->setLevel(LOGLEVEL);
         $logManager->write("[Updater] Client Connected", LogRecordTypes::INFO);
-
-
+        
+        header('Content-type: text/plain; charset=utf8', true);
+        
         //Filtrování IP adress
         if (DEBUGMOD != 1) {
             if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {

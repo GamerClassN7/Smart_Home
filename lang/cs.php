@@ -7,6 +7,7 @@ return $lang = [
 	'm_automatization' => 'Automatizace',
 	'm_scenes' => 'Scény',
 	'm_log' => 'Log',
+	'm_devices' => 'Zařízení',
 
 	//Buttons
 	'b_year' => 'Rok',
@@ -80,7 +81,7 @@ return $lang = [
 	't_ota' => 'OTA',
 	't_listUsers' => 'Seznam Uživatelů',
 	't_avatar' => 'Avatar',
-	't_listRooms' => 'Seznam Místností',	
+	't_listRooms' => 'Seznam Místností',
 	't_roomName' => 'Jméno Místnosti',
 	't_createRoom' => 'Vytvořit Místnost',
 

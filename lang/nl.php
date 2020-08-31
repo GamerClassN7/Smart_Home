@@ -7,6 +7,7 @@ return $lang = [
 	'm_automatization' => 'Automatisatie',
 	'm_scenes' => 'Scénes',
 	'm_log' => 'Log',
+	'm_devices' => 'Apparaat',
 
 	//Buttons
 	'b_year' => 'Jaar',

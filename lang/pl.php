@@ -7,6 +7,7 @@ return $lang = [
 	'm_automatization' => 'Zaplanowane działania',
 	'm_scenes' => 'Scenariusze',
 	'm_log' => 'Logi',
+	'm_devices' => 'Urządzenie',
 
 	//Buttons
 	'b_year' => 'Rok',

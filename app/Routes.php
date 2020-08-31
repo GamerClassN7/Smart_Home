@@ -18,6 +18,7 @@ $router->any('/login', 'Login');
 $router->any('/logout', 'Logout');
 $router->any('/automation', 'Automation');
 $router->any('/setting', 'Setting');
+$router->any('/device', 'Device');
 $router->any('/ajax', 'Ajax');
 $router->any('/oauth', 'Oauth');
 
@@ -35,7 +36,7 @@ $router->get('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
 
 //cron
 $router->post('/cron/clean', 'CronApi@clean');
-#$router->post('/cron/fetch', 'CronApi@fetch');
+$router->post('/cron/fetch', 'CronApi@fetch');
 
 //Google Home - API
 $router->any('/api/HA/auth', 'Oauth');
