@@ -12,7 +12,7 @@ class UpdatesApi {
     private function validateHeader($headers){
         if (
             isset($_SERVER['HTTP_X_ESP8266_STA_MAC']) &&
-            isset($_SERVER['HTTP_X_ESP8266_SKETCH_MD5']) 
+            isset($_SERVER['HTTP_X_ESP8266_SKETCH_MD5'])
         ) {
             return true;
         }
@@ -23,9 +23,14 @@ class UpdatesApi {
         $logManager = new LogManager('../logs/ota/'. date("Y-m-d").'.log');
         $logManager->setLevel(LOGLEVEL);
         $logManager->write("[Updater] Client Connected", LogRecordTypes::INFO);
-        
+
+      //   if($this->validateHeader($_SERVER)){
+      //       header($_SERVER["SERVER_PROTOCOL"]." 400 Bad Header");
+      //       die();
+      //   }
+
         header('Content-type: text/plain; charset=utf8', true);
-        
+
         //Filtrování IP adress
         if (DEBUGMOD != 1) {
             if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {

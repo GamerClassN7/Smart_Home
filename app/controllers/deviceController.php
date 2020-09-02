@@ -5,11 +5,13 @@ if (!empty ($_POST)){
 		$file = $_FILES['deviceFirmware'];
 		$deviceMac = $deviceManager->getDeviceById ($_POST['deviceId'])['mac'];
 		$fileName = (!empty ($deviceMac) ? str_replace (":", "", $deviceMac) . ".bin" : "");
-		if ($fileName != "" && file_exists ("../app/updater/" . $fileName)) {
-			unlink("../app/updater/" . $fileName);
+
+		if ($fileName != "" && file_exists ("../updater/" . $fileName)) {
+			unlink("../updater/" . $fileName);
 		}
 		if ($fileName != "") {
-			copy ($file['tmp_name'], "../app/updater/" . $fileName);
+			echo 'coping file'.$fileName .copy ($file['tmp_name'], "../updater/" . $fileName);;
+
 		} else {
 
 		}
@@ -18,6 +20,6 @@ if (!empty ($_POST)){
 		$deviceManager = new DeviceManager ();
 		$deviceManager->edit ($_POST['deviceId'], array ('command' => $_POST['deviceCommand']));
 	}
-	header('Location: ./');
-	die();
+	//header('Location: ./');
+	//die();
 }
