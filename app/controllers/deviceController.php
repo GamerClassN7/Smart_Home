@@ -20,6 +20,6 @@ if (!empty ($_POST)){
 		$deviceManager = new DeviceManager ();
 		$deviceManager->edit ($_POST['deviceId'], array ('command' => $_POST['deviceCommand']));
 	}
-	//header('Location: ./');
-	//die();
+	header('Location: ./device');
+	die();
 }
