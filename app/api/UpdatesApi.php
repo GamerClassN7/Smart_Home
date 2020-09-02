@@ -24,6 +24,11 @@ class UpdatesApi {
         $logManager->setLevel(LOGLEVEL);
         $logManager->write("[Updater] Client Connected", LogRecordTypes::INFO);
         
+        if($this->validateHeader($_SERVER)){
+            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+            die();
+        }
+
         header('Content-type: text/plain; charset=utf8', true);
         
         //Filtrování IP adress
