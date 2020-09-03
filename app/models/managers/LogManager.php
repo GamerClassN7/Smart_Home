@@ -35,7 +35,7 @@ class LogManager
 	}
 
 	public function __destruct(){
-		if (isset($this->logFile)) {
+		if (isset($this->logFile) && $this->logFile != "Unable to open file!") {
 			fclose($this->logFile);
 		}
 	}
