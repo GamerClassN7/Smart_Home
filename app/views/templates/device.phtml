@@ -43,7 +43,15 @@
 							<tr>
 								<td><i class="fa">&#x<?php echo (!empty($device['icon']) ? $device['icon'] : ""); ?></i></td>
 								<td><?php echo (!empty($device['name']) ? $device['name'] : ""); ?></td>
-								<td>Room</td>
+								<td>
+								<select class="input" id="device-<?php echo $device['device_id']?>-roomId">
+								<?php
+									foreach ($ROOMS as $key => $room) {
+										echo '<option value="'.$room['room_id'].'" '.($device['room_id'] == $room['room_id'] ? 'selected' : '').'>'.$room['name'].'</option>';
+									}
+								?>
+								</select>
+								</td>
 								<td>
 									<?php if (!empty($device['mac'])) : ?>
 										<?php 

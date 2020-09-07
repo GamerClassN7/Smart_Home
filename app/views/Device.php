@@ -6,6 +6,7 @@ class Device extends Template
 	function __construct () {
 		$userManager = new UserManager ();
 		$deviceManager = new DeviceManager ();
+		$roomManager = new RoomManager ();
 		$langMng = new LanguageManager ('en');
 
 		if (!$userManager->isLogin ()) {
@@ -31,9 +32,12 @@ class Device extends Template
 			}
 		}
 
+		$rooms = $roomManager->getAllRooms();
+
 		$template->prepare ('baseDir', BASEDIR);
 		$template->prepare ('debugMod', DEBUGMOD);
 		$template->prepare ('logToLiveTime', LOGTIMOUT);
+		$template->prepare ('rooms', $rooms);
 		$template->prepare ('devices', $devices);
 		$template->prepare ('langMng', $langMng);
 
