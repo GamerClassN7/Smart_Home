@@ -28,7 +28,7 @@
 						<th>Name</th>
 						<th>Room</th>
 						<th>Firmware</th>
-						<th>IP Address<br>(Mac)</th>
+						<th>IP Address<br>(Mac)<br>Token</th>
 						<th>Action
 							<form method="post" action="">
 								<button class="fa custom-file-input" type="submit" name="deviceCommand" value="reset" title="Reset All"><b>&#xf01e;</b></button>
@@ -80,7 +80,9 @@
 									<?php endif; ?>
 									<div type="float: clear;"></div>
 								</td>
-								<td><?php echo (!empty($device['mac']) ? $device['mac'] : ""); ?><br><?php echo (!empty($device['ip_address']) ? $device['ip_address'] : ""); ?></td>
+								<td><?php echo (!empty($device['mac']) ? $device['mac'] : ""); ?><br>
+								<?php echo (!empty($device['ip_address']) ? $device['ip_address'] : ""); ?><br>
+								<?php echo (!empty($device['token']) ? $device['token'] : ""); ?></td>
 								<td>
 									<?php if (!empty($device['mac'])) : ?>
 										<form method="post" action="">
