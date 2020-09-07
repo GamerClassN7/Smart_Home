@@ -1,9 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
-=======
-
->>>>>>> 5cb6f0b... Some Fixes
 <head>
 	<?php
 	$partial = new Partial('head');
@@ -12,10 +8,6 @@
 	?>
 	<title><?php echo $TITLE ?></title>
 </head>
-<<<<<<< HEAD
-=======
-
->>>>>>> 5cb6f0b... Some Fixes
 <body class="no-transitions">
 	<div class="row no-gutters main">
 		<div class="col-md-3 d-sm-none"></div>
@@ -37,7 +29,12 @@
 						<th>Room</th>
 						<th>Firmware</th>
 						<th>IP Address<br>(Mac)</th>
-						<th>Action</th>
+						<th>Action
+							<form method="post" action="">
+								<button class="fa custom-file-input" type="submit" name="deviceCommand" value="reset" title="Reset All"><b>&#xf01e;</b></button>
+								<div style="float: clear;"></div>
+							</form>
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -50,10 +47,11 @@
 								<td>
 									<?php if (!empty($device['mac'])) : ?>
 										<i class="fa <?php echo (!empty($device['firmware_hash']) ? ($device['firmware_hash'] != "need" ? "fa-check-circle" : "fa-circle") : "fa-times-circle"); ?>" style="float: center; <?php echo (!empty($device['firmware_hash']) ? ($device['firmware_hash'] != "need" ? "color: green;" : "color: yellow;") : "color: red;"); ?>"></i>
-										<button class="fa custom-file-input" type="button" onclick="document.getElementById('deviceFirmware').click();">&#xf0ee;</button>
+										<?php echo $device['firmware_hash'] ?>
+										<button class="fa custom-file-input" type="button" onclick="document.getElementById('deviceFirmware-<?php echo $device['device_id']?>').click();">&#xf0ee;</button>
 										<form style="display: none;" method="post" action="" enctype="multipart/form-data">
 											<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
-											<input type="file" onchange="this.form.submit();" name="deviceFirmware" id="deviceFirmware" value="">
+											<input type="file" onchange="this.form.submit();" name="deviceFirmware" id="deviceFirmware-<?php echo $device['device_id']?>" value="">
 										</form>
 									<?php endif; ?>
 									<div type="float: clear;"></div>
