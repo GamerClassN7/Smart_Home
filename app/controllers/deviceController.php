@@ -24,6 +24,9 @@ if (!empty ($_POST)){
 	if (!empty ($_POST['deviceRoomId'])  && !empty ($_POST['deviceId'])) {
 		$deviceManager->edit ($_POST['deviceId'], array ('room_id' => $_POST['deviceRoomId']));
 	}
+	if (!empty ($_POST['deviceName'])  && !empty ($_POST['deviceId'])) {
+		$deviceManager->edit ($_POST['deviceId'], array ('name' => $_POST['deviceName']));
+	}
 	header('Location: ./device');
 	die();
 }
