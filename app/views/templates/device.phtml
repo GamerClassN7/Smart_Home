@@ -44,17 +44,22 @@
 								<td><i class="fa">&#x<?php echo (!empty($device['icon']) ? $device['icon'] : ""); ?></i></td>
 								<td><?php echo (!empty($device['name']) ? $device['name'] : ""); ?></td>
 								<td>
-								<select class="input" id="device-<?php echo $device['device_id']?>-roomId">
-								<?php
-									foreach ($ROOMS as $key => $room) {
-										echo '<option value="'.$room['room_id'].'" '.($device['room_id'] == $room['room_id'] ? 'selected' : '').'>'.$room['name'].'</option>';
-									}
-								?>
-								</select>
+								<form method="post" action="" enctype="multipart/form-data">
+									<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
+									<select class="input" name="deviceRoomId" onchange="this.form.submit();">
+									<?php
+										if (!empty ($ROOMS)) {
+											foreach ($ROOMS as $key => $room) {
+												echo '<option value="' . $room['room_id'] . '" ' . ($device['room_id'] == $room['room_id'] ? 'selected' : '') . '>' . $room['name'] . '</option>';
+											}
+										}
+									?>
+									</select>
+								</form>
 								</td>
 								<td>
 									<?php if (!empty($device['mac'])) : ?>
-										<?php 
+										<?php
 										$icon = "fa-circle";
 										$color = "yellow";
 										if (!empty($device['firmware_hash'])) {
@@ -69,7 +74,7 @@
 											}
 										}
 										?>
-										
+
 										<i class="fa <?php echo $icon; ?>" style="color: <?php echo $color; ?>"></i>
 										<?php echo $device['firmware_hash'] ?>
 										<button class="fa custom-file-input" type="button" onclick="document.getElementById('deviceFirmware-<?php echo $device['device_id']?>').click();">&#xf0ee;</button>
