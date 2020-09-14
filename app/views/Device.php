@@ -30,6 +30,12 @@ class Device extends Template
 			} else {
 				$devices[$key]['firmware_hash'] = "false";
 			}
+
+			$wifi = SubDeviceManager::getSubDeviceByMaster($device['device_id'], 'wifi');
+			if ($wifi) {
+				$signalStrenght = RecordManager::getLastRecordNotNull($wifi['subdevice_id']);
+				$devices[$key]['signal'] = (!$signalStrenght ? 0 : $signalStrenght['value']);
+			}
 		}
 
 		$rooms = $roomManager->getAllRooms();

@@ -1,9 +1,9 @@
 RewriteEngine On
 
 # require https
-RewriteCond %{HTTPS} off
-RewriteCond %{REQUEST_URI} !^/api/update
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#RewriteCond %{HTTPS} off
+#RewriteCond %{REQUEST_URI} !^/api/update
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 #token to HTTP_AUTHORIZATION
 RewriteCond %{HTTP:Authorization} ^(.*)

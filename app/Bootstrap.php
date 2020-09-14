@@ -1,4 +1,15 @@
 <?php
+//Debug
+error_reporting(E_ALL);
+ini_set( 'display_errors','1');
+
+//setup
+ini_set ('session.cookie_httponly', '1');
+ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
+ini_set('session.cookie_path', str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])));
+ini_set('session.cookie_secure', '1');
+mb_internal_encoding ("UTF-8");
+
 session_start();
 
 // import configs
@@ -75,16 +86,7 @@ $apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRI
 $apiLogManager->write("[API] POST  body\n" . json_encode($_POST, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 $apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 
-//Debug
-error_reporting(E_ALL);
-ini_set( 'display_errors','1');
 
-//setup
-ini_set ('session.cookie_httponly', '1');
-ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
-ini_set('session.cookie_path', str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])));
-ini_set('session.cookie_secure', '1');
-mb_internal_encoding ("UTF-8");
 
 Debugger::flag('dbconnect');
 //D B Conector

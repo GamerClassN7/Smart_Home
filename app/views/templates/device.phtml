@@ -26,6 +26,7 @@
 					<tr>
 						<th>#</th>
 						<th>Name</th>
+						<th>Signal</th>
 						<th>Room</th>
 						<th>Firmware</th>
 						<th>IP Address<br>(Mac)<br>Token</th>
@@ -43,6 +44,7 @@
 							<tr>
 								<td><i class="fa">&#x<?php echo (!empty($device['icon']) ? $device['icon'] : ""); ?></i></td>
 								<td><?php echo (!empty($device['name']) ? $device['name'] : ""); ?></td>
+								<td><?php echo (!empty($device['signal']) ? $device['signal'] : ""); ?></td>
 								<td>
 								<select class="input" id="device-<?php echo $device['device_id']?>-roomId">
 								<?php

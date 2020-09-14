@@ -12,7 +12,7 @@ class WidgetApi extends ApiController{
 		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
 		if ($subDeviceData['type'] == 'on/off'){
 			$lastValue = RecordManager::getLastRecord($subDeviceData['subdevice_id'])['value'];
-			RecordManager::create($subDeviceData['device_id'], 'on/off', !$lastValue);
+			RecordManager::create($subDeviceData['device_id'], 'on/off', (int) !$lastValue);
 			$response = !$lastValue;
 		} else {
 			throw new Exception("Bad Request", 403);
