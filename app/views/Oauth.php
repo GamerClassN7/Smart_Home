@@ -3,7 +3,7 @@ class Oauth extends Template
 {
 	function __construct()
 	{
-		global $userManager;
+		$userManager = new UserManager ();
 		$langMng = new LanguageManager('en');
 
 		$template = new Template('oauth');
