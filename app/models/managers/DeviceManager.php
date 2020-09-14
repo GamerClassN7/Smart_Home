@@ -26,6 +26,10 @@ class DeviceManager{
 		return Db::loadOne("SELECT * FROM devices WHERE device_id = ?", array($deviceId));
 	}
 
+	static function getAllDevicesSorted ($sort, $sortType = "ASC") {
+		return Db::loadAll ("SELECT devices.* FROM devices LEFT JOIN rooms ON devices.room_id = rooms.room_id WHERE devices.approved != ? ORDER BY $sort $sortType", Array(2));
+	}
+
 	public static function create ($name, $token) {
 		$defaultRoom = RoomManager::getDefaultRoomId();
 		$device = array (

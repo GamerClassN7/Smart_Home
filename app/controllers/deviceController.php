@@ -15,11 +15,17 @@ if (!empty ($_POST)){
 	}
 	if (isset ($_POST['deviceCommand'])  && !empty ($_POST['deviceId'])) {
 		$deviceManager->edit ($_POST['deviceId'], array ('command' => $_POST['deviceCommand']));
-	}else if (!empty ($_POST['deviceCommand'])) {
+	} else if (!empty ($_POST['deviceCommand'])) {
 		$devices = $deviceManager->getAllDevices();
 		foreach ($devices as $key => $device) {
 			$deviceManager->edit ($device['device_id'], array ('command' => $_POST['deviceCommand']));
 		}
+	}
+	if (!empty ($_POST['deviceRoomId'])  && !empty ($_POST['deviceId'])) {
+		$deviceManager->edit ($_POST['deviceId'], array ('room_id' => $_POST['deviceRoomId']));
+	}
+	if (!empty ($_POST['deviceName'])  && !empty ($_POST['deviceId'])) {
+		$deviceManager->edit ($_POST['deviceId'], array ('name' => $_POST['deviceName']));
 	}
 	header('Location: ./device');
 	die();
