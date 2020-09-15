@@ -3,7 +3,8 @@ class DeviceManager{
 	public static $devices;
 
 	static function getAllDevices () {
-		return Db::loadAll ("SELECT * FROM devices WHERE approved != ?", Array(2));
+		return Db::loadAll ("SELECT devices.* FROM devices
+		WHERE approved != ?", Array(2));
 	}
 
 	static function getAllDevicesInRoom ($roomId = "") {
@@ -27,7 +28,9 @@ class DeviceManager{
 	}
 
 	static function getAllDevicesSorted ($sort, $sortType = "ASC") {
-		return Db::loadAll ("SELECT devices.* FROM devices LEFT JOIN rooms ON devices.room_id = rooms.room_id WHERE devices.approved != ? ORDER BY $sort $sortType", Array(2));
+		return Db::loadAll ("SELECT devices.* FROM devices
+			LEFT JOIN rooms ON (devices.room_id = rooms.room_id)
+		WHERE devices.approved != ? ORDER BY $sort $sortType", Array(2));
 	}
 
 	public static function create ($name, $token) {

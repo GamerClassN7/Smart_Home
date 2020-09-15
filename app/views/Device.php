@@ -6,6 +6,8 @@ class Device extends Template
 	function __construct () {
 		$userManager = new UserManager ();
 		$deviceManager = new DeviceManager ();
+		$subDeviceManager = new SubDeviceManager ();
+		$recordManager = new RecordManager ();
 		$roomManager = new RoomManager ();
 		$langMng = new LanguageManager ('en');
 
@@ -73,6 +75,16 @@ class Device extends Template
 		}
 
 		foreach ($devices as $key => $device) {
+			$subdevice = $subDeviceManager->getSubDeviceByMasterAndType ($device['device_id'], "wifi");
+			if (!empty ($subdevice['subdevice_id'])) {
+				$record = $recordManager->getLastRecord($subdevice['subdevice_id']);
+				if (!empty ($record)) {
+					$devices[$key]['signal'] = $record['value'] . " " . $subdevice['unit'];
+				}
+			}
+			if (empty ($devices[$key]['signal'])) {
+				$devices[$key]['signal'] = "";
+			}
 			$localBinary = "../updater/" . str_replace (':', '', $device['mac']) . ".bin";
 			if (file_exists ($localBinary)) {
 				$hash = md5_file ($localBinary);
@@ -97,6 +109,16 @@ class Device extends Template
 			} else if ($_GET['sortType'] == "ASC") {
 				usort($devices, function($a, $b) {
 					return $b['firmware_hash'] <=> $a['firmware_hash'];
+				});
+			}
+		} else if (!empty ($_GET['sort']) && !empty ($_GET['sortType']) && $_GET['sort'] == "signal") {
+			if ($_GET['sortType'] == "DESC") {
+				usort($devices, function($a, $b) {
+					return $a['signal'] <=> $b['signal'];
+				});
+			} else if ($_GET['sortType'] == "ASC") {
+				usort($devices, function($a, $b) {
+					return $b['signal'] <=> $a['signal'];
 				});
 			}
 		}
