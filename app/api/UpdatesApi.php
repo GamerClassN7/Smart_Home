@@ -17,6 +17,7 @@ class UpdatesApi {
             return true;
         }
         return false;
+
     }
 
     public function default(){
@@ -31,18 +32,18 @@ class UpdatesApi {
 
         header('Content-type: text/plain; charset=utf8', true);
 
-        //Filtrování IP adress
-        if (DEBUGMOD != 1) {
-            if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {
-                echo json_encode(array(
-                    'state' => 'unsuccess',
-                    'errorMSG' => "Using API from your IP insnt alowed!",
-                ));
-                header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
-                $logManager->write("[Updater] acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordTypes::INFO);
-                exit();
-            }
-        }
+        // //Filtrování IP adress
+        // if (DEBUGMOD != 1) {
+        //     if (!in_array($_SERVER['REMOTE_ADDR'], HOMEIP)) {
+        //         echo json_encode(array(
+        //             'state' => 'unsuccess',
+        //             'errorMSG' => "Using API from your IP insnt alowed!",
+        //         ));
+        //         header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
+        //         $logManager->write("[Updater] acces denied from " . $_SERVER['REMOTE_ADDR'], LogRecordTypes::INFO);
+        //         exit();
+        //     }
+        // }
 
         $macAddress = $_SERVER['HTTP_X_ESP8266_STA_MAC'];
         $localBinary = "../updater/" . str_replace(':', '', $macAddress) . ".bin";

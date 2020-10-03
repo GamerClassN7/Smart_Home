@@ -76,7 +76,7 @@ class EndpointsApi extends ApiController{
 
 		//Log Data Save
 		if (isset($obj['logs'])){
-			foreach ($deviceLogs as $log) {
+			foreach ($obj['logs'] as $log) {
 				$logManager = new LogManager('../logs/devices/'. date("Y-m-d").'.log');
 				$logManager->setLevel(LOGLEVEL);
 				$logManager->write("[Device Log Msg] Device_ID " . $deviceId . "->" . $log, LogRecordTypes::ERROR);
