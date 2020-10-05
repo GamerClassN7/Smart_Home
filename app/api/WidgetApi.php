@@ -27,7 +27,6 @@ class WidgetApi extends ApiController{
 			$i++;
 			usleep(250000);
 		}
-
 		$this->response(['value' => $response]);
 	}
 
@@ -37,7 +36,7 @@ class WidgetApi extends ApiController{
 		$connectionError = true;
 
 		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
-		$deviceData = DeviceManager::getDeviceById($deviceId);
+		$deviceData = DeviceManager::getDeviceById($subDeviceData['device_id']);
 		$events = RecordManager::getLastRecord($subDeviceId, 5);
 
 		$LastRecordTime = new DateTime($events[4]['time']);
@@ -51,17 +50,33 @@ class WidgetApi extends ApiController{
 		if (
 			$lastSeen < $deviceData['sleep_time'] ||
 			$subDeviceData['type'] == "on/off" ||
-			$subDeviceData['type'] == "door"
-		) {
-			$connectionError = false;
+			$subDeviceData['type'] == "door" ||
+			$subDeviceData['type'] == "wather"
+			) {
+				$connectionError = false;
+			}
+
+			$labels = [];
+			$values = [];
+			foreach ($events as $key => $event) {
+				$labels[] = $event['value'];
+				$values[] = $event['time'];
+			}
+
+			$response = [
+				'records'=> $events,
+				'graph'=> [
+					'labels' => $values,
+					'values' => $labels,
+					'min' => RANGES[$subDeviceData['type']]['min'],
+					'max' => RANGES[$subDeviceData['type']]['max'],
+					'scale' => RANGES[$subDeviceData['type']]['scale'],
+					'graph' => RANGES[$subDeviceData['type']]['graph'],
+				],
+				'comError' => $connectionError,
+				'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
+			];
+
+			$this->response($response);
 		}
-
-		$response = [
-			'records'=> $events,
-			'comError' => $connectionError,
-			'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
-		];
-
-		$this->response($response);
 	}
-}
