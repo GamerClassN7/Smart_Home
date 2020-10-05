@@ -59,15 +59,18 @@ class WidgetApi extends ApiController{
 			$labels = [];
 			$values = [];
 			foreach ($events as $key => $event) {
-				$labels[] = $event['value'];
-				$values[] = $event['time'];
+				$labels[] = (new DateTime($event['time']))->format('H:i');
+				$values[] = [
+					$event['time'],
+					$event['value'],
+				];
 			}
 
 			$response = [
 				'records'=> $events,
 				'graph'=> [
-					'labels' => $values,
-					'values' => $labels,
+					'labels' => $labels,
+					'values' => $values,
 					'min' => RANGES[$subDeviceData['type']]['min'],
 					'max' => RANGES[$subDeviceData['type']]['max'],
 					'scale' => RANGES[$subDeviceData['type']]['scale'],
