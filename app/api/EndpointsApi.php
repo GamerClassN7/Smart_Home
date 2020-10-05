@@ -31,10 +31,10 @@ class EndpointsApi extends ApiController{
 			];
 
 			//Subdevice Registration
-			$deviceId = DeviceManager::create($obj['token'], $obj['token']);
+			$device = DeviceManager::create($obj['token'], $obj['token']);
 			foreach ($obj['values'] as $key => $value) {
-				if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
-					SubDeviceManager::create($deviceId, $key, UNITS[$key]);
+				if (!SubDeviceManager::getSubDeviceByMaster($device['device_id'], $key)) {
+					SubDeviceManager::create($device['device_id'], $key, UNITS[$key]);
 				}
 			}
 
@@ -61,6 +61,8 @@ class EndpointsApi extends ApiController{
 			], 401);
 		}
 
+		$device = DeviceManager::getDeviceByToken($obj['token']);
+
 		//Diagnostic
 		if (isset($obj['settings'])){
 			$data = ['mac' => $obj['settings']["network"]["mac"], 'ip_address' => $obj['settings']["network"]["ip"]];
@@ -77,17 +79,15 @@ class EndpointsApi extends ApiController{
 		//Log Data Save
 		if (isset($obj['logs'])){
 			foreach ($obj['logs'] as $log) {
-				$logManager = new LogManager('../logs/devices/'. date("Y-m-d").'.log');
-				$logManager->setLevel(LOGLEVEL);
-				$logManager->write("[Device Log Msg] Device_ID " . $deviceId . "->" . $log, LogRecordTypes::ERROR);
-				unset($logManager);
+				$deviceLogManager = new LogManager('../logs/devices/'. date("Y-m-d").'.log');
+				$deviceLogManager->setLevel(LOGLEVEL);
+				$deviceLogManager->write("[Device Log Msg] Device_ID " . $device['device_id'] . "->" . $log, LogRecordTypes::ERROR);
+				unset($deviceLogManager);
 			}
 		}
 
 		// Issuing command
 		if ($command == "null"){
-			$device = DeviceManager::getDeviceByToken($obj['token']);
-			$deviceId = $device['device_id'];
 			$deviceCommand = $device["command"];
 			if ($deviceCommand != '' && $deviceCommand != null && $deviceCommand != "null")
 			{
@@ -96,24 +96,22 @@ class EndpointsApi extends ApiController{
 					'command'=>'null'
 				];
 				DeviceManager::editByToken($obj['token'], $data);
-				$logManager->write("[API] Device_ID " . $deviceId . " executing command " . $command, LogRecordTypes::INFO);
+				$logManager->write("[API] Device_ID " . $device['device_id'] . " executing command " . $command, LogRecordTypes::INFO);
 			}
 		}
 
 		$jsonAnswer = [];
 		$subDeviceLastReordValue = [];
-		$device = DeviceManager::getDeviceByToken($obj['token']);
-		$deviceId = $device['device_id'];
 
 		if (isset($obj['values'])) {
 			//ZAPIS
 			foreach ($obj['values'] as $key => $value) {
-				if (!SubDeviceManager::getSubDeviceByMaster($deviceId, $key)) {
-					SubDeviceManager::create($deviceId, $key, UNITS[$key]);
+				if (!SubDeviceManager::getSubDeviceByMaster($device['device_id'], $key)) {
+					SubDeviceManager::create($device['device_id'], $key, UNITS[$key]);
 				}
 				$subDeviceLastReordValue[$key] = $value['value'];
-				RecordManager::create($deviceId, $key, round($value['value'],3));
-				$logManager->write("[API] Device_ID " . $deviceId . " writed value " . $key . ' ' . $value['value'], LogRecordTypes::INFO);
+				RecordManager::create($device['device_id'], $key, round($value['value'],3));
+				$logManager->write("[API] Device_ID " . $device['device_id'] . " writed value " . $key . ' ' . $value['value'], LogRecordTypes::INFO);
 
 				//notification
 				if ($key == 'door' || $key == 'water') {
@@ -151,17 +149,17 @@ class EndpointsApi extends ApiController{
 
 			//upravit format na setings-> netvork etc
 
-			$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($deviceId);
+			$subDevicesTypeList = SubDeviceManager::getSubDeviceSTypeForMater($device['device_id']);
 			if (!in_array($subDevicesTypeList, ['on/off', 'door', 'water'])) {
 				$jsonAnswer['device']['sleepTime'] = $device['sleep_time'];
 			}
 		} else {
-			if (count(SubDeviceManager::getAllSubDevices($deviceId)) == 0) {
-				//SubDeviceManager::create($deviceId, 'on/off', UNITS[$key]);
-				//RecordManager::create($deviceId, 'on/off', 0);
+			if (count(SubDeviceManager::getAllSubDevices($device['device_id'])) == 0) {
+				//SubDeviceManager::create($device['device_id'], 'on/off', UNITS[$key]);
+				//RecordManager::create($device['device_id'], 'on/off', 0);
 			}
 
-			$subDevicesData = SubDeviceManager::getAllSubDevices($deviceId);
+			$subDevicesData = SubDeviceManager::getAllSubDevices($device['device_id']);
 
 			foreach ($subDevicesData as $key => $subDeviceData) {
 				$subDeviceId = $subDeviceData['subdevice_id'];
@@ -186,6 +184,7 @@ class EndpointsApi extends ApiController{
 
 		$this->response($jsonAnswer);
 		// this method returns response as json
-		unset($logManager);
+		//unset($logManager); //TODO: Opravit
+		die();
 	}
 }

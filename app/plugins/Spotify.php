@@ -16,9 +16,7 @@ class Spotify extends VirtualDeviceManager {
 	}
 
 	public function callback(){
-		$token = $_GET;
-		$actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-		var_dump($actual_link);
+		var_dump($_REQUEST);
 		(new SettingsManager)->create('spotify_token', $token);
 	}
 

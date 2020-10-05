@@ -3,7 +3,7 @@ class RoomManager{
 	public static $rooms;
 
 	static function getDefaultRoomId() {
-		$defaultRoom = Db::loadOne("SELECT room_id FROM rooms WHERE 'default' = 1");
+		$defaultRoom = Db::loadOne("SELECT `room_id` FROM `rooms` WHERE `default` = 1");
 		return $defaultRoom['room_id'];
 	}
 

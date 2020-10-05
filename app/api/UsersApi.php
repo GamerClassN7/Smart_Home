@@ -16,4 +16,22 @@ class UsersApi extends ApiController{
 
 		$this->response($response);
 	}
+
+	public function status(){
+		//$this->requireAuth();
+		$response = null;
+		$obj = $this->input;
+		$atHome = $obj['atHome'];
+
+		$user = UserManager::getUser($obj['user']);
+		$userAtHome = $user['at_home'];
+		$userId = $user['user_id'];
+
+		if (!empty($user)) {
+			if($userAtHome != $atHome){
+				UserManager::atHome($userId, $atHome);
+			}
+		}
+		$this->response(['value'=>'OK']);
+	}
 }

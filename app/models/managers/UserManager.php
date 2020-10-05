@@ -3,7 +3,7 @@ class UserManager
 {
 	public static function getUsers ($filtr = ['*']) {
 		try {
-			$allUsers = Db::loadAll ("SELECT " . implode($filtr, ",") . " FROM users");
+			$allUsers = Db::loadAll ("SELECT " . implode(",", $filtr) . " FROM users");
 			return $allUsers;
 		} catch(PDOException $error) {
 			echo $error->getMessage();

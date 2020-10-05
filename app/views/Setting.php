@@ -3,7 +3,6 @@ class Setting extends Template
 {
 	function __construct()
 	{
-
 		$userManager = new UserManager();
 		$langMng = new LanguageManager('en');
 
@@ -55,6 +54,7 @@ class Setting extends Template
 
 		$rooms = RoomManager::getAllRooms();
 		$template->prepare('rooms', $rooms);
+
 
 
 		$template->render();
