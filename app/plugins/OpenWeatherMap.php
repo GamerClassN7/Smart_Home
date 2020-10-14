@@ -13,6 +13,7 @@ class OpenWeatherMap extends VirtualDeviceManager
 			$deviceId = DeviceManager::getDeviceByToken($this->virtual_device_name)['device_id'];
 			if (!$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, $this->subdevice_type)) {
 				SubDeviceManager::create($deviceId, $this->subdevice_type, '');
+				sleep(1);
 			}
 
 			if (!$this->fetchEnabled($deviceId,$subDevice['subdevice_id'])) die();

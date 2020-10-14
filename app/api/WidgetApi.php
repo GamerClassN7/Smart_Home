@@ -1,7 +1,9 @@
 <?php
-class WidgetApi extends ApiController{
+class WidgetApi extends ApiController
+{
 
-	public function run($subDeviceId){
+	public function run($subDeviceId)
+	{
 		//$this->requireAuth();
 
 		$response = null;
@@ -10,7 +12,7 @@ class WidgetApi extends ApiController{
 		}
 
 		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
-		if ($subDeviceData['type'] == 'on/off'){
+		if ($subDeviceData['type'] == 'on/off') {
 			$lastValue = RecordManager::getLastRecord($subDeviceData['subdevice_id'])['value'];
 			RecordManager::create($subDeviceData['device_id'], 'on/off', (int) !$lastValue);
 			$response = !$lastValue;
@@ -20,7 +22,7 @@ class WidgetApi extends ApiController{
 
 		$i = 0;
 		$timeout = 20;
-		while (RecordManager::getLastRecord($subDeviceId)['execuded'] == 0){
+		while (RecordManager::getLastRecord($subDeviceId)['execuded'] == 0) {
 			if ($i == $timeout) {
 				throw new Exception("Timeout", 444);
 			}
@@ -30,7 +32,8 @@ class WidgetApi extends ApiController{
 		$this->response(['value' => $response]);
 	}
 
-	public function detail($subDeviceId){
+	public function detail($subDeviceId)
+	{
 		//$this->requireAuth();
 		$response = null;
 		$connectionError = true;
@@ -52,28 +55,29 @@ class WidgetApi extends ApiController{
 			$subDeviceData['type'] == "on/off" ||
 			$subDeviceData['type'] == "door" ||
 			$subDeviceData['type'] == "wather"
-			) {
-				$connectionError = false;
-			}
+		) {
+			$connectionError = false;
+		}
 
-			$labels = [];
-			$values = [];
-			foreach ($events as $key => $event) {
-				$recordDatetime = new DateTime($event['time']);
-				$labels[] = $recordDatetime->format('H:i');
-				$values[] = [
-					'y' => $event['value'],
-					't' => $recordDatetime->getTimestamp()*1000,
-				];
-			}
+		$labels = [];
+		$values = [];
+		foreach ($events as $key => $event) {
+			$recordDatetime = new DateTime($event['time']);
+			$labels[] = $recordDatetime->format('H:i');
+			$values[] = [
+				'y' => $event['value'],
+				't' => $recordDatetime->getTimestamp() * 1000,
+			];
+		}
 
-			$response = [
-				'records'=> $events,
-				'graph'=> [
+		$response = [
+			'records' => $events,
+			'graph' => [
+				'data' => [
 					'labels' => $labels,
-					'data' => [
-						'dataset' => $values
-					],
+					'dataset' => $values
+				],
+				'options' => [
 					'scales' => [
 						'xAxis' => [
 							'type' => 'time',
@@ -97,10 +101,11 @@ class WidgetApi extends ApiController{
 						'mode' => true
 					],
 				],
-				'comError' => $connectionError,
-				'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
-			];
+			],
+			'comError' => $connectionError,
+			'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
+		];
 
-			$this->response($response);
-		}
+		$this->response($response);
 	}
+}
