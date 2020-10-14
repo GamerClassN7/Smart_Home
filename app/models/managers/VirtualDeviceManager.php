@@ -1,21 +1,19 @@
 <?php
 class VirtualDeviceManager
 {
-    function fetch($url)
-    {
-        $json = json_decode(Utilities::CallAPI('GET', 'api.openweathermap.org/data/2.5/weather?q=prague&appid=1ee609f2fcf8048e84f1d2fb1d1d72b5', ''), true);
+	public function fetchEnabled($deviceId = null, $subDeviceId = null){
+		$sleepTime = DeviceManager::getDeviceById($deviceId)['sleep_time'];
 
-        if (DeviceManager::registeret('1ee609f2fcf8048e84f1d2fb1d1d72b5')) {
+		$LastRecordTime = new DateTime(RecordManager::getLastRecord($subDeviceId, 1)['time']);
+		$interval = $LastRecordTime->diff(new DateTime());
+		$hours   = $interval->format('%h');
+		$minutes = $interval->format('%i');
+		$lastSeen = ($hours * 60 + $minutes);
 
-            $deviceId = DeviceManager::getDeviceByToken('1ee609f2fcf8048e84f1d2fb1d1d72b5')['device_id'];
+		if ($lastSeen > $sleepTime || $sleepTime == 0) {
+			return true;
+		}
 
-            if (!SubDeviceManager::getSubDeviceByMaster($deviceId, 'weather-nice')) {
-                SubDeviceManager::create($deviceId, 'weather-nice', '');
-            }
-
-            RecordManager::create($deviceId, 'weather-nice', $json['weather'][0]['main']);
-        } else {
-            $deviceId = DeviceManager::create('1ee609f2fcf8048e84f1d2fb1d1d72b5', '1ee609f2fcf8048e84f1d2fb1d1d72b5')['device_id'];
-        }
-    }
+		return false;
+	}
 }
