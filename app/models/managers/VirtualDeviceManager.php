@@ -13,7 +13,6 @@ class VirtualDeviceManager
                 SubDeviceManager::create($deviceId, 'weather-nice', '');
             }
 
-            var_dump($json['weather'][0]);
             RecordManager::create($deviceId, 'weather-nice', $json['weather'][0]['main']);
         } else {
             $deviceId = DeviceManager::create('1ee609f2fcf8048e84f1d2fb1d1d72b5', '1ee609f2fcf8048e84f1d2fb1d1d72b5')['device_id'];

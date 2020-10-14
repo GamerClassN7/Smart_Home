@@ -74,6 +74,7 @@ class EndpointsApi extends ApiController{
 				'state' => 'succes',
 				'command' => $command,
 			], 200);
+			die();
 		}
 
 		//Log Data Save
@@ -84,6 +85,11 @@ class EndpointsApi extends ApiController{
 				$deviceLogManager->write("[Device Log Msg] Device_ID " . $device['device_id'] . "->" . $log, LogRecordTypes::ERROR);
 				unset($deviceLogManager);
 			}
+			$this->response([
+				'state' => 'succes',
+				'command' => $command,
+			], 200);
+			die();
 		}
 
 		// Issuing command

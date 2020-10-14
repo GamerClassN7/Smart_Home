@@ -1,4 +1,4 @@
-<?php 
+<?php
 class CronApi extends ApiController {
 
     public function clean(){
@@ -8,7 +8,10 @@ class CronApi extends ApiController {
     }
 
     public function fetch(){
-        echo (new VirtualDeviceManager)->fetch('');
+		  //echo (new VirtualDeviceManager)->fetch('');
+		  echo (new Covid)->fetch('');
+		  echo (new OpenWeatherMap)->fetch('');
+
         $this->response(['Value' => 'OK']);
     }
 }
