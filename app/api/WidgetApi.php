@@ -59,10 +59,11 @@ class WidgetApi extends ApiController{
 			$labels = [];
 			$values = [];
 			foreach ($events as $key => $event) {
-				$labels[] = (new DateTime($event['time']))->format('H:i');
+				$recordDatetime = new DateTime($event['time']);
+				$labels[] = $recordDatetime->format('H:i');
 				$values[] = [
-					$event['time'],
-					$event['value'],
+					'y' => $event['value'],
+					't' => $recordDatetime->getTimestamp()*1000,
 				];
 			}
 
@@ -70,11 +71,31 @@ class WidgetApi extends ApiController{
 				'records'=> $events,
 				'graph'=> [
 					'labels' => $labels,
-					'values' => $values,
-					'min' => RANGES[$subDeviceData['type']]['min'],
-					'max' => RANGES[$subDeviceData['type']]['max'],
-					'scale' => RANGES[$subDeviceData['type']]['scale'],
-					'graph' => RANGES[$subDeviceData['type']]['graph'],
+					'data' => [
+						'dataset' => $values
+					],
+					'scales' => [
+						'xAxis' => [
+							'type' => 'time',
+							'distribution' => 'linear',
+						],
+						'yAxes' => [
+							'ticks' => [
+								'min' => RANGES[$subDeviceData['type']]['min'],
+								'max' => RANGES[$subDeviceData['type']]['max'],
+								'steps' => RANGES[$subDeviceData['type']]['scale'],
+							]
+						]
+					],
+					'legend' => [
+						'display' => false
+					],
+					'tooltips' => [
+						'enabled' => true
+					],
+					'hover' => [
+						'mode' => true
+					],
 				],
 				'comError' => $connectionError,
 				'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
