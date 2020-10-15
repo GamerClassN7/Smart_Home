@@ -40,7 +40,7 @@ class WidgetApi extends ApiController
 
 		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
 		$deviceData = DeviceManager::getDeviceById($subDeviceData['device_id']);
-		$events = RecordManager::getLastRecord($subDeviceId, 5);
+		$events = RecordManager::getLastRecord($subDeviceId, 10);
 
 		$LastRecordTime = new DateTime($events[4]['time']);
 		$niceTime = Utilities::ago($LastRecordTime);
@@ -75,7 +75,10 @@ class WidgetApi extends ApiController
 			'graph' => [
 				'data' => [
 					'labels' => $labels,
-					'dataset' => $values
+					'datasets' => [[
+						//'label' => 'FUCK you',
+						'data' => $values,
+					]],
 				],
 				'options' => [
 					'scales' => [
@@ -85,9 +88,9 @@ class WidgetApi extends ApiController
 						],
 						'yAxes' => [
 							'ticks' => [
-								'min' => RANGES[$subDeviceData['type']]['min'],
-								'max' => RANGES[$subDeviceData['type']]['max'],
-								'steps' => RANGES[$subDeviceData['type']]['scale'],
+								'min' => $this->getDeviceConfig($subDeviceData['type'])['min'],
+								'max' => $this->getDeviceConfig($subDeviceData['type'])['max'],
+								'steps' => $this->getDeviceConfig($subDeviceData['type'])['scale'],
 							]
 						]
 					],
@@ -107,5 +110,12 @@ class WidgetApi extends ApiController
 		];
 
 		$this->response($response);
+	}
+
+	private function getDeviceConfig($type){
+		if (isset(RANGES[$type])){
+			return RANGES[$type];
+		}
+		return RANGES[''];
 	}
 }

@@ -87,7 +87,7 @@ class SubDeviceManager
 				GROUP BY subdevice_id
 			  )
 			GROUP BY subdevice_id
-			ORDER BY type DESC
+			ORDER BY d.name DESC
 		", $roomIds);
 
 		$ret = [];

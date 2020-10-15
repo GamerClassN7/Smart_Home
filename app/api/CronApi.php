@@ -11,6 +11,7 @@ class CronApi extends ApiController {
 		  //echo (new VirtualDeviceManager)->fetch('');
 		  echo (new Covid)->fetch('');
 		  echo (new OpenWeatherMap)->fetch('');
+		  echo (new UsaElection)->fetch('');
 
         $this->response(['Value' => 'OK']);
     }
