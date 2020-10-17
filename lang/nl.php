@@ -52,6 +52,7 @@ return $lang = [
 	'l_sleepTime' => 'Apparaat slaaptijd',
 	'l_atHome' => 'Thuis',
 	'l_nameAt' => 'Naam',
+	'l_email' => 'Email',
 	'l_lastSeen' => 'Laatst gezien',
 	'l_notificationStatus' => 'Notificatie status',
 

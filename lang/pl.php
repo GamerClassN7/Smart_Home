@@ -56,6 +56,7 @@ return $lang = [
 	'l_notificationStatus' => 'Stan powiadomienia',
 	'l_userName' => 'Username', //newOne
 	'l_password' => 'Password', //newOne
+	'l_email' => 'Email',
 	'l_oldPassword' => 'Old Password', //newOne
 	'l_newPassword' => 'New Password', //newOne
 

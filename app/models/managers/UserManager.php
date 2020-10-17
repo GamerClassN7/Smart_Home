@@ -43,7 +43,7 @@ class UserManager
 
 	public static function login ($username, $password, $rememberMe) {
 		try {
-			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
+			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?) OR LOWER(email)=LOWER(?)', array ($username, $username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
 					if (isset($rememberMe) && $rememberMe == 'true') {
 						setcookie ("rememberMe", self::setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), BASEDIR, $_SERVER['HTTP_HOST'], 1);
@@ -69,7 +69,7 @@ class UserManager
 
 	public static function loginNew ($username, $password) {
 		try {
-			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?)', array ($username))) {
+			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?) OR LOWER(email)=LOWER(?)', array ($username, $username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
 					return $user['user_id'];
 				} else {
@@ -152,6 +152,12 @@ class UserManager
 		}
 	}
 
+	public static function setUserDataAdmin ($type, $value, $id) {
+		if ($id) {
+			Db::command ('UPDATE users SET ' . $type . '=? WHERE user_id=?', array ($value, $id));
+		}
+	}
+
 	public static function getHashPassword ($password) {
 		$salt = "s0mRIdlKvI";
 		$hashPassword = hash('sha512', ($password . $salt));
@@ -181,8 +187,9 @@ class UserManager
 		}
 	}
 
-	public static function createUser($userName, $password){
-		$userId = Db::loadOne('SELECT * FROM users WHERE username = ?;', array($userName))['user_id'];
+	public static function createUser ($userName, $password, $email) {
+		$email = strtolower ($email);
+		$userId = Db::loadOne ('SELECT * FROM users WHERE LOWER (username) = LOWER (?) OR LOWER (email) = LOWER (?);', array ($userName, $email))['user_id'];
 		if ($userId != null) {
 			return false;
 		};
@@ -190,6 +197,7 @@ class UserManager
 			$user = [
 				'username' => $userName,
 				'password' => self::getHashPassword($password),
+				'email' => $email,
 			];
 			return Db::add ('users', $user);
 		} catch(PDOException $error) {
