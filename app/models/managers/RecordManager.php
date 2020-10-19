@@ -24,11 +24,18 @@ class RecordManager{
 		if ($subDeviceId == '') {
 			return false;
 		};
+
+		//Ochrana proti duplicitním hodnotám zapisují se jen změny
+		if (self::getLastRecord($subDeviceId, 1)['value'] === $value){
+			return false;
+		}
+
 		try {
 			$record = [
 				'execuded' => 1,
 			];
 			Db::edit ('records', $record, 'WHERE subdevice_id = ?', array ($subDeviceId));
+
 			$record = array (
 				'subdevice_id' => $subDeviceId,
 				'value' => $value,
@@ -39,7 +46,6 @@ class RecordManager{
 			die();
 		}
 	}
-
 
 	public static function setExecuted($recordId) {
 		try {
@@ -72,11 +78,12 @@ class RecordManager{
 		return Db::loadAll('SELECT * FROM records WHERE subdevice_id = ? AND time >= ? AND time <= ? AND value != ? ORDER BY time;', array($subDeviceId, $timeFrom, $timeTo, 999));
 	}
 
+	//TODO: Zeptat se @Patrik jestli je secure pak používat periodu přímo do SQL a pak pře url SQL Injection
 	public static function getAllRecordForGraph($subDeviceId, $period = "day", $groupBy = "hour") {
-		$periodLocal = '- 1 ' . strtoupper($period);
+		$periodLocal = '- 1' . strtoupper($period);
 		$dateTime = new DateTime();
 		$dateTime = $dateTime->modify($periodLocal);
-		$dateTime = $dateTime->format('Y-m-d');
+		$dateTime = $dateTime->format('Y-m-d H:i:s');
 		$groupBy = strtoupper($groupBy).'(time)';
 		$sql = 'SELECT value, time FROM records
 		WHERE
@@ -86,7 +93,7 @@ class RecordManager{
 		AND
 		time > ?
 		GROUP BY '.$groupBy.'
-		ORDER BY time ASC';
+		ORDER BY time Desc';
 		//TODO: Prasárna Opravit
 		return Db::loadAll($sql, array($subDeviceId, $dateTime));
 	}
@@ -96,7 +103,6 @@ class RecordManager{
 			Db::command ('DELETE FROM records WHERE `time` < ADDDATE(NOW(), INTERVAL -? DAY);', array($day));
 		}
 	}
-
 
 	//TODO: zkontrolovat jestli neco nezbilo po smazaní
 	public static function cleanSubdeviceRecords ($subDeviceId) {
