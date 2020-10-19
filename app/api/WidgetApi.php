@@ -40,9 +40,14 @@ class WidgetApi extends ApiController
 
 		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
 		$deviceData = DeviceManager::getDeviceById($subDeviceData['device_id']);
-		$events = RecordManager::getLastRecord($subDeviceId, 10);
 
-		$LastRecordTime = new DateTime($events[4]['time']);
+		//TODO: zeptat se @Patrik Je Graf Dobře Seřazený na DESC ?
+		$events = RecordManager::getAllRecordForGraph($subDeviceId);
+		if ( count($events) == 0){
+			throw new Exception("No Records", 404);
+		}
+
+		$LastRecordTime = new DateTime(reset($events)['time']);
 		$niceTime = Utilities::ago($LastRecordTime);
 
 		$interval = $LastRecordTime->diff(new DateTime());
@@ -63,7 +68,11 @@ class WidgetApi extends ApiController
 		$values = [];
 		foreach ($events as $key => $event) {
 			$recordDatetime = new DateTime($event['time']);
-			$labels[] = $recordDatetime->format('H:i');
+			if ($key == 0){
+				$labels[] = 'now';
+			} else {
+				$labels[] = $recordDatetime->format('H:i');
+			}
 			$values[] = [
 				'y' => $event['value'],
 				't' => $recordDatetime->getTimestamp() * 1000,
@@ -73,6 +82,7 @@ class WidgetApi extends ApiController
 		$response = [
 			'records' => $events,
 			'graph' => [
+				'type' => $this->getDeviceConfig($subDeviceData['type'])['graph'],
 				'data' => [
 					'labels' => $labels,
 					'datasets' => [[
@@ -82,17 +92,17 @@ class WidgetApi extends ApiController
 				],
 				'options' => [
 					'scales' => [
-						'xAxis' => [
+						'xAxis' => [[
 							'type' => 'time',
 							'distribution' => 'linear',
-						],
-						'yAxes' => [
+						]],
+						'yAxes' => [[
 							'ticks' => [
 								'min' => $this->getDeviceConfig($subDeviceData['type'])['min'],
 								'max' => $this->getDeviceConfig($subDeviceData['type'])['max'],
 								'steps' => $this->getDeviceConfig($subDeviceData['type'])['scale'],
 							]
-						]
+						]]
 					],
 					'legend' => [
 						'display' => false
