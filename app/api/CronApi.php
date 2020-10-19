@@ -13,6 +13,13 @@ class CronApi extends ApiController {
 		  echo (new OpenWeatherMap)->fetch('');
 		  echo (new UsaElection)->fetch('');
 
+			//	Database Backup
+		  $filenames = [];
+		  $backupWorker = new DatabaseBackup;
+		  $filenames[] = $backupWorker->scheme();
+		  $filenames[] = $backupWorker->data();
+		  $backupWorker->compress($_SERVER['DOCUMENT_ROOT'] . BASEDIR . '/backup/'.date("Y-m-d", time()).'.zip', $filenames);
+
         $this->response(['Value' => 'OK']);
     }
 }
