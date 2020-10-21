@@ -12,6 +12,7 @@ class CronApi extends ApiController {
 		  echo (new Covid)->fetch('');
 		  echo (new OpenWeatherMap)->fetch('');
 		  echo (new UsaElection)->fetch('');
+		  echo (new AirQuality)->fetch('');
 
 			//	Database Backup
 		  $filenames = [];

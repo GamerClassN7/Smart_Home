@@ -29,6 +29,7 @@ class RecordManager{
 		if (self::getLastRecord($subDeviceId, 1)['value'] === $value){
 			return false;
 		}
+		
 
 		try {
 			$record = [
