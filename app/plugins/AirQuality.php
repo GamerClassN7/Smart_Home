@@ -7,26 +7,45 @@ class AirQuality extends VirtualDeviceManager
 	private $virtual_device_name = "Air Quality";
 	private $subdevice_type = "air-quality";
 
-	function fetch($url)
+	function make()
 	{
-		
-
-		if (DeviceManager::registeret($this->virtual_device_name)) {
-			$deviceId = DeviceManager::getDeviceByToken($this->virtual_device_name)['device_id'];
-			if (!$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, $this->subdevice_type)) {
-				SubDeviceManager::create($deviceId, $this->subdevice_type, '');
-				sleep(1);
+		try {
+			if (DeviceManager::registeret($this->virtual_device_name)) {
+				$deviceId = DeviceManager::getDeviceByToken($this->virtual_device_name)['device_id'];
+				if (!$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, $this->subdevice_type)) {
+					SubDeviceManager::create($deviceId, $this->subdevice_type, '');
+					sleep(1);
+				}
+				
+				//if (!$this->fetchEnabled($deviceId,$subDevice['subdevice_id'])) die();
+				
+				$finalUrl = sprintf($this->api_uri, $this->city_sluig, $this->app_id);
+				$json = json_decode(Utilities::CallAPI('GET', $finalUrl, ''), true);
+				RecordManager::create($deviceId, $this->subdevice_type, $json['data']['aqi']);
+			} else {
+				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name);
+				DeviceManager::approved($this->virtual_device_name);
 			}
-
-			//if (!$this->fetchEnabled($deviceId,$subDevice['subdevice_id'])) die();
-
-			$finalUrl = sprintf($this->api_uri, $this->city_sluig, $this->app_id);
-			$json = json_decode(Utilities::CallAPI('GET', $finalUrl, ''), true);
-
-			RecordManager::create($deviceId, $this->subdevice_type, $json['data']['aqi']);
-		} else {
-			DeviceManager::create($this->virtual_device_name, $this->virtual_device_name);
-			DeviceManager::approved($this->virtual_device_name);
+			return 'sucessful';
+		} catch(Exception $e) {
+			return 'exception: ' . $e->getMessage();
 		}
+	}
+
+	function translate($value){
+		if ($value < 50) {
+			return 'Good';
+		}  else if  ($value > 51 && $value < 100) {
+			return 'Moderate';
+		} else if ($value > 101 && $value < 150) {
+			return 'Normal';
+		} else if ($value > 151 && $value < 200) {
+			return 'Unhealthy';
+		} else if ($value > 201 && $value < 300) {
+			return 'Very Unhealthy';
+		} else if ($value > 301 ) {
+			return 'Hazardous';
+		}
+		return '';
 	}
 }

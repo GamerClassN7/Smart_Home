@@ -1,26 +1,38 @@
 <?php
-class CronApi extends ApiController {
+class CronApi extends ApiController
+{
 
-    public function clean(){
-        $logKeeper = new LogMaintainer();
-        $logKeeper->purge(LOGTIMOUT);
-        $this->response(['Value' => 'OK']);
-    }
+	public function clean()
+	{
+		//Log Cleaning
+		$logKeeper = new LogMaintainer();
+		$logKeeper->purge(LOGTIMOUT);
+		
+		//Database Backup Cleanup 
+		$backupWorker = new DatabaseBackup();
+		$backupWorker->purge(5);
 
-    public function fetch(){
-		  //echo (new VirtualDeviceManager)->fetch('');
-		  echo (new Covid)->fetch('');
-		  echo (new OpenWeatherMap)->fetch('');
-		  echo (new UsaElection)->fetch('');
-		  echo (new AirQuality)->fetch('');
+		$this->response(['Value' => 'OK']);
+	}
 
-			//	Database Backup
-		  $filenames = [];
-		  $backupWorker = new DatabaseBackup;
-		  $filenames[] = $backupWorker->scheme();
-		  $filenames[] = $backupWorker->data();
-		  $backupWorker->compress($_SERVER['DOCUMENT_ROOT'] . BASEDIR . '/backup/'.date("Y-m-d", time()).'.zip', $filenames);
-
-        $this->response(['Value' => 'OK']);
-    }
+	public function fetch()
+	{
+		//Run Plugins
+		$result = [];
+		$dir = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . 'app/plugins/';
+        $pluginsFiles = array_diff(scandir($dir), ['..','.']);
+		foreach ($pluginsFiles as $key => $pluginFile) {
+			$className = str_replace(".php", "", $pluginFile);
+			echo " test  s " . $className . '\\n';
+            if(class_exists($className)){
+				$pluginMakeClass = new $className;
+				if (method_exists($pluginMakeClass,'make')){
+					$result[$className] = $pluginMakeClass->make();
+				}
+            }
+		}
+		
+		//Print Result
+		$this->response($result);
+	}
 }

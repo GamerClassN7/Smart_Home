@@ -5,61 +5,61 @@ class UsaElection extends VirtualDeviceManager
 	private $virtual_device_name = "Election";
 	private $subdevice_type = "election";
 
-	function fetch($url = 'true')
+	function make()
 	{
-		if (DeviceManager::registeret($this->virtual_device_name)) {
-			$deviceId = DeviceManager::getDeviceByToken($this->virtual_device_name)['device_id'];
-			$dataItems = ['Trump', 'Biden', 'Unknown'];
-			foreach ($dataItems as $dataItem) {
-				if (!$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, strtolower($dataItem))) {
-					SubDeviceManager::create($deviceId, strtolower($dataItem), '% ' . $dataItem);
-					sleep(1);
+		try {
+			if (DeviceManager::registeret($this->virtual_device_name)) {
+				$deviceId = DeviceManager::getDeviceByToken($this->virtual_device_name)['device_id'];
+				$dataItems = ['Trump', 'Biden', 'Unknown'];
+				foreach ($dataItems as $dataItem) {
+					if (!$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, strtolower($dataItem))) {
+						SubDeviceManager::create($deviceId, strtolower($dataItem), '% ' . $dataItem);
+						sleep(1);
+					}
 				}
-			}
 
-			if (!$this->fetchEnabled($deviceId, $subDevice['subdevice_id'])) die();
+				if (!$this->fetchEnabled($deviceId, $subDevice['subdevice_id'])) die();
 
-			$finalUrl = $this->api_uri;
-			$json = json_decode(Utilities::CallAPI('GET', $finalUrl), true);
+				$finalUrl = $this->api_uri;
+				$json = json_decode(Utilities::CallAPI('GET', $finalUrl), true);
 
-			$voteSpectrum = [
-				'republican' => [
-					'solid' => 0,
-					'leaning' => 0,
-				],
-				'democrat' => [
-					'solid' => 0,
-					'leaning' => 0,
-				],
-				'tossup' => 0
-			];
+				$voteSpectrum = [
+					'republican' => [
+						'solid' => 0,
+						'leaning' => 0,
+					],
+					'democrat' => [
+						'solid' => 0,
+						'leaning' => 0,
+					],
+					'tossup' => 0
+				];
 
-			foreach ($json as $state){
-				if ($state['raceCategory'] != 'tossup'){
-					$raceCategory = explode('-',$state['raceCategory']);
-					$voteSpectrum[$raceCategory[0]][$raceCategory[1]] = $voteSpectrum[$raceCategory[0]][$raceCategory[1]] + $state['raceDelegates'];
-				} else {
-					$voteSpectrum['tossup'] = $voteSpectrum['tossup'] + $state['raceDelegates'];
+				foreach ($json as $state) {
+					if ($state['raceCategory'] != 'tossup') {
+						$raceCategory = explode('-', $state['raceCategory']);
+						$voteSpectrum[$raceCategory[0]][$raceCategory[1]] = $voteSpectrum[$raceCategory[0]][$raceCategory[1]] + $state['raceDelegates'];
+					} else {
+						$voteSpectrum['tossup'] = $voteSpectrum['tossup'] + $state['raceDelegates'];
+					}
 				}
+
+				$Trump = $voteSpectrum['republican']['solid'] + $voteSpectrum['republican']['leaning'];
+				$Biden = $voteSpectrum['democrat']['solid'] + $voteSpectrum['democrat']['leaning'];
+				$Unknown = $voteSpectrum['tossup'];
+
+				$OnePercent = ($Trump + $Biden + $Unknown) / 100;
+
+				foreach ($dataItems as $Category) {
+					RecordManager::create($deviceId, strtolower($Category), round(($$Category / $OnePercent)));
+				}
+			} else {
+				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name);
+				DeviceManager::approved($this->virtual_device_name);
 			}
-
-			$Trump = $voteSpectrum['republican']['solid'] + $voteSpectrum['republican']['leaning'];
-			$Biden = $voteSpectrum['democrat']['solid'] + $voteSpectrum['democrat']['leaning'];
-			$Unknown = $voteSpectrum['tossup'];
-
-			$OnePercent = ($Trump + $Biden + $Unknown) / 100;
-
-			foreach ($dataItems as $Category) {
-				RecordManager::create($deviceId, strtolower($Category), round(($$Category / $OnePercent)));
-			}
-
-
-		} else {
-			DeviceManager::create($this->virtual_device_name, $this->virtual_device_name);
-			DeviceManager::approved($this->virtual_device_name);
+			return 'sucessful';
+		} catch (Exception $e) {
+			return 'exception: ' . $e->getMessage();
 		}
 	}
 }
-
-
-
