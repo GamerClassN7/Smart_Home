@@ -27,7 +27,7 @@ class Covid extends VirtualDeviceManager
 					RecordManager::create($deviceId, strtolower($dataItem), end($json)[$dataItem]);
 				}
 			} else {
-				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name);
+				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name, 'senzore-virtual');
 				DeviceManager::approved($this->virtual_device_name);
 			}
 			return 'sucessful';

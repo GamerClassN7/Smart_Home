@@ -54,7 +54,7 @@ class UsaElection extends VirtualDeviceManager
 					RecordManager::create($deviceId, strtolower($Category), round(($$Category / $OnePercent)));
 				}
 			} else {
-				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name);
+				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name, 'senzore-virtual');
 				DeviceManager::approved($this->virtual_device_name);
 			}
 			return 'sucessful';

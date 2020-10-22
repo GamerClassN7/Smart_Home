@@ -23,7 +23,7 @@ class AirQuality extends VirtualDeviceManager
 				$json = json_decode(Utilities::CallAPI('GET', $finalUrl, ''), true);
 				RecordManager::create($deviceId, $this->subdevice_type, $json['data']['aqi']);
 			} else {
-				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name);
+				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name, 'senzore-virtual');
 				DeviceManager::approved($this->virtual_device_name);
 			}
 			return 'sucessful';

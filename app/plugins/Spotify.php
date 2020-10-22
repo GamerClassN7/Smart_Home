@@ -56,7 +56,7 @@ class Spotify extends VirtualDeviceManager
 	// function make()
 	// {
 	// 	try {
-	// 		//$this->autorize();
+	// 		//$this->autorize();d
 	// 		//$this->getPlayerData();
 	// 		return 'sucessful';
 	// 	} catch (Exception $e) {
