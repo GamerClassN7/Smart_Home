@@ -1,36 +1,37 @@
 <?php
 
-class RoomsApi extends ApiController{
-	
-	public function default(){
+class RoomsApi extends ApiController
+{
+
+	public function
+	default()
+	{
 		//$this->requireAuth();
 		$response = [];
 		$roomIds = [];
 		$roomsData = RoomManager::getRoomsDefault();
-		
+
 		foreach ($roomsData as $roomKey => $room) {
 			$roomIds[] = $room['room_id'];
 		}
-		
+
 		//Translation Of Numeric Walues
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
 		foreach ($subDevicesData as $subDeviceKey => $subDevice) {
 			foreach ($subDevice as $key => $value) {
 				if (strpos($subDevicesData[$subDeviceKey][$key]['type'], '-') !== false) {
 					$type = "";
-					foreach(explode('-', $subDevicesData[$subDeviceKey][$key]['type']) as $word){
+					foreach (explode('-', $subDevicesData[$subDeviceKey][$key]['type']) as $word) {
 						$type .= ucfirst($word);
 					}
-					if(class_exists($type)){
-						$deviceClass = new $type;
-						if (method_exists($deviceClass,'translate')){
-							$subDevicesData[$subDeviceKey][$key]['value'] = $deviceClass->translate($subDevicesData[$subDeviceKey][$key]['value']);
-						}
-					} else {
+					if (!class_exists($type)) {
 						continue;
 					}
-				} else {
-					continue;
+					$deviceClass = new $type;
+					if (!method_exists($deviceClass, 'translate')) {
+						continue;
+					}
+					$subDevicesData[$subDeviceKey][$key]['value'] = $deviceClass->translate($subDevicesData[$subDeviceKey][$key]['value']);
 				}
 			}
 		}
@@ -45,10 +46,11 @@ class RoomsApi extends ApiController{
 		}
 		$this->response($response);
 	}
-	
-	public function update($roomId){
+
+	public function update($roomId)
+	{
 		//$this->requireAuth();
-		
+
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds([$roomId]);
 		$this->response($subDevicesData);
 	}

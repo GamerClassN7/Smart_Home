@@ -33,13 +33,16 @@ class DeviceManager{
 		WHERE devices.approved != ? ORDER BY $sort $sortType", Array(2));
 	}
 
-	public static function create ($name, $token) {
+	public static function create ($name, $token, $type = "") {
 		$defaultRoom = RoomManager::getDefaultRoomId();
 		$device = array (
 			'name' => $name,
 			'token' => $token,
 			'room_id' => $defaultRoom,
 		);
+		if (!empty($type)) {
+			$device['type'] = $type;
+		}
 		try {
 			Db::add ('devices', $device);
 			return Db::loadOne("SELECT device_id FROM devices WHERE token = ?", array($token))['device_id'];

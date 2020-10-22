@@ -1,5 +1,5 @@
 <?php
-class AirQuality extends VirtualDeviceManager
+class ExamplePlugin extends VirtualDeviceManager
 {
     function make(){
         //Getting Data

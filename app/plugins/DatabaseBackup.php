@@ -44,7 +44,7 @@ class DatabaseBackup
 			foreach ($files as $file) {
 				$zip->addFile($file);
 			}
-			echo $zip->close();
+			$zip->close();
 			foreach ($files as $file) {
 				unlink($file);
 			}
