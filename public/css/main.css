@@ -453,6 +453,33 @@ html {
 	color: #735b26;
   }
 
+  .box {
+	border: 4px solid #43a329;
+	background-color: #d4f6cb;
+	color: #43a329;
+	padding: .75rem 1rem;
+	margin-bottom: 1rem;
+  }
+
+  .box h5 {
+	color: #43a329;
+  }
+
+  .box.disabled {
+   border: 4px solid #a32929;
+   background-color: #f6cbcb;
+	color: #a32929;
+  }
+
+  .box.disabled h5 {
+	color: #a32929;
+  }
+
+  .content {
+	 width: fit-content;
+	 margin: 5px;
+  }
+
   .button {
 	background-color: #d4def7;
 	border: 0;

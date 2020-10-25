@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<?php
+	$partial = new Partial('head');
+	$partial->prepare('baseDir', $BASEDIR);
+	$partial->render();
+	?>
+	<title><?php echo $TITLE ?></title>
+</head>
+<body class="no-transitions">
+	<div class="row no-gutters main">
+		<div class="col-md-3 d-sm-none"></div>
+		<div class="col-md-3 nav-container">
+			<?php
+			$partial = new Partial('menu');
+			$partial->prepare('item', 'plugins');
+			$partial->prepare('langMng',$LANGMNG);
+			$partial->prepare('debugMod',$DEBUGMOD);
+			$partial->render();
+			?>
+		</div>
+		<div class="col-md-9 main-body">
+			<div class="col-12 col-sm-9 mx-auto mt-4">
+				<h1><?php echo $LANGMNG->get('t_Plugins'); ?></h1>
+
+				<div class="row mb-4">
+					<?php if ($PLUGINS): ?>
+						<?php foreach ($PLUGINS as $plugin): ?>
+							<div class="content">
+								<form method="post" action="">
+									<input type="hidden" name="name" value="<?php echo $plugin['name']; ?>"/>
+									<input type="hidden" name="actualStatus" value="<?php echo $plugin['status']; ?>"/>
+									<a onclick="$(this).closest('form').submit();">
+										<div class="panel box content <?php echo ($plugin['status'] ? '' : 'disabled '); ?>p-4">
+											<h5><?php echo $plugin['name']; ?></h5>
+										</div>
+									</a>
+								</form>
+							</div>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+
+		<?php
+		$partial = new Partial('footer');
+		$partial->prepare('baseDir', BASEDIR);
+		$partial->render();
+		//TODO js do main.js
+		?>
+	</body>
+	</html>

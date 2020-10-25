@@ -8,6 +8,7 @@ return $lang = [
 	'm_scenes' => 'Scény',
 	'm_log' => 'Log',
 	'm_devices' => 'Zařízení',
+	'm_plugins' => 'Pluginy',
 
 	//Buttons
 	'b_year' => 'Rok',
@@ -88,6 +89,7 @@ return $lang = [
 	't_listRooms' => 'Seznam Místností',
 	't_roomName' => 'Jméno Místnosti',
 	't_createRoom' => 'Vytvořit Místnost',
+	't_Plugins' => 'Pluginy',
 
 	//constants
 	'temp' => 'Teplota',

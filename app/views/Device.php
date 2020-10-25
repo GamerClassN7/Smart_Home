@@ -11,8 +11,8 @@ class Device extends Template
 		$roomManager = new RoomManager ();
 		$langMng = new LanguageManager ('en');
 
-		if (!$userManager->isLogin ()) {
-			header ('Location: ' . BASEURL . 'device');
+		if (!$userManager->isLogin()){
+			header('Location: ' . BASEURL . 'login');
 		}
 
 		$template = new Template ('device');

@@ -8,7 +8,7 @@ class CronApi extends ApiController
 		$logKeeper = new LogMaintainer();
 		$logKeeper->purge(LOGTIMOUT);
 
-		//Database Backup Cleanup 
+		//Database Backup Cleanup
 		$backupWorker = new DatabaseBackup();
 		$backupWorker->purge(5);
 
@@ -22,19 +22,34 @@ class CronApi extends ApiController
 		$dir = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . 'app/plugins/';
 		$pluginsFiles = array_diff(scandir($dir), ['..', '.']);
 		foreach ($pluginsFiles as $key => $pluginFile) {
-			$className = str_replace(".php", "", $pluginFile);
-			if (strpos($pluginFile, '_') === true) {
-				continue;
-			}
-			if (!class_exists($className)) {
-				continue;
-			}
-			$pluginMakeClass = new $className;
-			if (!method_exists($pluginMakeClass, 'make')) {
+			if (strpos($pluginFile, "!") === false) {
+				$className = str_replace(".php", "", $pluginFile);
+				if (strpos($pluginFile, '_') === true) {
+					continue;
+				}
+				if (!class_exists($className)) {
+					continue;
+				}
+				$pluginMakeClass = new $className;
+				if (!method_exists($pluginMakeClass, 'make')) {
 
-				continue;
+					continue;
+				}
+				$result[$className] = $pluginMakeClass->make();
+			} else {
+				$className = str_replace("!", "", str_replace(".php", "", $pluginFile));
+				if (strpos($pluginFile, '_') === true) {
+					continue;
+				}
+				if (!class_exists($className)) {
+					continue;
+				}
+				$pluginMakeClass = new $className;
+				if (!method_exists($pluginMakeClass, 'disable')) {
+					continue;
+				}
+				$result[$className] = $pluginMakeClass->disable();
 			}
-			$result[$className] = $pluginMakeClass->make();
 		}
 
 		//Print Result

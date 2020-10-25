@@ -8,6 +8,7 @@ return $lang = [
 	'm_scenes' => 'Scenes',
 	'm_log' => 'Log',
 	'm_devices' => 'Devices',
+	'm_plugins' => 'Plugins',
 
 	//Buttons
 	'b_year' => 'Year',
@@ -88,6 +89,7 @@ return $lang = [
 	't_listRooms' => 'Room List',
 	't_roomName' => 'Room Name',
 	't_createRoom' => 'Create Rom',
+	't_Plugins' => 'Plugins',
 
 	//constants
 	'humi' => 'Humidity',
