@@ -33,6 +33,7 @@ $router->get('/api/server', 'ServerApi@default');
 $router->get('/api/server/log', 'ServerApi@logStatus');
 $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 $router->get('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
+$router->get('/adminer', 'WidgetApi@detail');
 
 //cron
 $router->post('/cron/clean', 'CronApi@clean');

@@ -27,7 +27,6 @@ if (
 	isset($_POST['otaCode']) &&
 	$_POST['otaCode'] != ''
 ) {
-
 	$otaCode = $_POST['otaCode'];
 	$otaSecret = $_POST['otaSecret'];
 

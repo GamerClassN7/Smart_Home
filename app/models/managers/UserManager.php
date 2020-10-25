@@ -43,7 +43,7 @@ class UserManager
 
 	public static function login ($username, $password, $rememberMe) {
 		try {
-			if ($user = Db::loadOne ('SELECT * FROM users WHERE LOWER(username)=LOWER(?) OR LOWER(email)=LOWER(?)', array ($username, $username))) {
+			if ($user = Db::loadOne ('SELECT * FROM users WHERE (LOWER(username)=LOWER(?) OR LOWER(email)=LOWER(?))', array ($username, $username))) {
 				if ($user['password'] == UserManager::getHashPassword($password)) {
 					if (isset($rememberMe) && $rememberMe == 'true') {
 						setcookie ("rememberMe", self::setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), BASEDIR, $_SERVER['HTTP_HOST'], 1);

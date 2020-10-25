@@ -89,7 +89,7 @@
 									<i class="fa <?php echo $icon; ?>" style="color: <?php echo $color; ?>;"></i>
 									<?php echo $device['firmware_hash'] ?>
 									<button class="fa custom-file-input" type="button" onclick="document.getElementById('deviceFirmware-<?php echo $device['device_id'] ?>').click();">&#xf0ee;</button>
-									<form style="display: none;" method="post" action="" enctype="multipart/form-data">
+									<form style="display: none;" method="POST" action="" enctype="multipart/form-data">
 										<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
 										<input type="file" onchange="this.form.submit();" name="deviceFirmware" id="deviceFirmware-<?php echo $device['device_id'] ?>" value="">
 									</form>
