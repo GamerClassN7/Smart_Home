@@ -15,6 +15,7 @@ class Covid extends VirtualDeviceManager
 					if (!$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, strtolower($dataItem))) {
 						SubDeviceManager::create($deviceId, strtolower($dataItem), $dataItem);
 						sleep(1);
+						$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, strtolower($dataItem));
 					}
 				}
 

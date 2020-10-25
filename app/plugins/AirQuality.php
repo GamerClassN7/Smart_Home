@@ -15,6 +15,7 @@ class AirQuality extends VirtualDeviceManager
 				if (!$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, $this->subdevice_type)) {
 					SubDeviceManager::create($deviceId, $this->subdevice_type, '');
 					sleep(1);
+					$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, strtolower($this->subdevice_type));
 				}
 				
 				//if (!$this->fetchEnabled($deviceId,$subDevice['subdevice_id'])) die();

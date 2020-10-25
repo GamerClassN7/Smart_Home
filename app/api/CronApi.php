@@ -23,6 +23,9 @@ class CronApi extends ApiController
 		$pluginsFiles = array_diff(scandir($dir), ['..', '.']);
 		foreach ($pluginsFiles as $key => $pluginFile) {
 			$className = str_replace(".php", "", $pluginFile);
+			if (strpos($pluginFile, '_') === true) {
+				continue;
+			}
 			if (!class_exists($className)) {
 				continue;
 			}

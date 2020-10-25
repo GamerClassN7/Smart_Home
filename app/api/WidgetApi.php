@@ -96,13 +96,7 @@ class WidgetApi extends ApiController
 							'type' => 'time',
 							'distribution' => 'linear',
 						]],
-						'yAxes' => [[
-							'ticks' => [
-								'min' => $this->getDeviceConfig($subDeviceData['type'])['min'],
-								'max' => $this->getDeviceConfig($subDeviceData['type'])['max'],
-								'steps' => $this->getDeviceConfig($subDeviceData['type'])['scale'],
-							]
-						]]
+
 					],
 					'legend' => [
 						'display' => false
@@ -119,6 +113,17 @@ class WidgetApi extends ApiController
 			'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
 		];
 
+		//TODO: Make Cleaner 
+		if (isset(RANGES[$subDeviceData['type']])){
+			$response['graph']['options']['options']['scales']['yAxes'] = [[
+				'ticks' => [
+					'min' => RANGES[$subDeviceData['type']]['min'],
+					'max' => RANGES[$subDeviceData['type']]['max'],
+					'steps' => RANGES[$subDeviceData['type']]['scale'],
+				]
+			]];
+		}
+		
 		$this->response($response);
 	}
 

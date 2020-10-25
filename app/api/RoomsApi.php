@@ -19,20 +19,27 @@ class RoomsApi extends ApiController
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
 		foreach ($subDevicesData as $subDeviceKey => $subDevice) {
 			foreach ($subDevice as $key => $value) {
+				$type = null;
 				if (strpos($subDevicesData[$subDeviceKey][$key]['type'], '-') !== false) {
-					$type = "";
-					foreach (explode('-', $subDevicesData[$subDeviceKey][$key]['type']) as $word) {
-						$type .= ucfirst($word);
-					}
-					if (!class_exists($type)) {
-						continue;
-					}
-					$deviceClass = new $type;
-					if (!method_exists($deviceClass, 'translate')) {
-						continue;
-					}
-					$subDevicesData[$subDeviceKey][$key]['value'] = $deviceClass->translate($subDevicesData[$subDeviceKey][$key]['value']);
+					$type = $subDevicesData[$subDeviceKey][$key]['type'];
+				} else if (strpos(SubDeviceManager::getSubDeviceMaster($subDevicesData[$subDeviceKey][$key]['subdevice_id'])['type'], '-') !== false) {
+					$type = SubDeviceManager::getSubDeviceMaster($subDevicesData[$subDeviceKey][$key]['subdevice_id'])['type'];
+				} else {
+					continue;
 				}
+
+				$cammelCaseClass = "";
+				foreach (explode('-', $type) as $word) {
+					$cammelCaseClass .= ucfirst($word);
+				}
+				if (!class_exists($cammelCaseClass)) {
+					continue;
+				}
+				$deviceClass = new $cammelCaseClass;
+				if (!method_exists($deviceClass, 'translate')) {
+					continue;
+				}
+				$subDevicesData[$subDeviceKey][$key]['value'] = $deviceClass->translate($subDevicesData[$subDeviceKey][$key]['value']);
 			}
 		}
 
