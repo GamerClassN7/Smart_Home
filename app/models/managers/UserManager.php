@@ -49,12 +49,8 @@ class UserManager
 						setcookie ("rememberMe", self::setEncryptedCookie($user['username']), time () + (30 * 24 * 60 * 60 * 1000), BASEDIR, $_SERVER['HTTP_HOST'], 1);
 					}
 					$_SESSION['user']['id'] = $user['user_id'];
-					$page = "";
-					if ($user["startPage"] == 1) {
-						$page = "dashboard";
-					}
 					unset($_POST['login']);
-					return $page;
+					return "";
 				} else {
 					throw new PDOException("Heslo není správné!");
 				}
