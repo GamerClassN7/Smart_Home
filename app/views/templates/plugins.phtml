@@ -27,27 +27,16 @@
 
 				<div class="row mb-4">
 					<?php if ($PLUGINS): ?>
-						<?php foreach ($PLUGINS as $plugin): 
-							
+						<?php foreach ($PLUGINS as $plugin):
+
 								//BUTTON
 								$partial = new Partial('pluginButton');
 								$partial->prepare('langMng',$LANGMNG);
 								$partial->prepare('pluginName',$plugin['name']);
 								$partial->prepare('pluginStatus',$plugin['status']);
 								$partial->render();
-								
+
 						?>
-							<div class="content">
-								<form method="post" action="">
-									<input type="hidden" name="name" value="<?php echo $plugin['name']; ?>"/>
-									<input type="hidden" name="actualStatus" value="<?php echo $plugin['status']; ?>"/>
-									<a onclick="$(this).closest('form').submit();">
-										<div class="panel box content <?php echo ($plugin['status'] ? '' : 'disabled '); ?>p-4">
-											<h5><?php echo $plugin['name']; ?></h5>
-										</div>
-									</a>
-								</form>
-							</div>
 						<?php endforeach; ?>
 					<?php endif; ?>
 				</div>
