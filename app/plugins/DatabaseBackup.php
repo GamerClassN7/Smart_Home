@@ -6,8 +6,9 @@ class DatabaseBackup
 		try {
 			$filenames = [];
 			$backupWorker = new DatabaseBackup;
-			$filenames[] = $backupWorker->scheme();
-			$filenames[] = $backupWorker->data();
+			$filenames[] = $backupWorker->scheme(); //Backup Database scheme
+			$filenames[] = $backupWorker->data(); //Backup Database Data
+			$filenames[] = $_SERVER['DOCUMENT_ROOT'] . 'config/config.php'; //Backup Configuration File
 			$backupWorker->compress($_SERVER['DOCUMENT_ROOT'] . BASEDIR . '/backup/' . date("Y-m-d", time()) . '.zip', $filenames);
 			return 'sucessful';
 		} catch (Exception $e) {
