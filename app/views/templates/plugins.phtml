@@ -22,11 +22,21 @@
 		</div>
 		<div class="col-md-9 main-body">
 			<div class="col-12 col-sm-9 mx-auto mt-4">
-				<h1><?php echo $LANGMNG->get('t_Plugins'); ?></h1>
+				<h1><?php echo $LANGMNG->get('t_Plugins');
+				 ?></h1>
 
 				<div class="row mb-4">
 					<?php if ($PLUGINS): ?>
-						<?php foreach ($PLUGINS as $plugin): ?>
+						<?php foreach ($PLUGINS as $plugin): 
+							
+								//BUTTON
+								$partial = new Partial('pluginButton');
+								$partial->prepare('langMng',$LANGMNG);
+								$partial->prepare('pluginName',$plugin['name']);
+								$partial->prepare('pluginStatus',$plugin['status']);
+								$partial->render();
+								
+						?>
 							<div class="content">
 								<form method="post" action="">
 									<input type="hidden" name="name" value="<?php echo $plugin['name']; ?>"/>

@@ -1,0 +1,21 @@
+<div class="col-12 col-md-6 col-xl-4 square-wrap">
+    <div class="rectangle-2">
+        <div class="square-content double <?php echo ($PLUGINSTATUS == 0 ? 'is-inactive' : ''); ?>" id="plugin-<?php echo $PLUGINID; ?>">
+            <div class="row">
+                <div class="col-1">
+                    <h5 class="fa">
+                    <?php echo $PLUGINNAME ?>
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a class="button is-primary m-1" onClick="restartAutomation(<?php echo $PLUGINID; ?>);"><?php $LANGMNG->echo('b_restart')?></a>
+                </div>
+                <div class="col">
+                    <a class="button is-primary m-1" onClick="toggleAutomation(<?php echo $PLUGINID; ?>);"><?php $LANGMNG->echo('b_disable')?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

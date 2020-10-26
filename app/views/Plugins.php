@@ -6,7 +6,6 @@ class Plugins extends Template
 		$userManager = new UserManager();
 		$langMng = new LanguageManager('en');
 
-
 		if (!$userManager->isLogin()){
 			header('Location: ' . BASEURL . 'login');
 		}
