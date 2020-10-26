@@ -1,3 +1,4 @@
+
 navigator.permissions.query({name:'notifications'}).then(function(result) {
     var element = document.getElementById("notifications");
     if (result.state === 'granted') {
@@ -45,7 +46,7 @@ $( "button[name='deactivateOta']" ).click(function(){
         url: 'ajax',
         type: 'POST',
         data: {
-            "ota" : 'X',
+            "ota": 'X',
             "action": 'disable'
         },
         success: function(data){

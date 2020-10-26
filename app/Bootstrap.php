@@ -4,11 +4,18 @@ error_reporting(E_ALL);
 ini_set( 'display_errors','1');
 
 //setup
-ini_set ('session.cookie_httponly', '1');
+session_set_cookie_params(
+    1209600,
+    str_replace('login', "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])),
+    str_replace("/var/www/", "", $_SERVER['DOCUMENT_ROOT']),
+    true,
+    true
+);
+/*ini_set ('session.cookie_httponly', '1');
 ini_set('session.cookie_domain', $_SERVER['HTTP_HOST']);
-ini_set('session.cookie_path', str_replace("login", "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])));
+ini_set('session.cookie_path', str_replace('login', "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])));
 ini_set('session.cookie_secure', '1');
-ini_set('session.gc_maxlifetime', 1209600);
+ini_set('session.gc_maxlifetime', 1209600);*/
 mb_internal_encoding ("UTF-8");
 
 session_start();
