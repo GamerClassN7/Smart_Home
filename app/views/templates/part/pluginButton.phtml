@@ -12,15 +12,15 @@
 				<div class="col">
 					<form method="post" action="">
 						<input type="hidden" name="name" value="<?php echo $PLUGINNAME; ?>"/>
-						<input type="hidden" name="status" value="true"/>
-						<a class="button is-primary m-1" onclick="$(this).closest('form').submit();"><?php $LANGMNG->echo('b_approve')?></a>
+						<input type="hidden" name="status" value="<?php echo ($PLUGINSTATUS == false ? "true" : "false"); ?>"/>
+						<a class="button is-primary m-1" onclick="$(this).closest('form').submit();"><?php echo ($PLUGINSTATUS == false ? $LANGMNG->get('b_approve') : $LANGMNG->get('b_disable')); ?></a>
 					</form>
 				</div>
 				<div class="col">
 					<form method="post" action="">
 						<input type="hidden" name="name" value="<?php echo $PLUGINNAME; ?>"/>
-						<input type="hidden" name="status" value="false"/>
-						<a class="button is-primary m-1" onclick="$(this).closest('form').submit();"><?php $LANGMNG->echo('b_disable')?></a>
+						<input type="hidden" name="remove" value="1"/>
+						<a class="button is-primary m-1" onclick="$(this).closest('form').submit();"><?php $LANGMNG->echo('b_remove'); ?></a>
 					</form>
 				</div>
 			</div>
