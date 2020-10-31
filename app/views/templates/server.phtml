@@ -13,11 +13,11 @@
         <div class="col-md-3 d-sm-none"></div>
         <div class="col-md-3 nav-container">
             <?php
-            $partial = new Partial('menu');
-            $partial->prepare('item', 'log');
-            $partial->prepare('langMng',$LANGMNG);
-            $partial->prepare('debugMod',$DEBUGMOD);
-            $partial->render();
+                $partial = new Partial('menu');
+                $partial->prepare('item', 'log');
+                $partial->prepare('langMng',$LANGMNG);
+                $partial->prepare('debugMod',$DEBUGMOD);
+                $partial->render();
             ?>
         </div>
         <div class="col-md-9 main-body">
@@ -44,10 +44,11 @@
         </div>
 
         <?php
-		  $partial = new Partial('footer');
-		  $partial->prepare('baseDir', BASEDIR);
-        $partial->render();
-        //TODO js do main.js
+            $partial = new Partial('footer');
+            $partial->prepare('baseDir', BASEDIR);
+            $partial->render();
+            //TODO js do main.js
         ?>
+        
     </body>
     </html>
