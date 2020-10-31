@@ -16,9 +16,16 @@ class Server extends Template
 		return $meminfo;
 	}
 
-	function __construct()
-	{
-		$userManager = new UserManager();
+	private function getProcessorUsage(){
+		$loads=sys_getloadavg();
+		$core_nums=trim(shell_exec("grep -P '^physical id' /proc/cpuinfo|wc -l"));
+		$load = round($loads[0]/($core_nums + 1)*100, 2);
+		return $load;
+	}
+		
+		function __construct()
+		{
+			$userManager = new UserManager();
 		$langMng = new LanguageManager('en');
 
 		if (!$userManager->isLogin()){
@@ -37,7 +44,7 @@ class Server extends Template
 		$template->prepare('ip', $_SERVER['SERVER_ADDR']);
 		$template->prepare('name', $_SERVER['SERVER_NAME']);
 
-		$template->prepare('CPU', sys_getloadavg()[0]);
+		$template->prepare('CPU', $this->getProcessorUsage());
 		$template->prepare('ramFree', $this->getSystemMemInfo()["MemFree"]);
 		$template->prepare('ramTotal', $this->getSystemMemInfo()["MemTotal"]);
 		$template->prepare('diskFree', disk_free_space("/"));
