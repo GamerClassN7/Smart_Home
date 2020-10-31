@@ -23,8 +23,8 @@ class Server extends Template
 		return $load;
 	}
 		
-		function __construct()
-		{
+	function __construct()
+	{
 			$userManager = new UserManager();
 		$langMng = new LanguageManager('en');
 

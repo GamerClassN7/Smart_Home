@@ -12,16 +12,24 @@ class ServerApi extends ApiController {
 		return $meminfo;
     }
 
+    private function getProcessorUsage(){
+		$loads=sys_getloadavg();
+		$core_nums=trim(shell_exec("grep -P '^physical id' /proc/cpuinfo|wc -l"));
+		$load = round($loads[0]/($core_nums + 1)*100, 2);
+		return $load;
+	}
+
     public function default(){
         //$this->requireAuth();
         $response = [
-            "cpu_load" => sys_getloadavg()[0],
+            "cpu_load" => $this->getProcessorUsage(),
             "uptime" => shell_exec('uptime -p'),
             "ramFree" => $this->getSystemMemInfo()["MemFree"],
             "ramTotal" => $this->getSystemMemInfo()["MemTotal"],
             "diskFree" => disk_free_space("/"),
             "diskTotal" => disk_total_space("/"),
-            "serverTime" =>  date('m. d. Y H:i:s - e'),
+            "serverTime" => date('m. d. Y H:i:s'),
+            "serverTimeZone" => date('e'),
         ];
         $this->response($response);
     }

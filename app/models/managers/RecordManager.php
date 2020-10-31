@@ -86,7 +86,7 @@ class RecordManager{
 		$dateTime = $dateTime->modify($periodLocal);
 		$dateTime = $dateTime->format('Y-m-d H:i:s');
 		$groupBy = strtoupper($groupBy).'(time)';
-		$sql = 'SELECT value, time FROM records
+		$sql = 'SELECT value, time, execuded FROM records
 		WHERE
 		subdevice_id = ?
 		AND

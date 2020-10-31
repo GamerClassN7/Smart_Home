@@ -32,9 +32,17 @@ class WidgetApi extends ApiController
 		$this->response(['value' => $response]);
 	}
 
-	public function detail($subDeviceId)
+	public function detail($subDeviceId, $period = "day")
 	{
 		//$this->requireAuth();
+
+		$groupBy = [
+			"year" => "month",
+			"month" => "day",
+			"day" => "hour",
+			"hout" => "minute",
+		];
+
 		$response = null;
 		$connectionError = true;
 
@@ -42,9 +50,16 @@ class WidgetApi extends ApiController
 		$deviceData = DeviceManager::getDeviceById($subDeviceData['device_id']);
 
 		//TODO: zeptat se @Patrik Je Graf Dobře Seřazený na DESC ?
-		$events = RecordManager::getAllRecordForGraph($subDeviceId);
+		$events = RecordManager::getAllRecordForGraph($subDeviceId, $period, $groupBy[$period]);
 		if ( count($events) == 0){
 			throw new Exception("No Records", 404);
+		}
+
+		//Striping executed value from dataset if pasiv device such as Senzor ETC
+		if ($subDeviceData['type'] != "on/off") {
+			foreach ($events as $key => $event) {
+				unset($events[$key]['execuded']);
+			}
 		}
 
 		$LastRecordTime = new DateTime(reset($events)['time']);
@@ -115,7 +130,7 @@ class WidgetApi extends ApiController
 
 		//TODO: Make Cleaner 
 		if (isset(RANGES[$subDeviceData['type']])){
-			$response['graph']['options']['options']['scales']['yAxes'] = [[
+			$response['graph']['options']['scales']['yAxes'] = [[
 				'ticks' => [
 					'min' => RANGES[$subDeviceData['type']]['min'],
 					'max' => RANGES[$subDeviceData['type']]['max'],

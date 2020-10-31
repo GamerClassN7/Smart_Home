@@ -77,7 +77,7 @@ class SubDeviceManager
 
 		//TODO: @Patrik Check line 89
 		$rows = Db::loadAll("
-			SELECT d.room_id, sd.subdevice_id, sd.device_id, d.name, sd.type, sd.unit, r.value FROM subdevices sd
+			SELECT d.room_id, sd.subdevice_id, sd.device_id, d.icon, d.name, sd.type, sd.unit, r.value FROM subdevices sd
 			JOIN devices d ON sd.device_id = d.device_id
 			JOIN records r ON r.subdevice_id = sd.subdevice_id
 			WHERE d.room_id IN (".str_repeat("?,", count($roomIds)-1)."?)

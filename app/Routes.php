@@ -28,13 +28,17 @@ $router->post('/api/login', 'AuthApi@login');
 $router->post('/api/logout', 'AuthApi@logout');
 $router->get('/api/rooms', 'RoomsApi@default');
 $router->get('/api/rooms/{roomId}/update', 'RoomsApi@update');
+
 $router->get('/api/devices', 'DevicesApi@default');
 $router->get('/api/plugins', 'PluginsApi@default');
 $router->get('/api/users', 'UsersApi@default');
 $router->get('/api/server', 'ServerApi@default');
 $router->get('/api/server/log', 'ServerApi@logStatus');
+
 $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 $router->get('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
+$router->get('/api/widgets/{widgetId}/detail/{period}', 'WidgetApi@detail');
+
 
 //cron
 $router->post('/cron/clean', 'CronApi@clean');

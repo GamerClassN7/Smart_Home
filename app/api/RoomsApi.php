@@ -2,19 +2,18 @@
 
 class RoomsApi extends ApiController
 {
-
-	public function
-	default()
+	
+	public function	default()
 	{
 		//$this->requireAuth();
 		$response = [];
 		$roomIds = [];
 		$roomsData = RoomManager::getRoomsDefault();
-
+		
 		foreach ($roomsData as $roomKey => $room) {
 			$roomIds[] = $room['room_id'];
 		}
-
+		
 		//Translation Of Numeric Walues
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
 		foreach ($subDevicesData as $subDeviceKey => $subDevice) {
@@ -27,7 +26,7 @@ class RoomsApi extends ApiController
 				} else {
 					continue;
 				}
-
+				
 				$cammelCaseClass = "";
 				foreach (explode('-', $type) as $word) {
 					$cammelCaseClass .= ucfirst($word);
@@ -42,7 +41,7 @@ class RoomsApi extends ApiController
 				$subDevicesData[$subDeviceKey][$key]['value'] = $deviceClass->translate($subDevicesData[$subDeviceKey][$key]['value']);
 			}
 		}
-
+		
 		foreach ($roomsData as $roomKey => $roomData) {
 			if ($roomData['device_count'] == 0) continue;
 			$response[] = [
@@ -53,11 +52,11 @@ class RoomsApi extends ApiController
 		}
 		$this->response($response);
 	}
-
+	
 	public function update($roomId)
 	{
 		//$this->requireAuth();
-
+		
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds([$roomId]);
 		$this->response($subDevicesData);
 	}
