@@ -4,9 +4,11 @@ error_reporting(E_ALL);
 ini_set( 'display_errors','1');
 
 //setup
+parse_str($_SERVER['QUERY_STRING'], $params);
+$urlSes = str_replace((!empty ($params['url']) ? $params['url'] : ""), "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI']));
 session_set_cookie_params(
     1209600,
-    str_replace('login', "", str_replace('https://' . $_SERVER['HTTP_HOST'], "", $_SERVER['REQUEST_URI'])),
+    $urlSes,
     str_replace("/var/www/", "", $_SERVER['DOCUMENT_ROOT']),
     true,
     true
