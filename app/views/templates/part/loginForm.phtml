@@ -14,6 +14,10 @@
                 <div class="label">Remember me:</div>
                 <input class="" type="checkbox" name="remember" value="true"/>
             </div>
+				<?php if (!empty ($_SESSION['msg'])): ?>
+					<label class="message"><?php echo $_SESSION['msg']; ?></label><br/><br/>
+					<?php unset ($_SESSION['msg']); ?>
+				<?php endif; ?>
             <input type="submit" class="button" name="login" value="Login"/>
         </form>
     </div>

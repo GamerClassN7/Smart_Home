@@ -475,6 +475,15 @@ html {
 	color: #a32929;
   }
 
+  .message {
+	border: 2px solid #a32929;
+	background-color: #f6cbcb;
+	color: #a32929;
+	padding: .75rem 1rem;
+	margin-bottom: .8em;
+	width: 100%;
+  }
+
   .content {
 	 width: fit-content;
 	 margin: 5px;
