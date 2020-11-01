@@ -8,8 +8,8 @@ class DatabaseBackup
 			$backupWorker = new DatabaseBackup;
 			$filenames[] = $backupWorker->scheme(); //Backup Database scheme
 			$filenames[] = $backupWorker->data(); //Backup Database Data
-			$filenames[] = $_SERVER['DOCUMENT_ROOT'] . '/config/config.php'; //Backup Configuration File
-			$backupWorker->compress($_SERVER['DOCUMENT_ROOT'] . BASEDIR . '/backup/' . date("Y-m-d", time()) . '.zip', $filenames);
+			//$filenames[] = $_SERVER['DOCUMENT_ROOT'] . '/config/config.php'; //Backup Configuration File
+			$backupWorker->compress($_SERVER['DOCUMENT_ROOT'] . BASEDIR . 'backup/' . date("Y-m-d", time()) . '.zip', $filenames);
 			return 'sucessful';
 		} catch (Exception $e) {
 			return 'exception: ' . $e->getMessage();
@@ -18,7 +18,7 @@ class DatabaseBackup
 
 	private function scheme()
 	{
-		$backupfile = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . "/backup/" . DBNAME . '_scheme_' . date("Y-m-d", time()) . '.sql';
+		$backupfile = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . "backup/" . DBNAME . '_scheme_' . date("Y-m-d", time()) . '.sql';
 		$command = "mysqldump --skip-comments --no-create-info -h localhost -u " . DBUSER . " -p" . DBPASS . " " . DBNAME . " -r $backupfile 2>&1";
 		$this->executeCommand($command);
 		return $backupfile;
@@ -26,7 +26,7 @@ class DatabaseBackup
 
 	private function data()
 	{
-		$backupfile = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . "/backup/" . DBNAME . '_data_' . date("Y-m-d", time()) . '.sql';
+		$backupfile = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . "backup/" . DBNAME . '_data_' . date("Y-m-d", time()) . '.sql';
 		$command = "mysqldump --skip-comments --no-data -h localhost -u " . DBUSER . " -p" . DBPASS . " " . DBNAME . " -r $backupfile 2>&1";
 		$this->executeCommand($command);
 		return $backupfile;
@@ -43,7 +43,9 @@ class DatabaseBackup
 		$zip = new ZipArchive();
 		if ($zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
 			foreach ($files as $file) {
-				$zip->addFile($file);
+				$filename = explode('/', $file);
+				$filename = end($filename);
+				$zip->addFile($file, $filename);
 			}
 			$zip->close();
 			foreach ($files as $file) {
