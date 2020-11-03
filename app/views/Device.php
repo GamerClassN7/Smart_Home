@@ -103,23 +103,15 @@ class Device extends Template
 
 		if (!empty ($_GET['sort']) && !empty ($_GET['sortType']) && $_GET['sort'] == "firmware") {
 			if ($_GET['sortType'] == "DESC") {
-				usort($devices, function($a, $b) {
-					return $a['firmware_hash'] <=> $b['firmware_hash'];
-				});
+				return Utilities::sortArrayByKey($devices, 'firmware_hash', "desc");
 			} else if ($_GET['sortType'] == "ASC") {
-				usort($devices, function($a, $b) {
-					return $b['firmware_hash'] <=> $a['firmware_hash'];
-				});
+				return Utilities::sortArrayByKey($devices, 'firmware_hash', "asc");
 			}
 		} else if (!empty ($_GET['sort']) && !empty ($_GET['sortType']) && $_GET['sort'] == "signal") {
 			if ($_GET['sortType'] == "DESC") {
-				usort($devices, function($a, $b) {
-					return $a['signal'] <=> $b['signal'];
-				});
+				return Utilities::sortArrayByKey($devices, 'signal', "desc");
 			} else if ($_GET['sortType'] == "ASC") {
-				usort($devices, function($a, $b) {
-					return $b['signal'] <=> $a['signal'];
-				});
+				return Utilities::sortArrayByKey($devices, 'signal', "asc");
 			}
 		}
 

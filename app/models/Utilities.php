@@ -178,4 +178,29 @@ class Utilities
 
 		return $result;
 	}
+
+	/**
+	 * Sort Array by keys
+	 *
+	 * @param array $data
+	 * @param [type] $key
+	 * @param string $operator ('asc'/'desc')
+	 * @return void
+	 */
+	static function sortArrayByKey($data = [], $key, $operator = "asc"){
+		if ($operator == "asc")
+		{
+			uasort($data, function($a, $b) use ($key){
+				if ($a[$key] == $b[$key]) return 0;
+				return ($a[$key] < $b[$key]) ? -1 : 1;
+			});
+		} else{
+			uasort($data, function($a, $b) use ($key){
+				if ($a[$key] == $b[$key]) return 0;
+				return ($a[$key] > $b[$key]) ? -1 : 1;
+			});
+		}
+		return $data;
+		
+	}
 }

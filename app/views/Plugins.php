@@ -21,8 +21,8 @@ class Plugins extends Template
 			$plugins[$key]['status'] = $status;
 		}
 
-		sort($plugins);
-
+		$plugins = Utilities::sortArrayByKey($plugins, 'status', "desc");
+		
 		$template = new Template('plugins');
 		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('debugMod', DEBUGMOD);
