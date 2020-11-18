@@ -26,7 +26,13 @@ class RecordManager{
 		};
 
 		//Ochrana proti duplicitním hodnotám zapisují se jen změny
-		if (self::getLastRecord($subDeviceId, 1)['value'] == $value){
+		$lastRecord = self::getLastRecord($subDeviceId, 1);
+
+		if (!$lastRecord){
+			return false;
+		}
+
+		if ($lastRecord['value'] == $value){
 			return false;
 		}
 
