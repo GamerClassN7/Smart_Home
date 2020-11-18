@@ -81,6 +81,7 @@ class SubDeviceManager
 			JOIN devices d ON sd.device_id = d.device_id
 			JOIN records r ON r.subdevice_id = sd.subdevice_id
 			WHERE d.room_id IN (".str_repeat("?,", count($roomIds)-1)."?)
+			/*AND value != '999'*/
 			AND r.record_id IN (
 				SELECT MAX(record_id)
 				FROM records
