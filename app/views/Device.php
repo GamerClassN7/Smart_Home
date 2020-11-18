@@ -62,6 +62,10 @@ class Device extends Template
 			}
 
 			//Firmware Status
+			if (empty($devices[$key]['mac'])) {
+				$devices[$key]['firmware_hash'] = "";
+				continue;
+			}
 			$localBinary = "../updater/" . str_replace(':', '', $device['mac']) . ".bin";
 			$devices[$key]['firmware_hash'] = "";
 			if (file_exists($localBinary)) {
