@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 	<?php
-	$partial = new Partial('head');
+$partial = new Partial('head');
 	$partial->prepare('baseDir', $BASEDIR);
+	$partial->prepare('baseUrl', $BASEURL);
 	$partial->render();
 	?>
 	<title><?php echo $TITLE ?></title>
