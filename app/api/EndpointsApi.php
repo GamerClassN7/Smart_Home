@@ -70,11 +70,6 @@ class EndpointsApi extends ApiController{
 				$data['firmware_hash'] = $obj['settings']["firmware_hash"];
 			}
 			DeviceManager::editByToken($obj['token'], $data);
-			$this->response([
-				'state' => 'succes',
-				'command' => $command,
-			], 200);
-			die();
 		}
 
 		//Log Data Save
@@ -115,6 +110,7 @@ class EndpointsApi extends ApiController{
 				if (!SubDeviceManager::getSubDeviceByMaster($device['device_id'], $key)) {
 					SubDeviceManager::create($device['device_id'], $key, UNITS[$key]);
 				}
+				
 				$subDeviceLastReordValue[$key] = $value['value'];
 				RecordManager::create($device['device_id'], $key, round($value['value'],3));
 				$logManager->write("[API] Device_ID " . $device['device_id'] . " writed value " . $key . ' ' . $value['value'], LogRecordTypes::INFO);
@@ -170,11 +166,12 @@ class EndpointsApi extends ApiController{
 			foreach ($subDevicesData as $key => $subDeviceData) {
 				$subDeviceId = $subDeviceData['subdevice_id'];
 				$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
-				$subDeviceLastReordValue[$subDeviceData['type']] = $subDeviceLastReord['value'];
-
-				if ($subDeviceLastReord['execuded'] == 0){
-					$logManager->write("[API] subDevice_ID ".$subDeviceId . " executed comand with value " . json_encode($subDeviceLastReordValue) ." executed " . $subDeviceLastReord['execuded'], LogRecordTypes::INFO);
-					RecordManager::setExecuted($subDeviceLastReord['record_id']);
+				if (!empty ($subDeviceLastReord)) {
+					$subDeviceLastReordValue[$subDeviceData['type']] = $subDeviceLastReord['value'];
+					if ($subDeviceLastReord['execuded'] == 0){
+						$logManager->write("[API] subDevice_ID " . $subDeviceId . " executed comand with value " . json_encode($subDeviceLastReordValue) . " executed " . $subDeviceLastReord['execuded'], LogRecordTypes::INFO);
+						RecordManager::setExecuted($subDeviceLastReord['record_id']);
+					}
 				}
 			}
 		}
