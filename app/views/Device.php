@@ -3,91 +3,69 @@
 
 class Device extends Template
 {
-	function __construct () {
-		$userManager = new UserManager ();
-		$deviceManager = new DeviceManager ();
-		$subDeviceManager = new SubDeviceManager ();
-		$recordManager = new RecordManager ();
-		$roomManager = new RoomManager ();
-		$langMng = new LanguageManager ('en');
+	function __construct($sortBy = null, $sortType = null)
+	{
+		$userManager = new UserManager();
+		$deviceManager = new DeviceManager();
+		$subDeviceManager = new SubDeviceManager();
+		$recordManager = new RecordManager();
+		$roomManager = new RoomManager();
+		$langMng = new LanguageManager('en');
 
-		if (!$userManager->isLogin()){
+		if (!$userManager->isLogin()) {
 			header('Location: ' . BASEURL . 'login');
 		}
 
-		$template = new Template ('device');
-		$template->prepare ('title', $langMng->get ("m_devices"));
+		$template = new Template('device');
+		$template->prepare('title', $langMng->get("m_devices"));
 
-		if (!empty ($_GET['sort']) && !empty ($_SESSION['sort']) && $_SESSION['sort'] != $_GET['sort']) {
-			unset($_SESSION['sort']);
-			header('Location: device?sort=' . $_GET["sort"] . "&sortType=ASC");
-			die();
+		$sortWordBook = [
+			"id" => "device_id",
+			"name" => "name",
+			"room" => "room_id",
+			"ip" => "ip_address",
+			"mac" => "mac",
+			"token" => "token",
+			"signal" => "signal",
+			"firmware" => "firmware_hash",
+			"icon" => "icon"
+		];
+
+		$sortIcons = [
+			"ASC" => "&#xf0de",
+			"DESC" => "&#xf0dd",
+		];
+
+		$nextSort = [
+			"ASC" => "DESC",
+			"DESC" => "ASC",
+		];
+
+		$devices = $deviceManager->getAllDevices();
+
+		if (empty($sortBy) && empty($sortType)) {
+			$sortBy = "id";
+			$sortType = "DESC";
 		}
 
-		if (isset ($_GET['sortType'])) {
-			switch ($_GET['sortType']) {
-				case "DESC":
-				$sortType = "";
-				$sortIcon = "&#xf0dd";
-				break;
-				case "ASC":
-				$sortType = "DESC";
-				$sortIcon = "&#xf0de";
-				break;
-				case "":
-				unset($_GET["sort"]);
-				unset($_GET["sortType"]);
-				header('Location: device');
-				die();
-				break;
-			}
-		} else {
-			$sortType = "ASC";
-		}
-
-		if (!empty ($_GET['sort']) && !empty ($_GET['sortType'])) {
-			$template->prepare ('sortIcon', array ($_GET['sort'] => $sortIcon));
-			$actualSort = "devices.device_id";
-			switch ($_GET['sort']) {
-				case "name":
-				$actualSort = "devices.name";
-				break;
-				case "room":
-				$actualSort = "rooms.name";
-				break;
-				case "ip":
-				$actualSort = "devices.ip_address";
-				break;
-				case "mac":
-				$actualSort = "devices.mac";
-				break;
-				case "token":
-				$actualSort = "devices.token";
-				break;
-			}
-			$devices = $deviceManager->getAllDevicesSorted ($actualSort, $_GET['sortType']);
-		} else {
-			$devices = $deviceManager->getAllDevices ();
-		}
-
-		if (!empty ($_GET['sort'])) {
-			$_SESSION['sort'] = $_GET['sort'];
-		}
+		$template->prepare('sortIcon', [$sortBy => $sortIcons[$sortType]]);
 
 		foreach ($devices as $key => $device) {
-			$subdevice = $subDeviceManager->getSubDeviceByMasterAndType ($device['device_id'], "wifi");
-			if (!empty ($subdevice['subdevice_id'])) {
+			//Signal Stenght
+			$subdevice = $subDeviceManager->getSubDeviceByMasterAndType($device['device_id'], "wifi");
+			$devices[$key]['signal'] = "";
+			if (!empty($subdevice['subdevice_id'])) {
 				$record = $recordManager->getLastRecord($subdevice['subdevice_id']);
-				if (!empty ($record)) {
+				if (!empty($record)) {
 					$devices[$key]['signal'] = $record['value'] . " " . $subdevice['unit'];
-				}
+				} 
 			}
-			if (empty ($devices[$key]['signal'])) {
-				$devices[$key]['signal'] = "";
-			}
-			$localBinary = "../updater/" . str_replace (':', '', $device['mac']) . ".bin";
-			if (file_exists ($localBinary)) {
-				$hash = md5_file ($localBinary);
+
+			//Firmware Status
+			$localBinary = "../updater/" . str_replace(':', '', $device['mac']) . ".bin";
+			$devices[$key]['firmware_hash'] = "";
+			if (file_exists($localBinary)) {
+				$hash = md5_file($localBinary);
 				if ($hash == $device['firmware_hash']) {
 					$devices[$key]['firmware_hash'] = "true";
 				} else {
@@ -96,35 +74,22 @@ class Device extends Template
 			} else {
 				$devices[$key]['firmware_hash'] = "false";
 			}
-			if (empty ($device['mac'])) {
-				$devices[$key]['firmware_hash'] = "";
-			}
 		}
 
-		if (!empty ($_GET['sort']) && !empty ($_GET['sortType']) && $_GET['sort'] == "firmware") {
-			if ($_GET['sortType'] == "DESC") {
-				return Utilities::sortArrayByKey($devices, 'firmware_hash', "desc");
-			} else if ($_GET['sortType'] == "ASC") {
-				return Utilities::sortArrayByKey($devices, 'firmware_hash', "asc");
-			}
-		} else if (!empty ($_GET['sort']) && !empty ($_GET['sortType']) && $_GET['sort'] == "signal") {
-			if ($_GET['sortType'] == "DESC") {
-				return Utilities::sortArrayByKey($devices, 'signal', "desc");
-			} else if ($_GET['sortType'] == "ASC") {
-				return Utilities::sortArrayByKey($devices, 'signal', "asc");
-			}
-		}
+		$devices = Utilities::sortArrayByKey($devices, $sortWordBook[$sortBy], strtolower($sortType));
 
 		$rooms = $roomManager->getAllRooms();
 
-		$template->prepare ('baseDir', BASEDIR);
-		$template->prepare ('debugMod', DEBUGMOD);
-		$template->prepare ('logToLiveTime', LOGTIMOUT);
-		$template->prepare ('rooms', $rooms);
-		$template->prepare ('sortType', $sortType);
-		$template->prepare ('devices', $devices);
-		$template->prepare ('langMng', $langMng);
+		$template->prepare('baseUrl', BASEURL);
+		$template->prepare('baseDir', BASEDIR);
 
-		$template->render ();
+		$template->prepare('debugMod', DEBUGMOD);
+		$template->prepare('logToLiveTime', LOGTIMOUT);
+		$template->prepare('rooms', $rooms);
+		$template->prepare('sortType', $nextSort[$sortType]);
+		$template->prepare('devices', $devices);
+		$template->prepare('langMng', $langMng);
+
+		$template->render();
 	}
 }

@@ -5,6 +5,7 @@
 	<?php
 	$partial = new Partial('head');
 	$partial->prepare('baseDir', $BASEDIR);
+	$partial->prepare('baseUrl', $BASEURL);
 	$partial->render();
 	?>
 	<title><?php echo $TITLE ?></title>
@@ -25,15 +26,15 @@
 		<div class="col-md-9 main-body">
 			<table class="table is-fluid">
 				<tr>
-					<th><a href="device">#</a></th>
-					<th><a href="device?sort=name&sortType=<?php echo $SORTTYPE; ?>">Name</a><i class="fa"><?php echo (!empty($SORTICON['name']) ? $SORTICON['name'] : ""); ?></i></th>
-					<th><a href="device?sort=room&sortType=<?php echo $SORTTYPE; ?>">Room</a><i class="fa"><?php echo (!empty($SORTICON['room']) ? $SORTICON['room'] : ""); ?></i></th>
-					<th><a href="device?sort=signal&sortType=<?php echo $SORTTYPE; ?>">Signal</a><i class="fa"><?php echo (!empty($SORTICON['signal']) ? $SORTICON['signal'] : ""); ?></i></th>
-					<th><a href="device?sort=firmware&sortType=<?php echo $SORTTYPE; ?>">Firmware</a><i class="fa"><?php echo (!empty($SORTICON['firmware']) ? $SORTICON['firmware'] : ""); ?></i></th>
+					<th><a href="device/icon/<?php echo $SORTTYPE; ?>">#</a><i class="fa"><?php echo (!empty($SORTICON['icon']) ? $SORTICON['icon'] : ""); ?></i></th>
+					<th><a href="device/name/<?php echo $SORTTYPE; ?>">Name</a><i class="fa"><?php echo (!empty($SORTICON['name']) ? $SORTICON['name'] : ""); ?></i></th>
+					<th><a href="device/room/<?php echo $SORTTYPE; ?>">Room</a><i class="fa"><?php echo (!empty($SORTICON['room']) ? $SORTICON['room'] : ""); ?></i></th>
+					<th><a href="device/signal/<?php echo $SORTTYPE; ?>">Signal</a><i class="fa"><?php echo (!empty($SORTICON['signal']) ? $SORTICON['signal'] : ""); ?></i></th>
+					<th><a href="device/firmware/<?php echo $SORTTYPE; ?>">Firmware</a><i class="fa"><?php echo (!empty($SORTICON['firmware']) ? $SORTICON['firmware'] : ""); ?></i></th>
 					<th>
-						<a href="device?sort=ip&sortType=<?php echo $SORTTYPE; ?>">IP Address</a><i class="fa"><?php echo (!empty($SORTICON['ip']) ? $SORTICON['ip'] : ""); ?></i><br>
-						<a href="device?sort=mac&sortType=<?php echo $SORTTYPE; ?>">(Mac)</a><i class="fa"><?php echo (!empty($SORTICON['mac']) ? $SORTICON['mac'] : ""); ?></i><br>
-						<a href="device?sort=token&sortType=<?php echo $SORTTYPE; ?>">Token</a><i class="fa"><?php echo (!empty($SORTICON['token']) ? $SORTICON['token'] : ""); ?></i>
+						<a href="/device/ip/<?php echo $SORTTYPE; ?>">IP Address</a><i class="fa"><?php echo (!empty($SORTICON['ip']) ? $SORTICON['ip'] : ""); ?></i><br>
+						<a href="/device/mac/<?php echo $SORTTYPE; ?>">(Mac)</a><i class="fa"><?php echo (!empty($SORTICON['mac']) ? $SORTICON['mac'] : ""); ?></i><br>
+						<a href="/device/token/<?php echo $SORTTYPE; ?>">Token</a><i class="fa"><?php echo (!empty($SORTICON['token']) ? $SORTICON['token'] : ""); ?></i>
 					</th>
 					<th>Action
 						<form method="post" action="">
@@ -45,7 +46,7 @@
 				<?php if (!empty($DEVICES)) : ?>
 					<?php foreach ($DEVICES as $device) : ?>
 						<tr>
-							<td><i class="fa">&#x<?php echo (!empty($device['icon']) ? $device['icon'] : ""); ?></i></td>
+							<td><i class="fa <?php echo (!empty($device['icon']) ? $device['icon'] : ""); ?>"></i></td>
 							<td>
 								<form method="post" action="">
 									<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
@@ -87,12 +88,12 @@
 									?>
 
 									<i class="fa <?php echo $icon; ?>" style="color: <?php echo $color; ?>;"></i>
-									<?php echo $device['firmware_hash'] ?>
 									<button class="fa custom-file-input" type="button" onclick="document.getElementById('deviceFirmware-<?php echo $device['device_id'] ?>').click();">&#xf0ee;</button>
 									<form style="display: none;" method="POST" action="" enctype="multipart/form-data">
 										<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
 										<input type="file" onchange="this.form.submit();" name="deviceFirmware" id="deviceFirmware-<?php echo $device['device_id'] ?>" value="">
 									</form>
+									<!--<button class="fa custom-file-input" type="button" onclick="document.getElementById('deviceFirmware-<?php //echo $device['device_id'] ?>').click();">&#xf1f8;</button>-->
 								<?php endif; ?>
 								<div type="float: clear;"></div>
 							</td>
