@@ -5,7 +5,7 @@ class SubDeviceManager
 
 	public static function getAllSubDevices($deviceId = null)
 	{
-		if ($deviceId == null){
+		if ($deviceId == null) {
 			return Db::loadAll("SELECT * FROM subdevices");
 		}
 		return Db::loadAll("SELECT * FROM subdevices WHERE device_id = ?", array($deviceId));
@@ -72,15 +72,16 @@ class SubDeviceManager
 		return Db::loadAll("DELETE FROM subdevices WHERE subdevice_id = ?", array($subDeviceId));
 	}
 
-	public static function getSubdevicesByRoomIds($roomIds = NULL) {
-		if(empty($roomIds)) return NULL;
+	public static function getSubdevicesByRoomIds($roomIds = NULL)
+	{
+		if (empty($roomIds)) return NULL;
 
 		//TODO: @Patrik Check line 89
 		$rows = Db::loadAll("
-			SELECT d.room_id, sd.subdevice_id, sd.device_id, d.icon, d.name, sd.type, sd.unit, r.value FROM subdevices sd
+			SELECT d.room_id, d.sleep_time, sd.subdevice_id, sd.device_id, d.icon, d.name, sd.type, sd.unit, r.value FROM subdevices sd
 			JOIN devices d ON sd.device_id = d.device_id
 			JOIN records r ON r.subdevice_id = sd.subdevice_id
-			WHERE d.room_id IN (".str_repeat("?,", count($roomIds)-1)."?)
+			WHERE d.room_id IN (" . str_repeat("?,", count($roomIds) - 1) . "?)
 			/*AND value != '999'*/
 			AND r.record_id IN (
 				SELECT MAX(record_id)
@@ -92,10 +93,21 @@ class SubDeviceManager
 		", $roomIds);
 
 		$ret = [];
-		foreach($rows as $row){
+		foreach ($rows as $row) {
 			$ret[$row['room_id']][] = $row;
 		}
 
 		return $ret;
+	}
+
+	public static function getSubdeviceDetailById($subDeviceId){
+		if (empty($subDeviceId)) return NULL;
+
+		$rows = Db::loadOne("SELECT d.room_id, d.sleep_time, sd.subdevice_id, sd.type, sd.device_id FROM subdevices sd 
+		JOIN devices d ON sd.device_id = d.device_id
+		WHERE sd.subdevice_id = ? ", [$subDeviceId]);
+
+		return $rows;
+
 	}
 }

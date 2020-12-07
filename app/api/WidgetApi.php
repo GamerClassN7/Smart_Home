@@ -46,9 +46,9 @@ class WidgetApi extends ApiController
 		$response = null;
 		$connectionError = true;
 
-		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
-		$deviceData = DeviceManager::getDeviceById($subDeviceData['device_id']);
+		$subDeviceData = SubDeviceManager::getSubdeviceDetailById($subDeviceId);
 
+		
 		//TODO: zeptat se @Patrik Je Graf Dobře Seřazený na DESC ?
 		$events = RecordManager::getAllRecordForGraph($subDeviceId, $period, $groupBy[$period]);
 		if ( count($events) == 0){
@@ -64,20 +64,6 @@ class WidgetApi extends ApiController
 
 		$LastRecordTime = new DateTime(reset($events)['time']);
 		$niceTime = Utilities::ago($LastRecordTime);
-
-		$interval = $LastRecordTime->diff(new DateTime());
-		$hours   = $interval->format('%h');
-		$minutes = $interval->format('%i');
-		$lastSeen = ($hours * 60 + $minutes);
-
-		if (
-			$lastSeen < $deviceData['sleep_time'] ||
-			$subDeviceData['type'] == "on/off" ||
-			$subDeviceData['type'] == "door" ||
-			$subDeviceData['type'] == "wather"
-		) {
-			$connectionError = false;
-		}
 
 		$labels = [];
 		$values = [];
@@ -95,6 +81,9 @@ class WidgetApi extends ApiController
 		}
 
 		$response = [
+			'room_id' => $subDeviceData['room_id'],
+			'device_id' => $subDeviceData['device_id'],
+			'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
 			'records' => $events,
 			'graph' => [
 				'type' => $this->getDeviceConfig($subDeviceData['type'])['graph'],
@@ -124,8 +113,7 @@ class WidgetApi extends ApiController
 					],
 				],
 			],
-			'comError' => $connectionError,
-			'lastConnectionTime' => (empty($niceTime) ? "00:00" : $niceTime),
+
 		];
 
 		//TODO: Make Cleaner 

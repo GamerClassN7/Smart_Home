@@ -18,6 +18,7 @@ class RoomsApi extends ApiController
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
 		foreach ($subDevicesData as $subDeviceKey => $subDevice) {
 			foreach ($subDevice as $key => $value) {
+				//Type Handling
 				$type = null;
 				if (strpos($subDevicesData[$subDeviceKey][$key]['type'], '-') !== false) {
 					$type = $subDevicesData[$subDeviceKey][$key]['type'];
@@ -27,6 +28,7 @@ class RoomsApi extends ApiController
 					continue;
 				}
 				
+				//Record Translation
 				$cammelCaseClass = "";
 				foreach (explode('-', $type) as $word) {
 					$cammelCaseClass .= ucfirst($word);
@@ -39,6 +41,25 @@ class RoomsApi extends ApiController
 					continue;
 				}
 				$subDevicesData[$subDeviceKey][$key]['value'] = $deviceClass->translate($subDevicesData[$subDeviceKey][$key]['value']);
+
+				//Connection Error Creation
+				$niceTime = Utilities::ago($LastRecordTime);
+
+				$interval = $LastRecordTime->diff(new DateTime());
+				$hours   = $interval->format('%h');
+				$minutes = $interval->format('%i');
+				$lastSeen = ($hours * 60 + $minutes);
+		
+				if (
+					$lastSeen < $subDevicesData[$subDeviceKey][$key]['sleep_time'] ||
+					$subDevicesData[$subDeviceKey][$key]['type'] == "on/off" ||
+					$subDevicesData[$subDeviceKey][$key]['type'] == "door" ||
+					$subDevicesData[$subDeviceKey][$key]['type'] == "wather"
+				) {
+					$connectionError = false;
+				}
+				$subDevicesData[$subDeviceKey][$key]['connection_error'] =  $connectionError
+
 			}
 		}
 		

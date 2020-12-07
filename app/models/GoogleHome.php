@@ -26,6 +26,10 @@ class GoogleHome {
 					}
 				}
 
+				if ($traids < 0){
+					continue;
+				}
+
 				$tempDevice = [
 					'id' => (string) $deviceData['device_id'],
 					'type' => $actionType,
