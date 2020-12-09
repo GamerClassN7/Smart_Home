@@ -22,11 +22,15 @@ class SettingsManager{
 	}
 
 	public static function update ($name, $value) {
-		try {
-			Db::edit ('settings', ['value' => $value], 'WHERE name = ?', array($name));
-		} catch(PDOException $error) {
-			echo $error->getMessage();
-			die();
+		if ($this.getByName($name)){
+			$this->create($name, $value);
+		} else {
+			try {
+				Db::edit ('settings', ['value' => $value], 'WHERE name = ?', array($name));
+			} catch(PDOException $error) {
+				echo $error->getMessage();
+				die();
+			}
 		}
 	}
 }
