@@ -4,7 +4,8 @@ class SettingsManager{
 		return Db::loadAll ("SELECT * FROM settings");
 	}
 
-	static function getByName($settingName) {
+	static function getByName($settingName, $group = '') {
+		if ($group != '') return Db::loadOne("SELECT * FROM settings WHERE name = ? AND group = ?", array($settingName, $group));
 		return Db::loadOne("SELECT * FROM settings WHERE name = ?", array($settingName));
 	}
 
