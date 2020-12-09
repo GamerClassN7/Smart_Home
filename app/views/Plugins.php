@@ -22,9 +22,10 @@ class Plugins extends Template
 		}
 
 		$plugins = Utilities::sortArrayByKey($plugins, 'status', "desc");
-		
+
 		$template = new Template('plugins');
 		$template->prepare('baseDir', BASEDIR);
+		$template->prepare('baseUrl', BASEURL);
 		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('title', 'Plugins');
 		$template->prepare('langMng', $langMng);

@@ -22,7 +22,7 @@ class Server extends Template
 		$load = round($loads[0]/($core_nums + 1)*100, 2);
 		return $load;
 	}
-		
+
 	function __construct()
 	{
 			$userManager = new UserManager();
@@ -36,6 +36,7 @@ class Server extends Template
 		$template->prepare('title', 'Server');
 
 		$template->prepare('baseDir', BASEDIR);
+		$template->prepare('baseUrl', BASEURL);
 		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('langMng', $langMng);
 

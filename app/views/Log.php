@@ -19,6 +19,7 @@ class Log extends Template
 		$result = $this->logFinder ('../logs/', $result);
 
 		$template->prepare('baseDir', BASEDIR);
+		$template->prepare('baseUrl', BASEURL);
 		$template->prepare('debugMod', DEBUGMOD);
 		$template->prepare('logToLiveTime', LOGTIMOUT);
 		$template->prepare('title', 'Logy');

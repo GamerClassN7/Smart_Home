@@ -8,6 +8,7 @@ class Oauth extends Template
 
 		$template = new Template('oauth');
 		$template->prepare('baseDir', BASEDIR);
+		$template->prepare('baseUrl', BASEURL);
 		$template->prepare('title', 'Simple Home - Oauth');
 
 		if (isset($_GET['redirect_uri'])) {
