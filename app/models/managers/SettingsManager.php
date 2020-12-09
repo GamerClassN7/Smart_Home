@@ -8,10 +8,15 @@ class SettingsManager{
 		return Db::loadOne("SELECT * FROM settings WHERE name = ?", array($settingName));
 	}
 
-	public static function create ($name, $value) {
+	static function getSettingGroup($group) {
+		return Db::loadAll("SELECT * FROM settings WHERE group = ?", array($group));
+	}
+
+	public static function create ($name, $value, $group = '') {
 		$setting = array (
 			'name' => $name,
 			'value' => $value,
+			'group' => $group,
 		);
 		try {
 			Db::add ('settings', $setting);
@@ -21,12 +26,14 @@ class SettingsManager{
 		}
 	}
 
-	public static function update ($name, $value) {
+	public static function update ($name, $value, $group = '') {
 		if ($this.getByName($name)){
-			$this->create($name, $value);
+			$this->create($name, $value, $group);
 		} else {
 			try {
-				Db::edit ('settings', ['value' => $value], 'WHERE name = ?', array($name));
+				Db::edit ('settings', [
+					'value' => $value
+				], 'WHERE name = ?', array($name));
 			} catch(PDOException $error) {
 				echo $error->getMessage();
 				die();
