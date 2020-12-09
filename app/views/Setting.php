@@ -56,7 +56,27 @@ class Setting extends Template
 		$rooms = RoomManager::getAllRooms();
 		$template->prepare('rooms', $rooms);
 
+		$settingsManager = new SettingsManager();
+		$dir = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . 'app/plugins/';
+		$pluginsFiles = array_diff (scandir ($dir), ['..', '.']);
 
+		$plugins = array ();
+
+		foreach ($pluginsFiles as $key => $pluginFile) {
+			$status = (strpos ($pluginFile, "!") !== false ? false : true);
+			if ($status) {
+				$plugins[$key]['name'] = str_replace ("!", "", str_replace (".php", "", $pluginFile));
+				$plugins[$key]['slug'] = strtolower ($plugins[$key]['name']);
+				$result = $settingsManager->getSettingGroup($plugins[$key]['slug']);
+				if (count ($result) > 0) {
+					$plugins[$key]['settings'] = $result;
+				}
+			}
+		}
+
+		$plugins = Utilities::sortArrayByKey($plugins, 'slug', "desc");
+
+		$template->prepare('pluginsSettings', $plugins);
 
 		$template->render();
 	}

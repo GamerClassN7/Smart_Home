@@ -4,20 +4,20 @@ class SettingsManager{
 		return Db::loadAll ("SELECT * FROM settings");
 	}
 
-	static function getByName($settingName, $group = '') {
-		if ($group != '') return Db::loadOne("SELECT * FROM settings WHERE name = ? AND group = ?", array($settingName, $group));
+	static function getByName($settingName, $type = '') {
+		if ($type != '') return Db::loadOne("SELECT * FROM settings WHERE name = ? AND type = ?", array($settingName, $type));
 		return Db::loadOne("SELECT * FROM settings WHERE name = ?", array($settingName));
 	}
 
-	static function getSettingGroup($group) {
-		return Db::loadAll("SELECT * FROM settings WHERE group = ?", array($group));
+	static function getSettingGroup($type) {
+		return Db::loadAll("SELECT * FROM settings WHERE type=?", array($type));
 	}
 
-	public static function create ($name, $value, $group = '') {
+	public static function create ($name, $value, $type = '') {
 		$setting = array (
 			'name' => $name,
 			'value' => $value,
-			'group' => $group,
+			'type' => $type,
 		);
 		try {
 			Db::add ('settings', $setting);
@@ -27,9 +27,9 @@ class SettingsManager{
 		}
 	}
 
-	public static function update ($name, $value, $group = '') {
-		if ($this.getByName($name)){
-			$this->create($name, $value, $group);
+	public static function update ($name, $value, $type = '') {
+		if (self::getByName($name)){
+			self::create($name, $value, $type);
 		} else {
 			try {
 				Db::edit ('settings', [
