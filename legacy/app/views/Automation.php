@@ -1,8 +1,8 @@
 <?php
-$files = scandir('app/class/');
+$files = scandir('legacy/app/class/');
 $files = array_diff($files, array('.', '..'));
 foreach($files as $file) {
-	include_once 'app/class/'.  $file;
+	include_once 'legacy/app/class/'.  $file;
 }
 
 class Automation extends Template

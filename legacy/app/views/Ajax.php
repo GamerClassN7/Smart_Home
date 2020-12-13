@@ -1,8 +1,8 @@
 <?php
-$files = scandir('app/class/');
+$files = scandir('legacy/app/class/');
 $files = array_diff($files, array('.', '..'));
 foreach($files as $file) {
-	include_once 'app/class/'.  $file;
+	include_once 'legacy/app/class/'.  $file;
 }
 
 class Ajax extends Template
@@ -11,16 +11,16 @@ class Ajax extends Template
 	{
 		global $userManager;
 		global $lang;
-		
+
 		if (!$userManager->isLogin()){
 			header('Location: ' . BASEDIR);
 		}
-		
+
 		$is_ajax = 'XMLHttpRequest' == ( $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '' );
 		if (!$is_ajax){
 			header('Location: '  . BASEDIR);
 		}
-		
+
 		if (
 			isset($_POST['automation_id']) &&
 			$_POST['automation_id'] != '' &&
@@ -34,17 +34,17 @@ class Ajax extends Template
 						AutomationManager::remove($automationId);
 						die();
 					break;
-					
+
 					case 'deactive':
 						AutomationManager::deactive($automationId);
 						die();
 					break;
-					
+
 					case 'restart':
 						AutomationManager::restart($automationId);
 						die();
 					break;
-					
+
 					default:
 					echo 'no action detected';
 				break;
@@ -65,7 +65,7 @@ class Ajax extends Template
 						echo Utilities::generateGraphJson($graphData['graphType'], $graphData['graphData'], $graphData['graphRange']);
 						die();
 					break;
-					
+
 					//Change On/Off Device State of Device Button
 					case 'change':
 						$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
@@ -77,13 +77,13 @@ class Ajax extends Template
 						}
 						die();
 					break;
-					
+
 					//Waitin for execution of Changet walue for Device Button
 					case 'executed':
 						echo RecordManager::getLastRecord($subDeviceId)['execuded'];
 						die();
 					break;
-					
+
 					case 'set':
 						$value = $_POST['value'];
 						$subDevice = SubDeviceManager::getSubDevice($subDeviceId);
@@ -91,7 +91,7 @@ class Ajax extends Template
 						echo 'test id' . $subDevice['device_id'] .$subDevice['type'] . $value ;
 						die();
 					break;
-					
+
 					default:
 					echo 'no action detected';
 				break;
@@ -108,12 +108,12 @@ class Ajax extends Template
 						SceneManager::delete($sceneId);
 						die();
 					break;
-					
+
 					case 'execute':
 						echo SceneManager::execScene($sceneId);
 						die();
 					break;
-					
+
 					default:
 					echo 'no action detected';
 				break;
@@ -131,7 +131,7 @@ class Ajax extends Template
 						NotificationManager::addSubscriber($_SESSION['user']['id'], $subscriptionToken);
 						die();
 					break;
-					
+
 					case 'sendTest':
 						$notificationData = [
 							'title' => 'Alert',
@@ -147,7 +147,7 @@ class Ajax extends Template
 						}
 						die();
 					break;
-					
+
 					default:
 					echo 'no action detected';
 				break;
@@ -161,10 +161,10 @@ class Ajax extends Template
 				foreach ($allDevicesData as $deviceKey => $deviceValue) {
 					$allSubDevices = SubDeviceManager::getAllSubDevices($deviceValue['device_id']);
 					foreach ($allSubDevices as $key => $subDevicesData) {
-						
+
 						$lastRecord = RecordManager::getLastRecord($subDevicesData['subdevice_id']);
 						$parsedValue = $lastRecord['value'] . $subDevicesData['unit'];
-						
+
 						//TODO: udělat parser a ten použít jak v houmu tak zde
 						switch ($subDevicesData['type']) {
 							case 'on/off':
@@ -173,14 +173,14 @@ class Ajax extends Template
 								$operator = '==';
 								$breakValue = 1;
 							break;
-							
+
 							case 'door':
 								$replacementTrue = 'Closed';
 								$replacementFalse = 'Open';
 								$operator = '==';
 								$breakValue = 1;
 							break;
-							
+
 							case 'light':
 								$replacementTrue = 'Light';
 								$replacementFalse = 'Dark';
@@ -191,36 +191,36 @@ class Ajax extends Template
 									$breakValue = 810;
 								}
 							break;
-							
+
 							case 'water':
 								$replacementTrue = 'Wet';
 								$replacementFalse = 'Dry';
 								$operator = '==';
 								$breakValue = 1;
 							break;
-							
+
 							default:
 							$replacementTrue = '';
 							$replacementFalse = '';
 						break;
 					}
-					
+
 					if ($replacementTrue != '' && $replacementFalse != '') {
 						//parsing last values
 						$parsedValue = $replacementFalse;
-						
+
 						if (Utilities::checkOperator($lastRecord['value'], $operator, $breakValue)) {
 							$parsedValue = $replacementTrue;
 						}
 					}
-					
+
 					$updateData[$subDevicesData['subdevice_id']] = [
 						'time' => $lastRecord['time'],
 						'value' => $parsedValue,
 					];
 				}
 			}
-			
+
 			//TODO: PRO JS VRACET DATA
 			echo json_encode($updateData, JSON_PRETTY_PRINT);
 		}

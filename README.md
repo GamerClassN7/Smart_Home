@@ -7,7 +7,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/GamerClassN7/Smart_Home">
-    <img src="./app/templates/images/icon-192x192.png" height="100" width="100">
+    <img src="legacy/app/templates/images/icon-192x192.png" height="100" width="100">
   </a>
   <h3 align="center">Make your own Smart Home automation system</h3>
   <p align="center">

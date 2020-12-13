@@ -14,12 +14,11 @@ mb_internal_encoding ("UTF-8");
 
 //Autoloader
 foreach (["vendor","class", "views"] as $dir) {
-	$files = scandir('./app/'.$dir.'/');
+	$files = scandir('./legacy/app/'.$dir.'/');
 	$files = array_diff($files, array('.', '..', 'app'));
 
 	foreach($files as $file) {
-		//echo './app/'.$dir.'/'.  $file;
-		include './app/'.$dir.'/'.  $file;
+		include './legacy/app/'.$dir.'/'.  $file;
 	}
 }
 
@@ -28,18 +27,18 @@ $langTag = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 $langMng = new LanguageManager($langTag, DEBUGMOD);
 $langMng->load();
 
-if (DEBUGMOD == 1) {
-	// echo '<div class="col-md-9 main-body">';
-	// echo '<pre>';
-	// echo 'Language SLUG: ' . $langTag;
-	// echo '</pre>';
-	// echo '<pre>';
-	// print_r(get_defined_constants());
-	// echo '</pre>';
-	// echo '<pre>';
-	// print_r(get_defined_vars());
-	// echo '</pre>';
-	// echo '</dev>';
+if (true) {
+	 echo '<div class="col-md-9 main-body">';
+	 echo '<pre>';
+	 echo 'Language SLUG: ' . $langTag;
+	 echo '</pre>';
+	 echo '<pre>';
+	 print_r(get_defined_constants());
+	 echo '</pre>';
+	 echo '<pre>';
+	 print_r(get_defined_vars());
+	 echo '</pre>';
+	 echo '</dev>';
 }
 
 //DB Conector
