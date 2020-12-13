@@ -4,7 +4,7 @@
       "App\\" : "app/"
     }
   },
-  "require": {
+  "require-dev": {
     "phan/phan": "^3.2"
   }
 }
