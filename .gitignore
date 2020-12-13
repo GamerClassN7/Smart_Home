@@ -10,4 +10,4 @@ app/logs/*.log
 .vscode/sftp.json
 app/updater/*.bin
 logs/*
-
+vendor/
