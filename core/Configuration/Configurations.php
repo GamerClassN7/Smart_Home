@@ -9,13 +9,17 @@ namespace Core\Configuration;
  */
 class Configurations
 {
-	/**
-	 * Concerns:
-	 * 	-> Loading configuration files
-	 * 		- Scan directory for files.
-	 * 		- Filtering none config / php files.
-	 * 		- Creating assoc array.
-	 * 	-> Storing assoc array to this object.
-	 * 	-> Accessing configurations based on "paths" application.something For example.
-	 */
+	/** @var array */
+	private $configurations;
+
+	public function __construct(ConfigurationLoader $configurationLoader)
+	{
+		// Concern: Storing assoc array to this object.
+		$this->configurations = $configurationLoader->load();
+	}
+
+	public function get(string $path)
+	{
+		// Concern: Accessing configurations based on "paths" application.something For example.
+	}
 }
