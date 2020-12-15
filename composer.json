@@ -1,1 +1,10 @@
-{}
+{
+	"autoload": {
+		"psr-4": {
+			"Core\\": "core/"
+		}
+	},
+    "require": {
+        "illuminate/container": "^8.18"
+    }
+}

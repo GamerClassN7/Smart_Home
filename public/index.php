@@ -3,9 +3,24 @@
 /**
  * Composer autoload
  */
-	require_once __DIR__ . '/../vendor/autoload.php';
+
+use Core\Application\Application;
+use Illuminate\Container\Container;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$container = new Container();
 
 /**
- * todo: Create a new bootstrap architecture.
+ * Load providers
  */
-require_once __DIR__ . '/../app/Bootstrap.php';
+
+
+
+/**
+ * Create application & run
+ */
+$application = new Application(
+	$container
+);
+$application->run();
