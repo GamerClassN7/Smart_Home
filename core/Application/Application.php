@@ -19,7 +19,7 @@ class Application
 		$this->configurations = $configurations;
 	}
 
-	public function run()
+	public function run(): void
 	{
 		//todo: implement run logic.
 	}
