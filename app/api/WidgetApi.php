@@ -44,8 +44,6 @@ class WidgetApi extends ApiController
 		];
 
 		$response = null;
-		$connectionError = true;
-
 		$subDeviceData = SubDeviceManager::getSubdeviceDetailById($subDeviceId);
 
 		
