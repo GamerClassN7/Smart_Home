@@ -2,15 +2,21 @@
 
 namespace Core\Application;
 
+use Core\Configuration\Configurations;
 use Illuminate\Container\Container;
 
 class Application
 {
-	private Container $container;
+	/** @var Container $container */
+	private $container;
 
-	public function __construct(Container $container)
+	/** @var Configurations */
+	private $configurations;
+
+	public function __construct(Container $container, Configurations $configurations)
 	{
 		$this->container = $container;
+		$this->configurations = $configurations;
 	}
 
 	public function run()
