@@ -1,0 +1,3 @@
+[submodule ".docker"]
+	path = .docker
+	url = https://github.com/GamerClassN7/Docker-Xamp-Server.git
