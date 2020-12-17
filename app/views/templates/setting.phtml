@@ -203,7 +203,22 @@ $partial = new Partial('head');
 			</div>
 
 			<!--Plugins Settings-->
-
+			<?php foreach ($PLUGINSSETTINGS as $key => $pluginSeting) { ?>
+				<div class="col-12 col-sm-9 mx-auto mt-4">
+					<h4 class="mb-4"><?php echo $pluginSeting['name'] ?></h4>
+					<form method="post">
+						<?php foreach ($pluginSeting['settings'] as $key => $pluginSetingField) { ?>
+							<div class="field">
+								<div class="label"><?php echo $pluginSetingField['name'] ?>:</div>
+								<input type="text" class="input" name="roomName" value="<?php echo $pluginSetingField['value'] ?>">
+							</div>
+						<?php } ?>
+						<div class="field">
+							<input type="submit" name="submitPlugins<?php echo $pluginSeting['name'] ?>Settings" class="button" value="<?php $LANGMNG->echo('b_save') ?>">
+						</div>
+					</form>
+				</div>
+			<?php } ?>
 		</div>
 
 

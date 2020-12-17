@@ -70,6 +70,8 @@ class Setting extends Template
 				$result = $settingsManager->getSettingGroup($plugins[$key]['slug']);
 				if (count ($result) > 0) {
 					$plugins[$key]['settings'] = $result;
+				} else {
+					unset($plugins[$key]);
 				}
 			}
 		}
