@@ -33,4 +33,8 @@ class OpenWeatherMap extends VirtualDeviceManager
 			return 'exception: ' . $e->getMessage();
 		}
 	}
+
+	function enable(){
+		(new SettingsManager)->create('open_weather_api_token', '', 'open_weather');
+	}
 }
