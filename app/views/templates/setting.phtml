@@ -210,7 +210,7 @@ $partial = new Partial('head');
 						<?php foreach ($pluginSeting['settings'] as $key => $pluginSetingField) { ?>
 							<div class="field">
 								<div class="label"><?php echo $pluginSetingField['name'] ?>:</div>
-								<input type="text" class="input" name="roomName" value="<?php echo $pluginSetingField['value'] ?>">
+								<input type="text" class="input" name="<?php echo $pluginSetingField['name'] ?>" value="<?php echo $pluginSetingField['value'] ?>">
 							</div>
 						<?php } ?>
 						<div class="field">

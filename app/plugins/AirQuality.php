@@ -9,6 +9,14 @@ class AirQuality extends VirtualDeviceManager
 
 	function make()
 	{
+		//Register the settings
+		$settingMng = new SettingsManager();
+		if (!($settingField = $settingMng->getByName("airquality"))) {
+			$settingMng->create("token", "", "airquality");
+		} else {
+			$app_id = $settingField['value'];
+		}
+
 		try {
 			if (DeviceManager::registeret($this->virtual_device_name)) {
 				$deviceId = DeviceManager::getDeviceByToken($this->virtual_device_name)['device_id'];
@@ -17,9 +25,9 @@ class AirQuality extends VirtualDeviceManager
 					sleep(1);
 					$subDevice = SubDeviceManager::getSubDeviceByMaster($deviceId, strtolower($this->subdevice_type));
 				}
-				
+
 				//if (!$this->fetchEnabled($deviceId,$subDevice['subdevice_id'])) die();
-				
+
 				$finalUrl = sprintf($this->api_uri, $this->city_sluig, $this->app_id);
 				$json = json_decode(Utilities::CallAPI('GET', $finalUrl, ''), true);
 				RecordManager::create($deviceId, $this->subdevice_type, $json['data']['aqi']);

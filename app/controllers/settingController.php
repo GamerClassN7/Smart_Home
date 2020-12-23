@@ -21,13 +21,24 @@ if (isset($_POST) && !empty($_POST)){
 
 		$ga = new PHPGangsta_GoogleAuthenticator();
 		$checkResult = $ga->verifyCode($otaSecret, $otaCode, 2);    // 2 = 2*30sec clock tolerance
-		 if ($checkResult) {
-			 $userManager->setOta($otaCode, $otaSecret);
-		 }
+		if ($checkResult) {
+			$userManager->setOta($otaCode, $otaSecret);
+		}
 		header('Location: ' . BASEURL . 'setting');
 		die();
 	} else if (isset ($_POST['userPermission']) && !empty ($_POST['userID'])) {
 		$userManager->setUserDataAdmin("permission", $_POST['userPermission'], $_POST['userID']);
+		header('Location: ' . BASEURL . 'setting');
+		die();
+	} else {
+		foreach ($_POST as $key => $value) {
+			if ($key == 'submit') continue;
+			$settingMng = new SettingsManager();
+			if ($settingMng->getByName($key)) {
+				$settingMng->update($key, $value);
+			}
+		}
+
 		header('Location: ' . BASEURL . 'setting');
 		die();
 	}

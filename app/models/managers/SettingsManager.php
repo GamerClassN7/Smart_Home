@@ -14,21 +14,23 @@ class SettingsManager{
 	}
 
 	public static function create ($name, $value, $type = '') {
-		$setting = array (
-			'name' => $name,
-			'value' => $value,
-			'type' => $type,
-		);
-		try {
-			Db::add ('settings', $setting);
-		} catch(PDOException $error) {
-			echo $error->getMessage();
-			die();
+		if (!self::getByName($name)){
+			$setting = array (
+				'name' => $name,
+				'value' => $value,
+				'type' => $type,
+			);
+			try {
+				Db::add ('settings', $setting);
+			} catch(PDOException $error) {
+				echo $error->getMessage();
+				die();
+			}
 		}
 	}
 
 	public static function update ($name, $value, $type = '') {
-		if (self::getByName($name)){
+		if (!self::getByName($name)){
 			self::create($name, $value, $type);
 		} else {
 			try {
