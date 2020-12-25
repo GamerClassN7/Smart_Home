@@ -2,6 +2,7 @@
 .ftpconfig
 .ftpconfig2
 *.log
+*.bin
 config.php
 
 _nemazat/index.html

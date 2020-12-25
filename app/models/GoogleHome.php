@@ -26,7 +26,7 @@ class GoogleHome {
 					}
 				}
 
-				if ($traids < 0){
+				if ($traids < 1){
 					continue;
 				}
 
