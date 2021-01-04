@@ -102,7 +102,7 @@ class RecordManager{
 
 	public static function clean ($day) {
 		if (isset($day)) {
-			Db::command ('DELETE FROM records WHERE `time` < ADDDATE(NOW(), INTERVAL -? DAY);', array($day));
+			Db::command ('DELETE FROM records WHERE `time` < ADDDATE(NOW(), INTERVAL ? DAY);', array($day));
 		}
 	}
 
@@ -110,5 +110,10 @@ class RecordManager{
 	public static function cleanSubdeviceRecords ($subDeviceId) {
 		Db::command ('DELETE FROM records WHERE subdevice_id = ?);', array($subDeviceId));
 	}
+
+	public static function setHistory($subDeviceId){
+		$history = SubDeviceManager::getSubDevice($subDeviceId)['history'];
+		if ($history > 0) self::clean(-abs($history));
+	} 
 }
 ?>

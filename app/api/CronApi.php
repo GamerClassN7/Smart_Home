@@ -12,6 +12,11 @@ class CronApi extends ApiController
 		$backupWorker = new DatabaseBackup();
 		$backupWorker->purge(5);
 
+		//Old Records Cleanup
+		foreach (SubDeviceManager::getAllSubDevices() as $key => $value) {
+			RecordManager::setHistory($value['subdevice_id']);
+		}
+
 		$this->response(['Value' => 'OK']);
 	}
 
