@@ -34,4 +34,13 @@ class UsersApi extends ApiController{
 		}
 		$this->response(['value'=>'OK']);
 	}
+
+	public function subscribe(){
+		//$this->requireAuth();
+
+		$subscriptionToken = $this->input['token'];
+		$subscriptionUserId = $this->input['user_id'];
+		NotificationManager::addSubscriber($subscriptionUserId, $subscriptionToken);
+		$this->response(['value'=>'OK']);
+	}
 }
