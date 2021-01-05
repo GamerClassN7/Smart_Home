@@ -61,4 +61,10 @@ class AuthManager {
 		};
 		return false;
 	}
+
+	public function getUserId($bearer){
+		$token = explode(' ',  $bearer)[1];
+		$userid = Db::loadOne('SELECT user_id FROM tokens WHERE token = ? AND expire >= CURRENT_TIMESTAMP AND blocked = 0;', array($token))['user_id'];
+		return $userid;
+	}
 }

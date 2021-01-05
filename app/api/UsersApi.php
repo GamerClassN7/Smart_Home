@@ -37,10 +37,11 @@ class UsersApi extends ApiController{
 
 	public function subscribe(){
 		//$this->requireAuth();
+		$bearer = $_SERVER['HTTP_AUTHORIZATION'];
+		$authManager = new AuthManager();
+		$userId = $authManager->getUserId($bearer);
 
-		$subscriptionToken = $this->input['token'];
-		$subscriptionUserId = $this->input['user_id'];
-		NotificationManager::addSubscriber($subscriptionUserId, $subscriptionToken);
+		NotificationManager::addSubscriber($userId, $this->input['pushtoken']);
 		$this->response(['value'=>'OK']);
 	}
 }
