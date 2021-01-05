@@ -36,6 +36,7 @@
 						<a href="device/mac/<?php echo $SORTTYPE; ?>">(Mac)</a><i class="fa"><?php echo (!empty($SORTICON['mac']) ? $SORTICON['mac'] : ""); ?></i><br>
 						<a href="device/token/<?php echo $SORTTYPE; ?>">Token</a><i class="fa"><?php echo (!empty($SORTICON['token']) ? $SORTICON['token'] : ""); ?></i>
 					</th>
+					<th><a href="device/history/<?php echo $SORTTYPE; ?>">Historie</a><i class="fa"><?php echo (!empty($SORTICON['history']) ? $SORTICON['history'] : ""); ?></i></th>
 					<th>Action
 						<form method="post" action="">
 							<button class="fa custom-file-input" type="submit" name="deviceCommand" value="reset" title="Reset All"><b>&#xf01e;</b></button>
@@ -101,6 +102,14 @@
 								<?php echo (!empty($device['ip_address']) ? $device['ip_address'] : ""); ?><br>
 								<?php echo (!empty($device['token']) ? $device['token'] : ""); ?></td>
 							<td>
+								<?php if (isset($device['history'])): ?>
+									<form method="post" action="">
+										<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
+										<input class="input" type="number" onchange="this.form.submit();" name="deviceHistory" value="<?php echo (!empty($device['history']) ? $device['history'] : 0); ?>">
+									</form>
+								<?php endif; ?>
+							</td>
+							<td>
 								<?php if (!empty($device['mac'])) : ?>
 									<form method="post" action="">
 										<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
@@ -122,12 +131,6 @@
 		$partial->render();
 		//TODO js do main.js
 		?>
-		<script>
-			$(function() {
-				$("#sortable").sortable();
-				$("#sortable").disableSelection();
-			});
-		</script>
 </body>
 
 </html>

@@ -66,6 +66,10 @@ class SubDeviceManager
 		}
 	}
 
+	public static function editSubDevicesByDevice ($deviceId, $subDeviceParameters) {
+		DB::edit('subdevices', $subDeviceParameters, 'WHERE device_id=?', array ($deviceId));
+	}
+
 	public static function remove($subDeviceId)
 	{
 		RecordManager::cleanSubdeviceRecords($subDeviceId);
@@ -103,7 +107,7 @@ class SubDeviceManager
 	public static function getSubdeviceDetailById($subDeviceId){
 		if (empty($subDeviceId)) return NULL;
 
-		$rows = Db::loadOne("SELECT d.room_id, d.sleep_time, sd.subdevice_id, sd.type, sd.device_id FROM subdevices sd 
+		$rows = Db::loadOne("SELECT d.room_id, d.sleep_time, sd.subdevice_id, sd.type, sd.device_id FROM subdevices sd
 		JOIN devices d ON sd.device_id = d.device_id
 		WHERE sd.subdevice_id = ? ", [$subDeviceId]);
 

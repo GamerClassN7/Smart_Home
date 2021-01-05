@@ -19,7 +19,7 @@ $router->any('/logout', 'Logout');
 $router->any('/automation', 'Automation');
 $router->any('/setting', 'Setting');
 $router->any('/device', 'Device');
-$router->get('/device/{sortBy}/{sortType}', 'Device');
+$router->any('/device/{sortBy}/{sortType}', 'Device');
 $router->any('/plugins', 'Plugins');
 $router->any('/ajax', 'Ajax');
 $router->any('/oauth', 'Oauth');

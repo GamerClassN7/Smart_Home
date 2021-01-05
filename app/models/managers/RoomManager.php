@@ -19,6 +19,12 @@ class RoomManager{
 		return $allRoom;
 	}
 
+	public static function getRoomName ($room_id) {
+		//TODO: ignore Widgets withoud data
+		$allRoom = Db::loadAlone ("SELECT name FROM rooms WHERE room_id=?", array ($room_id));
+		return $allRoom;
+	}
+
 	public static function create ($name) {
 		$room = array (
 			'name' => $name,

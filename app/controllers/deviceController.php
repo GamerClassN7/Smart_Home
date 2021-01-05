@@ -1,6 +1,7 @@
 <?php
 if (!empty ($_POST)){
 	$deviceManager = new DeviceManager ();
+	$subDeviceManager = new SubDeviceManager ();
 	if (!empty ($_FILES['deviceFirmware']) && !empty ($_FILES['deviceFirmware']['tmp_name']) && !empty ($_POST['deviceId'])) {
 		$file = $_FILES['deviceFirmware'];
 		$deviceMac = $deviceManager->getDeviceById ($_POST['deviceId'])['mac'];
@@ -27,6 +28,9 @@ if (!empty ($_POST)){
 	if (!empty ($_POST['deviceName'])  && !empty ($_POST['deviceId'])) {
 		$deviceManager->edit ($_POST['deviceId'], array ('name' => $_POST['deviceName']));
 	}
-	header('Location: ./device');
+	if (isset ($_POST['deviceHistory']) && !empty ($_POST['deviceId'])) {
+		$subDeviceManager->editSubDevicesByDevice($_POST['deviceId'], array ('history' => $_POST['deviceHistory']));
+	}
+	header('Location: ' . BASEURL . str_replace(BASEDIR, "", $_SERVER['REQUEST_URI']));
 	die();
 }

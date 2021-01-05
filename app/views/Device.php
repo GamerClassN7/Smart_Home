@@ -28,7 +28,8 @@ class Device extends Template
 			"token" => "token",
 			"signal" => "signal",
 			"firmware" => "firmware_hash",
-			"icon" => "icon"
+			"icon" => "icon",
+			"history" => "history",
 		];
 
 		$sortIcons = [
@@ -47,18 +48,23 @@ class Device extends Template
 			$sortBy = "id";
 			$sortType = "DESC";
 		}
-
 		$template->prepare('sortIcon', [$sortBy => $sortIcons[$sortType]]);
 
 		foreach ($devices as $key => $device) {
 			//Signal Stenght
 			$subdevice = $subDeviceManager->getSubDeviceByMasterAndType($device['device_id'], "wifi");
+			$subdeviceLocal = $subDeviceManager->getSubDeviceByMaster($device['device_id']);
+			if (!empty ($subdeviceLocal)) {
+				$devices[$key]['history'] = (!empty ($subdeviceLocal['history']) ? $subdeviceLocal['history'] : 0);
+			} else {
+				unset($devices[$key]['history']);
+			}
 			$devices[$key]['signal'] = "";
 			if (!empty($subdevice['subdevice_id'])) {
 				$record = $recordManager->getLastRecord($subdevice['subdevice_id']);
 				if (!empty($record)) {
 					$devices[$key]['signal'] = $record['value'] . " " . $subdevice['unit'];
-				} 
+				}
 			}
 
 			//Firmware Status

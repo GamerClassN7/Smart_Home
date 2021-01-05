@@ -187,20 +187,31 @@ class Utilities
 	 * @param string $operator ('asc'/'desc')
 	 * @return void
 	 */
-	static function sortArrayByKey($data = [], $key, $operator = "asc"){
-		if ($operator == "asc")
-		{
-			uasort($data, function($a, $b) use ($key){
-				if ($a[$key] == $b[$key]) return 0;
-				return ($a[$key] < $b[$key]) ? -1 : 1;
+	static function sortArrayByKey($data = [], $key, $operator = "asc")
+	{
+		if ($operator == "asc") {
+			uasort($data, function ($a, $b) use ($key) {
+				$SortA = $a[$key];
+				$SortB = $b[$key];
+				if ($key == "room_id") {
+					$SortA = RoomManager::getRoomName($SortA);
+					$SortB = RoomManager::getRoomName($SortB);
+				}
+				if ($SortA == $SortB) return 0;
+				return ($SortA < $SortB) ? -1 : 1;
 			});
-		} else{
-			uasort($data, function($a, $b) use ($key){
-				if ($a[$key] == $b[$key]) return 0;
-				return ($a[$key] > $b[$key]) ? -1 : 1;
+		} else {
+			uasort($data, function ($a, $b) use ($key) {
+				$SortA = $a[$key];
+				$SortB = $b[$key];
+				if ($key == "room_id") {
+					$SortA = RoomManager::getRoomName($SortA);
+					$SortB = RoomManager::getRoomName($SortB);
+				}
+				if ($SortA == $SortB) return 0;
+				return ($SortA > $SortB) ? -1 : 1;
 			});
 		}
 		return $data;
-		
 	}
 }

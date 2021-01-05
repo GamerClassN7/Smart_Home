@@ -7,11 +7,9 @@ class DevicesApi extends ApiController{
 		$response = [];
 
 		// TODO: process the request
-
 		$this->response($response);
 	}
 
 	public function getDevicesByRoom($roomId){
-
 	}
 }
