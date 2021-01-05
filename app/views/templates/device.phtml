@@ -102,7 +102,7 @@
 								<?php echo (!empty($device['ip_address']) ? $device['ip_address'] : ""); ?><br>
 								<?php echo (!empty($device['token']) ? $device['token'] : ""); ?></td>
 							<td>
-								<?php if (isset($device['history'])): ?>
+								<?php if (isset($device['history']) && $device['history'] != "null"): ?>
 									<form method="post" action="">
 										<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
 										<input class="input" type="number" onchange="this.form.submit();" name="deviceHistory" value="<?php echo (!empty($device['history']) ? $device['history'] : 0); ?>">

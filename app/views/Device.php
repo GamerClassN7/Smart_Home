@@ -57,7 +57,7 @@ class Device extends Template
 			if (!empty ($subdeviceLocal)) {
 				$devices[$key]['history'] = (!empty ($subdeviceLocal['history']) ? $subdeviceLocal['history'] : 0);
 			} else {
-				unset($devices[$key]['history']);
+				$devices[$key]['history'] = "null";
 			}
 			$devices[$key]['signal'] = "";
 			if (!empty($subdevice['subdevice_id'])) {
