@@ -5,6 +5,21 @@ class Device extends Template
 {
 	function __construct($sortBy = null, $sortType = null)
 	{
+		// //Notification data setup
+		// $notificationMng = new NotificationManager;
+		// $notificationData = [
+		// 	'title' => 'Info',
+		// 	'body' => 'New device Detected Found',
+		// 	'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
+		// ];
+		// //Notification for newly added Device
+		// if ($notificationData != []) {
+		// 	$subscribers = $notificationMng::getSubscription();
+		// 	foreach ($subscribers as $key => $subscriber) {
+		// 		$notificationMng::sendSimpleNotification(SERVERKEY, $subscriber['token'], $notificationData);
+		// 	}
+		// }
+
 		$userManager = new UserManager();
 		$deviceManager = new DeviceManager();
 		$subDeviceManager = new SubDeviceManager();
@@ -54,8 +69,8 @@ class Device extends Template
 			//Signal Stenght
 			$subdevice = $subDeviceManager->getSubDeviceByMasterAndType($device['device_id'], "wifi");
 			$subdeviceLocal = $subDeviceManager->getSubDeviceByMaster($device['device_id']);
-			if (!empty ($subdeviceLocal)) {
-				$devices[$key]['history'] = (!empty ($subdeviceLocal['history']) ? $subdeviceLocal['history'] : 0);
+			if (!empty($subdeviceLocal)) {
+				$devices[$key]['history'] = (!empty($subdeviceLocal['history']) ? $subdeviceLocal['history'] : 0);
 			} else {
 				$devices[$key]['history'] = "null";
 			}
