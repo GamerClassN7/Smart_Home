@@ -62,6 +62,7 @@ class EndpointsApi extends ApiController{
 		}
 
 		$device = DeviceManager::getDeviceByToken($obj['token']);
+		DeviceManager::setHeartbeat($device['device_id']);
 
 		//Diagnostic
 		if (isset($obj['settings'])){
@@ -110,7 +111,7 @@ class EndpointsApi extends ApiController{
 				if (!SubDeviceManager::getSubDeviceByMaster($device['device_id'], $key)) {
 					SubDeviceManager::create($device['device_id'], $key, UNITS[$key]);
 				}
-				
+
 				$subDeviceLastReordValue[$key] = $value['value'];
 				RecordManager::create($device['device_id'], $key, round($value['value'],3));
 				$logManager->write("[API] Device_ID " . $device['device_id'] . " writed value " . $key . ' ' . $value['value'], LogRecordTypes::INFO);

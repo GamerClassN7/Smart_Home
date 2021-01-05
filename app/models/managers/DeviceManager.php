@@ -7,7 +7,9 @@ class DeviceManager{
 		WHERE approved != ?", Array(2));
 	}
 
-
+	static function setHeartbeat($deviceId){
+		self::edit($deviceId, ['heartbeat' => date("Y-m-d H:i:s", time())]);
+	}
 
 	static function getAllDevicesInRoom ($roomId = "") {
 		return Db::loadAll ("SELECT * FROM devices WHERE room_id = ? AND approved != ?", Array($roomId, 2));

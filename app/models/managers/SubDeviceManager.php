@@ -50,7 +50,7 @@ class SubDeviceManager
 	}
 
 	//check if dubdevice exist
-
+	//Add History to be set in Creation
 	public static function create($deviceId, $type, $unit)
 	{
 		$record = array(

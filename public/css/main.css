@@ -2660,19 +2660,19 @@ html {
 
   @font-face {
 	font-family: 'Metropolis';
-	src: url("../fonts/Metropolis-Regular.ttf");
+	/*src: url("../fonts/Metropolis-Regular.ttf");*/
 	font-weight: 400;
   }
 
   @font-face {
 	font-family: 'Metropolis';
-	src: url("../fonts/Metropolis-Medium.ttf");
+	/*src: url("../fonts/Metropolis-Medium.ttf");*/
 	font-weight: 500;
   }
 
   @font-face {
 	font-family: 'Metropolis';
-	src: url("../fonts/Metropolis-SemiBold.ttf");
+	/*src: url("../fonts/Metropolis-SemiBold.ttf");*/
 	font-weight: 600;
   }
 
