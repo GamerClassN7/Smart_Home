@@ -60,7 +60,6 @@ const UNITS = [
 
 //Notifications
 define('SERVERKEY','');
-define('SERVERVAIPKEY','');
 
 //TODO: Po registraci vzít výchozí hodnoty
 //Default network Setting

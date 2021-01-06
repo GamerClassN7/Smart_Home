@@ -10,7 +10,7 @@ class Device extends Template
 		// $notificationData = [
 		// 	'title' => 'Info',
 		// 	'body' => 'New device Detected Found',
-		// 	'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
+		// 	'icon' => 'http://dev.steelants.cz/projekty/simplehome-client/img/icons/favicon-16x16.png',
 		// ];
 		// //Notification for newly added Device
 		// if ($notificationData != []) {
