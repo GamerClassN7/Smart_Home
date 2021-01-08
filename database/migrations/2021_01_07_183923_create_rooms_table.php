@@ -16,6 +16,8 @@ class CreateRoomsTable extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->int('owner_id');  //TODO: Foregin key to user Table
+            $table->boolval('default');
             $table->timestamps();
         });
     }

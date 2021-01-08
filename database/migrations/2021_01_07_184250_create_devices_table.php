@@ -15,6 +15,18 @@ class CreateDevicesTable extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
+            $table->int('room_id'); //TODO: Foregin key to Room Table
+            $table->string('type');
+            $table->string('token');
+            $table->datetime('heartbeat')
+            $table->string('mac');
+            $table->string('firmware_hash');
+            $table->string('ip_address');
+            $table->string('sleep_time');
+            $table->string('owner_id'); //TODO: Foregin key to user Table
+            $table->boolval('approved');
+            $table->string('icon');
+            $table->string('command');
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->timestamps();
