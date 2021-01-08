@@ -14,14 +14,14 @@ class CreateDevicesTable extends Migration
     public function up()
     {
         Schema::create('devices', function (Blueprint $table) {
-            $table->id();
+            $table->id()->unique();
             $table->int('room_id'); //TODO: Foregin key to Room Table
             $table->string('type');
-            $table->string('token');
+            $table->string('token')->unique();
             $table->datetime('heartbeat')
             $table->string('mac');
             $table->string('firmware_hash');
-            $table->string('ip_address');
+            $table->string('ip_address')->unique();
             $table->string('sleep_time');
             $table->string('owner_id'); //TODO: Foregin key to user Table
             $table->boolval('approved');
