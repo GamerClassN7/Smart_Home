@@ -14,9 +14,12 @@ class CreateRoomsTable extends Migration
     public function up()
     {
         Schema::create('rooms', function (Blueprint $table) {
-            $table->id();
+            $table->id()->unique();
             $table->string('name')->unique();
+            $table->int('owner_id');  //TODO: Foregin key to user Table
+            $table->boolval('default');
             $table->timestamps();
+            $table->forgein('owner_id')->references('user_id')->on('users');
         });
     }
 
