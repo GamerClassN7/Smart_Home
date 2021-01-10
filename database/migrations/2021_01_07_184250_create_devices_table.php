@@ -27,8 +27,10 @@ class CreateDevicesTable extends Migration
             $table->string('ip_address')->unique();
             $table->string('firmware_hash');
             $table->string('sleep_time');
-            $table->datetime('heartbeat')
+            $table->datetime('heartbeat');
             $table->string('command');
+            $table->forgein('owner_id')->references('user_id')->on('users');
+            $table->forgein('room_id')->references('room_id')->on('rooms');
             $table->timestamps();
         });
     }

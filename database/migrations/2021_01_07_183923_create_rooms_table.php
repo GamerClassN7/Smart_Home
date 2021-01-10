@@ -19,6 +19,7 @@ class CreateRoomsTable extends Migration
             $table->int('owner_id');  //TODO: Foregin key to user Table
             $table->boolval('default');
             $table->timestamps();
+            $table->forgein('owner_id')->references('user_id')->on('users');
         });
     }
 
