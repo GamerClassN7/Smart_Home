@@ -28,7 +28,7 @@ class RecordManager{
 		//Ochrana proti duplicitním hodnotám zapisují se jen změny
 		$lastRecord = self::getLastRecord($subDeviceId, 1);
 
-		if ($lastRecord['value'] == $value){
+		if (isset($lastRecord['value']) && $lastRecord['value'] == $value){
 			return false;
 		}
 
@@ -114,6 +114,6 @@ class RecordManager{
 	public static function setHistory($subDeviceId){
 		$history = SubDeviceManager::getSubDevice($subDeviceId)['history'];
 		if ($history > 0) self::clean(-abs($history));
-	} 
+	}
 }
 ?>
