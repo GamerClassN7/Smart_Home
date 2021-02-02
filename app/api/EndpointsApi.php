@@ -113,7 +113,7 @@ class EndpointsApi extends ApiController{
 				}
 
 				$subDeviceLastReordValue[$key] = $value['value'];
-				RecordManager::create($device['device_id'], $key, round($value['value'],3));
+				RecordManager::create($device['device_id'], $key, round($value['value'],3), 'device');
 				$logManager->write("[API] Device_ID " . $device['device_id'] . " writed value " . $key . ' ' . $value['value'], LogRecordTypes::INFO);
 
 				//notification

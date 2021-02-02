@@ -2,16 +2,21 @@
 class RecordManager{
 	public static $records;
 
-	public static function createWithSubId ($subDeviceId,  $value) {
+	public static function createWithSubId ($subDeviceId, $value, $origin = false) {
 		try {
 			$record = [
 				'execuded' => 1,
 			];
+
 			Db::edit ('records', $record, 'WHERE subdevice_id = ?', array ($subDeviceId));
 			$record = array (
 				'subdevice_id' => $subDeviceId,
 				'value' => $value,
 			);
+
+			if ($origin != false)
+				$record['Origin'] = $origin;
+
 			return Db::add ('records', $record);
 		} catch(PDOException $error) {
 			echo $error->getMessage();
@@ -19,7 +24,7 @@ class RecordManager{
 		}
 	}
 
-	public static function create ($deviceId, $type, $value) {
+	public static function create ($deviceId, $type, $value, $origin = false) {
 		$subDeviceId = Db::loadOne('SELECT * FROM subdevices WHERE device_id = ? AND type = ?;', array($deviceId, $type))['subdevice_id'];
 		if ($subDeviceId == '') {
 			return false;
@@ -42,6 +47,10 @@ class RecordManager{
 				'subdevice_id' => $subDeviceId,
 				'value' => $value,
 			);
+
+			if ($origin != false)
+				$record['Origin'] = $origin;
+
 			return Db::add ('records', $record);
 		} catch(PDOException $error) {
 			echo $error->getMessage();

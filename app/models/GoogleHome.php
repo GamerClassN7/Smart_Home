@@ -27,7 +27,7 @@ class GoogleHome
 						$attributes += $deviceAttributes;
 					}
 				}
-	
+
 				if ($traids < 1) {
 					continue;
 				}
@@ -76,7 +76,7 @@ class GoogleHome
 				'online' => false,
 				'status' => 'OFFLINE',
 			];
-			
+
 			if ($subDevicesData = SubDeviceManager::getAllSubDevices($deviceId['id'])) {
 				foreach ($subDevicesData as $key => $subDeviceData) {
 					$lastRecord = RecordManager::getLastRecord($subDeviceData['subdevice_id']);
@@ -249,7 +249,7 @@ class GoogleHome
 
 		if ($executionCommand['params']['on']) $value = 1;
 
-		RecordManager::createWithSubId($subDeviceId, $value);
+		RecordManager::createWithSubId($subDeviceId, $value, 'google');
 
 		$executed = 0;
 		$waiting = 0;
@@ -288,7 +288,7 @@ class GoogleHome
 			$value = $executionCommand['params']['thermostatTemperatureSetpoint'];
 		}
 
-		RecordManager::createWithSubId($subDeviceId, $value);
+		RecordManager::createWithSubId($subDeviceId, $value, 'google');
 
 		$executed = 0;
 		$waiting = 0;
@@ -332,7 +332,7 @@ class GoogleHome
 			$value = RecordManager::getLastRecordNotNull($subDeviceId)['value'];
 		}
 
-		RecordManager::createWithSubId($subDeviceId, $value);
+		RecordManager::createWithSubId($subDeviceId, $value, 'google');
 
 		$executed = 0;
 		$waiting = 0;

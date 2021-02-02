@@ -14,7 +14,7 @@ class WidgetApi extends ApiController
 		$subDeviceData = SubDeviceManager::getSubDevice($subDeviceId);
 		if ($subDeviceData['type'] == 'on/off') {
 			$lastValue = RecordManager::getLastRecord($subDeviceData['subdevice_id'])['value'];
-			RecordManager::create($subDeviceData['device_id'], 'on/off', (int) !$lastValue);
+			RecordManager::create($subDeviceData['device_id'], 'on/off', (int) !$lastValue, "vue-app");
 			$response = !$lastValue;
 		} else {
 			throw new Exception("Bad Request", 403);
@@ -46,7 +46,7 @@ class WidgetApi extends ApiController
 		$response = null;
 		$subDeviceData = SubDeviceManager::getSubdeviceDetailById($subDeviceId);
 
-		
+
 		//TODO: zeptat se @Patrik Je Graf Dobře Seřazený na DESC ?
 		$events = RecordManager::getAllRecordForGraph($subDeviceId, $period, $groupBy[$period]);
 		if ( count($events) == 0){
@@ -114,7 +114,7 @@ class WidgetApi extends ApiController
 
 		];
 
-		//TODO: Make Cleaner 
+		//TODO: Make Cleaner
 		if (isset(RANGES[$subDeviceData['type']])){
 			$response['graph']['options']['scales']['yAxes'] = [[
 				'ticks' => [
@@ -124,7 +124,7 @@ class WidgetApi extends ApiController
 				]
 			]];
 		}
-		
+
 		$this->response($response);
 	}
 
