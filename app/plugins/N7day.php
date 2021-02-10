@@ -29,7 +29,7 @@ class N7Day extends VirtualDeviceManager
 				$datediff = $now - $your_date;
 				$daysUntilN7Day = round($datediff / (60 * 60 * 24));
 				
-				RecordManager::create($deviceId, $this->subdevice_type, $daysUntilN7Day);
+				RecordManager::create($deviceId, $this->subdevice_type, $daysUntilN7Day, 'plugin');
 			} else {
 				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name, $this->device_type);
 				DeviceManager::approved($this->virtual_device_name);

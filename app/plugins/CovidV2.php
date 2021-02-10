@@ -31,7 +31,7 @@ class CovidV2 extends VirtualDeviceManager
 				$json = json_decode(Utilities::CallAPI('GET', $finalUrl, ''), true)['data'];
 
 				foreach ($dataItems as $dataItem) {
-					RecordManager::create($deviceId, strtolower($dataItem), end($json)[$this->name_index[$dataItem]]);
+					RecordManager::create($deviceId, strtolower($dataItem), end($json)[$this->name_index[$dataItem]], 'plugin');
 				}
 			} else {
 				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name, strtolower($this->virtual_device_name));

@@ -52,7 +52,7 @@ class UsaElection extends VirtualDeviceManager
 				$OnePercent = ($Trump + $Biden + $Unknown) / 100;
 
 				foreach ($dataItems as $Category) {
-					RecordManager::create($deviceId, strtolower($Category), round(($$Category / $OnePercent)));
+					RecordManager::create($deviceId, strtolower($Category), round(($$Category / $OnePercent)), 'plugin');
 				}
 			} else {
 				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name, 'senzore-virtual');

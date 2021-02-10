@@ -55,7 +55,7 @@ class OpenWeatherMap extends VirtualDeviceManager
 				}
 
 
-				RecordManager::create($deviceId, $this->subdevice_type, $json['weather'][0]['id']);
+				RecordManager::create($deviceId, $this->subdevice_type, $json['weather'][0]['id'], 'plugin');
 			} else {
 				DeviceManager::create($this->virtual_device_name, $this->virtual_device_name, 'senzore-virtual');
 				DeviceManager::approved($this->virtual_device_name);
