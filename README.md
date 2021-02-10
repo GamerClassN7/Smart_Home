@@ -136,6 +136,17 @@ Distributed under the MIT License. See `LICENSE` for more information.
 Project Link: [https://github.com/GamerClassN7/Smart_Home/](https://github.com/GamerClassN7/Smart_Home/) <br> <br>
 <sup><sub>Tags (ignore): ESP32 ESP12 ESP08 ESP01 ESP Smart Home Automation System PWA PHP HTML JS DHT11 DHT22
 
+## Code Statistics
+Type | Files | Lines
+-----|-------|-----------
+php  | 2     | 2298 (89%)
+md   | 1     | 171 (7%)
+js   | 1     | 64 (2%)
+sh   | 1     | 34 (1%)
+json | 1     | 10 (0.4%)
+-----|-------|-----------
+All  | 6     | 2577
+
 ## Folder structure
 ```
 - /app								# app specific files
