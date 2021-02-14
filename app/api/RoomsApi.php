@@ -54,6 +54,7 @@ class RoomsApi extends ApiController
 		foreach ($roomsData as $roomKey => $roomData) {
 			if ($roomData['device_count'] == 0) continue;
 			$subDevicesSorted = isset($subDevicesData[$roomData['room_id']]) ? Utilities::sortArrayByKey($subDevicesData[$roomData['room_id']], 'connection_error', 'asc') : [];
+			if (count($subDevicesSorted) == 0) continue;
 			$response[] = [
 				'room_id' => $roomData['room_id'],
 				'name' => $roomData['name'],
