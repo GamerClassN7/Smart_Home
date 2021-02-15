@@ -78,7 +78,9 @@ class EndpointsApi extends ApiController{
 			foreach ($obj['logs'] as $log) {
 				$deviceLogManager = new LogManager('../logs/devices/'. date("Y-m-d").'.log');
 				$deviceLogManager->setLevel(LOGLEVEL);
-				$deviceLogManager->write("[Device Log Msg] Device_ID " . $device['device_id'] . "->" . $log, LogRecordTypes::ERROR);
+				if ($log != 'HTTP_UPDATE_FAILD code-102 messageFile Not Found (404)'){
+					$deviceLogManager->write("[Device Log Msg] Device_ID " . $device['device_id'] . "->" . $log, LogRecordTypes::ERROR);
+				}
 				unset($deviceLogManager);
 			}
 			$this->response([
