@@ -3,6 +3,19 @@ class DatabaseBackup
 {
 	public function make()
 	{
+		//Register the settings
+		$time  = '00:00';
+		$settingMng = new SettingsManager();
+		if (!($settingField = $settingMng->getByName("backup_time","db_backup"))) {
+			$settingMng->create("backup_time", $time, "db_backup");
+		} else {
+			$time = $settingField['value'];
+		}
+
+		//Time to Backup ?
+		if (date("H:i",time()) != $time)
+			return 'pending';
+
 		try {
 			$filenames = [];
 			$backupWorker = new DatabaseBackup;
@@ -19,6 +32,7 @@ class DatabaseBackup
 	private function data()
 	{
 		$backupfile = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . "/backup/" . DBNAME . '_data_' . date("Y-m-d", time()) . '.sql';
+		if (file_exists($backupfile)) return null;
 		$command = "mysqldump --skip-comments --no-create-info -h localhost -u " . DBUSER . " -p" . DBPASS . " " . DBNAME . " -r $backupfile 2>&1";
 		$this->executeCommand($command);
 		return $backupfile;
@@ -27,6 +41,7 @@ class DatabaseBackup
 	private function scheme()
 	{
 		$backupfile = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . "/backup/" . DBNAME . '_scheme_' . date("Y-m-d", time()) . '.sql';
+		if (file_exists($backupfile)) return null;
 		$command = "mysqldump --skip-comments --no-data -h localhost -u " . DBUSER . " -p" . DBPASS . " " . DBNAME . " -r $backupfile 2>&1";
 		$this->executeCommand($command);
 		return $backupfile;

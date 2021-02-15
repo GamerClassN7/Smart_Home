@@ -14,7 +14,7 @@ class SettingsManager{
 	}
 
 	public static function create ($name, $value, $type = '') {
-		if (!self::getByName($name)){
+		//if (!self::getByName($name)){
 			$setting = array (
 				'name' => $name,
 				'value' => $value,
@@ -26,7 +26,7 @@ class SettingsManager{
 				echo $error->getMessage();
 				die();
 			}
-		}
+		//}
 	}
 
 	public static function update ($name, $value, $type = '') {
