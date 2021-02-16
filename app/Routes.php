@@ -40,6 +40,9 @@ $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 $router->get('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
 $router->get('/api/widgets/{widgetId}/detail/{period}', 'WidgetApi@detail');
 
+$router->get('/api/automations', 'AutomationsApi@default');
+
+
 
 //cron
 $router->post('/cron/clean', 'CronApi@clean');
