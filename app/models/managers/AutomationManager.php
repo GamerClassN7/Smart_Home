@@ -43,10 +43,15 @@ class AutomationManager{
 
 	}
 
+	public static function getById($automationId){
+		return Db::loadOne("SELECT * FROM automation WHERE automation_id = ?", [$automationId]);
+
+	}
+
 	public static function executeAll(){
 		global $logManager;
 
-		$automations = Db::loadAll ("SELECT * FROM automation");
+		/*$automations = Db::loadAll ("SELECT * FROM automation");
 		$dayNameNow = strtolower (date('D', time()));
 
 		foreach ($automations as $automation) {
@@ -170,6 +175,6 @@ class AutomationManager{
 					Db::edit('automation', array('locked' => 0), 'WHERE automation_id = ?', array($automation['automation_id']));
 				}
 			}
-		}
+		}*/
 	}
 }

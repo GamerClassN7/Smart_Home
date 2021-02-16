@@ -41,22 +41,26 @@ $router->get('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
 $router->get('/api/widgets/{widgetId}/detail/{period}', 'WidgetApi@detail');
 
 $router->get('/api/automations', 'AutomationsApi@default');
-
+$router->get('/api/automations/{automationId}/detail', 'AutomationsApi@detail');
 
 
 //cron
 $router->post('/cron/clean', 'CronApi@clean');
 $router->post('/cron/fetch', 'CronApi@fetch');
+$router->post('/cron/automations', 'CronApi@automations');
+
 
 //Google Home - API
 $router->any('/api/HA/auth', 'Oauth');
 $router->any('/api/HA', 'GoogleHomeApi@response');
+
 
 //Endpoints API
 $router->post('/api/endpoint/', 'EndpointsApi@default');
 $router->any('/api/update/', 'UpdatesApi@default');
 $router->any('/api/users/status', 'UsersApi@status');
 $router->any('/api/users/subscribe', 'UsersApi@subscribe');
+
 
 // examples
 $router->any('/api/example', 'ExampleApi@example');

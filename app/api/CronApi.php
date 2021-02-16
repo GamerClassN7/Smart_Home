@@ -20,8 +20,7 @@ class CronApi extends ApiController
 		$this->response(['Value' => 'OK']);
 	}
 
-	public function fetch()
-	{
+	public function fetch(){
 		//Run Plugins
 		$result = [];
 		$dir = $_SERVER['DOCUMENT_ROOT'] . BASEDIR . 'app/plugins/';
@@ -59,5 +58,10 @@ class CronApi extends ApiController
 
 		//Print Result
 		$this->response($result);
+	}
+
+	public function automations(){
+		AutomationManager:executeAll();
+		$this->response(['Value' => 'OK']);
 	}
 }
