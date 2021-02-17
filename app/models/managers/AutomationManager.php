@@ -8,9 +8,9 @@ class AutomationManager{
 	}
 
 	public static function deactive($automationId) {
-		$automation = Db::loadOne ("SELECT * FROM automation WHERE automation_id=?" , array ($automationId));
-		$flipedValue = ($automation['active'] == 1 ? 0 : 1);
-		return Db::command ('UPDATE automation SET active = ? WHERE automation_id=?', array ($flipedValue,$automationId));
+		$automation = self::getById($automationId,["enabled"]);
+		$flipedValue = ($automation['enabled'] == 1 ? 0 : 1);
+		return Db::command ('UPDATE automation SET enabled = ? WHERE automation_id=?', array ($flipedValue,$automationId));
 	}
 
 	public static function restart($automationId) {
@@ -38,13 +38,12 @@ class AutomationManager{
 		}
 	}
 
-	public static function getAll(){
-		return Db::loadAll ("SELECT * FROM automation");
-
+	public static function getAll($collums = ['*']){
+		return Db::loadAll ("SELECT ". implode("," , $collums)." FROM automation");
 	}
 
-	public static function getById($automationId){
-		return Db::loadOne("SELECT * FROM automation WHERE automation_id = ?", [$automationId]);
+	public static function getById($automationId, $collums = ['*']){
+		return Db::loadOne("SELECT ". implode("," , $collums)." FROM automation WHERE automation_id = ?", [$automationId]);
 
 	}
 
