@@ -34,6 +34,7 @@ class AutomationManager{
 			}
 		} catch(PDOException $error) {
 			echo $error->getMessage();
+			return false;
 			die();
 		}
 	}

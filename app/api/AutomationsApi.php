@@ -20,4 +20,15 @@ class AutomationsApi extends ApiController
 
 		$this->response($response);
 	}
+
+	public function create()
+	{
+		//$this->requireAuth();
+		$obj = $this->input;
+
+		$response = [];
+		$response = AutomationManager::create($obj['name'],$obj['days'], $obj['tasks'], $obj['conditions']);
+
+		$this->response(['value'=>'OK']);
+	}
 }
