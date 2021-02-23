@@ -23,7 +23,7 @@ class AutomationsApi extends ApiController
 
 	public function create()
 	{
-		//$this->requireAuth();
+		$this->requireAuth();
 		$obj = $this->input;
 
 		$response = [];
