@@ -17,14 +17,14 @@ class AutomationManager{
 		return Db::command ('UPDATE automation SET executed = 0 WHERE automation_id=?', array ($automationId));
 	}
 
-	public static function create ($name, $onDays, $doCode, $ifCode, $automationId = "") {
-		$userId = UserManager::getUserData('user_id');
+	public static function create ($name, $onDays, $doCode, $ifCode, $userId = 1, $automationId = "") {
+		$userId = UserManager::getUserData('user_id', $userId);
 		$scene = array (
 			'name' => $name,
 			'owner_id' => $userId,
 			'on_days' => $onDays,
-			'if_something' => $ifCode,
-			'do_something' => $doCode,
+			'conditions' => $ifCode,
+			'tasks' => $doCode,
 		);
 		try {
 			if ($automationId == "") {

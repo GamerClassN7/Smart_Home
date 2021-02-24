@@ -26,8 +26,18 @@ class AutomationsApi extends ApiController
 		$this->requireAuth();
 		$obj = $this->input;
 
+		if (
+			empty($obj['name']) ||
+			!isset($obj['name']) ||
+			!isset($obj['conditions']) ||
+			!isset($obj['tasks']) ||
+			!isset($obj['days'])
+		) {
+			throw new Exception("Invalid request payload", 400);
+		}
+
 		$response = [];
-		$response = AutomationManager::create($obj['name'],$obj['days'], $obj['tasks'], $obj['conditions']);
+		$response = AutomationManager::create($obj['name'],json_encode($obj['days']), json_encode($obj['tasks']), json_encode($obj['conditions']));
 
 		$this->response(['value'=>'OK']);
 	}
