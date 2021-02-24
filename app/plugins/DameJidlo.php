@@ -38,7 +38,7 @@ class DameJidlo extends VirtualDeviceManager
             echo 'Error:' . curl_error($ch);
         }
         curl_close($ch);
-
+        var_dump(isset(json_decode($result, true)['data']['active_orders'][0]['delivery']['time']['eta']) ? json_decode($result, true)['data']['active_orders'][0]['delivery']['time']['eta'] : 0);
         return  (isset(json_decode($result, true)['data']['active_orders'][0]['delivery']['time']['eta']) ? json_decode($result, true)['data']['active_orders'][0]['delivery']['time']['eta'] : 0);
     }
 
@@ -80,6 +80,6 @@ class DameJidlo extends VirtualDeviceManager
         } else if ($value <= 1) {
             return "less " . $value;
         }
-		return '';
+		return $value;
 	}
 }
