@@ -28,6 +28,9 @@ if (!empty ($_POST)){
 	if (!empty ($_POST['deviceName'])  && !empty ($_POST['deviceId'])) {
 		$deviceManager->edit ($_POST['deviceId'], array ('name' => $_POST['deviceName']));
 	}
+	if (!empty ($_POST['deviceApproved'])  && !empty ($_POST['deviceId'])) {
+		$deviceManager->edit ($_POST['deviceId'], array ('approved' => $_POST['deviceApproved']));
+	}
 	if (isset ($_POST['deviceHistory']) && !empty ($_POST['deviceId'])) {
 		$subDeviceManager->editSubDevicesByDevice($_POST['deviceId'], array ('history' => $_POST['deviceHistory']));
 	}
