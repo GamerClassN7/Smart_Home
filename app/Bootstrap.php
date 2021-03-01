@@ -105,10 +105,8 @@ $apiLogManager->write("[API] request body\n" . json_encode($obj, JSON_PRETTY_PRI
 $apiLogManager->write("[API] POST  body\n" . json_encode($_POST, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 $apiLogManager->write("[API] GET body\n" . json_encode($_GET, JSON_PRETTY_PRINT), LogRecordTypes::INFO);
 
-
-
 Debugger::flag('dbconnect');
-//D B Conector
+//DB Conector
 Db::connect (DBHOST, DBUSER, DBPASS, DBNAME);
 
 Debugger::flag('routes');

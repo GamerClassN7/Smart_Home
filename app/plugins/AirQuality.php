@@ -9,14 +9,6 @@ class AirQuality extends VirtualDeviceManager
 
 	function make()
 	{
-		//Register the settings
-		$settingMng = new SettingsManager();
-		if (!($settingField = $settingMng->getByName("airquality"))) {
-			$settingMng->create("token", "", "airquality");
-		} else {
-			$app_id = $settingField['value'];
-		}
-
 		try {
 			if (DeviceManager::registeret($this->virtual_device_name)) {
 				$deviceId = DeviceManager::getDeviceByToken($this->virtual_device_name)['device_id'];

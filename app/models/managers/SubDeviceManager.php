@@ -66,10 +66,6 @@ class SubDeviceManager
 		}
 	}
 
-	public static function editSubDevicesByDevice ($deviceId, $subDeviceParameters) {
-		DB::edit('subdevices', $subDeviceParameters, 'WHERE device_id=?', array ($deviceId));
-	}
-
 	public static function remove($subDeviceId)
 	{
 		RecordManager::cleanSubdeviceRecords($subDeviceId);

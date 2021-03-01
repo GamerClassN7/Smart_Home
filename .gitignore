@@ -13,9 +13,9 @@ _nemazat/css/font-awesome.min.css
 .vscode/
 .vscode/sftp.json
 
-app/updater/*.bin
-app/logs/*.log
-backup/*.zip
-
-
 vendor/
+
+
+logs/*.log
+updater/*.bin
+backup/*.zip

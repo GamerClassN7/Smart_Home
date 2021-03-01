@@ -1,0 +1,69 @@
+<div class="modal-container modal-container-hiden" id="modal">
+    <div class="modal">
+        <a href=""><i class="fa fa-times close"></i></a>
+        <h4 class="mb-4"><?php $LANGMNG->echo('t_createAutomation')?></h4>
+        <form method="post"  action="" >
+            <div class="field">
+                <div class="label"><?php $LANGMNG->echo('l_nameAt')?></div>
+                <div class="field">
+                    <input class="input" type="text" name="name" required/>
+                </div>
+                <div class="label"><?php $LANGMNG->echo('l_runAt')?></div>
+                <div class="field">
+                    <select class="input" name="atSelector" id="valueSelector" required>
+                        <option	value="sunSet"><?php $LANGMNG->echo('l_sunSet')?></option>
+                        <option	value="sunRise"><?php $LANGMNG->echo('l_sunRice')?></option>
+                        <option	value="inHome"><?php $LANGMNG->echo('l_inHome')?></option>
+                        <option	value="outHome"><?php $LANGMNG->echo('l_outHome')?></option>
+                        <option	value="time"><?php $LANGMNG->echo('l_time')?></option>
+                        <option	value="atDeviceValue"><?php $LANGMNG->echo('l_deviceValue');?></option>
+                        <option	value="noOneHome"><?php $LANGMNG->echo('w_noOne') . ' ' . $LANGMNG->get('w_neni') . ' ' . $LANGMNG->get('w_home');?></option>
+                        <option	value="someOneHome"><?php $LANGMNG->echo('w_someOne') . ' ' . $LANGMNG->get('w_is') . ' ' . $LANGMNG->get('w_home');?></option>
+                    </select>
+                    <input class="input" type="time" name="atTime" id="atTime" disabled/>
+                    <select class="input" name="atDeviceValue" id="atDeviceValue" disabled>
+                        <?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ ?>
+                            <option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name']; ?>[<?php echo $subDeviceValue['type'];  ?>]</option>
+                        <?php } ?>
+                    </select>
+                    =
+                    <input class="input" type="num" name="atDeviceValueInt" id="atDeviceValueInt" required disabled/>
+                </div>
+
+                <div class="label"><?php $LANGMNG->echo('l_affectedDevices')?></div>
+                <div class="field">
+                    <select class="input" name="devices[]" multiple>
+                        <?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){
+                            if ($subDeviceValue['type'] != 'on/off') continue;?>
+                            <option value="<?php echo $subDeviceValue['masterDevice']; ?>"><?php echo $subDeviceValue['name']; ?></option>
+                        <?php } ?>
+                    </select>
+
+                </div>
+                <div class="label"><?php $LANGMNG->echo('l_atDays')?></div>
+                <div class="field">
+                    <input type="checkbox" name="day[]" value="mon"/> <?php $LANGMNG->echo('d_monday'); ?>
+                </div>
+                <div class="field">
+                    <input type="checkbox" name="day[]" value="tue"/> <?php $LANGMNG->echo('d_tuesday'); ?>
+                </div>
+                <div class="field">
+                    <input type="checkbox" name="day[]" value="wed"/> <?php $LANGMNG->echo('d_wednesday'); ?>
+                </div>
+                <div class="field">
+                    <input type="checkbox" name="day[]" value="thu"/> <?php $LANGMNG->echo('d_thursday'); ?>
+                </div>
+                <div class="field">
+                    <input type="checkbox" name="day[]" value="fri"/> <?php $LANGMNG->echo('d_friday'); ?>
+                </div>
+                <div class="field">
+                    <input type="checkbox" name="day[]" value="sat"/> <?php $LANGMNG->echo('d_saturday'); ?>
+                </div>
+                <div class="field">
+                    <input type="checkbox" name="day[]" value="sun"/> <?php $LANGMNG->echo('d_sunday'); ?>
+                </div>
+            </div>
+            <input type="submit" class="button" name="modalNext" value="<?php $LANGMNG->echo('b_next')?>"/>
+        </form>
+    </div>
+</div>

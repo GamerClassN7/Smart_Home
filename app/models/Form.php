@@ -112,7 +112,7 @@ class Form {
 	 * [render function whitch dysplay generated form]
 	 */
 	function render(){
-		self::addInput(InputTypes::SUBMIT, 'formSubmit', '', 'Submit', 'Submit');
+		self::addInput(InputTypes::SUBMIT, 'formSubmit', '', '', 'Submit');
 		$form = '<form '.$this->formName.$this->formId.$this->method.$this->action.'">';
 		$form .= $this->formContent;
 		$form .= '</form>';

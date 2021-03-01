@@ -24,7 +24,15 @@ $partial = new Partial('head');
 		<div class="col-md-9 main-body">
 			<a class="button is-primary m-1" onClick="$('#modal').removeClass('modal-container-hiden').show();"><?php $LANGMNG->echo('t_createAutomation'); ?></a>
 			<div class="row no-gutters">
-				<?php foreach ($AUTOMATIONS as $automationId => $automationData) {
+
+
+
+
+
+
+
+				<?php
+				foreach ($AUTOMATIONS as $automationId => $automationData) {
 					//BUTTON
 					$partial = new Partial('automationButton');
 					$partial->prepare('langMng',$LANGMNG);
@@ -57,6 +65,28 @@ $partial = new Partial('head');
 
 		$partial->prepare('subDevices',$SUBDEVICES);
 		$partial->render();
+
+		$form = new Form('Automation', 'automation-1', 'POST', '');
+		$form->addInput('text','name', 'name', '', true, true);
+		$form->addSelect('run-condition', 'run-condition', 'l_run_condition', [
+			'test' => 'test',
+			'test1' => 'test',
+			'test2' => 'test',
+			'test3' => 'test',
+			'test4' => 'test',
+			'test5' => 'test',
+
+		], true, true, true);
+		$form->addInput('button','add-condition', 'add-condition', 'l_condition', true, true);
+		$form->addSelect('active-time', 'active-time', 'l_run_schedule', [
+			'all' => 'l_all',
+			'day' => 'l_day',
+			'night' => 'l_night',
+			'custome' => 'l_custome',
+		], true, true, true);
+
+		$form->render();
+
 	}?>
 	<script src="./app/templates/js/automation.js"></script>
 	<?php

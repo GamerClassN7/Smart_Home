@@ -8,60 +8,26 @@
                 <div class="field">
                     <input class="input" type="text" name="name" required/>
                 </div>
-                <div class="label"><?php $LANGMNG->echo('l_runAt')?></div>
-                <div class="field">
-                    <select class="input" name="atSelector" id="valueSelector" required>
-                        <option	value="sunSet"><?php $LANGMNG->echo('l_sunSet')?></option>
-                        <option	value="sunRise"><?php $LANGMNG->echo('l_sunRice')?></option>
-                        <option	value="inHome"><?php $LANGMNG->echo('l_inHome')?></option>
-                        <option	value="outHome"><?php $LANGMNG->echo('l_outHome')?></option>
-                        <option	value="time"><?php $LANGMNG->echo('l_time')?></option>
-                        <option	value="atDeviceValue"><?php $LANGMNG->echo('l_deviceValue');?></option>
-                        <option	value="noOneHome"><?php $LANGMNG->echo('w_noOne') . ' ' . $LANGMNG->get('w_neni') . ' ' . $LANGMNG->get('w_home');?></option>
-                        <option	value="someOneHome"><?php $LANGMNG->echo('w_someOne') . ' ' . $LANGMNG->get('w_is') . ' ' . $LANGMNG->get('w_home');?></option>
-                    </select>
-                    <input class="input" type="time" name="atTime" id="atTime" disabled/>
-                    <select class="input" name="atDeviceValue" id="atDeviceValue" disabled>
-                        <?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){ ?>
-                            <option value="<?php echo $subDeviceKey; ?>"><?php echo $subDeviceValue['name']; ?>[<?php echo $subDeviceValue['type'];  ?>]</option>
-                        <?php } ?>
-                    </select>
-                    =
-                    <input class="input" type="num" name="atDeviceValueInt" id="atDeviceValueInt" required disabled/>
-                </div>
 
-                <div class="label"><?php $LANGMNG->echo('l_affectedDevices')?></div>
-                <div class="field">
-                    <select class="input" name="devices[]" multiple>
-                        <?php foreach ($SUBDEVICES as $subDeviceKey => $subDeviceValue){
-                            if ($subDeviceValue['type'] != 'on/off') continue;?>
-                            <option value="<?php echo $subDeviceValue['masterDevice']; ?>"><?php echo $subDeviceValue['name']; ?></option>
-                        <?php } ?>
-                    </select>
+                <div class="label"><?php $LANGMNG->echo('l_runCondition')?></div>
+                <select class="input" name="condOper" id="valueSelector" required>
+                    <option	value="or"><?php $LANGMNG->echo('l_oneNeedToBeWaild')?></option>
+                    <option	value="and"><?php $LANGMNG->echo('l_allNeedToBeWalid')?></option>
+                </select>
+                <input type="button" class="button" name="addCondition" value="<?php $LANGMNG->echo('b_add')?>"/>
 
-                </div>
-                <div class="label"><?php $LANGMNG->echo('l_atDays')?></div>
-                <div class="field">
-                    <input type="checkbox" name="day[]" value="mon"/> <?php $LANGMNG->echo('d_monday'); ?>
-                </div>
-                <div class="field">
-                    <input type="checkbox" name="day[]" value="tue"/> <?php $LANGMNG->echo('d_tuesday'); ?>
-                </div>
-                <div class="field">
-                    <input type="checkbox" name="day[]" value="wed"/> <?php $LANGMNG->echo('d_wednesday'); ?>
-                </div>
-                <div class="field">
-                    <input type="checkbox" name="day[]" value="thu"/> <?php $LANGMNG->echo('d_thursday'); ?>
-                </div>
-                <div class="field">
-                    <input type="checkbox" name="day[]" value="fri"/> <?php $LANGMNG->echo('d_friday'); ?>
-                </div>
-                <div class="field">
-                    <input type="checkbox" name="day[]" value="sat"/> <?php $LANGMNG->echo('d_saturday'); ?>
-                </div>
-                <div class="field">
-                    <input type="checkbox" name="day[]" value="sun"/> <?php $LANGMNG->echo('d_sunday'); ?>
-                </div>
+
+                <div class="label"><?php $LANGMNG->echo('l_runTask')?></div>
+                <input type="button" class="button" name="addTask" value="<?php $LANGMNG->echo('b_add')?>"/>
+
+                <div class="label"><?php $LANGMNG->echo('l_activeTime')?></div>
+                <select class="input" name="condOper" id="valueSelector" required>
+                    <option	value="allday"><?php $LANGMNG->echo('l_all')?></option>
+                    <option	value="daytime"><?php $LANGMNG->echo('l_day')?></option>
+                    <option	value="night"><?php $LANGMNG->echo('l_night')?></option>
+                    <option	value="custom"><?php $LANGMNG->echo('l_custome')?></option>
+                </select>
+
             </div>
             <input type="submit" class="button" name="modalNext" value="<?php $LANGMNG->echo('b_next')?>"/>
         </form>
