@@ -15,7 +15,6 @@ _nemazat/css/font-awesome.min.css
 
 vendor/
 
-
 logs/*.log
 updater/*.bin
 backup/*.zip
