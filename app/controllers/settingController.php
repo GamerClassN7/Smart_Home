@@ -1,6 +1,7 @@
 <?php
 if (isset($_POST) && !empty($_POST)){
 	$userManager = new UserManager();
+	$roomManager = new RoomManager();
 	if (isset($_POST['submitPasswordChange']) && $_POST['submitPasswordChange'] != "") {
 		$oldPassword = $_POST['oldPassword'];
 		$newPassword = $_POST['newPassword1'];
@@ -28,6 +29,10 @@ if (isset($_POST) && !empty($_POST)){
 		die();
 	} else if (isset ($_POST['userPermission']) && !empty ($_POST['userID'])) {
 		$userManager->setUserDataAdmin("permission", $_POST['userPermission'], $_POST['userID']);
+		header('Location: ' . BASEURL . 'setting');
+		die();
+	} if (isset ($_POST['roomName']) && !empty ($_POST['roomId'])) {
+		$roomManager->edit($_POST['roomId'], array("name" => $_POST['roomName']));
 		header('Location: ' . BASEURL . 'setting');
 		die();
 	} else {

@@ -115,8 +115,12 @@
 										<input type="hidden" name="deviceId" value="<?php echo (!empty($device['device_id']) ? $device['device_id'] : ""); ?>">
 										<button class="fa custom-file-input" <?php echo (!empty($device['command']) && $device['command'] == "reset" ? "style=\"color:red;\"" : ""); ?> type="submit" name="deviceCommand" value="reset" title="Reset">&#xf01e;</button>
 										<button class="fa custom-file-input" <?php echo (!empty($device['command']) && $device['command'] == "config" ? "style=\"color:red;\"" : ""); ?> type="submit" name="deviceCommand" value="config" title="Config">&#xf013;</button>
-										<button class="fas fa custom-file-input" <?php echo (!empty($device['approved']) && $device['approved'] == 1 ? "style=\"color:Green;\"" : ""); ?> type="submit" name="deviceApproved" value="1" title="Approved">&#xf00c;</button>
-										<button class="fas fa custom-file-input" <?php echo (!empty($device['approved']) && $device['approved'] == 2 ? "style=\"color:red;\"" : ""); ?> type="submit" name="deviceApproved" value="2" title="Blocked">&#xf00d;</button>
+										<?php if (isset($device['approved']) && $device['approved'] == 0) : ?>
+											<button class="fas fa custom-file-input" type="submit" name="deviceApproved" value="1" title="Approved">&#xf00c;</button>
+										<?php endif; ?>
+										<?php if (isset($device['approved']) && $device['approved']  < 2) : ?>
+											<button class="fas fa custom-file-input" type="submit" name="deviceApproved" value="2" title="Blocked">&#xf00d;</button>
+										<?php endif; ?>
 										<div style="float: clear;"></div>
 									</form>
 								<?php endif; ?>

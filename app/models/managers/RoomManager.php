@@ -37,6 +37,15 @@ class RoomManager{
 		}
 	}
 
+	public static function edit ($roomId, $values = []) {
+		try {
+			Db::edit ('rooms', $values, 'WHERE room_id = ?', array($roomId));
+		} catch(PDOException $error) {
+			echo $error->getMessage();
+			die();
+		}
+	}
+
 	public static function delete ($roomId) {
 		Db::command ('DELETE FROM rooms WHERE room_id=?', array ($roomId));
 	}

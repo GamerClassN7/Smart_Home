@@ -177,7 +177,12 @@ $partial = new Partial('head');
 					<tbody>
 						<?php foreach ($ROOMS as $key => $room) { ?>
 							<tr>
-								<td><?php echo $room['name']; ?></td>
+								<td>
+									<form method="post" action="">
+										<input type="hidden" name="roomId" value="<?php echo (!empty($room['room_id']) ? $room['room_id'] : ""); ?>">
+										<input class="input" type="text" onchange="this.form.submit();" name="roomName" value="<?php echo (!empty($room['name']) ? $room['name'] : ""); ?>">
+									</form>
+								</td>
 								<td>
 									<button name="deleteRoom" type="button" class="button is-danger fa">&#xf1f8;</button>
 									<button name="defaultRoom" type="button" class="button fa" <?php echo ($room['default'] ? 'disabled' : ''); ?>>&#xf140;</button>
