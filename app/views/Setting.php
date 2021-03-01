@@ -10,24 +10,12 @@ class Setting extends Template
 			header('Location: ' . BASEURL . 'login');
 		}
 
-		$automations = [];
-		$automationsData = AutomationManager::getAll();
-		foreach ($automationsData as $automationKey => $automationData) {
-			$automations[$automationData['automation_id']] = [
-				'name' => '',
-				'onDays' => $automationData['on_days'],
-				'ifSomething' => $automationData['if_something'],
-				'doSomething' => $automationData['do_something'],
-			];
-		}
-
 		$template = new Template('setting');
 		$template->prepare('baseDir', BASEDIR);
 		$template->prepare('baseUrl', BASEURL);
 		$template->prepare('debugMod', DEBUGMOD);
-		$template->prepare('title', 'Automation');
+		$template->prepare('title', 'Settings');
 		$template->prepare('langMng', $langMng);
-		$template->prepare('automations', $automations);
 
 		$users = $userManager->getUsers();
 		foreach ($users as $key => $value) {
