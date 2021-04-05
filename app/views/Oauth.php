@@ -9,9 +9,9 @@ class Oauth
 		//Log
 		$logManager = new LogManager(__DIR__ . '/../../logs/auth/' . date("Y-m-d") . '.log');
 		$logManager->setLevel(LOGLEVEL);
-		$logManager->write("[OAUTH] GET  " . json_encode($_GET), LogRecordTypes::WARNING);
-		$logManager->write("[OAUTH] DATA " . file_get_contents('php://input'), LogRecordTypes::WARNING);
-		$logManager->write("[OAUTH] URL  " . $_SERVER['REQUEST_URI'], LogRecordTypes::WARNING);
+		$logManager->write("[OAUTH] GET  " . json_encode($_GET), LogRecordTypes::INFO);
+		$logManager->write("[OAUTH] DATA " . file_get_contents('php://input'), LogRecordTypes::INFO);
+		$logManager->write("[OAUTH] URL  " . $_SERVER['REQUEST_URI'], LogRecordTypes::INFO);
 
 		$userManager = new UserManager();
 		$langMng = new LanguageManager('en');
@@ -49,10 +49,10 @@ class Oauth
 		//Log
 		$logManager = new LogManager(__DIR__ . '/../../logs/auth/' . date("Y-m-d") . '.log');
 		$logManager->setLevel(LOGLEVEL);
-		$logManager->write("[OAUTH] GET  " . json_encode($_GET), LogRecordTypes::WARNING);
-		$logManager->write("[OAUTH] POST " . json_encode($_POST), LogRecordTypes::WARNING);
-		$logManager->write("[OAUTH] DATA " . file_get_contents('php://input'), LogRecordTypes::WARNING);
-		$logManager->write("[OAUTH] URL  " . $_SERVER['REQUEST_URI'], LogRecordTypes::WARNING);
+		$logManager->write("[OAUTH] GET  " . json_encode($_GET), LogRecordTypes::INFO);
+		$logManager->write("[OAUTH] POST " . json_encode($_POST), LogRecordTypes::INFO);
+		$logManager->write("[OAUTH] DATA " . file_get_contents('php://input'), LogRecordTypes::INFO);
+		$logManager->write("[OAUTH] URL  " . $_SERVER['REQUEST_URI'], LogRecordTypes::INFO);
 
 		// $template = new Template('oauth');
 		// $template->prepare('baseDir', BASEDIR);
@@ -68,19 +68,8 @@ class Oauth
 			"scope" => 'user',
 		];
 
-		$logManager->write("[OAUTH] Response  " . json_encode($get), LogRecordTypes::WARNING);
+		$logManager->write("[OAUTH] Response  " . json_encode($get), LogRecordTypes::INFO);
 		echo json_encode($get);
 		die();
-	}
-
-	function httpPost($url, $data)
-	{
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		$response = curl_exec($curl);
-		curl_close($curl);
-		return $response;
 	}
 }
