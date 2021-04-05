@@ -2,18 +2,18 @@
 
 class RoomsApi extends ApiController
 {
-	
+
 	public function	default()
 	{
 		//$this->requireAuth();
 		$response = [];
 		$roomIds = [];
 		$roomsData = RoomManager::getRoomsDefault();
-		
+
 		foreach ($roomsData as $roomKey => $room) {
 			$roomIds[] = $room['room_id'];
 		}
-		
+
 		//Translation Of Numeric Walues
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds($roomIds);
 		foreach ($subDevicesData as $subDeviceKey => $subDevice) {
@@ -25,14 +25,21 @@ class RoomsApi extends ApiController
 				} else if (strpos(SubDeviceManager::getSubDeviceMaster($subDevicesData[$subDeviceKey][$key]['subdevice_id'])['type'], '-') !== false) {
 					$type = SubDeviceManager::getSubDeviceMaster($subDevicesData[$subDeviceKey][$key]['subdevice_id'])['type'];
 				}
-				
+
 				//Connection Error Creation
 				$connectionError = true;
-				$LastRecordTime = new DateTime($subDevicesData[$subDeviceKey][$key]['time']);
+				$LastRecordTime = new DateTime($subDevicesData[$subDeviceKey][$key]['heartbeat']);
 				$interval = $LastRecordTime->diff(new DateTime());
-				$lastSeen = ($interval->format('%h') * 60 + $interval->format('%i'));
-				
-				if ($subDevicesData[$subDeviceKey][$key]['sleep_time'] == NULL || $subDevicesData[$subDeviceKey][$key]['sleep_time'] == 0 || $lastSeen < $subDevicesData[$subDeviceKey][$key]['sleep_time']) {
+
+
+				$lastSeen = $interval->days * 24 * 60;
+				$lastSeen += $interval->h * 60;
+				$lastSeen += $interval->i;
+
+
+				//$lastSeen = ($interval->format('%h') * 60 + $interval->format('%i'));
+
+				if ($lastSeen < ($subDevicesData[$subDeviceKey][$key]['sleep_time'] == 0 ? 15 : $subDevicesData[$subDeviceKey][$key]['sleep_time'])) {
 					$connectionError = false;
 				}
 				$subDevicesData[$subDeviceKey][$key]['connection_error'] = $connectionError;
@@ -50,7 +57,7 @@ class RoomsApi extends ApiController
 				}
 			}
 		}
-		
+
 		foreach ($roomsData as $roomKey => $roomData) {
 			if ($roomData['device_count'] == 0) continue;
 			$subDevicesSorted = isset($subDevicesData[$roomData['room_id']]) ? Utilities::sortArrayByKey($subDevicesData[$roomData['room_id']], 'connection_error', 'asc') : [];
@@ -64,11 +71,11 @@ class RoomsApi extends ApiController
 
 		$this->response($response);
 	}
-	
+
 	public function update($roomId)
 	{
 		//$this->requireAuth();
-		
+
 		$subDevicesData = SubDeviceManager::getSubdevicesByRoomIds([$roomId]);
 		$this->response($subDevicesData);
 	}

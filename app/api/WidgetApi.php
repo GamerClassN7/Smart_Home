@@ -149,7 +149,8 @@ class WidgetApi extends ApiController
 			}
 		}
 
-		$subDeviceData = SubDeviceManager::edit($subDeviceId, $obj);
+		echo $subDeviceId;
+		echo SubDeviceManager::edit($subDeviceId, $obj);
 
 		$response = [
 			"value" => "OK"

@@ -92,7 +92,7 @@ class SubDeviceManager
 
 		//TODO: @Patrik Check line 89
 		$rows = Db::loadAll("
-			SELECT d.room_id, d.sleep_time, sd.subdevice_id, sd.device_id, COALESCE(sd.icon, d.icon) AS icon, COALESCE(sd.name, d.name) AS name, sd.type, sd.unit, r.value, r.time FROM subdevices sd
+			SELECT d.room_id, d.sleep_time, d.heartbeat, sd.subdevice_id, sd.device_id, COALESCE(sd.icon, d.icon) AS icon, COALESCE(sd.name, d.name) AS name, sd.type, sd.unit, r.value, r.time FROM subdevices sd
 			JOIN devices d ON sd.device_id = d.device_id
 			JOIN records r ON r.subdevice_id = sd.subdevice_id
 			WHERE d.room_id IN (" . str_repeat("?,", count($roomIds) - 1) . "?)
