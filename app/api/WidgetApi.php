@@ -134,4 +134,29 @@ class WidgetApi extends ApiController
 		}
 		return RANGES[''];
 	}
+
+	public function edit($subDeviceId)
+	{
+		$this->requireAuth();
+		$allow = ["icon", "name"];
+
+		$response = null;
+		$obj = $this->input;
+
+		foreach ($obj as $key => $value) {
+			if (!in_array($key, $allow)){
+				unset($obj[$key]);
+			}
+		}
+
+		$subDeviceData = SubDeviceManager::edit($subDeviceId, $obj);
+
+		$response = [
+			"value" => "OK"
+		];
+		
+		$this->response($response);
+	}
+
+
 }

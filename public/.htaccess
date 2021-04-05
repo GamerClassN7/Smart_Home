@@ -5,7 +5,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !.css
 RewriteCond %{REQUEST_FILENAME} !.js
-RewriteRule (.*) ./index.php?url=$1#$2 [QSA,L]
+RewriteRule (.*) ./index.php?url=$1 [QSA,L]
 
 #token to HTTP_AUTHORIZATION
 RewriteCond %{HTTP:Authorization} ^(.*)

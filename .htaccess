@@ -17,6 +17,7 @@ RewriteCond %{REQUEST_FILENAME} \.
 RewriteRule (.*) ./public/$1 [L]
 
 # serve all other request as query parameters
-RewriteRule (.*) ./public/index.php?url=$1 [L,QSA]
+# RewriteRule (.*) ./public/index.php?url=$1 [L,QSA]
+RewriteRule ^(.*?\.php)/([^/]*)/([^/]*)(/.+)? ./public/index.php?url=$1&$2&$3 [NC,N,QSA]
 
 AddType application/x-httpd-php .php .phtml

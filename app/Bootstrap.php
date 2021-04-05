@@ -3,6 +3,8 @@
 error_reporting(E_ALL);
 ini_set( 'display_errors','1');
 
+
+
 //setup
 parse_str($_SERVER['QUERY_STRING'], $params);
 if (defined ("BASEDIR")) {

@@ -7,10 +7,12 @@ class Template{
 
 	function __construct($path = "", $debug = false) {
 		$this->debug = $debug;
-		if (!empty('../app/views/templates/' . $path . '.phtml') && file_exists('../app/views/templates/' . $path . '.phtml')) {
+
+		if (!empty(__DIR__ . '/../app/views/templates/' . $path . '.phtml') && file_exists(__DIR__ . '/../app/views/templates/' . $path . '.phtml')) {
 			$this->path = $path;
 		} else {
 			echo '<pre>';
+			echo __DIR__ . '/../app/views/templates/' . $path . '.phtml</br>';
 			echo 'PHTML: Template File ' . $path . ' not found';
 			echo '</pre>';
 			die();
@@ -26,9 +28,9 @@ class Template{
 
 	function render() {
 		extract($this->assignedValues);
-		if (!empty('../app/controllers/' . $this->path . 'Controller.php') && file_exists('../app/controllers/' . $this->path . 'Controller.php')) {
-			include('../app/controllers/' . $this->path . 'Controller.php');
+		if (!empty(__DIR__ . '/../app/controllers/' . $this->path . 'Controller.php') && file_exists(__DIR__ . '/../app/controllers/' . $this->path . 'Controller.php')) {
+			include(__DIR__ . '/../app/controllers/' . $this->path . 'Controller.php');
 		}
-		require_once('../app/views/templates/' . $this->path . '.phtml');
+		require_once(__DIR__ . '/../app/views/templates/' . $this->path . '.phtml');
 	}
 }

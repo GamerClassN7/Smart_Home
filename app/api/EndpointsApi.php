@@ -1,6 +1,8 @@
 <?php
-class EndpointsApi extends ApiController{
-	public function default(){
+class EndpointsApi extends ApiController
+{
+	public function default()
+	{
 		// $this->requireAuth();
 		$obj = $this->input;
 
@@ -8,7 +10,7 @@ class EndpointsApi extends ApiController{
 		$command = "null";
 
 		//Log
-		$logManager = new LogManager('../logs/api/'. date("Y-m-d").'.log');
+		$logManager = new LogManager('../logs/api/' . date("Y-m-d") . '.log');
 		$logManager->setLevel(LOGLEVEL);
 
 		//Token Checks
@@ -65,7 +67,7 @@ class EndpointsApi extends ApiController{
 		DeviceManager::setHeartbeat($device['device_id']);
 
 		//Diagnostic
-		if (isset($obj['settings'])){
+		if (isset($obj['settings'])) {
 			$data = ['mac' => $obj['settings']["network"]["mac"], 'ip_address' => $obj['settings']["network"]["ip"]];
 			if (array_key_exists("firmware_hash", $obj['settings'])) {
 				$data['firmware_hash'] = $obj['settings']["firmware_hash"];
@@ -74,11 +76,11 @@ class EndpointsApi extends ApiController{
 		}
 
 		//Log Data Save
-		if (isset($obj['logs'])){
+		if (isset($obj['logs'])) {
 			foreach ($obj['logs'] as $log) {
-				$deviceLogManager = new LogManager('../logs/devices/'. date("Y-m-d").'.log');
+				$deviceLogManager = new LogManager('../logs/devices/' . date("Y-m-d") . '.log');
 				$deviceLogManager->setLevel(LOGLEVEL);
-				if ($log != 'HTTP_UPDATE_FAILD code-102 messageFile Not Found (404)'){
+				if ($log != 'HTTP_UPDATE_FAILD code-102 messageFile Not Found (404)') {
 					$deviceLogManager->write("[Device Log Msg] Device_ID " . $device['device_id'] . "->" . $log, LogRecordTypes::ERROR);
 				}
 				unset($deviceLogManager);
@@ -91,13 +93,12 @@ class EndpointsApi extends ApiController{
 		}
 
 		// Issuing command
-		if ($command == "null"){
+		if ($command == "null") {
 			$deviceCommand = $device["command"];
-			if ($deviceCommand != '' && $deviceCommand != null && $deviceCommand != "null")
-			{
+			if ($deviceCommand != '' && $deviceCommand != null && $deviceCommand != "null") {
 				$command = $deviceCommand;
 				$data = [
-					'command'=>'null'
+					'command' => 'null'
 				];
 				DeviceManager::editByToken($obj['token'], $data);
 				$logManager->write("[API] Device_ID " . $device['device_id'] . " executing command " . $command, LogRecordTypes::INFO);
@@ -115,7 +116,7 @@ class EndpointsApi extends ApiController{
 				}
 
 				$subDeviceLastReordValue[$key] = $value['value'];
-				RecordManager::create($device['device_id'], $key, round($value['value'],3), 'device');
+				RecordManager::create($device['device_id'], $key, round($value['value'], 3), 'device');
 				$logManager->write("[API] Device_ID " . $device['device_id'] . " writed value " . $key . ' ' . $value['value'], LogRecordTypes::INFO);
 
 				//notification
@@ -127,20 +128,20 @@ class EndpointsApi extends ApiController{
 						case 'door':
 							$notificationData = [
 								'title' => 'Info',
-								'body' => 'Someone just open up '.$device['name'],
+								'body' => 'Someone just open up ' . $device['name'],
 								'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
 							];
 
-						break;
+							break;
 						case 'water':
 							$notificationData = [
 								'title' => 'Alert',
-								'body' => 'Wather leak detected by '.$device['name'],
+								'body' => 'Wather leak detected by ' . $device['name'],
 								'icon' => BASEDIR . '/app/templates/images/icon-192x192.png',
 							];
-						break;
+							break;
 					}
-					if (DEBUGMOD) $notificationData['body'] .= ' value='.$value['value'];
+					if (DEBUGMOD) $notificationData['body'] .= ' value=' . $value['value'];
 					if ($notificationData != []) {
 						$subscribers = $notificationMng::getSubscription();
 						foreach ($subscribers as $key => $subscriber) {
@@ -169,9 +170,9 @@ class EndpointsApi extends ApiController{
 			foreach ($subDevicesData as $key => $subDeviceData) {
 				$subDeviceId = $subDeviceData['subdevice_id'];
 				$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
-				if (!empty ($subDeviceLastReord)) {
+				if (!empty($subDeviceLastReord)) {
 					$subDeviceLastReordValue[$subDeviceData['type']] = $subDeviceLastReord['value'];
-					if ($subDeviceLastReord['execuded'] == 0){
+					if ($subDeviceLastReord['execuded'] == 0) {
 						$logManager->write("[API] subDevice_ID " . $subDeviceId . " executed comand with value " . json_encode($subDeviceLastReordValue) . " executed " . $subDeviceLastReord['execuded'], LogRecordTypes::INFO);
 						RecordManager::setExecuted($subDeviceLastReord['record_id']);
 					}
@@ -192,5 +193,78 @@ class EndpointsApi extends ApiController{
 		// this method returns response as json
 		//unset($logManager); //TODO: Opravit
 		die();
+	}
+
+	protected function requireAuth()
+	{
+		if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+			// TODO: call appropriate class/method
+			$deviceManager = new DeviceManager();
+			list($type, $hash) = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
+			$this->authenticated = $deviceManager->approved($hash);
+			return $hash;
+			if (!$this->authenticated) {
+				throw new Exception("Authorization required", 401);
+			}
+		} else {
+			throw new Exception("Authorization required", 401);
+		}
+	}
+
+	public function default_v2()
+	{
+		$token = $this->requireAuth();
+		$obj = $this->input;
+		$response = [];
+
+		$device = DeviceManager::getDeviceByToken($token);
+		DeviceManager::setHeartbeat($device['device_id']);
+
+		// Issue command
+		$deviceCommand = $device["command"];
+		if ($deviceCommand != '' && $deviceCommand != null && $deviceCommand != "null") {
+			$response['command'] = $deviceCommand;
+			DeviceManager::editByToken($obj['token'], ['command' => 'null']);
+		}
+
+		$subDevicesData = SubDeviceManager::getAllSubDevices($device['device_id']);
+		if (count($subDevicesData) > 0) {
+			foreach ($subDevicesData as $key => $subDeviceData) {
+				$subDeviceId = $subDeviceData['subdevice_id'];
+				$subDeviceLastReord = RecordManager::getLastRecord($subDeviceId);
+				if (!empty($subDeviceLastReord)) {
+					$response['values'][$subDeviceData['type']] = $subDeviceLastReord['value'];
+					if ($subDeviceLastReord['execuded'] == 0) {
+						RecordManager::setExecuted($subDeviceLastReord['record_id']);
+					}
+				}
+			}
+		}
+
+		$this->response($response, 200);
+	}
+
+	public function cofiguration_v2()
+	{
+		$token = $this->requireAuth();
+		$response = [];
+
+		$device = DeviceManager::getDeviceByToken($token);
+		DeviceManager::setHeartbeat($device['device_id']);
+
+		if (!empty($device["name"]) && isset($device["name"])) $response["nettwork"]['hostname'] = $this->nameToHostname($device["name"]);
+		if (!empty($device["ip_address"]) && isset($device["ip_address"])) $response["nettwork"]['ip'] = $device["ip_address"];
+		if (!empty($device["gateway"]) && isset($device["gateway"])) $response["nettwork"]['gateway'] = $device["gateway"];
+		if (!empty($device["dns"]) && isset($device["dns"])) $response["nettwork"]['dns'] = $device["dns"];
+		if (!empty($device["sleep_time"]) && isset($device["sleep_time"])) $response["sleep"] = $device["sleep_time"];
+
+		$this->response($response, 200);
+	}
+
+	private function nameToHostname(string $name = null)
+	{
+		$hostname = "";
+		$hostname = strtolower($name);
+		return str_replace(' ', '_', $hostname);
 	}
 }

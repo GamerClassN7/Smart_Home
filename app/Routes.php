@@ -10,6 +10,7 @@ $router->setDefault(function(){
 	unset($logManager);
 });
 
+
 //Pages
 $router->any('/', 'Log');
 $router->any('/log', 'Log');
@@ -46,6 +47,7 @@ $router->get('/api/server/log', 'ServerApi@logStatus');
 $router->post('/api/widgets/{widgetId}/run', 'WidgetApi@run');
 $router->get('/api/widgets/{widgetId}/detail', 'WidgetApi@detail');
 $router->get('/api/widgets/{widgetId}/detail/{period}', 'WidgetApi@detail');
+$router->post('/api/widgets/{widgetId}/edit', 'WidgetApi@edit');
 
 //Vue APP - Automations Endpoints
 $router->get('/api/automations', 'AutomationsApi@default');
@@ -61,7 +63,8 @@ $router->post('/cron/automations', 'CronApi@automations');
 
 
 //Google Home - API
-$router->any('/api/HA/auth', 'Oauth');
+$router->any('/api/HA/auth', 'Oauth@default');
+$router->any('/api/HA/token', 'Oauth@token');
 $router->any('/api/HA', 'GoogleHomeApi@response');
 
 
@@ -71,6 +74,9 @@ $router->any('/api/update/', 'UpdatesApi@default');
 $router->any('/api/users/status', 'UsersApi@status');
 $router->any('/api/users/subscribe', 'UsersApi@subscribe');
 
+//Endpoints API - V2
+$router->post('/api/v2/endpoint/', 'EndpointsApi@default_v2');
+$router->post('/api/v2/endpoint/cofiguration', 'EndpointsApi@cofiguration_v2');
 
 // examples
 $router->any('/api/example', 'ExampleApi@example');

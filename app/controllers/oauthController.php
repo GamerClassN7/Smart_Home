@@ -14,19 +14,34 @@ if (
 	$state = $_POST["state"];
 	$clientId = $_POST["clientId"];
 	$ota = $userManager->haveOtaEnabled($userName);
+
 	if ($ota == "") {
 		$token = (new AuthManager)->getToken($userName,$userPassword, $clientId);
 		if (!$token) {
 			throw new Exception("Auth failed", 401);
 		}
 
-		$get = [
-			"access_token"=>$token,
-			"token_type"=>"Bearer",
-			"state"=>$state,
-		];
-
-		header('Location: ' . $_POST["redirectUrl"] . '#' . http_build_query($get));
+		$get=[];
+		if ($_POST['response_type'] = 'code') {
+			$get = [
+				"state"=>$state,
+				"code"=>$token,
+				"access_token"=>$token,
+				"state"=>$state,
+			];
+		} else {
+			$get = [
+				"access_token"=>$token,
+				"token_type"=>"Bearer",
+				"state"=>$state,
+			];
+		}
+		
+		//Log
+		$logManager = new LogManager(__DIR__ . '/../../logs/auth/' . date("Y-m-d") . '.log');
+		$logManager->setLevel(LOGLEVEL);
+		$logManager->write("[OAUTH] Response  " . $_POST["redirectUrl"] . '?' . http_build_query($get), LogRecordTypes::WARNING);
+		header('Location: ' . $_POST["redirectUrl"] . '?' . http_build_query($get));
 		die();
 	}
 
