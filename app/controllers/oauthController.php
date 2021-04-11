@@ -26,7 +26,6 @@ if (
 			$get = [
 				"state"=>$state,
 				"code"=>$token,
-				"access_token"=>$token,
 				"state"=>$state,
 			];
 		} else {

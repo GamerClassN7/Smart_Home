@@ -9,9 +9,9 @@ class Oauth
 		//Log
 		$logManager = new LogManager(__DIR__ . '/../../logs/auth/' . date("Y-m-d") . '.log');
 		$logManager->setLevel(LOGLEVEL);
-		$logManager->write("[OAUTH] GET  " . json_encode($_GET), LogRecordTypes::INFO);
-		$logManager->write("[OAUTH] DATA " . file_get_contents('php://input'), LogRecordTypes::INFO);
-		$logManager->write("[OAUTH] URL  " . $_SERVER['REQUEST_URI'], LogRecordTypes::INFO);
+		$logManager->write("[OAUTH] GET  " . json_encode($_GET), LogRecordTypes::WARNING);
+		$logManager->write("[OAUTH] DATA " . file_get_contents('php://input'), LogRecordTypes::WARNING);
+		$logManager->write("[OAUTH] URL  " . $_SERVER['REQUEST_URI'], LogRecordTypes::WARNING);
 
 		$userManager = new UserManager();
 		$langMng = new LanguageManager('en');
@@ -49,10 +49,10 @@ class Oauth
 		//Log
 		$logManager = new LogManager(__DIR__ . '/../../logs/auth/' . date("Y-m-d") . '.log');
 		$logManager->setLevel(LOGLEVEL);
-		$logManager->write("[OAUTH] GET  " . json_encode($_GET), LogRecordTypes::INFO);
-		$logManager->write("[OAUTH] POST " . json_encode($_POST), LogRecordTypes::INFO);
-		$logManager->write("[OAUTH] DATA " . file_get_contents('php://input'), LogRecordTypes::INFO);
-		$logManager->write("[OAUTH] URL  " . $_SERVER['REQUEST_URI'], LogRecordTypes::INFO);
+		$logManager->write("[OAUTH] GET  " . json_encode($_GET), LogRecordTypes::WARNING);
+		$logManager->write("[OAUTH] POST " . json_encode($_POST), LogRecordTypes::WARNING);
+		$logManager->write("[OAUTH] DATA " . file_get_contents('php://input'), LogRecordTypes::WARNING);
+		$logManager->write("[OAUTH] URL  " . $_SERVER['REQUEST_URI'], LogRecordTypes::WARNING);
 
 		// $template = new Template('oauth');
 		// $template->prepare('baseDir', BASEDIR);
@@ -63,12 +63,13 @@ class Oauth
 		$token =  $_POST["code"];
 		$get = [
 			"access_token" => $token,
-			"token_type" => "bearer",
+			"token_type" => "Bearer",
 			"refresh_token" => $token,
 			"scope" => 'user',
+			//"expires_in" => 63113851,
 		];
 
-		$logManager->write("[OAUTH] Response  " . json_encode($get), LogRecordTypes::INFO);
+		$logManager->write("[OAUTH] Response  " . json_encode($get), LogRecordTypes::WARNING);
 		echo json_encode($get);
 		die();
 	}

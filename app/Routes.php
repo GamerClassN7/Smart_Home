@@ -66,6 +66,7 @@ $router->post('/cron/automations', 'CronApi@automations');
 $router->any('/api/HA/auth', 'Oauth@default');
 $router->any('/api/HA/token', 'Oauth@token');
 $router->any('/api/HA', 'GoogleHomeApi@response');
+$router->any('/api/HA/', 'GoogleHomeApi@response');
 
 
 //Endpoints API

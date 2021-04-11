@@ -1,4 +1,5 @@
 <?php
+https://console.cloud.google.com/logs/query;cursorTimestamp=2021-04-11T07:51:16.567357750Z?project=simple-home-79188
 class GoogleHome
 {
 	static function sync($requestId)
@@ -42,7 +43,10 @@ class GoogleHome
 					],
 
 					'willReportState' => false,
-					'roomHint' => $roomData['name']
+					'roomHint' => $roomData['name'],
+					"otherDeviceIds" => [
+						["deviceId" => "SH#".(string) $deviceData['device_id']]
+					]
 				];
 				if ($tempDevice['attributes'] == null) unset($tempDevice['attributes']);
 

@@ -1,5 +1,6 @@
 <?php
-class GoogleHomeDeviceTypes {
+class GoogleHomeDeviceTypes
+{
 	/*const AirConditioningUnit	   = 'action.devices.types.AC_UNIT';
 	const AirFreshener 			   = 'action.devices.types.AIRFRESHENER';
 	const AirPurifier             = 'action.devices.types.AIRPURIFIER';
@@ -107,7 +108,7 @@ class GoogleHomeDeviceTypes {
 			'commandOnlyOnOff' => false,
 		],
 		'temp_cont' 				=> [
-			'availableThermostatModes' => 'off,heat',
+			'availableThermostatModes' => ['off', 'heat'],
 			'thermostatTemperatureUnit' => 'C',
 		],
 		'vol_cont' 				=> [
@@ -117,7 +118,7 @@ class GoogleHomeDeviceTypes {
 			'levelStepSize' => 2,
 			'commandOnlyVolume' => false,
 		],
-		'media_cont'=> [
+		'media_cont' => [
 			'transportControlSupportedCommands' => [
 				"NEXT",
 				"PREVIOUS",
@@ -127,7 +128,7 @@ class GoogleHomeDeviceTypes {
 				"CAPTION_CONTROL"
 			],
 		],
-		'media_status'=> [
+		'media_status' => [
 			'supportActivityState' => true,
 			'supportPlaybackState' => true,
 		],
@@ -159,27 +160,32 @@ class GoogleHomeDeviceTypes {
 		],
 	];
 
-	static function getAction($deviceType){
+	static function getAction($deviceType)
+	{
 		if (!isset(self::$actionWordBook[$deviceType])) return;
 		return self::$actionWordBook[$deviceType];
 	}
 
-	static function getTraid($subDeviceType){
+	static function getTraid($subDeviceType)
+	{
 		if (!isset(self::$traidWordBook[$subDeviceType])) return;
 		return self::$traidWordBook[$subDeviceType];
 	}
 
-	static function getType($subDeviceCommand){
+	static function getType($subDeviceCommand)
+	{
 		if (!isset(self::$commandWordBook[$subDeviceCommand])) return;
 		return self::$commandWordBook[$subDeviceCommand];
 	}
 
-	static function getAttribute($subDeviceType){
+	static function getAttribute($subDeviceType)
+	{
 		if (!isset(self::$attributeWordBook[$subDeviceType])) return;
 		return self::$attributeWordBook[$subDeviceType];
 	}
 
-	static function getQueryJson($deviceType, $type){
+	static function getQueryJson($deviceType, $type)
+	{
 		return self::$wordBook[$type];
 	}
 }
